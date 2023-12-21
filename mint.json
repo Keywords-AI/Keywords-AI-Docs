@@ -7,9 +7,13 @@
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#6483F0",
+    "light": "#F9FAFC",
+    "dark": "#05050A",
+    "background": {
+      "dark": "#05050A",
+      "light": "#F9FAFC"
+    },
     "anchors": {
       "from": "#0D9373",
       "to": "#07C983"
@@ -74,5 +78,8 @@
     "twitter": "https://twitter.com/mintlify",
     "github": "https://github.com/mintlify",
     "linkedin": "https://www.linkedin.com/company/mintsearch"
+  },
+  "search": {
+    "prompt": "Search Something..."
   }
 }
