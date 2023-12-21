@@ -38,12 +38,7 @@
       "url": "https://mintlify.com/docs"
     },
     {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
+      "name": "ABCD",
       "icon": "newspaper",
       "url": "https://mintlify.com/blog"
     }
@@ -51,15 +46,20 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["introduction", "quickstart", "development"]
+      "pages": ["get-started/overview", "get-started/concepts", "get-started/quick-start"]
     },
     {
-      "group": "Essentials",
-      "pages": ["essentials/markdown", "essentials/code", "essentials/images", "essentials/settings", "essentials/navigation"]
+      "group": "API Usage",
+      "pages": ["api-usage/api-keys", 
+      "api-usage/request",
+      "api-usage/response"
+    ]
     },
     {
-      "group": "API Documentation",
-      "pages": ["api-reference/introduction"]
+      "group": "Integrations",
+      "pages": ["integrations/supported-models",
+      "integrations/llm-credits"
+    ]
     },
     {
       "group": "Endpoint Examples",
