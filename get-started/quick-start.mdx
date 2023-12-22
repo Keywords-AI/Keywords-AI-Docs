@@ -8,7 +8,7 @@ description: 'A quick example for Keywords AI API usage'
 ```python
 def demo_call(input, 
               model="claude-2" ,
-              token="R2iZMDRj.r0vZMKKEV40PBR0nPsIrm9O6xJQaqwnd", 
+              token="a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z", 
               stream=False
               ):
     headers = {
@@ -23,10 +23,9 @@ def demo_call(input,
     }
 
     response = requests.post('https://platform.keywordsai.co/api/generate/', headers=headers, json=data, stream=stream)
-    # response = requests.post('http://localhost:8000/api/generate/', headers=headers, json=data)
     return response
 
-messages = [{'role': 'user', 'content': 'Hello, how are you?'}]
+messages = "Say 'Hello World'"
 print(demo_call(messages).json())
 ```
 
