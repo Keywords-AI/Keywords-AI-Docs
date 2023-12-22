@@ -38,17 +38,7 @@ print(demo_call(messages).json())
 The results should be printed in the console.
 
 ```python
-ChatCompletion(id='chatcmpl-8Y0J7j2oWReB3mJrqW2H5VQ9UzUGN', 
-choices=[
-    Choice(
-        finish_reason='stop', 
-        index=0, 
-        message=ChatCompletionMessage(content='Hello World', role='assistant', function_call=None, tool_calls=None), logprobs=None)], 
-        created=1703115025, 
-        model='gpt-4-0613', 
-        object='chat.completion', 
-        system_fingerprint=None, 
-        usage=CompletionUsage(completion_tokens=9, prompt_tokens=12, total_tokens=21))
+{'id': 'chatcmpl-8Ygj0WAGNhHBFjatPCefcPeNi12ct', 'choices': [{'finish_reason': 'stop', 'index': 0, 'message': {'content': 'Hello World', 'role': 'assistant'}}], 'created': 1703230636, 'model': 'claude-2', 'object': 'chat.completion', 'system_fingerprint': None, 'usage': {'completion_tokens': 2, 'prompt_tokens': 12, 'total_tokens': 14}, '_response_ms': 653.2679999999999}
 ```
 
 Congratulations! You have finished the “Hello World” tutorial for Keywords AI API
