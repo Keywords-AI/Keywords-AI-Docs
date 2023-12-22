@@ -1,33 +1,38 @@
 ---
 title: 'API Keys'
-description: 'Example section for showcasing API endpoints'
+description: 'How to get & use an API key to access Keywords AI API'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## What is an API Key?
 
-## Welcome
+An API key is a unique identifier used primarily for authentication and access control in software applications. It acts like a passcode that allows your application to communicate with an API (Application Programming Interface). By providing an API key with your requests, the API can verify your identity or the identity of your application and ensure you have the necessary permissions to use the API's services. This is crucial for maintaining security, preventing unauthorized access, and tracking API usage. In essence, an API key is a way to let the API know that the request it's receiving is coming from a trusted source.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+## Get an API Key
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+To procure your API key, navigate to your [API Keys](https://platform.keywordsai.co/platform/organization/api-keys) page on the platform.
 
-## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+**Careful!!!** API keys are secret and should not be shared publicly. Do not include your API key in your source code or client-side JavaScript. If you believe your API key has been compromised, revoke it and replace it with a new one.
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+## Use the API Key
+
+If you are using OpenAI SDK:
+
+```python
+import openai
+openai.base_url = "https://platform.keywordsai.co/api/generate/"
+openai.api_key = "{YOUR_KEYWORDSD_AI_API_KEY}" # You should replace this with your actual key
+...other code...
 ```
+
+If you are making an HTTP request, include the following in the header
+
+```jsx
+... other header params
+Authorization: 'Api-Key YOUR_API_KEY'
+... other header params
+```
+
+## Lost your API Key?
+
+Unfortunately, API key will only show once after you generate it. If you have lost your API key, you will have to regerate your [API Keys](https://platform.keywordsai.co/platform/organization/api-keys) on the platform.
