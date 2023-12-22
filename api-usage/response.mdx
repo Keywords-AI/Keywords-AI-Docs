@@ -1,33 +1,107 @@
 ---
 title: 'Response'
-description: 'Example section for showcasing API endpoints'
+description: 'E\Handling different response objects'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## JSON Response
 
-## Welcome
+When streaming is disabled, the API endpoint delivers a singular JSON response, containing the model-generated text along with pertinent information, ensuring succinct and straightforward data processing.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+```bash
+{
+    "id": "chatcmpl-123",
+    "object": "chat.completion.chunk",
+    "created": 1677652288,
+    "choices": [{
+        "index": 0,
+        "delta": {
+        "content": "Hello",
+        },
+        "finish_reason": "stop"
+    }]
+}
+```
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+## Streaming Response
 
-## Authentication
+Activating the streaming option alters the endpoint's output to produce a sequence of JSON objects, each **separated by a “----” delimiter.** This facilitates real-time interaction and partial data utilization, enhancing dynamic application responses and user experiences.
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+### **Read Stream Function**
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+The following function can be used to read a streaming response from the API. It takes in the response object, a callback function to handle the response, and an optional callback function to handle the end of the stream.
+
+```
+const readStream = async (
+streamResponse,
+callbackFunction, // The callback function to handle each "token" from the stream
+streamComplete = (done) => console.log("Stream done")
+) => {
+/* Return an abort control */
+
+const reader = streamResponse.body.getReader();
+const decoder = new TextDecoder();
+const abortController = new AbortController();
+const signal = abortController.signal;
+
+// Start reading the stream
+(async () => {
+    try {
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done || signal.aborted) {
+        streamComplete();
+        break;
+        }
+        const message = decoder.decode(value);
+				// Splitting the returned text chunck with the delimiter
+        for (const line of message.split("---")) {
+        // Line is a JSON string
+        callbackFunction(line);
+        }
+    }
+    } catch (e) {
+    console.error("Stream error:", e);
+    }
+})();
+
+// Return a function to abort the stream from outside
+return () => {
+    console.log("Aborting stream");
+    abortController.abort();
+};
+};
+
+export default readStream;
+```
+
+## Catching Errors
+
+Keywords AI API returns the error in the response body with and response status. Here is an example of an API call.
+
+```jsx
+// An example API call
+fetch('https://platform.keywordsai.co/api/generate/', {
+method: 'POST',
+headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Api-Key {YOUR_ACCESS_TOKEN}',
+},
+body: JSON.stringify({
+    messages: [{ role: 'user', content: 'Hello' }],
+    'stream': false,
+    'max_tokens': 100,
+    ... other parameters in similar format ...
+}),
+})
+.then(async (response) => {
+if (!response.ok){
+	console.log(await response.json());
+}
+})
+```
+
+In the above example, if an error occurred, the returned JSON object will of the following form:
+
+```jsx
+{"detail": ...some error message...}
 ```

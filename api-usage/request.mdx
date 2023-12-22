@@ -1,33 +1,41 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'Request'
+description: 'Reference for request parameters'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+You can paste the command below into your terminal to run your first API request. Make sure to replace `YOUR_ACCESS_TOKEN` with your secret API key.
 
-## Welcome
+## Example Call
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+```bash
+curl -X POST "https://platform.keywordsai.co/api/generate/"\
+-H "Content-Type: application/json"\
+-H "Authorization: Api-Key {YOUR_ACCESS_TOKEN}"\
+-d '{
+    "messages":[{
+        "role":"user",
+        "content":"Hello"
+    }],
+    "stream": false,
+    "max_tokens": 100,
+    ... other parameters in similar format ...
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
-
-## Authentication
-
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
-
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+}'
 ```
+
+## Parameters
+
+- **model:** The model to use. See List
+- **messages:** List of messages, or string, to send to GPT
+- **suffix:** String to append to GPT response
+- **max_tokens:** integer or null
+- **temperature:** number or null
+- **n:** integer or null, How many completions to generate for each prompt.
+- **stream:** boolean, Whether to stream back partial progress.
+- **logprobs:** integer or null, Include the log probabilities on the logprobs most likely tokens, as well the chosen tokens.
+- **echo:** boolean, Echo back the prompt in addition to the completion
+- **stop:** List of string, Stop sequence
+- **presence_penalty:** number or null, How much to penalize new tokens based on whether they appear in the text so far. Increases the model's likelihood to talk about new topics.
+- **frequency_penalty:** number or null, How much to penalize new tokens based on their existing frequency in the text so far. Decreases the model's likelihood to repeat the same line verbatim.
+- **best_of:** integer or null, Generates best_of completions server side and returns the "best" (the one with the lowest log probability per token). Results cannot be streamed.
+- **logit_bias:** Map of tokens to logit bias values

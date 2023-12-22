@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Docs",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
@@ -22,29 +22,18 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:team@keywordsai.co"
     }
   ],
   "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "name": "Get started",
+    "url": "https://keywordsai.co"
   },
-  "tabs": [
-    {
-      "name": "API Reference",
-      "url": "api-reference"
-    }
-  ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "ABCD",
+      "name": "Platform",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://platform.keywordsai.co"
     }
   ],
   "navigation": [
@@ -60,9 +49,15 @@
     ]
     },
     {
-      "group": "Integrations",
-      "pages": ["integrations/supported-models",
-      "integrations/llm-credits"
+      "group": "Integration",
+      "pages": ["integration/supported-models",
+      "integration/llm-credits"
+    ]
+    },
+    {
+      "group": "Guides",
+      "pages": ["guides/limits",
+      "guides/error-handling"
     ]
     },
     {
@@ -75,11 +70,9 @@
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "linkedin": "https://www.linkedin.com/company/keywordsai/"
   },
   "search": {
-    "prompt": "Search Something..."
+    "prompt": "Search..."
   }
 }
