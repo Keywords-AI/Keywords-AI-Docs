@@ -23,7 +23,7 @@ def demo_call(input,
         "stream": stream,
     }
 
-    response = requests.post('https://platform.keywordsai.co/api/generate/', headers=headers, json=data, stream=stream)
+    response = requests.post('https://api.keywordsai.co/api/generate/', headers=headers, json=data, stream=stream)
     return response
 
 messages = "Say 'Hello World'"
