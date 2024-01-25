@@ -6,8 +6,9 @@ description: 'Reference for request parameters'
 You can paste the command below into your terminal to run your first API request. Make sure to replace `YOUR_ACCESS_TOKEN` with your secret API key.
 
 ## Example Call
+<CodeGroup>
 
-```bash
+```bash cURL
 curl -X POST "https://api.keywordsai.co/api/generate/" \
 -H "Content-Type: application/json" \
 -H "Authorization: Api-Key {YOUR_KEYWORDSAI_API_KEY}" \
@@ -22,6 +23,33 @@ curl -X POST "https://api.keywordsai.co/api/generate/" \
   "max_tokens": 100
 }'
 ```
+
+```python Python
+import requests
+def demo_call(input, 
+              model="claude-2" ,
+              token="a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z", 
+              stream=False
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Api-Key {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        "stream": stream,
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/generate/', headers=headers, json=data, stream=stream)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+
+</CodeGroup>
 
 ## Parameters
 
