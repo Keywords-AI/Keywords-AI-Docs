@@ -27,11 +27,26 @@ openai.api_key = "{YOUR_KEYWORDSD_AI_API_KEY}" # You should replace this with yo
 
 If you are making an HTTP request, include the following in the header
 
-```jsx
-... other header params
-Authorization: 'Api-Key YOUR_API_KEY'
-... other header params
+<CodeGroup>
+```TypeScript JavaScript/TypeScript
+fetch('https://api.keywordsai.co/api/generate/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY'
+}
+...other code...
+})
 ```
+
+```Python Python
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': f'Api-Key YOUR_KEYWORDS_AI_API_KEY',
+}
+response = requests.post('https://api.keywordsai.co/api/generate/', headers=headers, json=data, stream=stream)
+```
+</CodeGroup>
 
 ## Lost your API Key?
 

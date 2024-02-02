@@ -3,9 +3,9 @@ title: 'Quick Start: Hello World'
 description: 'A quick example for Keywords AI API usage'
 ---
 
-## Try Keywords AI with Python SDK
-
-```python
+## Try Keywords AI with an API Call
+<CodeGroup>
+```python Python
 import requests
 def demo_call(input, 
               model="claude-2" ,
@@ -30,6 +30,25 @@ messages = "Say 'Hello World'"
 print(demo_call(messages).json())
 ```
 
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/generate/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+    'Authorization': 'Api-Key a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
+  }
+    body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [{role: 'user', content: "Say 'Hello World'"}]
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+</CodeGroup>
+
 - **URL Change**: Modify the API endpoint URL in your code from OpenAI’s URL to the Keywords AI endpoint URL: \`https://keywordsai.co/api/generate/\\`.
 - **API Key**: Replace the OpenAI API key with your Keywords AI API key.
 - **Parameters**: Models parameter becomes optional.
@@ -38,8 +57,23 @@ print(demo_call(messages).json())
 
 The results should be printed in the console.
 
-```python
-{'id': 'chatcmpl-8Ygj0WAGNhHBFjatPCefcPeNi12ct', 'choices': [{'finish_reason': 'stop', 'index': 0, 'message': {'content': 'Hello World', 'role': 'assistant'}}], 'created': 1703230636, 'model': 'claude-2', 'object': 'chat.completion', 'system_fingerprint': None, 'usage': {'completion_tokens': 2, 'prompt_tokens': 12, 'total_tokens': 14}, '_response_ms': 653.2679999999999}
+```json
+{
+  "id": "chatcmpl-8Ygj0WAGNhHBFjatPCefcPeNi12ct",
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": { "content": "Hello World", "role": "assistant" }
+    }
+  ],
+  "created": 1703230636,
+  "model": "gpt-3.5-turbo",
+  "object": "chat.completion",
+  "system_fingerprint": null,
+  "usage": { "completion_tokens": 2, "prompt_tokens": 12, "total_tokens": 14 },
+  "_response_ms": 653.2679999999999
+}
 ```
 
 Congratulations! You have finished the “Hello World” tutorial for Keywords AI API

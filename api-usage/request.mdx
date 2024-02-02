@@ -48,6 +48,22 @@ def demo_call(input,
 messages = "Say 'Hello World'"
 print(demo_call(messages).json())
 ```
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/generate/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+    'Authorization': 'Api-Key a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
+  }
+    body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [{role: 'user', content: "Say 'Hello World'"}]
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
 
 </CodeGroup>
 
