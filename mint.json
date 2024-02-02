@@ -5,7 +5,7 @@
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo.svg",
   "colors": {
     "primary": "#6483F0",
     "light": "#F9FAFC",
@@ -39,7 +39,7 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["get-started/overview", "get-started/concepts", "get-started/quick-start"]
+      "pages": ["get-started/introduction", "get-started/overview", "get-started/concepts", "get-started/quick-start"]
     },
     {
       "group": "API Usage",
@@ -59,14 +59,6 @@
       "pages": ["guides/limits",
       "guides/error-handling"
     ]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
-      ]
     }
   ],
   "footerSocials": {
@@ -76,3 +68,4 @@
     "prompt": "Search..." 
   }
 }
+
