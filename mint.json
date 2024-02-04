@@ -33,31 +33,86 @@
     {
       "name": "Platform",
       "icon": "newspaper",
-      "url": "https://keywords-platform.web.app/platform/setting"
+      "url": "https://platform.keywordsai.co"
     }
   ],
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["get-started/introduction", "get-started/overview", "get-started/concepts", "get-started/quick-start"]
+      "pages": ["get-started/introduction", "get-started/overview", 
+      {
+        "group": "Concepts and Terminologies",
+        "pages":[
+          "get-started/concepts",
+          "get-started/llm-params"
+        ]
+      },
+      "get-started/quick-start"]
     },
     {
       "group": "API Usage",
       "pages": ["api-usage/api-keys", 
-      "api-usage/request",
-      "api-usage/response"
+      {
+        "group": "Sending Request",
+        "pages": [
+          "api-usage/request-params"
+        ]
+      },
+      {
+        "group": "Handling Response",
+        "pages": [
+          "api-usage/regular-response",
+          "api-usage/streaming-response"
+        ]
+      },
+      "api-usage/fallback-mechanism"
     ]
     },
     {
+      "group": "Performance Monitoring",
+      "pages": [
+        "performance-monitoring/monitoring-metrics",
+        {
+          "group": "Dashboard",
+          "pages":["performance-monitoring/dashboard/dashboard"]
+        },
+        {
+          "group": "Request Log",
+          "pages":["performance-monitoring/requestlog/requestlog"]
+        }
+      ]
+    },
+    {
+      "group": "API Playgrounds",
+      "pages": [
+        "api-playgrounds/chatbot",
+        "api-playgrounds/playground"
+      ]
+    },
+    {
       "group": "Integration",
-      "pages": ["integration/supported-models",
+      "pages": [
+      "integration/supported-models",
       "integration/llm-credits"
     ]
     },
     {
+      "group": "Collaboration",
+      "pages": ["collaboration/access-management"]
+    },
+    {
+      "group": "Error Handling",
+      "pages": [
+      "error-handling/error-code",
+      "error-handling/suggestions",
+      "error-handling/alerts"
+    ]
+    },
+    {
       "group": "Guides",
-      "pages": ["guides/limits",
-      "guides/error-handling"
+      "pages": [
+        "guides/limits",
+        "guides/prompting-guides"
     ]
     }
   ],

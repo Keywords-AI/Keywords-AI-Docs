@@ -1,5 +1,5 @@
 ---
-title: 'Error Handling'
+title: 'Error Codes'
 description: 'Error codes & potential solutions'
 ---
 
@@ -37,3 +37,30 @@ This error message signals that the API key has reached its allotted request or 
 **Possible Solutions**
 
 - If applicable, consider upgrading your usage plan to accommodate higher volumes.
+
+## Example Error Code Format
+
+Keywords AI API returns the error message in the response body. Here is an example call
+
+```JavaScript JavaScript
+// An example API call
+fetch('https://api.keywordsai.co/api/generate/', {
+method: 'POST',
+headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Api-Key {YOUR_ACCESS_TOKEN}',
+},
+body: ...some body...
+})
+.then(async (response) => {
+if (!response.ok){
+	console.log(reponse.status, await response.json());
+}
+})
+```
+
+If an error occurred, the code above will print the following
+
+```json
+400 {"detail": ...some error message...}
+```
