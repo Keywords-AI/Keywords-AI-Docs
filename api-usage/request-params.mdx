@@ -1,0 +1,183 @@
+---
+title: 'Request Parameters'
+description: 'An overview for LLM generation parameters'
+---
+
+You can paste the command below into your terminal to run your first API request. Make sure to replace `YOUR_ACCESS_TOKEN` with your secret API key.
+
+## Example Call
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/generate/" \
+-H "Content-Type: application/json" \
+-H "Authorization: Api-Key {YOUR_KEYWORDSAI_API_KEY}" \
+-d '{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello"
+    }
+  ],
+  "stream": false,
+  "max_tokens": 100
+}'
+```
+
+```python Python
+import requests
+def demo_call(input, 
+              model="claude-2" ,
+              token="a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z", 
+              stream=False
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Api-Key {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        "stream": stream,
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/generate/', headers=headers, json=data, stream=stream)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/generate/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+    'Authorization': 'Api-Key a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
+  }
+    body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [{role: 'user', content: "Say 'Hello World'"}]
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+</CodeGroup>
+
+## LLM API Parameters
+
+<ParamField path="model" type="string">
+  Specify which model to use. See the list of model [here](/integration/supported-models)
+</ParamField>
+
+<ParamField path="messages" type="array[dict]">
+  List of messages to send to the endpoint in the [OpenAI style](https://platform.openai.com/docs/api-reference/chat/create#chat-create-messages), each of them following this format:
+  ```json
+  {
+    "role": "user", // Available choices are user, system or assistant
+    "content": "Hello?"
+  }
+  ```
+</ParamField>
+
+<ParamField path="suffix" type="string">
+  Strings to append to the end of the response.
+</ParamField>
+
+<ParamField path="max_tokens" type="integer">
+  Maximum number of tokens to generate in the response
+</ParamField>
+
+<ParamField path="temperature" type="float" default={1} >
+  Controls randomness in the output in the range of 0-2, higher temperature will a more random response. See more info in the [LLM parameters page](/get-started/llm-params)
+</ParamField>
+
+<ParamField path="n" type="integer" default={1}>
+  How many completions choices to generate for each prompt.  
+
+  <strong>Caveat!</strong> while this can help improving generation quality by picking the optimal choice, this could also lead to more token usage.
+</ParamField>
+
+<ParamField path="stream" type="boolean" default={false}>
+  Whether to stream back partial progress token by token
+</ParamField>
+
+{/* Add this to the concept page */}
+<ParamField path="logprobs" type="boolean" default={false}>
+  Include the log probabilities on the logprobs most likely tokens, as well the chosen tokens
+</ParamField>
+
+<ParamField path="echo" type="boolean">
+  Echo back the prompt in addition to the completion
+</ParamField>
+
+{/* Add this to the concept page */}
+<ParamField path="stop" type="array[string]"> 
+  Stop sequence
+</ParamField>
+
+{/* Add this to the concept page */}
+<ParamField path="presence_penalty" type="number">
+  How much to penalize new tokens based on whether they appear in the text so far. Increases the model's likelihood to talk about new topics
+</ParamField>
+
+{/* Add this to the concept page */}
+<ParamField path="frequency_penalty" type="number">
+  How much to penalize new tokens based on their existing frequency in the text so far. Decreases the model's likelihood to repeat the same line verbatim
+</ParamField>
+
+{/* Add this to the concept page */}
+<ParamField path="logit_bias" type="dict">
+  Used to modify the probability of tokens appearing in the response
+</ParamField>
+
+<ParamField path="tools" type="array[dict]">
+  A list of tools the model may call. Currently, only functions are supported as a tool. Use this to provide a array of functions the model may generate JSON inputs for.
+  ```json
+  {
+      "type": "function",
+      "function": {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a given location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The city and state, e.g. San Francisco, CA"
+            },
+            "unit": {
+              "type": "string",
+              "enum": ["celsius", "fahrenheit"]
+            }
+          },
+          "required": ["location"]
+        }
+      }
+    }
+  ```
+</ParamField>
+
+## Extra Parameters for Monitoring
+
+<ParamField path="customer_identifier" type="string">
+Use this the as a tag to identify the user assocaited with the API call.
+</ParamField>
+
+<ParamField path="metadata" type="dict">
+You can add any key value pair to this metadata field for your reference, contact team@keywordsai.co if you need extra parameter supports for your usecase.
+
+Example:
+```json
+{
+  "my_value_key": "my_value"
+}
+```
+</ParamField>
+
+<ParamField path="disable_log" type="boolean" deafault={false}>
+When set to true, only the request and the [performance metrics](/performance-monitoring/monitoring-metrics) will be recorded, input and output messages will be ommited from the log.
+</ParamField>
