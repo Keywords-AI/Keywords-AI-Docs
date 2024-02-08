@@ -19,6 +19,7 @@ curl -X POST "https://api.keywordsai.co/api/generate/" \
       "content": "Hello"
     }
   ],
+  "models": ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"],
   "stream": false,
   "max_tokens": 100
 }'
@@ -40,6 +41,7 @@ def demo_call(input,
         'model': model,
         'messages': [{'role': 'user', 'content': input}],
         "stream": stream,
+        "models": ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"],
     }
 
     response = requests.post('https://api.keywordsai.co/api/generate/', headers=headers, json=data, stream=stream)
@@ -57,7 +59,7 @@ fetch('https://api.keywordsai.co/api/generate/', {
     'Authorization': 'Api-Key a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
   }
     body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        models: ['gpt-3.5-turbo', 'gpt-3.5-turbo-16k'],
         messages: [{role: 'user', content: "Say 'Hello World'"}]
     })
 })
@@ -73,6 +75,9 @@ fetch('https://api.keywordsai.co/api/generate/', {
   Specify which model to use. See the list of model [here](/integration/supported-models)
 </ParamField>
 
+<ParamField path="models" type="array[string]">
+Specify the list of models the router to chooose between. See the list of model [here](/integration/supported-models)
+</ParamField>
 <ParamField path="messages" type="array[dict]">
   List of messages to send to the endpoint in the [OpenAI style](https://platform.openai.com/docs/api-reference/chat/create#chat-create-messages), each of them following this format:
   ```json
