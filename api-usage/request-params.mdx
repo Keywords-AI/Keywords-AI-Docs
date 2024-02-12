@@ -86,6 +86,25 @@ Specify the list of models the router to chooose between. See the list of model 
     "content": "Hello?"
   }
   ```
+
+  <strong>Image Processing</strong> If you want to use the image processing feature, you need to use the following format to upload the image
+  ```json
+{
+  "role": "user",
+  "content": [
+    {
+        "type": "text",
+        "text": "What’s in this image?"
+    },
+    {
+        "type": "image_url",
+        "image_url": {
+        "url": "https://as1.ftcdn.net/v2/jpg/01/34/53/74/1000_F_134537443_VendrqyXIWyHrZgxdIsfyKUost734JDP.jpg"
+        }
+    }
+  ]
+}
+  ```
 </ParamField>
 
 <ParamField path="suffix" type="string">
