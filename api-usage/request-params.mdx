@@ -76,7 +76,7 @@ fetch('https://api.keywordsai.co/api/generate/', {
 </ParamField>
 
 <ParamField path="models" type="array[string]">
-Specify the list of models the router to chooose between. See the list of model [here](/integration/supported-models)
+Specify the list of models the router to chooose between. If not specified, <strong>all models</strong> will be used. See the list of model [here](/integration/supported-models)
 </ParamField>
 <ParamField path="messages" type="array[dict]">
   List of messages to send to the endpoint in the [OpenAI style](https://platform.openai.com/docs/api-reference/chat/create#chat-create-messages), each of them following this format:
