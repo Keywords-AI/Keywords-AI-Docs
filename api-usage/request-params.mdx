@@ -200,15 +200,15 @@ Specify the list of models the router to chooose between. If not specified, <str
 
 ## Extra Parameters for Monitoring
 
-<ParamField path="eval" type="boolean" default={false}>
-Adding this returns the evaluation metrics in the response body. If streaming is on, the metrics will be streamed as the last chunk
+<ParamField path="request_breakdown" type="boolean" default={false}>
+Adding this returns the summarization of the response in the response body. If streaming is on, the metrics will be streamed as the last chunk
 
 <strong>Regular Response</strong>
 ```json
 {
   "id": "chatcmpl-7476cf3f-fcc9-4902-a548-a12489856d8a",
   //... main part of the response body ...
-  "evaluation": {
+  "request_breakdown": {
     "prompt_tokens": 6,
     "completion_tokens": 9,
     "cost": 4.8e-5,
@@ -253,12 +253,12 @@ Adding this returns the evaluation metrics in the response body. If streaming is
 //... other chunks ...
 // The following is the last chunk
 {
-  "id": "evaluation",
+  "id": "request_breakdown",
   "choices": [
     {
       "delta": { "content": null, "role": "assistant" },
       "finish_reason": "stop",
-      "evaluation": {
+      "request_breakdown": {
         "prompt_tokens": 6,
         "completion_tokens": 9,
         "cost": 4.8e-5,
