@@ -81,6 +81,11 @@ fetch('https://api.keywordsai.co/api/generate/', {
 <ParamField path="models" type="array[string]">
 Specify the list of models the router to chooose between. If not specified, <strong>all models</strong> will be used. See the list of model [here](/integration/supported-models)
 </ParamField>
+
+<ParamField path="fallback_models" type="array[string]">
+Specify the list of backup models (ranked by priority) to response in case of a failure in the primary model. See the list of model [here](/integration/supported-models)
+</ParamField>
+
 <ParamField path="messages" type="array[dict]">
   List of messages to send to the endpoint in the [OpenAI style](https://platform.openai.com/docs/api-reference/chat/create#chat-create-messages), each of them following this format:
   ```json
@@ -120,8 +125,7 @@ Specify the list of models the router to chooose between. If not specified, <str
 
 <ParamField path="temperature" type="float" default={1}>
   Controls randomness in the output in the range of 0-2, higher temperature will
-  a more random response. See more info in the [LLM parameters
-  page](/get-started/llm-params)
+  a more random response. See more info in the [LLM parameters page](/get-started/llm-params)
 </ParamField>
 
 <ParamField path="n" type="integer" default={1}>
