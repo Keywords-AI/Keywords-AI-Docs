@@ -1,11 +1,12 @@
 ---
-title: 'Request Parameters'
-description: 'An overview for LLM generation parameters'
+title: "Request Parameters"
+description: "An overview for LLM generation parameters"
 ---
 
 You can paste the command below into your terminal to run your first API request. Make sure to replace `YOUR_ACCESS_TOKEN` with your secret API key.
 
 ## Example Call
+
 <CodeGroup>
 
 ```bash cURL
@@ -27,9 +28,9 @@ curl -X POST "https://api.keywordsai.co/api/generate/" \
 
 ```python Python
 import requests
-def demo_call(input, 
+def demo_call(input,
               model="claude-2" ,
-              token="a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z", 
+              token="a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z",
               stream=False
               ):
     headers = {
@@ -50,6 +51,7 @@ def demo_call(input,
 messages = "Say 'Hello World'"
 print(demo_call(messages).json())
 ```
+
 ```TypeScript TypeScript
 // Define the function with TypeScript
 fetch('https://api.keywordsai.co/api/generate/', {
@@ -72,7 +74,8 @@ fetch('https://api.keywordsai.co/api/generate/', {
 ## LLM API Parameters
 
 <ParamField path="model" type="string">
-  Specify which model to use. See the list of model [here](/integration/supported-models)
+  Specify which model to use. See the list of model
+  [here](/integration/supported-models)
 </ParamField>
 
 <ParamField path="models" type="array[string]">
@@ -115,12 +118,14 @@ Specify the list of models the router to chooose between. If not specified, <str
   Maximum number of tokens to generate in the response
 </ParamField>
 
-<ParamField path="temperature" type="float" default={1} >
-  Controls randomness in the output in the range of 0-2, higher temperature will a more random response. See more info in the [LLM parameters page](/get-started/llm-params)
+<ParamField path="temperature" type="float" default={1}>
+  Controls randomness in the output in the range of 0-2, higher temperature will
+  a more random response. See more info in the [LLM parameters
+  page](/get-started/llm-params)
 </ParamField>
 
 <ParamField path="n" type="integer" default={1}>
-  How many completions choices to generate for each prompt.  
+  How many completions choices to generate for each prompt.
 
   <strong>Caveat!</strong> while this can help improving generation quality by picking the optimal choice, this could also lead to more token usage.
 </ParamField>
@@ -130,8 +135,10 @@ Specify the list of models the router to chooose between. If not specified, <str
 </ParamField>
 
 {/* Add this to the concept page */}
+
 <ParamField path="logprobs" type="boolean" default={false}>
-  Include the log probabilities on the logprobs most likely tokens, as well the chosen tokens
+  Include the log probabilities on the logprobs most likely tokens, as well the
+  chosen tokens
 </ParamField>
 
 <ParamField path="echo" type="boolean">
@@ -139,21 +146,27 @@ Specify the list of models the router to chooose between. If not specified, <str
 </ParamField>
 
 {/* Add this to the concept page */}
-<ParamField path="stop" type="array[string]"> 
+
+<ParamField path="stop" type="array[string]">
   Stop sequence
 </ParamField>
 
 {/* Add this to the concept page */}
+
 <ParamField path="presence_penalty" type="number">
-  How much to penalize new tokens based on whether they appear in the text so far. Increases the model's likelihood to talk about new topics
+  How much to penalize new tokens based on whether they appear in the text so
+  far. Increases the model's likelihood to talk about new topics
 </ParamField>
 
 {/* Add this to the concept page */}
+
 <ParamField path="frequency_penalty" type="number">
-  How much to penalize new tokens based on their existing frequency in the text so far. Decreases the model's likelihood to repeat the same line verbatim
+  How much to penalize new tokens based on their existing frequency in the text
+  so far. Decreases the model's likelihood to repeat the same line verbatim
 </ParamField>
 
 {/* Add this to the concept page */}
+
 <ParamField path="logit_bias" type="dict">
   Used to modify the probability of tokens appearing in the response
 </ParamField>
@@ -187,21 +200,132 @@ Specify the list of models the router to chooose between. If not specified, <str
 
 ## Extra Parameters for Monitoring
 
+<ParamField path="eval" type="boolean" default={false}>
+Adding this returns the evaluation metrics in the response body. If streaming is on, the metrics will be streamed as the last chunk
+
+<strong>Regular Response</strong>
+```json
+{
+  "id": "chatcmpl-7476cf3f-fcc9-4902-a548-a12489856d8a",
+  //... main part of the response body ...
+  "evaluation": {
+    "prompt_tokens": 6,
+    "completion_tokens": 9,
+    "cost": 4.8e-5,
+    "prompt_messages": [
+      {
+        "role": "user",
+        "content": "How are you doing today?"
+      }
+    ],
+    "completion_message": {
+      "content": " I'm doing well, thanks for asking!",
+      "role": "assistant"
+    },
+    "model": "claude-2",
+    "cached": false,
+    "timestamp": "2024-02-20T01:23:39.329729Z",
+    "status_code": 200,
+    "stream": false,
+    "latency": 1.8415491580963135,
+    "scores": {},
+    "category": "Questions",
+    "metadata": {},
+    "routing_time": 0.18612787732854486,
+    "full_request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "How are you doing today?"
+        }
+      ],
+      "model": "claude-2",
+      "logprobs": true
+    },
+    "sentiment_score": 0
+  }
+}
+```
+
+<strong>Streaming Response</strong>
+
+```json
+//... other chunks ...
+// The following is the last chunk
+{
+  "id": "evaluation",
+  "choices": [
+    {
+      "delta": { "content": null, "role": "assistant" },
+      "finish_reason": "stop",
+      "evaluation": {
+        "prompt_tokens": 6,
+        "completion_tokens": 9,
+        "cost": 4.8e-5,
+        "prompt_messages": [
+          {
+            "role": "user",
+            "content": "How are you doing today?"
+          }
+        ],
+        "completion_message": {
+          "content": " I'm doing well, thanks for asking!",
+          "role": "assistant"
+        },
+        "model": "claude-2",
+        "cached": false,
+        "timestamp": "2024-02-20T01:23:39.329729Z",
+        "status_code": 200,
+        "stream": false,
+        "latency": 1.8415491580963135,
+        "scores": {},
+        "category": "Questions",
+        "metadata": {},
+        "routing_time": 0.18612787732854486,
+        "full_request": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "How are you doing today?"
+            }
+          ],
+          "model": "claude-2",
+          "logprobs": true
+        },
+        "sentiment_score": 0
+      },
+      "index": 0,
+      "message": { "content": null, "role": "assistant" }
+    }
+  ],
+  "created": 1706100589,
+  "model": "extra_parameter",
+  "object": "chat.completion.chunk",
+  "system_fingerprint": null,
+  "usage": {}
+}
+```
+</ParamField>
+
 <ParamField path="customer_identifier" type="string">
-Use this the as a tag to identify the user assocaited with the API call.
+  Use this the as a tag to identify the user assocaited with the API call.
 </ParamField>
 
 <ParamField path="metadata" type="dict">
 You can add any key value pair to this metadata field for your reference, contact team@keywordsai.co if you need extra parameter supports for your usecase.
 
 Example:
+
 ```json
 {
   "my_value_key": "my_value"
 }
 ```
+
 </ParamField>
 
 <ParamField path="disable_log" type="boolean" deafault={false}>
-When set to true, only the request and the [performance metrics](/performance-monitoring/monitoring-metrics) will be recorded, input and output messages will be ommited from the log.
+  When set to true, only the request and the [performance
+  metrics](/performance-monitoring/monitoring-metrics) will be recorded, input
+  and output messages will be ommited from the log.
 </ParamField>
