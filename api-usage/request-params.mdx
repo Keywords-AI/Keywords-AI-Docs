@@ -78,15 +78,7 @@ fetch('https://api.keywordsai.co/api/generate/', {
   [here](/integration/supported-models)
 </ParamField>
 
-<ParamField path="models" type="array[string]">
-Specify the list of models the router to chooose between. If not specified, <strong>all models</strong> will be used. See the list of model [here](/integration/supported-models)
-</ParamField>
-
-<ParamField path="fallback_models" type="array[string]">
-Specify the list of backup models (ranked by priority) to response in case of a failure in the primary model. See the list of model [here](/integration/supported-models)
-</ParamField>
-
-<ParamField path="messages" type="array[dict]">
+<ParamField path="messages" type="array[dict]" required={true}>
   List of messages to send to the endpoint in the [OpenAI style](https://platform.openai.com/docs/api-reference/chat/create#chat-create-messages), each of them following this format:
   ```json
   {
@@ -113,6 +105,26 @@ Specify the list of backup models (ranked by priority) to response in case of a 
   ]
 }
   ```
+</ParamField>
+
+<ParamField path="models" type="array[string]">
+Specify the list of models the router to chooose between. If not specified, <strong>all models</strong> will be used. See the list of model [here](/integration/supported-models)
+</ParamField>
+
+<ParamField path="fallback_models" type="array[string]">
+Specify the list of backup models (ranked by priority) to response in case of a failure in the primary model. See the list of model [here](/integration/supported-models)
+</ParamField>
+
+
+<ParamField path="customer_api_keys" type="dict">
+You can pass in a dictionary of your customer's API keys for specific models. If the router selects a model that is in the dictionary, it will attempt to use the customer's API key for calling the model before using your [integration API key](/integration/llm-credit) or Keywords AI's default API key.
+
+```json
+{
+  "gpt-3.5-turbo": "your_customer_api_key",
+  "gpt-4": "your_customer_api_key",
+}
+```
 </ParamField>
 
 <ParamField path="suffix" type="string">
