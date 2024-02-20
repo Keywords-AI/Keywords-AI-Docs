@@ -214,6 +214,17 @@ You can pass in a dictionary of your customer's API keys for specific models. If
   ```
 </ParamField>
 
+<ParamField path="tool_choice" type="dict">
+  Manually picking the choice of tool for the model to use. This will force the model to make a function call everytime a function is passed in.
+  ```json
+  {
+    "type": "function",
+    "function": {"name": "name_of_the_function"},
+  }
+  ```
+</ParamField>
+
+
 ## Extra Parameters for Monitoring
 
 <ParamField path="request_breakdown" type="boolean" default={false}>
