@@ -1,6 +1,6 @@
 ---
 title: "Request Parameters"
-description: "An overview for LLM generation parameters"
+description: "An overview of LLM generation parameters"
 ---
 
 You can paste the command below into your terminal to run your first API request. Make sure to replace `YOUR_KEYWORDSAI_API_KEY` with your actual Keywords AI API key.
@@ -108,11 +108,11 @@ fetch('https://api.keywordsai.co/api/generate/', {
 </ParamField>
 
 <ParamField path="models" type="array[string]">
-Specify the list of models the router to chooose between. If not specified, <strong>all models</strong> will be used. See the list of model [here](/integration/supported-models)
+Specify the list of models for the router to choose between. If not specified, <strong>all models</strong> will be used. See the list of models [here](/integration/supported-models)
 </ParamField>
 
 <ParamField path="fallback_models" type="array[string]">
-Specify the list of backup models (ranked by priority) to response in case of a failure in the primary model. See the list of model [here](/integration/supported-models)
+Specify the list of backup models (ranked by priority) to respond in case of a failure in the primary model. See the list of models [here](/integration/supported-models)
 </ParamField>
 
 
@@ -137,13 +137,13 @@ You can pass in a dictionary of your customer's API keys for specific models. If
 
 <ParamField path="temperature" type="float" default={1}>
   Controls randomness in the output in the range of 0-2, higher temperature will
-  a more random response. See more info in the [LLM parameters page](/get-started/llm-params)
+  a more random response. See more info on the [LLM parameters page](/get-started/llm-params)
 </ParamField>
 
 <ParamField path="n" type="integer" default={1}>
-  How many completions choices to generate for each prompt.
+  Specify many completions choices to generate for each prompt.
 
-  <strong>Caveat!</strong> while this can help improving generation quality by picking the optimal choice, this could also lead to more token usage.
+  <strong>Caveat!</strong> While this can help improve generation quality by picking the optimal choice, this could also lead to more token usage.
 </ParamField>
 
 <ParamField path="stream" type="boolean" default={false}>
@@ -153,8 +153,7 @@ You can pass in a dictionary of your customer's API keys for specific models. If
 {/* Add this to the concept page */}
 
 <ParamField path="logprobs" type="boolean" default={false}>
-  Include the log probabilities on the logprobs most likely tokens, as well the
-  chosen tokens
+  Include the log probabilities on each token being selected.
 </ParamField>
 
 <ParamField path="echo" type="boolean">
@@ -170,15 +169,15 @@ You can pass in a dictionary of your customer's API keys for specific models. If
 {/* Add this to the concept page */}
 
 <ParamField path="presence_penalty" type="number">
-  How much to penalize new tokens based on whether they appear in the text so
-  far. Increases the model's likelihood to talk about new topics
+  Specify how much to penalize new tokens based on whether they appear in the text so
+  far. Increases the model's likelihood of talking about new topics
 </ParamField>
 
 {/* Add this to the concept page */}
 
 <ParamField path="frequency_penalty" type="number">
-  How much to penalize new tokens based on their existing frequency in the text
-  so far. Decreases the model's likelihood to repeat the same line verbatim
+  Specify how much to penalize new tokens based on their existing frequency in the text
+  so far. Decreases the model's likelihood for repeating the same line verbatim
 </ParamField>
 
 {/* Add this to the concept page */}
@@ -188,7 +187,7 @@ You can pass in a dictionary of your customer's API keys for specific models. If
 </ParamField>
 
 <ParamField path="tools" type="array[dict]">
-  A list of tools the model may call. Currently, only functions are supported as a tool. Use this to provide a array of functions the model may generate JSON inputs for.
+  A list of tools the model may call. Currently, only functions are supported as a tool. Use this to provide an array of functions the model may generate JSON inputs for.
   ```json
   {
       "type": "function",
@@ -215,7 +214,7 @@ You can pass in a dictionary of your customer's API keys for specific models. If
 </ParamField>
 
 <ParamField path="tool_choice" type="dict">
-  Manually picking the choice of tool for the model to use. This will force the model to make a function call everytime a function is passed in.
+  Manually picking the choice of tool for the model to use. This will force the model to make a function call every time a function is passed in.
   ```json
   {
     "type": "function",
@@ -335,11 +334,11 @@ Adding this returns the summarization of the response in the response body. If s
 </ParamField>
 
 <ParamField path="customer_identifier" type="string">
-  Use this the as a tag to identify the user associated with the API call.
+  Use this as a tag to identify the user associated with the API call.
 </ParamField>
 
 <ParamField path="metadata" type="dict">
-You can add any key value pair to this metadata field for your reference, contact team@keywordsai.co if you need extra parameter supports for your usecase.
+You can add any key-value pair to this metadata field for your reference, contact team@keywordsai.co if you need extra parameter support for your use case.
 
 Example:
 
@@ -354,5 +353,5 @@ Example:
 <ParamField path="disable_log" type="boolean" deafault={false}>
   When set to true, only the request and the [performance
   metrics](/performance-monitoring/monitoring-metrics) will be recorded, input
-  and output messages will be ommited from the log.
+  and output messages will be omitted from the log.
 </ParamField>
