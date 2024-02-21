@@ -57,7 +57,7 @@ print(demo_call(messages).json())
 fetch('https://api.keywordsai.co/api/generate/', {
   method: 'POST',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
     'Authorization': 'Api-Key a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
   }
     body: JSON.stringify({
@@ -141,7 +141,7 @@ You can pass in a dictionary of your customer's API keys for specific models. If
 </ParamField>
 
 <ParamField path="n" type="integer" default={1}>
-  Specify many completions choices to generate for each prompt.
+  Specify many completion choices to generate for each prompt.
 
   <strong>Caveat!</strong> While this can help improve generation quality by picking the optimal choice, this could also lead to more token usage.
 </ParamField>
@@ -287,7 +287,7 @@ Adding this returns the summarization of the response in the response body. If s
       "request_breakdown": {
         "prompt_tokens": 6,
         "completion_tokens": 9,
-        "cost": 4.8e-5,
+        "cost": 4.8e-5, //  In usd
         "prompt_messages": [
           {
             "role": "user",
@@ -303,11 +303,11 @@ Adding this returns the summarization of the response in the response body. If s
         "timestamp": "2024-02-20T01:23:39.329729Z",
         "status_code": 200,
         "stream": false,
-        "latency": 1.8415491580963135,
+        "latency": 1.8415491580963135, // in seconds
         "scores": {},
         "category": "Questions",
         "metadata": {},
-        "routing_time": 0.18612787732854486,
+        "routing_time": 0.18612787732854486, // in seconds
         "full_request": {
           "messages": [
             {
