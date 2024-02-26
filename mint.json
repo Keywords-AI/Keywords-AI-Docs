@@ -39,33 +39,32 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["get-started/introduction", "get-started/overview", 
-      {
-        "group": "Concepts and Terminologies",
-        "pages":[
-          "get-started/concepts",
-          "get-started/llm-params"
-        ]
-      },
-      "get-started/quick-start"]
+      "pages": [
+        "get-started/introduction",
+        "get-started/overview",
+        {
+          "group": "Concepts and Terminologies",
+          "pages": ["get-started/concepts", "get-started/llm-params"]
+        },
+        "get-started/quick-start"
+      ]
     },
     {
       "group": "API Usage",
-      "pages": ["api-usage/api-keys", 
-      {
-        "group": "Sending Request",
-        "pages": [
-          "api-usage/request-params"
-        ]
-      },
-      {
-        "group": "Handling Response",
-        "pages": [
-          "api-usage/regular-response",
-          "api-usage/streaming-response"
-        ]
-      }
-    ]
+      "pages": [
+        "api-usage/api-keys",
+        {
+          "group": "Sending Request",
+          "pages": ["api-usage/request-params"]
+        },
+        {
+          "group": "Handling Response",
+          "pages": [
+            "api-usage/regular-response",
+            "api-usage/streaming-response"
+          ]
+        }
+      ]
     },
     {
       "group": "Performance Monitoring",
@@ -73,27 +72,30 @@
         "performance-monitoring/monitoring-metrics",
         {
           "group": "Dashboard",
-          "pages":["performance-monitoring/dashboard/dashboard"]
+          "pages": ["performance-monitoring/dashboard/dashboard"]
         },
         {
           "group": "Request Log",
-          "pages":["performance-monitoring/requestlog/requestlog"]
+          "pages": ["performance-monitoring/requestlog/requestlog"]
         }
       ]
     },
     {
       "group": "API Playgrounds",
-      "pages": [
-        "api-playgrounds/chatbot",
-        "api-playgrounds/playground"
-      ]
+      "pages": ["api-playgrounds/chatbot", "api-playgrounds/playground"]
     },
     {
       "group": "Integration",
       "pages": [
-      "integration/supported-models",
-      "integration/llm-credits"
-    ]
+        "integration/supported-models",
+        {
+          "group": "Providers",
+          "pages": ["integration/providers/providers-overview",
+          "integration/providers/openai",
+          "integration/providers/azure"
+        ]
+        }
+      ]
     },
     {
       "group": "Collaboration",
@@ -102,24 +104,20 @@
     {
       "group": "Error Handling",
       "pages": [
-      "error-handling/error-code",
-      "error-handling/suggestions",
-      "error-handling/alerts"
-    ]
+        "error-handling/error-code",
+        "error-handling/suggestions",
+        "error-handling/alerts"
+      ]
     },
     {
       "group": "Guides",
-      "pages": [
-        "guides/limits",
-        "guides/prompting-guides"
-    ]
+      "pages": ["guides/limits", "guides/prompting-guides"]
     }
   ],
   "footerSocials": {
     "linkedin": "https://www.linkedin.com/company/keywordsai/"
   },
   "search": {
-    "prompt": "Search..." 
+    "prompt": "Search..."
   }
 }
-
