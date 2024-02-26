@@ -108,23 +108,32 @@ fetch('https://api.keywordsai.co/api/generate/', {
 </ParamField>
 
 <ParamField path="models" type="array[string]">
-Specify the list of models for the router to choose between. If not specified, <strong>all models</strong> will be used. See the list of models [here](/integration/supported-models)
+  Specify the list of models for the router to choose between. If not specified,{" "}
+  <strong>all models</strong> will be used. See the list of models
+  [here](/integration/supported-models)
 </ParamField>
 
 <ParamField path="fallback_models" type="array[string]">
-Specify the list of backup models (ranked by priority) to respond in case of a failure in the primary model. See the list of models [here](/integration/supported-models)
+  Specify the list of backup models (ranked by priority) to respond in case of a
+  failure in the primary model. See the list of models
+  [here](/integration/supported-models)
 </ParamField>
 
-
-<ParamField path="customer_api_keys" type="dict">
-You can pass in a dictionary of your customer's API keys for specific models. If the router selects a model that is in the dictionary, it will attempt to use the customer's API key for calling the model before using your [integration API key](/integration/llm-credits) or Keywords AI's default API key.
+<ParamField path="customer_credentials" type="dict">
+You can pass in a dictionary of your customer's credentials and deployment variables for [supported providers](/integration/llm-credits) and use their credits when the router is calling models from those providers.
 
 ```json
 {
-  "gpt-3.5-turbo": "your_customer_api_key",
-  "gpt-4": "your_customer_api_key",
+  "openai": {
+    "api_key": "sk-DEacrWTDndFYhdcLYKF6T3BlbkdfghuyTj4sYL2v1EDhg3iz5",
+    "some_vars": "some_values"
+  },
+  "provider_id": {
+    "some_provider_var_names": "some_provider_var_values"
+  }
 }
 ```
+
 </ParamField>
 
 <ParamField path="suffix" type="string">
@@ -137,7 +146,8 @@ You can pass in a dictionary of your customer's API keys for specific models. If
 
 <ParamField path="temperature" type="float" default={1}>
   Controls randomness in the output in the range of 0-2, higher temperature will
-  a more random response. See more info on the [LLM parameters page](/get-started/llm-params)
+  a more random response. See more info on the [LLM parameters
+  page](/get-started/llm-params)
 </ParamField>
 
 <ParamField path="n" type="integer" default={1}>
@@ -169,15 +179,16 @@ You can pass in a dictionary of your customer's API keys for specific models. If
 {/* Add this to the concept page */}
 
 <ParamField path="presence_penalty" type="number">
-  Specify how much to penalize new tokens based on whether they appear in the text so
-  far. Increases the model's likelihood of talking about new topics
+  Specify how much to penalize new tokens based on whether they appear in the
+  text so far. Increases the model's likelihood of talking about new topics
 </ParamField>
 
 {/* Add this to the concept page */}
 
 <ParamField path="frequency_penalty" type="number">
-  Specify how much to penalize new tokens based on their existing frequency in the text
-  so far. Decreases the model's likelihood for repeating the same line verbatim
+  Specify how much to penalize new tokens based on their existing frequency in
+  the text so far. Decreases the model's likelihood of repeating the same line
+  verbatim
 </ParamField>
 
 {/* Add this to the concept page */}
@@ -222,7 +233,6 @@ You can pass in a dictionary of your customer's API keys for specific models. If
   }
   ```
 </ParamField>
-
 
 ## Extra Parameters for Monitoring
 
@@ -331,6 +341,7 @@ Adding this returns the summarization of the response in the response body. If s
   "usage": {}
 }
 ```
+
 </ParamField>
 
 <ParamField path="customer_identifier" type="string">
@@ -354,4 +365,17 @@ Example:
   When set to true, only the request and the [performance
   metrics](/performance-monitoring/monitoring-metrics) will be recorded, input
   and output messages will be omitted from the log.
+</ParamField>
+
+## Deprecated Parameters
+
+<ParamField path="customer_api_keys" type="dict">
+You can pass in a dictionary of your customer's API keys for specific models. If the router selects a model that is in the dictionary, it will attempt to use the customer's API key for calling the model before using your [integration API key](/integration/llm-credits) or Keywords AI's default API key.
+
+```json
+{
+  "gpt-3.5-turbo": "your_customer_api_key",
+  "gpt-4": "your_customer_api_key",
+}
+```
 </ParamField>

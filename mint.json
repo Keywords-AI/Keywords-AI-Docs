@@ -64,8 +64,7 @@
           "api-usage/regular-response",
           "api-usage/streaming-response"
         ]
-      },
-      "api-usage/fallback-mechanism"
+      }
     ]
     },
     {
