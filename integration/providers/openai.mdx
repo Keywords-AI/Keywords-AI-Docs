@@ -1,0 +1,17 @@
+---
+title: "OpenAI Credits"
+description: "Use your own OpenAI credits through Keywords AI"
+---
+
+Add [customer_credentials](/api-usage/request-params#:~:text=customer_credentials) parameter in your [request body](/api-usage/request-params) to use your own OpenAI credits.
+
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "openai": {
+      "api_key": "your-api-key"
+    }
+  }
+}
+```
