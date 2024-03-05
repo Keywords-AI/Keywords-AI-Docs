@@ -81,17 +81,17 @@
       "group": "API Endpoint Features",
       "pages": [
         "api-features/load-balancing",
-        "api-features/usage-control",
-        "api-features/llm-params",
-        "api-features/retires",
-        "api-features/requst-breakdown",
+        "api-features/fallbacks",
+        "api-features/retries",
+        "api-features/request-breakdown",
         "api-features/streaming",
-        "api-features/disable-log"
+        "api-features/disable-logs"
       ]
     },
     {
       "group": "Platform Features",
       "pages": [
+        "platform-features/api-keys",
         "platform-features/playground",
         "platform-features/dashboard",
         "platform-features/requests-log",
@@ -109,9 +109,7 @@
           "pages": [
           "integration/providers/providers-overview",
           "integration/providers/openai",
-          "integration/providers/azure",
-          "integration/providers/gemini",
-          "integration/providers/"  
+          "integration/providers/azure"
         ]
         }
       ]
