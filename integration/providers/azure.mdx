@@ -8,10 +8,10 @@ Add [customer_credentials](/api-usage/request-params#:~:text=customer_credential
 To find the parameters needed, you can follow these steps:
 - Visit your [Azure Portal](https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI).
 - You will see your deployments via the above link, choose the deployment you want to use.
-<img src="images/blurred-azure-portal.jpg"/>
+<img src="images/providers/azure/blurred-azure-endpoint.jpg"/>
 - Click on the "Endpoints" link to get the API base URL.
 - Click on the "Manage Keys" link to get the API key.
-<img src="images/blurred-azure-endpoint.jpg"/>
+<img src="images/providers/azure/blurred-azure-endpoint.jpg"/>
 - Pick the version from the [available versions](https://learn.microsoft.com/en-us/azure/ai-services/openai/reference).
 
 ```json
@@ -20,8 +20,8 @@ To find the parameters needed, you can follow these steps:
   "customer_credentials": {
     "azure": {
       "api_key": "your-api-key",
-      "api_base": "your api base url",
-      "api_version": "your api version",
+      "api_base": "your-api-base-url",
+      "api_version": "your-api-version",
     }
   }
 }
