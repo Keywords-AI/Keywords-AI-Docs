@@ -1,4 +1,9 @@
 {
+  "analytics": {
+    "posthog": {
+        "apiKey": "phx_yQ76AuQS0asDcDrEWEHRRnvBt67nbhJAnYVUiqApTwx"
+    }
+},
   "$schema": "https://mintlify.com/schema.json",
   "name": "Docs",
   "logo": {
