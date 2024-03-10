@@ -1,9 +1,9 @@
 {
   "analytics": {
     "posthog": {
-        "apiKey": "phc_rL8MrmFrie28wgxtDurKt9t1bwCzChaJQ7WYaj1F1gH"
+      "apiKey": "phc_rL8MrmFrie28wgxtDurKt9t1bwCzChaJQ7WYaj1F1gH"
     }
-},
+  },
   "$schema": "https://mintlify.com/schema.json",
   "name": "Docs",
   "logo": {
@@ -46,6 +46,17 @@
       "url": "concepts"
     }
   ],
+  "api": {
+    "baseUrl": "https://api.keywordsai.co",
+    "auth": {
+      "method": "key",
+      "name": "Authorization",
+      "inputPrefix": "Api-Key"
+    },
+    "playground": {
+      "mode": "show"
+    }
+  },
   "navigation": [
     {
       "group": "Get Started",
@@ -69,7 +80,8 @@
               ]
             }
           ]
-        }
+        },
+        "api-endpoints/async-endpoints/users-data-endpoint"
       ]
     },
     {
@@ -104,10 +116,10 @@
         {
           "group": "Providers",
           "pages": [
-          "integration/providers/providers-overview",
-          "integration/providers/openai",
-          "integration/providers/azure"
-        ]
+            "integration/providers/providers-overview",
+            "integration/providers/openai",
+            "integration/providers/azure"
+          ]
         }
       ]
     },
@@ -118,15 +130,11 @@
         "error-handling/401",
         "error-handling/403",
         "error-handling/404",
-        "error-handling/408", 
+        "error-handling/408",
         "error-handling/429",
         "error-handling/500",
         "error-handling/504"
       ]
-    },
-    {
-      "group": "Concepts and Terminologies",
-      "pages": ["concept/concepts", "concept/llm-params"]
     }
   ],
   "footerSocials": {
