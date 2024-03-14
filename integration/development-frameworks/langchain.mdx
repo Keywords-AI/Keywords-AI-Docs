@@ -1,0 +1,27 @@
+---
+title: LangChain
+---
+
+You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions.mdx) endpoint with LangChain's `ChatOpenAI` LLM under two lines of code change.
+
+```Python Python
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    base_url=env["base_url"],
+    api_key=env["api_key"],
+    model="gpt-3.5-turbo",
+    streaming=True,
+    model_kwargs={
+        "extra_body":{"customer_identifier": "customer_11"}
+    }
+)
+response = llm.invoke(
+    input="Hi"
+)
+print(response)
+```
+
+In `model_kwargs`, you can pass in any [OpenAI parameters](/api-endpoints/proxy-endpoints/chat-completions#openai-parameters). 
+
+To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can specify an `extra_body` object within `model_kwargs`. In the above example, `customer_identifier` is the Keywords AI parameter. These parameters will take precedence over the OpenAI parameters if they are conflicting.
