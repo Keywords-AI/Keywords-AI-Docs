@@ -1,79 +1,9 @@
 ---
-title: "Text Generation"
-description: "An overview of LLM generation parameters"
-api: "POST https://api.keywordsai.co/api/generate/"
+title: Chat Completion
+api: POST https://api.keywordsai.co/api/chat/completions
 ---
-<Info>Make sure you add **Bearer** prefix to your token</Info>
 
-You can paste the command below into your terminal to run your first API request. Make sure to replace `YOUR_KEYWORDSAI_API_KEY` with your actual Keywords AI API key.
-
-## Example Call
-
-<CodeGroup>
-
-```bash cURL
-curl -X POST "https://api.keywordsai.co/api/generate/" \
--H "Content-Type: application/json" \
--H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
--d '{
-  "messages": [
-    {
-      "role": "user",
-      "content": "Hello"
-    }
-  ],
-  "models": ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"],
-  "stream": false,
-  "max_tokens": 100
-}'
-```
-
-```python Python
-import requests
-def demo_call(input,
-              model="claude-2" ,
-              token="a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z",
-              stream=False
-              ):
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Bearer {token}',
-    }
-
-    data = {
-        'model': model,
-        'messages': [{'role': 'user', 'content': input}],
-        "stream": stream,
-        "models": ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"],
-    }
-
-    response = requests.post('https://api.keywordsai.co/api/generate/', headers=headers, json=data, stream=stream)
-    return response
-
-messages = "Say 'Hello World'"
-print(demo_call(messages).json())
-```
-
-```TypeScript TypeScript
-// Define the function with TypeScript
-fetch('https://api.keywordsai.co/api/generate/', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
-  }
-    body: JSON.stringify({
-        models: ['gpt-3.5-turbo', 'gpt-3.5-turbo-16k'],
-        messages: [{role: 'user', content: "Say 'Hello World'"}]
-    })
-})
-.then(response => response.json())
-.then(data => console.log(data));
-```
-
-</CodeGroup>
-
-## LLM API Parameters
+## OpenAI Parameters
 
 <ParamField path="model" type="string">
   Specify which model to use. See the list of model
@@ -107,39 +37,6 @@ fetch('https://api.keywordsai.co/api/generate/', {
   ]
 }
   ```
-</ParamField>
-
-<ParamField path="models" type="array">
-  Specify the list of models for the router to choose between. If not specified,{" "}
-  <strong>all models</strong> will be used. See the list of models
-  [here](/integration/supported-models)
-</ParamField>
-
-<ParamField path="fallback_models" type="array">
-  Specify the list of backup models (ranked by priority) to respond in case of a
-  failure in the primary model. See the list of models
-  [here](/integration/supported-models)
-</ParamField>
-
-<ParamField path="customer_credentials" type="object">
-You can pass in a dictionary of your customer's credentials and deployment variables for [supported providers](/integration/providers/providers-overview) and use their credits when the router is calling models from those providers.
-
-```json
-{
-  "openai": {
-    "api_key": "sk-DEacrWTDndFYhdcLYKF6T3BlbkdfghuyTj4sYL2v1EDhg3iz5",
-    "some_vars": "some_values"
-  },
-  "provider_id": {
-    "some_provider_var_names": "some_provider_var_values"
-  }
-}
-```
-
-</ParamField>
-
-<ParamField path="suffix" type="string">
-  Strings to append to the end of the response.
 </ParamField>
 
 <ParamField path="max_tokens" type="number">
@@ -236,7 +133,7 @@ You can pass in a dictionary of your customer's credentials and deployment varia
   ```
 </ParamField>
 
-## Extra Parameters for Monitoring
+## Keywords AI Parameters
 
 <ParamField path="request_breakdown" type="boolean" default={false}>
 Adding this returns the summarization of the response in the response body. If streaming is on, the metrics will be streamed as the last chunk
@@ -344,6 +241,33 @@ Adding this returns the summarization of the response in the response body. If s
 }
 ```
 
+</ParamField>
+
+<ParamField path="models" type="array">
+  Specify the list of models for the router to choose between. If not specified,{" "}
+  <strong>all models</strong> will be used. See the list of models
+  [here](/integration/supported-models)
+</ParamField>
+
+<ParamField path="fallback_models" type="array">
+  Specify the list of backup models (ranked by priority) to respond in case of a
+  failure in the primary model. See the list of models
+  [here](/integration/supported-models)
+</ParamField>
+
+<ParamField path="customer_credentials" type="object">
+You can pass in a dictionary of your customer's credentials and deployment variables for [supported providers](/integration/providers/providers-overview) and use their credits when the router is calling models from those providers.
+```json
+{
+  "openai": {
+    "api_key": "sk-DEacrWTDndFYhdcLYKF6T3BlbkdfghuyTj4sYL2v1EDhg3iz5",
+    "some_vars": "some_values"
+  },
+  "provider_id": {
+    "some_provider_var_names": "some_provider_var_values"
+  }
+}
+```
 </ParamField>
 
 <ParamField path="customer_identifier" type="string">

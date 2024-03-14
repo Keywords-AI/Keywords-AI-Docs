@@ -49,7 +49,7 @@
   "api": {
     "baseUrl": "https://api.keywordsai.co",
     "auth": {
-      "method": "key",
+      "method": "bearer",
       "name": "Authorization",
       "inputPrefix": "Api-Key"
     },
@@ -68,8 +68,9 @@
     {
       "group": "API Endpoints",
       "pages": [
+        "api-endpoints/proxy-endpoints/chat-completions",
         {
-          "group": "Text generation: api/generate/",
+          "group": "Text generation",
           "pages": [
             "api-endpoints/proxy-endpoints/text-generation/request-params",
             {
@@ -106,13 +107,21 @@
         "platform-features/users-page",
         "platform-features/alerts-and-fallback",
         "platform-features/available-models-list",
-        "platform-features/collaboration/"
+        "platform-features/webhooks"
       ]
     },
     {
       "group": "Integration",
       "pages": [
         "integration/supported-models",
+        {
+          "group": "Development frameworks",
+          "pages": [
+            "integration/development-frameworks/openai-sdk",
+            "integration/development-frameworks/langchain",
+            "integration/development-frameworks/llama-index"
+          ]
+        },
         {
           "group": "Providers",
           "pages": [
