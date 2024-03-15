@@ -21,6 +21,36 @@ response = llm.invoke(
 )
 print(response)
 ```
+```TypeScript TypeScript
+import { ChatOpenAI as ChatOpenAITest } from "@langchain/openai"
+// import { ChatOpenAI } from "langchain/chat_models/openai"
+import { ConversationChain } from "langchain/chains"
+
+const keywordsAI =  new ChatOpenAITest({
+    configuration: {
+        baseURL: "https://api.keywordsai.co/api/",
+    },
+    openAIApiKey: "<Your Keywords AI API Key>",
+    modelName: "gpt-3.5-turbo",
+    streaming: true,
+    modelKwargs: {
+        customer_identifier: "123456"
+    }
+    
+})
+
+const chain = new ConversationChain({
+    llm: keywordsAI,
+})
+
+async function main() {
+    // const response = await chain.call({input: "Hi"}) // You can use chain.call to invoke the model
+    const response = await keywordsAI.invoke("Hi") // Or you can use the model directly
+    console.log(response)
+}
+
+main()
+```
 
 In `model_kwargs`, you can pass in any [OpenAI parameters](/api-endpoints/proxy-endpoints/chat-completions#openai-parameters). 
 
