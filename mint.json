@@ -69,6 +69,13 @@
       "group": "API Endpoints",
       "pages": [
         "api-endpoints/proxy-endpoints/chat-completions",
+        "api-endpoints/async-endpoints/users-data-endpoint",
+        "api-endpoints/data-endpoints/models-endpoint"
+      ]
+    },
+    {
+      "group": "Deprecated API Endpoints",
+      "pages": [
         {
           "group": "Text generation",
           "pages": [
@@ -81,8 +88,7 @@
               ]
             }
           ]
-        },
-        "api-endpoints/async-endpoints/users-data-endpoint"
+        }
       ]
     },
     {
@@ -94,7 +100,8 @@
         "api-features/retries",
         "api-features/request-breakdown",
         "api-features/streaming",
-        "api-features/disable-logs"
+        "api-features/disable-logs",
+        "api-features/webhooks"
       ]
     },
     {
@@ -106,8 +113,7 @@
         "platform-features/requests-log",
         "platform-features/users-page",
         "platform-features/alerts-and-fallback",
-        "platform-features/available-models-list",
-        "platform-features/webhooks"
+        "platform-features/available-models-list"
       ]
     },
     {
