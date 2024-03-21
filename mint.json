@@ -69,15 +69,10 @@
       "group": "API Endpoints",
       "pages": [
         "api-endpoints/proxy-endpoints/chat-completions",
+        "api-endpoints/data-endpoints/models-endpoint",
         "api-endpoints/async-endpoints/users-data-endpoint",
-        "api-endpoints/data-endpoints/models-endpoint"
-      ]
-    },
-    {
-      "group": "Deprecated API Endpoints",
-      "pages": [
         {
-          "group": "Text generation",
+          "group": "Deprecation",
           "pages": [
             "api-endpoints/proxy-endpoints/text-generation/request-params",
             {
