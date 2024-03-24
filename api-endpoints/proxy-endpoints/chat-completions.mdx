@@ -9,7 +9,8 @@ api: POST https://api.keywordsai.co/api/chat/completions
   Specify which model to use. See the list of model
   [here](/integration/supported-models)
 
-  When this parameter is used, the router will not trigger.
+  When this parameter is used, the router will not trigger, and the `models` parameter behaves as `fallback_models`.
+
 </ParamField>
 
 <ParamField path="messages" type="array" required={true}>
@@ -250,7 +251,9 @@ Adding this returns the summarization of the response in the response body. If s
   <strong>all models</strong> will be used. See the list of models
   [here](/integration/supported-models)
 
-  If only one model is specified, it will be treated as if `model` parameter is used and the router will not trigger.
+  If only one model is specified, it will be treated as if the `model` parameter is used and the router will not trigger.
+
+  When the `model` parameter is used, the router will not trigger, and this parameter behaves as `fallback_models`.
 </ParamField>
 
 <ParamField path="fallback_models" type="array">
