@@ -8,6 +8,8 @@ api: POST https://api.keywordsai.co/api/chat/completions
 <ParamField path="model" type="string">
   Specify which model to use. See the list of model
   [here](/integration/supported-models)
+
+  When this parameter is used, the router will not trigger.
 </ParamField>
 
 <ParamField path="messages" type="array" required={true}>
