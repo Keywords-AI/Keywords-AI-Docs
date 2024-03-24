@@ -39,7 +39,7 @@ The API key will show up only once, <strong>Be careful and save it somewhere saf
 ```python Python
 import requests
 def demo_call(input, 
-              model="claude-2" ,
+              models=["gpt-3.5-turbo"],
               token="a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z", 
               stream=False
               ):
@@ -49,7 +49,7 @@ def demo_call(input,
     }
 
     data = {
-        'model': model,
+        'models': models,
         'messages': [{'role': 'user', 'content': input}],
         "stream": stream,
     }
