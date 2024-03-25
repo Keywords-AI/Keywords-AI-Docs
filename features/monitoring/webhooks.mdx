@@ -1,0 +1,93 @@
+---
+title: Webhooks
+---
+
+The Keywords AI platform provides a webhook system that allows you to receive notifications when certain events occur. 
+
+For example, when Keywords AI logs a new request, your webhook and point can receive this notification as an API call from Keywords AI.
+
+<img src="/images/api-features/webhooks/webhooks.png"/>
+
+## Authentication
+Keywords AI uses [digital signature](https://en.wikipedia.org/wiki/Digital_signature) strategy for webhook data verification.
+
+The data sent from Keywords AI undergoes the following process before you can use it:
+
+1. The data is ready in Keywords AI's backend
+```json
+{
+    "some": "data"
+}
+```
+2. The Keywords AI encodes the data with your API Key string retrieved from the action's header (we don't store your API key) that triggers the webhook, using [SHA-256](https://en.wikipedia.org/wiki/SHA-2) algorithm.
+```Python
+import hmac
+import json
+api_key = retrieve_from_header(some_action_header)
+stringified_body = json.dumps(data_to_send)
+signature = hmac.new(
+    fake_api_key.encode(),
+    stringified_body.encode(),
+    "sha256"
+).hexdigest()
+```
+3. The signature is then passed to `X-Keywordsai-Signature`. This is **case sensitive**.
+```json
+// Some header
+{
+    "X-Keywordsai-Signature": "2217632f28bdfc939977d00790f1c8cc9997c23ab36de810ae7e4fecdb310603"
+}
+```
+4. You can verify the data and accept or reject the payload
+```Python
+secret_key = YOUR_KEYWORDS_AI_API_KEY
+signature = request.headers.get("x-keywordsai-signature")
+compare_signature = hmac.new(secret_key.encode(), msg=stringify_data.encode(), digestmod="sha256").hexdigest()
+
+if compare_signature != signature:
+    return Response({"message": "Webhook signature does not match."}, status=401)
+```
+## Example for using Webhooks
+1. Define a webhook endpoint in your application.
+
+This endpoint sends an email to the admin when a webhook event is received.
+```Python Django
+import hmac
+## This endpoint corresponds to http://localhost:8000/api/webhook/
+## Replace this endpoint with your actual endpoint
+class TestWebhook(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+    
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        stringify_data = json.dumps(data)
+        secret_key = os.getenv("KEYWORDS_AI_API_KEY")
+        signature = request.headers.get("x-keywords-signature")
+        compare_signature = hmac.new(secret_key.encode(), msg=stringify_data.encode(), digestmod="sha256").hexdigest()
+        
+        if compare_signature != signature:
+            return Response({"message": "Webhook signature does not match."}, status=401)
+        
+        send_mail(
+            subject=f'Test Webhook Received',
+            message=f"Webhook data: {data}",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[settings.DEFAULT_FROM_EMAIL],
+        )
+        return Response({"message": "Webhook received."}, status=200)
+```
+
+2. Create a new webhook in the Keywords AI platform.
+    1. Go to the [Webhooks page](https://platform.keywordsai.co/platform/api/webhooks) in the Keywords AI platform.
+    2. Click on the "Create Webhook" button, and a modal will appear.
+    <img src="/images/api-features/webhooks/webhook_options.png" />
+    3. Define the webhook URL. In this demo, it is `http://localhost:8000/api/webhook/`.
+    4. Define the event type that triggers the webhook. In this demo, it is `New request log` (when an API call is logged).
+    5. Define the API Key you want to associate this webhook with. In this demo, it is an admin development key.
+    6. Click on the "Create" button.
+
+3. Make an [API call](/get-started/quick-start) to the [chat completion endpoint](/api-endpoints/proxy-endpoints/chat-completions)
+
+4. Receive the email.
+
