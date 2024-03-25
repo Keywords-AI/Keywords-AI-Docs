@@ -87,28 +87,35 @@
       ]
     },
     {
-      "group": "API Endpoint Features",
+      "group": "Features",
       "pages": [
-        "api-features/load-balancing",
-        "api-features/model-filtering",
-        "api-features/fallbacks",
-        "api-features/retries",
-        "api-features/request-breakdown",
-        "api-features/streaming",
-        "api-features/disable-logs",
-        "api-features/webhooks"
-      ]
-    },
-    {
-      "group": "Platform Features",
-      "pages": [
-        "platform-features/api-keys",
-        "platform-features/playground",
-        "platform-features/dashboard",
-        "platform-features/requests-log",
-        "platform-features/users-page",
-        "platform-features/alerts-and-fallback",
-        "platform-features/available-models-list"
+        {
+          "group":"Generation",
+          "pages": [
+            "features/generation/streaming",
+            "features/generation/fallbacks",
+            "features/generation/load-balancing",
+            "features/generation/retries",
+            "features/generation/model-filtering",
+            "features/generation/available-models-list"
+          ]
+        },
+        {
+          "group": "Monitoring",
+          "pages": [
+            "features/monitoring/dashboard",
+            "features/monitoring/requests-log",
+            "features/monitoring/users-page",
+            "features/monitoring/request-breakdown",
+            "features/monitoring/alerts-and-fallback"
+          ]
+        },
+        {
+          "group": "Evaluation",
+          "pages": [
+            "features/evaluation/generation/faithfulness"
+          ]
+        }
       ]
     },
     {

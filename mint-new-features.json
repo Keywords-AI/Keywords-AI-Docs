@@ -65,6 +65,31 @@
       ]
     },
     {
+      "group": "API Endpoint Features",
+      "pages": [
+        "api-features/load-balancing",
+        "api-features/model-filtering",
+        "api-features/fallbacks",
+        "api-features/retries",
+        "api-features/request-breakdown",
+        "api-features/streaming",
+        "api-features/disable-logs",
+        "api-features/webhooks"
+      ]
+    },
+    {
+      "group": "Platform Features",
+      "pages": [
+        "platform-features/api-keys",
+        "platform-features/playground",
+        "platform-features/dashboard",
+        "platform-features/requests-log",
+        "platform-features/users-page",
+        "platform-features/alerts-and-fallback",
+        "platform-features/available-models-list"
+      ]
+    },
+    {
       "group": "Async Endpoints",
       "pages": [
         "api-endpoints/async-endpoints",
