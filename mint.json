@@ -121,9 +121,17 @@
               ]
             },
             {
-              "group":"Faithfulness",
+              "group":"Text Generation",
               "pages": [
-                "features/evaluation/generation/faithfulness"
+                "features/evaluation/generation/faithfulness",
+                "features/evaluation/generation/flesch-kincaid",
+                "features/evaluation/generation/answer-relevance"
+              ]
+            },
+            {
+              "group":"Other",
+              "pages": [
+                "features/evaluation/other/sentiment"
               ]
             }
           ]
