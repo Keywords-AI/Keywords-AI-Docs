@@ -113,7 +113,19 @@
         {
           "group": "Evaluation",
           "pages": [
-            "features/evaluation/generation/faithfulness"
+            "features/evaluation/overview",
+            {
+              "group":"Retrieval",
+              "pages": [
+                "features/evaluation/retrieval/context-precision"
+              ]
+            },
+            {
+              "group":"Faithfulness",
+              "pages": [
+                "features/evaluation/generation/faithfulness"
+              ]
+            }
           ]
         }
       ]
