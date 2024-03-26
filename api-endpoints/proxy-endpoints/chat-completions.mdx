@@ -5,6 +5,70 @@ api: POST https://api.keywordsai.co/api/chat/completions
 
 ## OpenAI Parameters
 
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/chat/completions" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
+-d '{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello"
+    }
+  ],
+  "models": ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"],
+  "stream": false,
+  "max_tokens": 100
+}'
+```
+
+```python Python
+import requests
+import os
+
+def  keywords_ai_generate( 
+                messages, 
+                api_key=os.getenv("KEYWORDS_AI_API_KEY"),
+                url=os.getenv("KEYWORDS_AI_ENDPOINT") + "api/chat/completions",
+                **kwargs
+                ):
+    print("Calling: ",url)
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Api-Key {api_key}',
+    }
+    data = {
+        "messages": messages,
+        **kwargs
+    }
+        
+    response = requests.post(url=url, headers=headers, json=data)
+    return response
+
+params ={"messages": [{"role": "user", "content": "Hello"}], "models": ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"], "stream": False, "max_tokens": 100}
+response = keywords_ai_generate(**params)
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
+  }
+    body: JSON.stringify({
+        models: ['gpt-3.5-turbo', 'gpt-3.5-turbo-16k'],
+        messages: [{role: 'user', content: "Say 'Hello World'"}]
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+</CodeGroup>
+
 <ParamField path="model" type="string">
   Specify which model to use. See the list of model
   [here](/integration/supported-models)
