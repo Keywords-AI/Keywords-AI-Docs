@@ -115,8 +115,7 @@ fetch('https://api.keywordsai.co/api/generate/', {
 
 <ParamField path="temperature" type="number" default={1}>
   Controls randomness in the output in the range of 0-2, higher temperature will
-  a more random response. See more info on the [LLM parameters
-  page](/get-started/llm-params)
+  a more random response. 
 </ParamField>
 
 <ParamField path="n" type="number" default={1}>
@@ -368,13 +367,13 @@ Example:
 <ParamField path="exclude_models" type="array" default={[]}>
   The list of models to exclude from the router's selection. See the list of models [here](/integration/supported-models)
 
-  This only excludes models in the router, if `model` parameter will take precedence over this parameter, and`fallback_models` and [safety net](/platform-features/alerts-and-fallback.mdx) will still use the excluded models to catch failures.
+  This only excludes models in the router, if `model` parameter will take precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
 </ParamField>
 
 <ParamField path="exclude_providers" type="array" default={[]}>
   The list of providers to exclude from the router's selection. All models under the provider will be excluded. See the list of providers [here](/integration/providers/providers-overview)
 
-  This only excludes models in the router, if `model` parameter will take precedence over this parameter, and`fallback_models` and [safety net](/platform-features/alerts-and-fallback.mdx) will still use the excluded models to catch failures.
+  This only excludes models in the router, if `model` parameter will take precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
 </ParamField>
 
 ## Deprecated Parameters
