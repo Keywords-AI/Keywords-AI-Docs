@@ -33,8 +33,30 @@ The API key will show up only once, <strong>Be careful and save it somewhere saf
 <Card icon="link" href="/api-usage/api-keys" title="API Key Concepts">
   Learn More about Keywords AI API keys here
 </Card >
+## Try Keywords AI with the OpenAI SDK
+### Install the OpenAI SDK
+```bash
+pip install openai
+```
 
-## Try Keywords AI with an API Call
+```Python Python
+from openai import OpenAI
+
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key=YOUR_KEYWORDSAI_API_KEY,
+)
+
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[{"role":"user", "content":"Tell me a long story"}],
+    stream=True,
+    extra_body={"customer_identifier": "customer_11"}
+)
+```
+
+## Try Keywords AI with a pure API call
 <CodeGroup>
 ```python Python
 import requests
@@ -54,7 +76,7 @@ def demo_call(input,
         "stream": stream,
     }
 
-    response = requests.post('https://api.keywordsai.co/api/generate/', headers=headers, json=data, stream=stream)
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data, stream=stream)
     return response
 
 messages = "Say 'Hello World'"
@@ -63,7 +85,7 @@ print(demo_call(messages).json())
 
 ```TypeScript TypeScript
 // Define the function with TypeScript
-fetch('https://api.keywordsai.co/api/generate/', {
+fetch('https://api.keywordsai.co/api/chat/completions', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -80,7 +102,7 @@ fetch('https://api.keywordsai.co/api/generate/', {
 
 </CodeGroup>
 
-- **URL Change**: Modify the API endpoint URL in your code from OpenAI’s URL to the Keywords AI endpoint URL: \`https://keywordsai.co/api/generate/\\`.
+- **URL Change**: Modify the API endpoint URL in your code from OpenAI’s URL to the Keywords AI endpoint URL: `https://keywordsai.co/api/chat/completions`.
 - **API Key**: Replace the OpenAI API key with your Keywords AI API key.
 - **Parameters**: Models parameter becomes optional.
 
