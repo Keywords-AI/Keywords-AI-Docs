@@ -2,7 +2,7 @@
 Title: Users Page
 ---
 
-The users page helps you keep track of your users. You can tag each of your API calls with a [customer_identifier](/api-usage/request-params#:~:text=%7B%7D%0A%7D-,customer_identifier,-string)
+The users page helps you keep track of your users. You can tag each of your API calls with a `customer_identifier`
 and we will keep track of the usage of each of your users.
 
 <img src="/images/users-page/users-page.png" alt="Users Page" />
@@ -50,7 +50,7 @@ def  keywords_ai_generate(
     }
         
     response = requests.post(
-        'https://api.keywordsai.co/api/generate/', headers=headers, json=data)
+        'https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
     return response
 
 response = keywords_ai_generate(
@@ -64,7 +64,7 @@ response = keywords_ai_generate(
 
 ```TypeScript TypeScript
 // Define the function with TypeScript
-fetch('https://api.keywordsai.co/api/generate/', {
+fetch('https://api.keywordsai.co/api/chat/completions', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',

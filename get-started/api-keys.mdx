@@ -45,7 +45,7 @@ Here are some parameters for your API key:
 
 ```python
 import openai
-openai.base_url = "https://api.keywordsai.co/api/generate/"
+openai.base_url = "https://api.keywordsai.co/api/chat/completions"
 openai.api_key = "{YOUR_KEYWORDSD_AI_API_KEY}" # You should replace this with your actual key
 ...other code...
 ``` */}
@@ -54,7 +54,7 @@ When you make a request to Keywords AI, you can add the key in the header under 
 
 <CodeGroup>
 ```TypeScript JavaScript/TypeScript
-fetch('https://api.keywordsai.co/api/generate/', {
+fetch('https://api.keywordsai.co/api/chat/completions', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ headers = {
     'Content-Type': 'application/json',
     'Authorization': f'Api-Key YOUR_KEYWORDS_AI_API_KEY',
 }
-response = requests.post('https://api.keywordsai.co/api/generate/', headers=headers, json=data, stream=stream)
+response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data, stream=stream)
 ```
 </CodeGroup>
 
