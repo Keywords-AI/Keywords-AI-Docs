@@ -7,7 +7,7 @@ This error code indicates that your requests are malformed or invalid for the op
 
 This usually happens in two ways:
 - Keywords AI’s validator catches invalid input types for parameters for some parameters before sending them to its upstream provider. This means your request is malformed and some request parameters are not in the right type. and you should follow the guide on the LLM params page
-- The request passed the basic validations/type checking, but it was rejected by the upstream [provider]() of Keywords AI. This usually happens when you pass in parameters that are not supported by the models you specified and turn off Keywords AI’s safety net. It is recommended to turn on the [safety net]() to avoid this issue.
+- The request passed the basic validations/type checking, but it was rejected by the upstream [provider]() of Keywords AI. This usually happens when you pass in parameters that are not supported by the models you specified and turn off Keywords AI’s safety net. It is recommended to turn on the [safety net](/features/monitoring/alerts-and-fallback) to avoid this issue.
 
 <AccordionGroup>
   <Accordion title="Invalid Parameters">
