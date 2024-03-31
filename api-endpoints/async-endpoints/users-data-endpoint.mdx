@@ -141,6 +141,8 @@ func main() {
         </ResponseField>
         <ResponseField name="total_cost" default={0}>
             Depending on summary_type, the total cost of the tokens used within the timeframe.
+
+            For example: summary_type=monthly, total_cost=1000 means the user has used 1000 tokens in the current month.
         </ResponseField>
         <ResponseField name="average_sentiment" default={0}>
             Depending on summary_type, the average sentiment score of the user's requests over this timeframe
