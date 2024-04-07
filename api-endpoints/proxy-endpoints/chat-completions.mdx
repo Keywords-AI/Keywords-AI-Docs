@@ -199,6 +199,19 @@ fetch('https://api.keywordsai.co/api/chat/completions', {
   ```
 </ParamField>
 
+<ParamField path="response_format" type="object">
+  An object specifying the format that the model must output. Compatible with GPT-4 Turbo and all GPT-3.5 Turbo models newer than gpt-3.5-turbo-1106.
+
+  Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message the model generates is valid JSON.
+
+  You must have a "json" as a keyword in the prompt to use this feature.
+  <Expandable title="properties">
+    <ParamField path="type" type="string" required={true}>
+      The type of response format. options: "json_object", "text"
+    </ParamField>
+  </Expandable>
+</ParamField>
+
 ## Keywords AI Parameters
 
 <ParamField path="request_breakdown" type="boolean" default={false}>
