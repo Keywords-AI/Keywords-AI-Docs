@@ -7,23 +7,6 @@ api: POST https://api.keywordsai.co/api/chat/completions
 
 <CodeGroup>
 
-```bash cURL
-curl -X POST "https://api.keywordsai.co/api/chat/completions" \
--H "Content-Type: application/json" \
--H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
--d '{
-  "messages": [
-    {
-      "role": "user",
-      "content": "Hello"
-    }
-  ],
-  "models": ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"],
-  "stream": false,
-  "max_tokens": 100
-}'
-```
-
 ```python Python
 import requests
 import os
@@ -67,6 +50,24 @@ fetch('https://api.keywordsai.co/api/chat/completions', {
 .then(response => response.json())
 .then(data => console.log(data));
 ```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/chat/completions" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
+-d '{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello"
+    }
+  ],
+  "models": ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"],
+  "stream": false,
+  "max_tokens": 100
+}'
+```
+
 </CodeGroup>
 
 <ParamField path="model" type="string">

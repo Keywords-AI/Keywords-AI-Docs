@@ -2,31 +2,59 @@
 Title: Requests Log
 ---
 
-The requests log page is a table view that shows all the API calls that have been made to the Keywords AI. This is useful for debugging and monitoring the API usage.
+{/* The requests log page is a table view that shows all the API calls that have been made to the Keywords AI. This is useful for debugging and monitoring the API usage. */}
+Keywords AI automatically logs all LLM requests when using Keywords AI's API.
 
-<img src="/images/requests-log/requests-log.png"/>
+By clicking on an entry, a side panel opens up, revealing a detailed view of the request and response objects. You can see Metadata, Request/Response content, and Evaluation results in it.
+
+<img src="/images/requests-log/logging.png"/>
 
 ## Components of the Requests Log
-### Control Bar
+{/* ### Control Bar
 The control bar is located at the top of the page.
 <img src="/images/requests-log/control-bar.png" />
 You can filter and search for logs by [various metrics](/platform-features/requests-log#available-metrics)
 <img src="images/requests-log/filter-and-search.gif" />
-You can also export the logs in CSV/JSON format by clicking on the `Export` button on the top right corner of the control bar.
+You can also export the logs in CSV/JSON format by clicking on the `Export` button on the top right corner of the control bar. */}
 
-### Log Table
+### Filters
+<Frame caption="Check it out on our Requests page">
+<img src="/images/requests-log/Filters.png" />
+</Frame>
+{/* <sup>check it out here: [Request](https://platform.keywordsai.co/platform/requests) </sup> */}
+
+You can locate requests by filtering them based on the criteria such as:
+- **API Key**
+- **Model**
+- **Status**
+- **User**
+- **Time**
+- **Error code**
+- **...**
+
+### Filter by custom metadata
+You can now filter by custom metadata columns on the Dashboard and the Requests page. <br/> See how to send Metadata to Keywords AI here: **Custom Metadata**
+
+Example:<br/><img src="/images/requests-log/custom-metadata.png" />
+
+### Data export
+Export your data to CSV or JSON for external analysis.
+<img src="/images/requests-log/data-export.png" />
+
+
+{/* ### Log Table
 The log table is located in the middle of the page, it shows all the logs that match the search criteria.
 <img src="/images/requests-log/logs.png" />
 You can change the displaying metrics, grouping and ordering by clicking on the `Display options` button on the top right corner of the log table.
-<img src="/images/requests-log/display-options.gif" />
+<img src="/images/requests-log/display-options.gif" /> */}
 
-### Side Panel
+{/* ### Side Panel
 The side panel is located on the right side of the page. It shows the details of the selected log.
 <img src="/images/requests-log/side-panel.png" />
 You also see the content of the request and response in text or JSON format.
-<img src="/images/requests-log/log-content.gif" />
+<img src="/images/requests-log/log-content.gif" /> */}
 
-## Displaying Metrics
+{/* ## Displaying Metrics
 
 <ResponseField name="Time" type="datetime">
 Timestamp of the API call
@@ -99,4 +127,4 @@ You can quickly pick an option with the following key bindings:
 | Dropdown | Options & Shortcut |
 |---|---|
 | Grouping | `1`:API key `2`: Model `3`: Status `4`:Sentiment `5`: No grouping|
-| Ordering | `1`: Default `2`: Date `3`: Cost `4`: Latency `5`: TTFT |
+| Ordering | `1`: Default `2`: Date `3`: Cost `4`: Latency `5`: TTFT | */}

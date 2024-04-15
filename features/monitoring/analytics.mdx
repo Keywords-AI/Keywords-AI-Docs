@@ -1,20 +1,29 @@
 ---
-Title: Dashboard Page
+Title: Analytics Page
 ---
 
-Keywords AI's [dashboard page](https://platform.keywordsai.co/platform/dashboard) aggregates your API calls and traces them through time, making it easy to visually keep track of your API usage.
+Keywords AI's [dashboard page](https://platform.keywordsai.co/platform/dashboard) assists developers in identifying and fixing code or LLM-related issues.
+
+You can see aggregated metrics such as the number of requests over time, average generation time, time to first token (TTFT), total cost, average number of tokens, and user activity.
 
 <img src="/images/platform-features/dashboard/dashboard.png" alt="Dashboard Page"/>
 
-## Dashboard Components
+{/* ## Dashboard Components */}
 
-### Metric Cards
+## Graphs
+
+### LLM metrics
+LLM graphs aggregate your API calls and trace them through time, making it easy to visually keep track of your API usage.
+
+{/* ### Metric Cards
 On the top of the dashboard page, you will find these metric cards that give you a quick overview of your API usage.
 <img src="/images/platform-features/dashboard/dashboard-summary.png" alt="Dashboard Page" />
 
-Each card shows an aggregation of the metric and a small embedded chart that shows the trend of the metric over time.
+Each card shows an aggregation of the metric and a small embedded chart that shows the trend of the metric over time. */}
 
-### Display Metrics & Breakdown Controls
+<img src="/images/platform-features/dashboard/LLM-metrics.png" alt="Dashboard Page" />
+
+{/* ### Display Metrics & Breakdown Controls
 You can control the displays of the chart in the middle control bar
 <img src="/images/platform-features/dashboard/dashboard-filter.png" alt="Dashboard Filter" />
 
@@ -23,9 +32,24 @@ You can choose which chart to display and filter the requests in the graph by me
 
 By default, the chart traces the total aggregation of the selected metric through time. You can also choose the breakdown type to see the distribution of the metric by different aggregations.
 
-<img src="/images/platform-features/dashboard/dashboard-breakdown-type.png" alt="Dashboard Breakdown Types" />
+<img src="/images/platform-features/dashboard/dashboard-breakdown-type.png" alt="Dashboard Breakdown Types" /> */}
 
-## Example
+### Users
+
+User graphs provide an overview of the user information being sent to Keywords AI.
+
+You can tag each of your API calls with a customer_identifier and we will keep track of the usage of each of your users. See examples here: [User data](/features/monitoring/user-data#example)
+<img src="/images/platform-features/dashboard/User-metrics.png" alt="Dashboard Page" />
+
+### Evaluation
+
+Evaluation graphs provide an overview of the performance of LLM output based on Keywords AI's built-in metrics and users' customized evaluation metrics.
+
+See how to turn on evaluations and create your evaluation metrics here: _[Evaluation](/features/evaluation/overview)_
+
+<img src="/images/platform-features/dashboard/Evaluation.png" alt="Dashboard Page" />
+
+{/* ## Example
 Let's take a look at an example of seeing the latency of the API requests over the month with a breakdown by models
 
 1. Select the `Latency` metric
@@ -45,9 +69,9 @@ Looks pretty good!
 Click open the side panel:
 <img src="/images/platform-features/dashboard/side-panel.png" alt="Dashboard Select Latency" />
 
-Great! You can try different combinations of metrics and breakdown types to learn more about your API usage.
+Great! You can try different combinations of metrics and breakdown types to learn more about your API usage. */}
 
-## Advanced Usage
+{/* ## Advanced Usage
 You can use a combination of hotkeys to your advantage to quickly navigate through the dashboard page.
 | Action| Shortcut |
 |---|---|
@@ -60,7 +84,7 @@ You can quickly pick an option with the following key bindings:
 | Timeline | `1`:Day `2`: Week `3`: Month `4`:Year|
 | Metric | `1`: Request `2`: Errors `3`: Latency `4`: TTFT `5`: Prompt tokens `6`: Output tokens `7`: All tokens `8`: Total cost|
 | Type | `1`: Total `2`: Average|
-| Breakdown | `1`:None, `2`: Model, `3`: API key|
+| Breakdown | `1`:None, `2`: Model, `3`: API key| */}
 
 
 
