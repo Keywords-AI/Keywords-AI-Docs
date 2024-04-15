@@ -5,6 +5,60 @@ api: POST https://api.keywordsai.co/api/request-logs/create/
 
 The Request Logging Endpoint is an endpoint that allows you to directly log an LLM inference to Keywords AI, instead of using Keywords AI as a proxy with the [chat completion endpoint](/api-endpoints/proxy-endpoints/chat-completions) and auto-generate the logs.
 
+## Example call:
+
+<CodeGroup>
+```Python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "id": 1091403,
+    "unique_id": "004NiQ",
+    "prompt_tokens": 8,
+    "completion_tokens": 16,
+    "cost": 0.00042,
+    "prompt_messages": [
+        {
+            "role": "user",
+            "content": "Hi"
+        }
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "message": "Hi, how can I assist you today?"
+    },
+    "latency": 0.0,
+    "model": "gpt-4",
+    "timestamp": "2024-04-15T08:30:37.721313Z",
+    "failed": False,
+    "category": "",
+    "time_to_first_token": None,
+    "metadata": {},
+    "stream": False,
+    "status_code": 200,
+    "session_id": "",
+    "cached": False,
+    "tokens_per_second": 0.0,
+    "warnings": "",
+    "has_warnings": False,
+    "error_message": "",
+    "is_test": False,
+    "customer_identifier": "456467",
+    "used_custom_credential": True,
+    "log_type": "logging_api",
+    "user": 303,
+    "customer_user": 55
+}
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.request("POST", url, headers=headers, json=payload)
+```
+</CodeGroup>
+
 <ResponseField name="prompt_tokens" type="integer">
 Number of tokens in the prompt. Default is 0.
 </ResponseField>
@@ -56,21 +110,28 @@ Additional variables for this log. Default is an empty dictionary.
 {
   "key": "value"
 }
-```
+````
+
 </ResponseField>
 
 <ResponseField name="stream" type="boolean">
-Whether the LLM inference was streamed. Default is false.
+  Whether the LLM inference was streamed. Default is false.
 </ResponseField>
 
 <ResponseField name="status_code" type="integer">
-The status code of the LLM inference. Default is 200 (ok).
+  The status code of the LLM inference. Default is 200 (ok).
 </ResponseField>
 
 <ResponseField name="customer_identifier" type="string">
-An identifier for the customer that invoked this LLM inference, helps with visualizing user activities. Default is an empty string.
+  An identifier for the customer that invoked this LLM inference, helps with
+  visualizing user activities. Default is an empty string.
 </ResponseField>
 
 <ResponseField name="cached_response" type="integer">
-Whether the response was cached. Default is 0.
+  Whether the response was cached. Default is 0.
 </ResponseField>
+
+<ResponseField name="is_test" type="boolean">
+  Whether the LLM inference is a test call. If set to true, you will only be able to see this log in `Test Mode` in the platform. Default is false.
+</ResponseField>
+
