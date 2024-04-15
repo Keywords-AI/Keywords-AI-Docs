@@ -148,6 +148,7 @@
         "api-endpoints/proxy-endpoints/chat-completions",
         "api-endpoints/data-endpoints/models-endpoint",
         "api-endpoints/async-endpoints/users-data-endpoint",
+        "api-endpoints/async-endpoints/request-logging-endpoint",
         {
           "group": "Deprecation",
           "pages": [
