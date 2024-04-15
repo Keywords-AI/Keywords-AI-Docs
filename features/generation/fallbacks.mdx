@@ -5,14 +5,18 @@ description: "Avoid downtime with failover models"
 
 Keywords AI will catch any errors occurring in a request to model and fall back to the list of models you specified in the `fallback` field. This is useful to avoid downtime and ensure that your application is always available.
 
-If all your fallback models also fail, Keywords AI will continue to catch the error if you have [safety net](/features/monitoring/alerts-and-fallback) enabled.
+_See all params [here](/api-endpoints/proxy-endpoints/chat-completions)._
+
+**Automatic Fallbacks** are enabled by default. If you want to disable them, you can do so by setting the [safety net](/features/monitoring/automatically-fallback).
+
+## Fallback example
 
 ```json
 {
   // ...other parameters...
   "fallback": [
-    "model1",
-    "model2"
+    "gemini/gemini-pro",
+    "mistral/mistral-small"
   ]
 }
 ```

@@ -1,42 +1,42 @@
 ---
-title: 'Quick Start'
-description: 'A quick example for Keywords AI API usage'
+title: "Quick Start"
+description: "A quick example for Keywords AI API usage"
 ---
 
 ## Create an Account
 
-Go to Keywords AI's [sign up page](https://platform.keywordsai.co/signup) to create an account.
+Go to Keywords AI's [sign up page](https://platform.keywordsai.co/signup) to create an account. You can use email or Google account to sign up.
 
-- You will be asked to verify your email to activate your account
-- You will need to complete the onboarding steps to proceed
+{/* After you complete your onboarding questions, you will see this page: */}
 
-After you complete your onboarding questions, you will see this page:
+{/* <img src="/images/welcome-page.png" /> */}
 
-<img src="/images/welcome-page.png"/>
-
-Welcome to Keywords AI!
+{/* Welcome to Keywords AI! */}
 
 ## Create an API key
 
 To create an API key, visit the [API key page](https://platform.keywordsai.co/platform/api/api-keys)
 
-<img src="/images/create-api-key.jpg" alt="Create API key placeholder" />
+{/* <img src="/images/create-api-key.jpg" alt="Create API key placeholder" /> */}
 
 - Name your API key for future reference
-- Pick an expiry date (optional, default is never expired)
-- Choose the models you want the router to route between (pick at least one)
-- Pick a rate limit (option, default as the maximum rate limit of your plan, see [rate limit](/guides/limits#rate-limits))
-- Pick a spending limit (optional)
+- Pick an environment (test or production)
+- Click the `View code` button to copy the code into your codebase
+{/* - Pick an expiry date (optional, default is never expired) */}
+{/* - Choose the models you want the router to route between (pick at least one) */}
+{/* - Pick a rate limit (option, default as the maximum rate limit of your plan, see [rate limit](/guides/limits#rate-limits)) */}
+{/* - Pick a spending limit (optional) */}
 
 The API key will show up only once, <strong>Be careful and save it somewhere safe!</strong>
 
-<Card icon="link" href="/api-usage/api-keys" title="API Key Concepts">
+{/* <Card icon="link" href="/api-usage/api-keys" title="API Key Concepts">
   Learn More about Keywords AI API keys here
-</Card >
-## Try Keywords AI with the OpenAI SDK
-### Install the OpenAI SDK
-```bash
-pip install openai
+</Card> */}
+## Try Keywords AI with the OpenAI SDK 
+### Install the OpenAI SDK 
+
+```bash 
+pip install openai 
 ```
 
 ```Python Python
@@ -57,6 +57,7 @@ response = client.chat.completions.create(
 ```
 
 ## Try Keywords AI with a pure API call
+
 <CodeGroup>
 ```python Python
 import requests
@@ -81,7 +82,8 @@ def demo_call(input,
 
 messages = "Say 'Hello World'"
 print(demo_call(messages).json())
-```
+
+````
 
 ```TypeScript TypeScript
 // Define the function with TypeScript
@@ -98,7 +100,7 @@ fetch('https://api.keywordsai.co/api/chat/completions', {
 })
 .then(response => response.json())
 .then(data => console.log(data));
-```
+````
 
 </CodeGroup>
 
