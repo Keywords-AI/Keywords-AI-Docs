@@ -67,7 +67,7 @@ fetch('https://api.keywordsai.co/api/chat/completions', {
 ```Python Python
 headers = {
     'Content-Type': 'application/json',
-    'Authorization': f'Api-Key YOUR_KEYWORDS_AI_API_KEY',
+    'Authorization': f'Bearer YOUR_KEYWORDS_AI_API_KEY',
 }
 response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data, stream=stream)
 ```
