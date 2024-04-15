@@ -94,6 +94,7 @@
             "features/generation/fallbacks",
             "features/generation/load-balancing",
             "features/generation/retries",
+            "features/generation/customer-identifier",
             "features/generation/model-filtering",
             "features/generation/disable-logs",
             "features/generation/metadata"
