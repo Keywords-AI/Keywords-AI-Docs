@@ -9,13 +9,9 @@ _See all params [here](/api-endpoints/proxy-endpoints/chat-completions)._
 ## Streaming example
 <CodeGroup>
 ```python Python
-def  keywords_ai_generate( 
-        "..."
-                ):
+def  keywords_ai_generate( "..."):
     print("Calling: ",url)
-    headers = {
-        "..."
-    }
+    headers = {"..."}
     data = {
         "..." #other params
         "stream": True,
@@ -62,8 +58,25 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
 
 </CodeGroup>
 
+## How it Works in Keywords AI (Optional reading)
+Keywords AI runs on ASGI server to handle large loads of concurrent requests.
+
+We receive the stream from our provider as synchronous generator, and we forward it to the frontend as an asynchronous generator as soon as we start receiving the data:
+
+```python
+from asyncio import sleep as async_sleep
+async def stream_response(response: Response):
+    wait_time = 0.001
+    async for chunk in response.iter_lines():
+        await async_sleep(1)
+        yield chunk
+```
+
+The wait_time will not add actual latency. It is necessary for the asynchronous event loop to "break" from this task and send the request chunk by chunk.
+
 ## Deprecated
 ### Mannually Handling Streaming
+**This one is deprecated, just for reference!**
 
 <CodeGroup>
 ```TypeScript TypeScript
@@ -121,19 +134,3 @@ if response.status_code == 200:
         print(chunk)
 ```
 </CodeGroup>
-
-## How it Works in Keywords AI (Optional reading)
-Keywords AI runs on ASGI server to handle large loads of concurrent requests.
-
-We receive the stream from our provider as synchronous generator, and we forward it to the frontend as an asynchronous generator as soon as we start receiving the data:
-
-```python
-from asyncio import sleep as async_sleep
-async def stream_response(response: Response):
-    wait_time = 0.001
-    async for chunk in response.iter_lines():
-        await async_sleep(1)
-        yield chunk
-```
-
-The wait_time will not add actual latency. It is necessary for the asynchronous event loop to "break" from this task and send the request chunk by chunk.
