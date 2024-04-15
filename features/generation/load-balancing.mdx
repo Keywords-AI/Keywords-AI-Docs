@@ -34,11 +34,11 @@ for fallback in fallback_models:
 # ...Omit code until generation...
 # Randomly pick a provider based on the latency and rate_limit distribution
 model = pick_model_to_use(balancing_between)
-"""Under the hood
-distribution = [rate_limit_1, rate_limit_2, rate_limit_3] / sum_of_rate_limits
-weights = add_latency_weight_to_distribution(distribution, [latency_1, latency_2, latency_3])
-model = random.choices(balancing_between, weights=weights)
-"""
 keywords_generation(module, **other_kwargs)
 
 ```
+
+## How load balancing works
+distribution = [rate_limit_1, rate_limit_2, rate_limit_3] / sum_of_rate_limits <br/>
+weights = add_latency_weight_to_distribution(distribution, [latency_1, latency_2, latency_3])<br/>
+model = random.choices(balancing_between, weights=weights)

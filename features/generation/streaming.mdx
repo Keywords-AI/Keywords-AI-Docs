@@ -5,7 +5,65 @@ description: "Pushing the output token by token"
 
 When streaming is available, Keywords AI will forward the streaming response to your end token by token. This is useful when you want to process the output as soon as it is available, rather than waiting for the entire response to be received, and can significantly improve the user experience.
 
-## Code Examples for Handling Streaming
+_See all params [here](/api-endpoints/proxy-endpoints/chat-completions)._
+## Streaming example
+<CodeGroup>
+```python Python
+def  keywords_ai_generate( 
+        "..."
+                ):
+    print("Calling: ",url)
+    headers = {
+        "..."
+    }
+    data = {
+        "..." #other params
+        "stream": True,
+    }
+        
+    response = requests.post(url=url, headers=headers, json=data)
+    return response
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
+  }
+    body: JSON.stringify({
+        models: ['gpt-3.5-turbo', 'gpt-3.5-turbo-16k'],
+        messages: [{role: 'user', content: "Say 'Hello World'"}],
+        stream: true,
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/chat/completions" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
+-d '{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello"
+    }
+  ],
+  "models": ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"],
+  "stream": true,
+  "max_tokens": 100
+}'
+```
+
+</CodeGroup>
+
+## Deprecated
+### Mannually Handling Streaming
 
 <CodeGroup>
 ```TypeScript TypeScript

@@ -41,9 +41,14 @@
       "url": "https://platform.keywordsai.co"
     },
     {
-      "name": "Concepts",
-      "icon": "book",
-      "url": "concepts"
+      "name": "Community",
+      "icon": "house",
+      "url": "https://discord.com/invite/KEanfAafQQ"
+    },
+    {
+      "name": "Chat with Founders",
+      "icon": "phone",
+      "url": "https://cal.com/keywordsai/demo"
     }
   ],
   "api": {
@@ -60,9 +65,80 @@
   "navigation": [
     {
       "group": "Get Started",
+      "pages": ["get-started/overview", "get-started/quick-start"]
+    },
+    {
+      "group": "Integrations",
       "pages": [
-        "get-started/overview",
-        "get-started/quick-start"
+        "integration/development-frameworks/openai-sdk",
+        "integration/development-frameworks/langchain",
+        "integration/development-frameworks/llama-index",
+        "integration/supported-models",
+        "integration/own-api-keys",
+        {
+          "group": "LLM Providers",
+          "pages": [
+            "integration/providers/providers-overview",
+            "integration/providers/azure"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Features",
+      "pages": [
+        {
+          "group": "Generation",
+          "pages": [
+            "features/generation/streaming",
+            "features/generation/fallbacks",
+            "features/generation/load-balancing",
+            "features/generation/retries",
+            "features/generation/model-filtering",
+            "features/generation/disable-logs",
+            "features/generation/metadata"
+          ]
+        },
+        {
+          "group": "Monitoring",
+          "pages": [
+            "features/monitoring/analytics",
+            "features/monitoring/logging",
+            "features/monitoring/user-data",
+            "features/monitoring/webhooks",
+            "features/monitoring/subscribe-alerts",
+            "features/monitoring/automatically-fallback"
+          ]
+        },
+        {
+          "group": "Evaluation",
+          "pages": [
+            "features/evaluation/overview",
+            {
+              "group": "Retrieval",
+              "pages": ["features/evaluation/retrieval/context-precision"]
+            },
+            {
+              "group": "Text Generation",
+              "pages": [
+                "features/evaluation/generation/faithfulness",
+                "features/evaluation/generation/flesch-kincaid",
+                "features/evaluation/generation/answer-relevance"
+              ]
+            },
+            {
+              "group": "Other",
+              "pages": ["features/evaluation/other/sentiment"]
+            }
+          ]
+        },
+        {
+          "group": "Prompt",
+          "pages": [
+            "features/prompt/test&compare",
+            "features/prompt/prompt-management"
+          ]
+        }
       ]
     },
     {
@@ -82,80 +158,6 @@
                 "api-endpoints/proxy-endpoints/text-generation/streaming-response"
               ]
             }
-          ]
-        }
-      ]
-    },
-    {
-      "group": "Features",
-      "pages": [
-        {
-          "group":"Generation",
-          "pages": [
-            "features/generation/streaming",
-            "features/generation/fallbacks",
-            "features/generation/load-balancing",
-            "features/generation/retries",
-            "features/generation/model-filtering",
-            "features/generation/available-models-list"
-          ]
-        },
-        {
-          "group": "Monitoring",
-          "pages": [
-            "features/monitoring/dashboard",
-            "features/monitoring/requests-log",
-            "features/monitoring/users-page",
-            "features/monitoring/request-breakdown",
-            "features/monitoring/alerts-and-fallback"
-          ]
-        },
-        {
-          "group": "Evaluation",
-          "pages": [
-            "features/evaluation/overview",
-            {
-              "group":"Retrieval",
-              "pages": [
-                "features/evaluation/retrieval/context-precision"
-              ]
-            },
-            {
-              "group":"Text Generation",
-              "pages": [
-                "features/evaluation/generation/faithfulness",
-                "features/evaluation/generation/flesch-kincaid",
-                "features/evaluation/generation/answer-relevance"
-              ]
-            },
-            {
-              "group":"Other",
-              "pages": [
-                "features/evaluation/other/sentiment"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "group": "Integration",
-      "pages": [
-        "integration/supported-models",
-        {
-          "group": "Development frameworks",
-          "pages": [
-            "integration/development-frameworks/openai-sdk",
-            "integration/development-frameworks/langchain",
-            "integration/development-frameworks/llama-index"
-          ]
-        },
-        {
-          "group": "LLM Providers",
-          "pages": [
-            "integration/providers/providers-overview",
-            "integration/providers/openai",
-            "integration/providers/azure"
           ]
         }
       ]
