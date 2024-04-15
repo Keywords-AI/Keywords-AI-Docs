@@ -51,7 +51,7 @@
     "auth": {
       "method": "bearer",
       "name": "Authorization",
-      "inputPrefix": "Api-Key"
+      "inputPrefix": "Bearer"
     },
     "playground": {
       "mode": "show"
