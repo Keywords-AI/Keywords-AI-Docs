@@ -50,7 +50,7 @@ def  keywords_ai_generate(
     }
         
     response = requests.post(
-        'https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+        'https://api.keywordsai.co/api/generate/', headers=headers, json=data)
     return response
 
 response = keywords_ai_generate(
@@ -64,7 +64,7 @@ response = keywords_ai_generate(
 
 ```TypeScript TypeScript
 // Define the function with TypeScript
-fetch('https://api.keywordsai.co/api/chat/completions', {
+fetch('https://api.keywordsai.co/api/generate/', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
