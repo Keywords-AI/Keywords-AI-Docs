@@ -79,7 +79,12 @@
           "group": "LLM Providers",
           "pages": [
             "integration/providers/providers-overview",
-            "integration/providers/azure"
+            "integration/providers/azure",
+            "integration/providers/openai",
+            "integration/providers/anthropic",
+            "integration/providers/perplexity",
+            "integration/providers/openrouter",
+            "integration/providers/groq"
           ]
         }
       ]
@@ -146,9 +151,9 @@
       "group": "API Endpoints",
       "pages": [
         "api-endpoints/proxy-endpoints/chat-completions",
+        "api-endpoints/async-endpoints/request-logging-endpoint",
         "api-endpoints/data-endpoints/models-endpoint",
         "api-endpoints/async-endpoints/users-data-endpoint",
-        "api-endpoints/async-endpoints/request-logging-endpoint",
         {
           "group": "Deprecation",
           "pages": [
