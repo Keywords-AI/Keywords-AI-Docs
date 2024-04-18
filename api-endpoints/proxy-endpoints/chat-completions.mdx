@@ -20,7 +20,7 @@ def  keywords_ai_generate(
     print("Calling: ",url)
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Api-Key {api_key}',
+        'Authorization': f'Bearer {api_key}',
     }
     data = {
         "messages": messages,

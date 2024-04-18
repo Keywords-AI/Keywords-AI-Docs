@@ -68,7 +68,7 @@ def demo_call(input,
               ):
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Api-Key {token}',
+        'Authorization': f'Bearer {token}',
     }
 
     data = {
@@ -91,7 +91,7 @@ fetch('https://api.keywordsai.co/api/chat/completions', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Api-Key a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
+    'Authorization': 'Bearer a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
   },
     body: JSON.stringify({
         model: 'gpt-3.5-turbo',
