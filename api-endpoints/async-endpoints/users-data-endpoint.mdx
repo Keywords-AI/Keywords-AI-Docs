@@ -3,7 +3,7 @@ title: "Users' Data"
 api: "GET https://api.keywordsai.co/api/users/"
 ---
 
-<Info>Make sure you add **Api-Key** prefix to your token</Info>
+<Info>Make sure you add **Bearer** prefix to your token</Info>
 
 You can paste the command below into your terminal to run your first API request. Make sure to replace `YOUR_KEYWORDSAI_API_KEY` with your actual Keywords AI API key.
 
@@ -22,7 +22,7 @@ get_params = {
     'date': '2024-03-09 00:00:00'
 }
 headers = {
-    "Authorization": f"Api-Key {api_key}",
+    "Authorization": f"Bearer {api_key}",
     "Content-Type": "application/json"
 }
 
@@ -45,7 +45,7 @@ const getParams = {
     'date': '2024-03-09 00:00:00'
 };
 const headers = {
-    "Authorization": `Api-Key ${apiKey}`,
+    "Authorization": `Bearer ${apiKey}`,
     "Content-Type": "application/json"
 };
 
@@ -63,7 +63,7 @@ axios.get(url, { headers: headers })
 
 ```bash cURL
 curl -X GET 'https://api.keywordsai.co/api/users/?page_size=10&summary_type=all&date=2024-03-09%2000:00:00' \
--H 'Authorization: Api-Key production_api_key' \
+-H 'Authorization: Bearer production_api_key' \
 -H 'Content-Type: application/json'
 ```
 
@@ -86,7 +86,7 @@ func main() {
         "date":         []string{"2024-03-09 00:00:00"},
     }
     headers := map[string]string{
-        "Authorization": "Api-Key " + apiKey,
+        "Authorization": "Bearer " + apiKey,
         "Content-Type":  "application/json",
     }
 
