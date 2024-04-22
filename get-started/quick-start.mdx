@@ -56,13 +56,13 @@ response = client.chat.completions.create(
 )
 ```
 
-## Try Keywords AI with a pure API call
+## Try Keywords AI with a standard API call
 
 <CodeGroup>
 ```python Python
 import requests
 def demo_call(input, 
-              models=["gpt-3.5-turbo"],
+              model="gpt-3.5-turbo",
               token="a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z", 
               stream=False
               ):
@@ -72,7 +72,7 @@ def demo_call(input,
     }
 
     data = {
-        'models': models,
+        'model': model,
         'messages': [{'role': 'user', 'content': input}],
         "stream": stream,
     }
