@@ -84,7 +84,8 @@
             "integration/providers/anthropic",
             "integration/providers/perplexity",
             "integration/providers/openrouter",
-            "integration/providers/groq"
+            "integration/providers/groq",
+            "integration/providers/bedrock"
           ]
         }
       ]
