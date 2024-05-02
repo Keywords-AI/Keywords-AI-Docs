@@ -29,7 +29,7 @@ Completion message in JSON format. Default is an empty dictionary.
 ```python 
 "completion_message": {
     "role": "assistant",
-    "message": "Hi, how can I assist you today?"
+    "content": "Hi, how can I assist you today?"
 },
 ```
 
@@ -155,8 +155,16 @@ Completion message in JSON format. Default is an empty dictionary.
 Number of tokens in the prompt. Default is 0.
 </ResponseField>
 
+<ResponseField name="prompt_unit_price" type="number">
+pass this parameter in if you want to log your self-host / fine-tuned model.
+</ResponseField>
+
 <ResponseField name="completion_tokens" type="integer">
 Number of tokens in the completion. Default is 0.
+</ResponseField>
+
+<ResponseField name="completion_unit_price" type="number">
+pass this parameter in if you want to log your self-host / fine-tuned model.
 </ResponseField>
 
 <ResponseField name="cost" type="float">
@@ -222,7 +230,7 @@ Additional variables for this log. Default is an empty dictionary.
 ## Example call:
 
 <CodeGroup>
-```Python
+```python Python
 import requests
 
 url = "https://api.keywordsai.co/api/request-logs/create/"
@@ -254,7 +262,7 @@ payload = {
     ],
     "completion_message": {
         "role": "assistant",
-        "message": "Hi, how can I assist you today?"
+        "content": "Hi, how can I assist you today?"
     },
     "tool_choice": {
         "type": "function",
@@ -310,5 +318,89 @@ headers = {
 }
 
 response = requests.request("POST", url, headers=headers, json=payload)
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
+-d '{
+    "id": 1091403,
+    "unique_id": "004NiQ",
+    "prompt_tokens": 8,
+    "completion_tokens": 16,
+    "cost": 0.00042,
+    "prompt_messages": [
+        {
+          "role": "user",
+          "content": "Hi"
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "xxxx",
+              "type": "function",
+              "function": {
+                "name": "get_current_weather",
+                "arguments": "{\n\"location\": \"Boston, MA\"\n}" 
+              }
+            }
+          ]
+        }
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "tool_choice": {
+        "type": "function",
+        "function": {
+            "name": "get_current_weather"
+        }
+    },
+    "tools":[
+      {
+      "type": "function",
+      "function": {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a given location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The city and state, e.g. San Francisco, CA"
+            },
+            "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]}
+          },
+          "required": ["location"]
+        }
+      }
+    }
+],
+    "latency": 0.0,
+    "model": "gpt-4",
+    "timestamp": "2024-04-15T08:30:37.721313Z",
+    "failed": false,
+    "category": "",
+    "time_to_first_token": null,
+    "metadata": {},
+    "stream": false,
+    "status_code": 200,
+    "session_id": "",
+    "cached": false,
+    "tokens_per_second": 0.0,
+    "warnings": "",
+    "has_warnings": false,
+    "error_message": "",
+    "is_test": false,
+    "customer_identifier": "456467",
+    "used_custom_credential": true,
+    "log_type": "logging_api",
+    "user": 303,
+    "customer_user": 55
+}'
 ```
 </CodeGroup>
