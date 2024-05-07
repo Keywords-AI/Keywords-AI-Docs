@@ -84,7 +84,8 @@
             "integration/providers/anthropic",
             "integration/providers/perplexity",
             "integration/providers/openrouter",
-            "integration/providers/groq"
+            "integration/providers/groq",
+            "integration/providers/bedrock"
           ]
         }
       ]
@@ -155,7 +156,7 @@
         "api-endpoints/data-endpoints/models-endpoint",
         "api-endpoints/async-endpoints/users-data-endpoint",
         {
-          "group": "Deprecation",
+          "group": "Deprecated",
           "pages": [
             "api-endpoints/proxy-endpoints/text-generation/request-params",
             {
