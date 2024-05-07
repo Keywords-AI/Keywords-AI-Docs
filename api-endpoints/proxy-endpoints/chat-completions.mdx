@@ -3,9 +3,9 @@ title: Chat Completion
 api: POST https://api.keywordsai.co/api/chat/completions
 ---
 
-## Standard Parameters <br/> <sub>Check Keywords AI parameters after this section</sub> 
+## Standard Parameters <br/> <sub>Check Keywords AI parameters after this section</sub>
 
-<br/>
+<br />
 
 <CodeGroup>
 
@@ -13,8 +13,8 @@ api: POST https://api.keywordsai.co/api/chat/completions
 import requests
 import os
 
-def  keywords_ai_generate( 
-                messages, 
+def  keywords_ai_generate(
+                messages,
                 api_key=os.getenv("KEYWORDS_AI_API_KEY"),
                 url=os.getenv("KEYWORDS_AI_ENDPOINT") + "api/chat/completions",
                 **kwargs
@@ -28,7 +28,7 @@ def  keywords_ai_generate(
         "messages": messages,
         **kwargs
     }
-        
+
     response = requests.post(url=url, headers=headers, json=data)
     return response
 
@@ -76,7 +76,7 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
   Specify which model to use. See the list of model
   [here](/integration/supported-models)
 
-  When this parameter is used, the router will not trigger, and the `models` parameter behaves as `fallback_models`.
+When this parameter is used, the router will not trigger, and the `models` parameter behaves as `fallback_models`.
 
 </ParamField>
 
@@ -205,9 +205,10 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
 <ParamField path="response_format" type="object">
   An object specifying the format that the model must output. Compatible with GPT-4 Turbo and all GPT-3.5 Turbo models newer than gpt-3.5-turbo-1106.
 
-  Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message the model generates is valid JSON.
+Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message the model generates is valid JSON.
 
-  You must have a "json" as a keyword in the prompt to use this feature.
+You must have a "json" as a keyword in the prompt to use this feature.
+
   <Expandable title="properties">
     <ParamField path="type" type="string" required={true}>
       The type of response format. options: "json_object", "text"
@@ -330,9 +331,10 @@ Adding this returns the summarization of the response in the response body. If s
   <strong>all models</strong> will be used. See the list of models
   [here](/integration/supported-models)
 
-  If only one model is specified, it will be treated as if the `model` parameter is used and the router will not trigger.
+If only one model is specified, it will be treated as if the `model` parameter is used and the router will not trigger.
 
-  When the `model` parameter is used, the router will not trigger, and this parameter behaves as `fallback_models`.
+When the `model` parameter is used, the router will not trigger, and this parameter behaves as `fallback_models`.
+
 </ParamField>
 
 <ParamField path="fallback_models" type="array">
@@ -382,13 +384,40 @@ Example:
 <ParamField path="exclude_models" type="array" default={[]}>
   The list of models to exclude from the router's selection. See the list of models [here](/integration/supported-models)
 
-  This only excludes models in the router, if `model` parameter will take precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
+This only excludes models in the router, if `model` parameter will take precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
+
 </ParamField>
 
 <ParamField path="exclude_providers" type="array" default={[]}>
   The list of providers to exclude from the router's selection. All models under the provider will be excluded. See the list of providers [here](/integration/providers/providers-overview)
 
-  This only excludes models in the router, if `model` parameter will take precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
+This only excludes models in the router, if `model` parameter will take precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
+
+</ParamField>
+
+<ParamField path="prompt" type="object">
+  The prompt template to use for the completion. You can build and deploy prompts in the [prompt management page](features/prompt/prompt-management).
+
+  <Expandable title="properties">
+    <ParamField path="referential_slug" type="string" required={true}>
+      The ID of the prompt to use.
+    </ParamField>
+    <ParamField path="variables" type="object">
+      The variables to replace in the prompt template.
+    </ParamField>
+    <ParamField path="version" type="number">
+      The version of the prompt to use. If not specified, the latest version will be used.
+    </ParamField>
+  </Expandable>
+```json
+{
+  "referential_slug": "prompt_id",
+  "variables": {
+    "variable_name": "variable_value"
+  },
+  "version": 1
+}
+```
 </ParamField>
 
 ## Deprecated Parameters
@@ -399,7 +428,8 @@ You can pass in a dictionary of your customer's API keys for specific models. If
 ```json
 {
   "gpt-3.5-turbo": "your_customer_api_key",
-  "gpt-4": "your_customer_api_key",
+  "gpt-4": "your_customer_api_key"
 }
 ```
+
 </ParamField>
