@@ -155,6 +155,7 @@
         "api-endpoints/async-endpoints/request-logging-endpoint",
         "api-endpoints/data-endpoints/models-endpoint",
         "api-endpoints/async-endpoints/users-data-endpoint",
+        "api-endpoints/async-endpoints/user-management-endpoint",
         {
           "group": "Deprecated",
           "pages": [
