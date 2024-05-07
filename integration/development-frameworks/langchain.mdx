@@ -8,8 +8,8 @@ You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completion
 from langchain_openai import ChatOpenAI
 
 llm = ChatOpenAI(
-    base_url=env["base_url"],
-    api_key=env["api_key"],
+    base_url="https://api.keywordsai.co/api/",
+    api_key="<Your Keywords AI API Key>",
     model="gpt-3.5-turbo",
     streaming=True,
     model_kwargs={
