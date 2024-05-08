@@ -10,10 +10,16 @@ Make sure to replace `YOUR_KEYWORDSAI_API_KEY` with your actual Keywords AI API 
 ## Example Call
 <CodeGroup>
 ```Python Python
+import os
+import sys
+sys.path.append(os.getcwd())
+from utils.common_params import *
+
+
 import requests
 
-base_url = "https://api.keywordsai.co/api/users/create/"
-api_key = production_api_key # Replace with your actual Keywords AI API key
+url = "https://api.keywordsai.co/api/users/create/"
+api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
 data = {
     "period_budget": 30,
     "customer_identifier": "some_customer_identifier"
@@ -25,6 +31,7 @@ headers = {
 
 response = requests.post(url, headers=headers, json=data)
 print(response.json())
+
 ```
 </CodeGroup>
 

@@ -12,8 +12,8 @@ Make sure to replace `YOUR_KEYWORDSAI_API_KEY` with your actual Keywords AI API 
 ```Python Python
 import requests
 
-base_url = "https://api.keywordsai.co/api/user/update/<str:customer_identifier>"
-api_key = production_api_key # Replace with your actual Keywords AI API key
+url = "https://api.keywordsai.co/api/user/update/some_customer_identifier"
+api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
 data = {
     "period_budget": 30
 }
@@ -22,7 +22,7 @@ headers = {
     "Content-Type": "application/json"
 }
 
-response = requests.post(url, headers=headers, json=data)
+response = requests.patch(url, headers=headers, json=data)
 print(response.json())
 ```
 </CodeGroup>
