@@ -157,6 +157,7 @@
         "api-endpoints/async-endpoints/users-data-endpoint",
         "api-endpoints/async-endpoints/user-management-endpoint",
         "api-endpoints/async-endpoints/user-creation-endpoint",
+        "api-endpoints/async-endpoints/user-detail-endpoint",
         {
           "group": "Deprecated",
           "pages": [
