@@ -1,0 +1,21 @@
+---
+title: "404: Not Found"
+---
+
+## Description
+The requested resource could not be found in the Keywords API.
+
+This usually happens in two cases:
+- You are trying to access a model that is not provided by the Keywords API endpoint.
+- None of the models you specified in the request meet some hard requirements such as function call support or image support, and you turned off [safety net](/features/monitoring/alerts-and-fallback). It is recommended to turn on the safety net to avoid this issue.
+
+<AccordionGroup>
+  <Accordion title="Requested Model Does Not Exist">
+    You are trying to call a model name that is not in the list of [available models](https://platform.keywordsai.co/platform/api/models)
+- Check your spelling and make sure the model name is correct
+- If you want a new model to be added, please contact us at team@keywordsai.co
+```json
+{"detail": "Requested model: blablabla is not available in the model list, please check the available models: https://platform.keywordsai.co/platform/api/models"}
+```
+  </Accordion>
+</AccordionGroup>

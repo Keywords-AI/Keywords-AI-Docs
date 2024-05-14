@@ -1,0 +1,51 @@
+---
+title: "Fallbacks"
+description: "Avoid downtime with failover models"
+---
+
+Keywords AI will catch any errors occurring in a request to model and fall back to the list of models you specified in the `fallback` field. This is useful to avoid downtime and ensure that your application is always available.
+
+_See all params [here](/api-endpoints/proxy-endpoints/chat-completions)._
+
+**Automatic Fallbacks** are enabled by default. If you want to disable them, you can do so by setting the [safety net](/features/monitoring/automatically-fallback).
+
+## Fallback example
+
+```json
+{
+  // ...other parameters...
+  "fallback": [
+    "gemini/gemini-pro",
+    "mistral/mistral-small"
+  ]
+}
+```
+
+## Fallback Logic with Retries
+
+Below is the pseudo-code for the fallback logic with retries:
+
+```python
+warnings = {}
+model = "model_in_request_that_will_fail"
+keywords_native_failover = keywords_ai_models_data[model]["fallback"] # A slice of data from our database for the native failover
+# Native failovers usually are the same models, but just from different providers, they are optimally ranked to reduce cost and latency
+fallback_models = [*keywords_native_failover, "model1", "model2"]
+
+# Keywords AI will filter away models that do not meet the hard requirements of the request (function_calling support, etc.)
+# To save time from unnecessary retries
+fallback_models = filter_by_hard_requirements(request, fallback_models)
+
+for model in fallback_models:
+  for _ in range(retries):
+    try:
+        response = generate_response_with_load_balance(model)
+        break
+    except Exception as e:
+        error_code, error_message = keywords_ai_exception_handler(e)
+        warnings[model] = error_message
+raise Exception("All models failed", warnings)
+```
+
+- To learn more about how `generate_response_with_load_balance` works, see the [Load Balancing](/platform-features/load-balancing) section.
+- To learn more about how `filter_by_hard_requirements` works, see the [Model Filtering](/platform-features/model-filtering) section.
