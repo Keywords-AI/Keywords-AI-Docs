@@ -36,31 +36,14 @@
   },
   "topbarLinks": [
     {
-      "name": "Support",
-      "url": "mailto:team@keywordsai.co"
+      "name": "Discord",
+      "url": "https://discord.com/invite/KEanfAafQQ"
     }
   ],
   "topbarCtaButton": {
     "name": "Get started",
-    "url": "https://keywordsai.co"
+    "url": "https://platform.keywordsai.co/"
   },
-  "anchors": [
-    {
-      "name": "Platform",
-      "icon": "browser",
-      "url": "https://platform.keywordsai.co"
-    },
-    {
-      "name": "Discord",
-      "icon": "discord",
-      "url": "https://discord.com/invite/KEanfAafQQ"
-    },
-    {
-      "name": "Chat with Founders",
-      "icon": "phone",
-      "url": "https://cal.com/keywordsai/demo"
-    }
-  ],
 
   "api": {
     "baseUrl": "https://api.keywordsai.co",
