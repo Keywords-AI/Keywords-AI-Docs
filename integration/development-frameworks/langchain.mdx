@@ -1,0 +1,57 @@
+---
+title: LangChain
+---
+
+You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions.mdx) endpoint with LangChain's `ChatOpenAI` LLM under two lines of code change.
+<CodeGroup>
+```Python Python
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="<Your Keywords AI API Key>",
+    model="gpt-3.5-turbo",
+    streaming=True,
+    model_kwargs={
+        "extra_body":{"customer_identifier": "customer_11"}
+    }
+)
+response = llm.invoke(
+    input="Hi"
+)
+print(response)
+```
+```TypeScript TypeScript
+import { ChatOpenAI as ChatOpenAITest } from "@langchain/openai"
+// import { ChatOpenAI } from "langchain/chat_models/openai"
+import { ConversationChain } from "langchain/chains"
+
+const keywordsAI =  new ChatOpenAITest({
+    configuration: {
+        baseURL: "https://api.keywordsai.co/api/",
+    },
+    openAIApiKey: "<Your Keywords AI API Key>",
+    modelName: "gpt-3.5-turbo",
+    streaming: true,
+    modelKwargs: {
+        customer_identifier: "123456"
+    }
+    
+})
+
+const chain = new ConversationChain({
+    llm: keywordsAI,
+})
+
+async function main() {
+    // const response = await chain.call({input: "Hi"}) // You can use chain.call to invoke the model
+    const response = await keywordsAI.invoke("Hi") // Or you can use the model directly
+    console.log(response)
+}
+
+main()
+```
+</CodeGroup>
+In `model_kwargs`, you can pass in any [OpenAI parameters](/api-endpoints/proxy-endpoints/chat-completions#openai-parameters). 
+
+To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can specify an `extra_body` object within `model_kwargs`. In the above example, `customer_identifier` is the Keywords AI parameter. These parameters will take precedence over the OpenAI parameters if they are conflicting.
