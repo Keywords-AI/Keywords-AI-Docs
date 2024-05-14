@@ -3,7 +3,7 @@ title: LangChain
 ---
 
 You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions.mdx) endpoint with LangChain's `ChatOpenAI` LLM under two lines of code change.
-
+<CodeGroup>
 ```Python Python
 from langchain_openai import ChatOpenAI
 
@@ -51,7 +51,7 @@ async function main() {
 
 main()
 ```
-
+</CodeGroup>
 In `model_kwargs`, you can pass in any [OpenAI parameters](/api-endpoints/proxy-endpoints/chat-completions#openai-parameters). 
 
 To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can specify an `extra_body` object within `model_kwargs`. In the above example, `customer_identifier` is the Keywords AI parameter. These parameters will take precedence over the OpenAI parameters if they are conflicting.

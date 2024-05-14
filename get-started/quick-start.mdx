@@ -38,14 +38,14 @@ The API key will show up only once, <strong>Be careful and save it somewhere saf
 ```bash 
 pip install openai 
 ```
-
+<CodeGroup>
 ```Python Python
 from openai import OpenAI
 
 
 client = OpenAI(
     base_url="https://api.keywordsai.co/api/",
-    api_key=YOUR_KEYWORDSAI_API_KEY,
+    api_key="YOUR_KEYWORDSAI_API_KEY",
 )
 
 response = client.chat.completions.create(
@@ -56,6 +56,22 @@ response = client.chat.completions.create(
 )
 ```
 
+```TypeScript TypeScript
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api/",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const chatCompletion = await openai.chat.completions.create({
+  model: "gpt-3.5-turbo",
+  messages: [{"role": "user", "content": "Hello"}],
+});
+
+```
+</CodeGroup>
+
 ## Try Keywords AI with a standard API call
 
 <CodeGroup>
@@ -63,7 +79,7 @@ response = client.chat.completions.create(
 import requests
 def demo_call(input, 
               model="gpt-3.5-turbo",
-              token="a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z", 
+              token="a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z", # replace this with your Keywords AI API key
               stream=False
               ):
     headers = {
@@ -83,7 +99,7 @@ def demo_call(input,
 messages = "Say 'Hello World'"
 print(demo_call(messages).json())
 
-````
+```
 
 ```TypeScript TypeScript
 // Define the function with TypeScript
@@ -91,7 +107,7 @@ fetch('https://api.keywordsai.co/api/chat/completions', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
+    'Authorization': 'Bearer a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z' // replace this with your Keywords AI API key
   },
     body: JSON.stringify({
         model: 'gpt-3.5-turbo',
@@ -100,8 +116,77 @@ fetch('https://api.keywordsai.co/api/chat/completions', {
 })
 .then(response => response.json())
 .then(data => console.log(data));
-````
+```
 
+```bash Bash
+curl -X POST "https://api.keywordsai.co/chat/completions" 
+-H "Content-Type: application/json" 
+-H "Authorization: Bearer Your_KeywordsAI_API_Key" 
+-d "{
+  "model": "gpt-3.5-turbo",
+  "messages": [{"role": "user", "content": "Hello"}],
+  "stream": false,
+  "max_tokens": 100,
+  ... other parameters in similar format ...
+}"
+```
+
+```PHP PHP
+<?php
+  $ch = curl_init();
+    
+  curl_setopt($ch, CURLOPT_URL, "https://api.keywordsai.co/chat/completions");
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    "Content-Type: application/json",
+    "Authorization: Bearer Your_KeywordsAI_API_Key",
+  ));
+  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array(
+    "model" => "gpt-3.5-turbo",
+    "messages" => array(["role" => "user", "content" => "Hello"]),
+    "stream" => false,
+    "max_tokens" => 100,
+    // ... other parameters in similar format ...
+  )));
+    
+  $response = curl_exec($ch);
+  curl_close($ch);
+?>
+```
+
+```Go Go
+package main
+import (
+  "bytes"
+  "net/http"
+)
+    
+func main() {
+  url := "https://api.keywordsai.co/chat/completions"
+  method := "POST"
+    
+  payload := []byte(`{
+    "model" : "gpt-3.5-turbo",
+    "messages": [{"role": "user", "content": "Hello"}],
+    "stream": false,
+    "max_tokens": 100,
+    ... other parameters in similar format ...
+  }`)
+    
+  client := &http.Client{}
+  req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+    
+  if err != nil {
+    panic(err)
+  }
+    
+  req.Header.Add("Content-Type", "application/json")
+  req.Header.Add("Authorization", "Bearer Your_KeywordsAI_API_Key")
+    
+  res, err := client.Do(req)
+  defer res.Body.Close()
+}
+```
 </CodeGroup>
 
 - **URL Change**: Modify the API endpoint URL in your code from OpenAI’s URL to the Keywords AI endpoint URL: `https://keywordsai.co/api/chat/completions`.

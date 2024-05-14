@@ -10,6 +10,16 @@
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
+  "primaryTab": {
+    "name": "Documentation"
+  },
+  "tabs":[
+    {
+      "name": "API",
+      "url": "api-endpoints"
+  }
+  ],
+  
   "favicon": "/logo.svg",
   "colors": {
     "primary": "#6483F0",
@@ -41,8 +51,8 @@
       "url": "https://platform.keywordsai.co"
     },
     {
-      "name": "Community",
-      "icon": "house",
+      "name": "Discord",
+      "icon": "discord",
       "url": "https://discord.com/invite/KEanfAafQQ"
     },
     {
@@ -51,6 +61,7 @@
       "url": "https://cal.com/keywordsai/demo"
     }
   ],
+
   "api": {
     "baseUrl": "https://api.keywordsai.co",
     "auth": {
@@ -149,7 +160,7 @@
       ]
     },
     {
-      "group": "API Endpoints",
+      "group": "API",
       "pages": [
         "api-endpoints/proxy-endpoints/chat-completions",
         "api-endpoints/async-endpoints/request-logging-endpoint",
