@@ -22,4 +22,17 @@ headers = {
 response = requests.get(url, headers=headers)
 print(response.json())
 ```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch("https://api.keywordsai.co/api/user/detail/some_customer_identifier", {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer Your_Keywords_AI_API_Key '
+  }
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
 </CodeGroup>

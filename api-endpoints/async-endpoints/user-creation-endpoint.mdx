@@ -27,6 +27,24 @@ response = requests.post(url, headers=headers, json=data)
 print(response.json())
 
 ```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/users/create/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer Your_Keywords_AI_API_Key '
+  },
+    body: JSON.stringify({
+        period_budget: 30,
+        customer_identifier: "some_customer_identifier"
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
 </CodeGroup>
 
 <ParamField path="customer_identifier" type="str" required={true}>
