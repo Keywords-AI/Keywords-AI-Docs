@@ -47,32 +47,38 @@ fetch('https://api.keywordsai.co/api/users/create/', {
 
 </CodeGroup>
 
-<ParamField path="customer_identifier" type="str" required={true}>
+<ParamField path="customer_identifier" type="string" required={true}>
     The unique identifier for the user. This field is required.
 </ParamField>
 
-<ParamField path="name" type="str">
-    Name of the user.
+<ParamField path="name" type="string">
+    User's name.
 </ParamField>
 
-<ParamField path="period_start" type="str">
+<ParamField path="email" type="string">
+    User's email address.
+</ParamField>
+<ParamField path="period_start" type="string">
     The start of the budget period in ISO Format: `YYYY-MM-DD` (e.g. `2024-03-09`). If not provided, the current date will be used.
 
     This field will automatically roll over to the next period if the current date is past the end of the period.
 </ParamField>
 
-<ParamField path="period_end" type="str">
+<ParamField path="period_end" type="string">
     The end of the budget period in ISO Format: `YYYY-MM-DD` (e.g. `2024-03-09`). If not provided, it will be set based on the `period_start` + `budget_duration`. (e.g. `2024-03-09` + `1 month` = `2024-04-09`)
 
     This field will automatically roll over to the next period if the current date is past the end of the period.
 </ParamField>
 
-<ParamField path="budget_duration" type="str">
+<ParamField path="budget_duration" type="string">
     Type of budget duration. Possible values are `daily`, `weekly`, `monthly`, and `yearly`. The default value is `monthly`.
 </ParamField>
 
 <ParamField path="period_budget" type="number">
     The budget amount for the period. The default value is `null`, which means no budget is set.
+</ParamField>
+<ParamField path="metadata" type="object">
+    Customized metadata for the user. Any key-value pairs can be added here.
 </ParamField>
 
 
