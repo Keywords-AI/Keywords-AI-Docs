@@ -1,0 +1,17 @@
+---
+title: "Together AI"
+description: "Use your own Together AI credits through Keywords AI"
+---
+
+Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy-endpoints/chat-completions) to use your own Together AI credits.
+
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "togetherai": {
+      "api_key": "your-api-key"
+    }
+  }
+}
+```

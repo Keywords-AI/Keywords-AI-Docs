@@ -76,10 +76,12 @@
             "integration/providers/azure",
             "integration/providers/openai",
             "integration/providers/anthropic",
-            "integration/providers/perplexity",
-            "integration/providers/openrouter",
             "integration/providers/groq",
-            "integration/providers/bedrock"
+            "integration/providers/perplexity",
+            "integration/providers/fireworks",
+            "integration/providers/together",
+            "integration/providers/bedrock",
+            "integration/providers/openrouter"
           ]
         }
       ]
@@ -88,7 +90,7 @@
       "group": "Features",
       "pages": [
         {
-          "group": "Generation",
+          "group": "API",
           "pages": [
             "features/generation/streaming",
             "features/generation/fallbacks",
@@ -105,10 +107,17 @@
           "pages": [
             "features/monitoring/analytics",
             "features/monitoring/logging",
-            "features/monitoring/user-data",
             "features/monitoring/webhooks",
             "features/monitoring/subscribe-alerts",
             "features/monitoring/automatically-fallback"
+          ]
+        },
+        {
+          "group": "User",
+          "pages": [
+            "features/user/user-data",
+            "features/user/user-creation",
+            "features/user/user-budget"
           ]
         },
         {
