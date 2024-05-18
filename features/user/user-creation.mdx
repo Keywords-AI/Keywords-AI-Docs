@@ -1,0 +1,102 @@
+---
+title: "User creation & update"
+description: "Create/update users to have better user observability on Keywords AI" 
+---
+
+To have better user observability, you can create new users through our [User Creation endpoint](/api-endpoints/async-endpoints/user-creation-endpoint) or update exsiting users through [User Update endpoint](/api-endpoints/async-endpoints/user-update-endpoint). 
+
+## User Creation
+
+<CodeGroup>
+```Python Python
+import requests
+
+url = "https://api.keywordsai.co/api/users/create/"
+api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
+data = {
+    "customer_identifier": "some_customer_identifier",
+    "name": "John Doe",
+    # Add other parameters here 
+    # e.g. "period_budget": 30
+}
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/users/create/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer Your_Keywords_AI_API_Key '
+  },
+    body: JSON.stringify({
+        customer_identifier: "some_customer_identifier"
+        name: "John Doe",
+        // Add other parameters here 
+        // e.g. period_budget: 30
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+</CodeGroup>
+
+For more inforation about `customer_identifier`, check out the parameter [here](/features/generation/customer-identifier)
+
+## User Update
+Update existing users to have better user observability.
+
+### Update users on the platform
+You can update user's name and email on the platform. Go to the [Users page](https://platform.keywordsai.co/platform/users) and click on the user you want to update. Type user's name and email in the corresponding fields.
+
+<img src="/images/users-page/user-update.png" alt="Users Page data" />
+
+### Update users through API
+You can update all user's information through the [User Update endpoint](/api-endpoints/async-endpoints/user-update-endpoint).
+ <CodeGroup>
+```Python Python
+import requests
+
+url = "https://api.keywordsai.co/api/user/update/some_customer_identifier" #replace with the actual customer_identifier to update
+api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
+data = {
+    "name": "John Doe",
+    "period_budget": 30
+    # Add other parameters here
+}
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch("https://api.keywordsai.co/api/user/update/some_customer_identifier", { 
+    // replace with the actual customer_identifier to update
+method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer Your_Keywords_AI_API_Key '
+  },
+    body: JSON.stringify({
+        name: "John Doe",
+        period_budget: 30,
+        // Add other parameters here
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+ </CodeGroup>
