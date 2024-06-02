@@ -77,6 +77,14 @@ fetch('https://api.keywordsai.co/api/users/create/', {
 <ParamField path="period_budget" type="number">
     The budget amount for the period. The default value is `null`, which means no budget is set.
 </ParamField>
+<ParamField path="markup_percentage" type="number">
+    This allows a User's usage to be reported more by x%. The default value is `0`.
+```json
+  {
+    "markup_percentage": 30 // 30% extra on top of the usage  
+  }
+```
+</ParamField>
 <ParamField path="metadata" type="object">
     Customized metadata for the user. Any key-value pairs can be added here.
 </ParamField>
