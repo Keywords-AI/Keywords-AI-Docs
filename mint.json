@@ -67,6 +67,7 @@
         "integration/development-frameworks/openai-sdk",
         "integration/development-frameworks/langchain",
         "integration/development-frameworks/llama-index",
+        "integration/development-frameworks/vercel",
         "integration/supported-models",
         "integration/own-api-keys",
         {

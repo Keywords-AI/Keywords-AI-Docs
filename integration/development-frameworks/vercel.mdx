@@ -1,0 +1,62 @@
+---
+title: Vercel SDK
+---
+
+You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions.mdx) endpoint with Vercel AI SDK under two lines of code change.
+
+<CodeGroup>
+```TypeScript Vercel
+import { createOpenAI, OpenAIProvider } from '@ai-sdk/openai'
+import { streamText, streamObject } from 'ai'
+
+async function main() {
+  // Initialize OpenAI with Keywords proxy
+  const client: OpenAIProvider = createOpenAI({
+    baseURL: 'https://api.keywordsai.co',
+    apiKey: 'KGSkg7BI.0yseGNgMgXj6uZ8zXtKeaTKGc80oGRTC',
+    compatibility: 'strict',
+  })
+
+
+  const requestParamsDefault: Parameters<typeof streamText>[0] = {
+    model: client.chat('gpt-3.5-turbo'),
+    messages: [
+      {
+        role: 'user',
+        content: 'Hello! How are you doing today?',
+      },
+    ],
+    temperature: 0.5,
+  }
+
+  try {
+    console.log('Calling OpenAI with Keywords proxy...')
+
+    const { textStream: proxyTextStream } = await streamText(requestParamsDefault)
+    for await (const textPart of proxyTextStream) {
+      console.log('Keywords Proxy Response:', textPart)
+    }
+  } catch (error) {
+    console.error('Error:', error)
+  }
+}
+
+main()
+```
+
+</CodeGroup>
+
+
+## Vercel AI SDK Core Functions:
+
+<ParamField path="generateText" type="function">
+Generates text and tool calls. This function is ideal for non-interactive use cases such as automation tasks where you need to write text (e.g. drafting email or summarizing web pages) and for agents that use tools.
+</ParamField>
+
+<ParamField path="streamText" type="function">
+    Stream text and tool calls. You can use the streamText function for interactive use cases such as chat bots and content streaming. You can also generate UI components with tools (see Generative UI).
+</ParamField>
+
+<ParamField path="generateObject" type="function">
+    Generates a typed, structured object that matches a [Zod](https://zod.dev/) schema. You can use this function to force the language model to return structured data, e.g. for information extraction, synthetic data generation, or classification tasks.
+</ParamField>
