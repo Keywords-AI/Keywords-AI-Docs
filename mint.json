@@ -68,6 +68,7 @@
         "integration/development-frameworks/langchain",
         "integration/development-frameworks/llama-index",
         "integration/development-frameworks/vercel",
+        "integration/development-frameworks/anthropic",
         "integration/supported-models",
         "integration/own-api-keys",
         {
@@ -79,7 +80,6 @@
             "integration/providers/anthropic",
             "integration/providers/groq",
             "integration/providers/perplexity",
-            "integration/providers/fireworks",
             "integration/providers/together",
             "integration/providers/bedrock",
             "integration/providers/openrouter"
