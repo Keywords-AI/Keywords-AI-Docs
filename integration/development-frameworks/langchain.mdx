@@ -34,7 +34,9 @@ const keywordsAI =  new ChatOpenAITest({
     modelName: "gpt-3.5-turbo",
     streaming: true,
     modelKwargs: {
-        customer_identifier: "123456"
+        extra_body: {
+            customer_identifier: "123456"
+        }
     }
     
 })
