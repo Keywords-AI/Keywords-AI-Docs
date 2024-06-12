@@ -20,6 +20,11 @@ message = client.messages.create(
     messages=[
         {"role": "user", "content": "How are you today?"}
     ]
+    metadata={
+        "keywordsai_params": {
+            "customer_identifier": "something"
+        }
+    },
 )
 
 print(message.content)
@@ -28,6 +33,6 @@ print(message.content)
 </CodeGroup>
 
 
-To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `extra_body` parameter. In the above example, `customer_identifier` is the Keywords AI parameter. These parameters will take precedence over the OpenAI parameters if they are conflicting.
+To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `metadata` parameter. In the above example, `customer_identifier` is the Keywords AI parameter. These parameters will take precedence over the Anthropic parameters if they are conflicting.
 
 
