@@ -81,6 +81,7 @@
             "integration/providers/groq",
             "integration/providers/perplexity",
             "integration/providers/together",
+            "integration/providers/Fireworks",
             "integration/providers/bedrock",
             "integration/providers/openrouter"
           ]
