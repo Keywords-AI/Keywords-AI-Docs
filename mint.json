@@ -59,7 +59,7 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["get-started/overview", "get-started/quick-start"]
+      "pages": ["get-started/overview", "get-started/quick-start", "get-started/fine-tuned-model"]
     },
     {
       "group": "Integrations",
