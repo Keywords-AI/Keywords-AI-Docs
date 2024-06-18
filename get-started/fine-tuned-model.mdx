@@ -1,0 +1,93 @@
+---
+title: "Custom Model"
+description: "You can log your custom model's outputs through our logging endpoint"
+---
+
+## Create an Account
+
+Go to Keywords AI's [sign up page](https://platform.keywordsai.co/signup) to create an account. You can use email or Google account to sign up.
+
+{/* After you complete your onboarding questions, you will see this page: */}
+
+{/* <img src="/images/welcome-page.png" /> */}
+
+{/* Welcome to Keywords AI! */}
+
+## Create an API key
+
+To create an API key, visit the [API key page](https://platform.keywordsai.co/platform/api/api-keys)
+
+## Example call:
+
+Check out the [Logging endpoint page](/api-endpoints/async-endpoints/request-logging-endpoint) to see all supported parameters.
+
+
+<CodeGroup>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "id": 1091403,
+    "unique_id": "004NiQ",
+    "prompt_tokens": 8,
+    "completion_tokens": 16,
+    "cost": 0.00042,
+    "prompt_messages": [
+        {
+            "role": "user",
+            "content": "Hi"
+        },
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "latency": 0.0,
+    "model": "gpt-4",
+    "timestamp": "2024-04-15T08:30:37.721313Z",
+    "metadata": {},
+    "customer_identifier": "456467",
+    "log_type": "logging_api",
+    "user": 303,
+    "customer_user": 55
+}
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.request("POST", url, headers=headers, json=payload)
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
+-d '{
+    "id": 1091403,
+    "unique_id": "004NiQ",
+    "prompt_tokens": 8,
+    "completion_tokens": 16,
+    "cost": 0.00042,
+    "prompt_messages": [
+        {
+          "role": "user",
+          "content": "Hi"
+        },
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "latency": 0.0,
+    "model": "gpt-4",
+    "timestamp": "2024-04-15T08:30:37.721313Z",
+    "metadata": {},
+    "customer_identifier": "456467",
+    "log_type": "logging_api",
+    "user": 303,
+    "customer_user": 55
+}'
+```
+</CodeGroup>
