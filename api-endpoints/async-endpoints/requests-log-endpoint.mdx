@@ -1,0 +1,56 @@
+---
+title: Requests Log Endpoint
+api: POST https://api.keywordsai.co/api/request-logs/
+---
+
+The Requests Log endpoint allows you to get the past logs by with filters
+
+
+```python 
+import requests
+```
+You can add these params to the **URL params**:
+for example:
+```python
+url = "https://api.keywordsai.co/api/request-logs/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
+
+# or
+from urllib.parse import urlencode
+params = {
+    "page": 1,
+    "sort_by": "-id",
+    "is_test": "false",
+    "all_envs": "false",
+    "fetch_filters": "false",
+    "page_size": 1
+}
+url = f"https://api.keywordsai.co/api/request-logs/?{urlencode(params)}"
+```
+
+<ParamField name="sort_by" type="string" required>
+  The field to sort by. Default is `-id` (same as sort by `-timestamp`, but with better performance).
+  `-` is for descending order, if not provided, it will be ascending order.
+</ParamField>
+
+<ParamField name="is_test" type="string" default="false">
+  Whether the log is a test call or not. Default is false. This parameter will override the `all_envs` parameter.
+  Options: `true`, `false`.
+</ParamField>
+
+<ParamField name="all_envs" type="string" default="false">
+  Whether to include logs from all environments. Default is false. `is_test` parameter will override this parameter.
+  Options: `true`, `false`.
+</ParamField>
+
+<ParamField name="fetch_filters" type="string" default="false">
+  Whether to retrieve the available filtering options. Default is `false`. Enabling this could slow down the response time.
+  Options: `true`, `false`.
+</ParamField>
+
+<ParamField name="page_size" type="number" default={100}>
+  The number of logs to return per page.
+</ParamField>
+
+<ParamField name="page" type="number" default={1}>
+  The page number of the current logs.
+</ParamField>
