@@ -8,20 +8,30 @@ authMethod: "none"
 A list of models.
 ```json
 {
-    "data": [
-       {"model_name":"gpt-3.5-turbo","display_name":"GPT-3.5 Turbo","max_context_window":4096,"input_cost":0.5,"output_cost":0.1,"rate_limit":30000},
+    "models": [
+       {
+        "model_name":"gpt-3.5-turbo",
+        "max_context_window":4096,
+        "input_cost":0.5,
+        "output_cost":0.1,
+        "rate_limit":30000,
+        "provider": {
+            "provider_name": "OpenAI",
+            "provider_id": "openai",
+            "moderation": "Filtered",
+            "credential_fields": [
+                "api_key" // The API key for the provider
+            ]
+        }
+       },
        // ... other models ... 
     ]
 }
 ```
 Each model:
 
-<Expandable>
 <ResponseField name="model_name" type="string">
     The name used in `model` parameter for calling the Keywords AI [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint.
-</ResponseField>
-<ResponseField name="display_name" type="string">
-    The display name of the model in [models page](https://platform.keywordsai.co/platform/api/models)
 </ResponseField>
 <ResponseField name="max_context_window" type="number">
     The maximum number of tokens the model can process in one API call.
@@ -35,5 +45,21 @@ Each model:
 <ResponseField name="rate_limit" type="number">
     The rate limit for calling this model with Keywords AI.
 </ResponseField>
-</Expandable>
+<ResponseField name="provider" type="object">
+    The provider of the model.
+    <Expandable>
+        <ResponseField name="provider_name" type="string">
+            The name of the provider.
+        </ResponseField>
+        <ResponseField name="provider_id" type="string">
+            The ID of the provider.
+        </ResponseField>
+        <ResponseField name="moderation" type="string">
+            The moderation level of the provider. Possible values: `Filtered`, `Unfiltered`.
+        </ResponseField>
+        <ResponseField name="credential_fields" type="array">
+            The fields required to authenticate with the provider.
+        </ResponseField>
+    </Expandable>
+</ResponseField>
 </ResponseField>
