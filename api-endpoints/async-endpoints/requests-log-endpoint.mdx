@@ -26,31 +26,31 @@ params = {
 url = f"https://api.keywordsai.co/api/request-logs/?{urlencode(params)}"
 ```
 
-<ParamField name="sort_by" type="string" required>
+<ParamField path="sort_by" type="string" required>
   The field to sort by. Default is `-id` (same as sort by `-timestamp`, but with better performance).
   `-` is for descending order, if not provided, it will be ascending order.
 </ParamField>
 
-<ParamField name="is_test" type="string" default="false">
+<ParamField path="is_test" type="string" default="false">
   Whether the log is a test call or not. Default is false. This parameter will override the `all_envs` parameter.
   Options: `true`, `false`.
 </ParamField>
 
-<ParamField name="all_envs" type="string" default="false">
+<ParamField path="all_envs" type="string" default="false">
   Whether to include logs from all environments. Default is false. `is_test` parameter will override this parameter.
   Options: `true`, `false`.
 </ParamField>
 
-<ParamField name="fetch_filters" type="string" default="false">
+<ParamField path="fetch_filters" type="string" default="false">
   Whether to retrieve the available filtering options. Default is `false`. Enabling this could slow down the response time.
   Options: `true`, `false`.
 </ParamField>
 
-<ParamField name="page_size" type="number" default={100}>
+<ParamField path="page_size" type="number" default={100}>
   The number of logs to return per page.
 </ParamField>
 
-<ParamField name="page" type="number" default={1}>
+<ParamField path="page" type="number" default={1}>
   The page number of the current logs.
 </ParamField>
 
@@ -67,7 +67,7 @@ data = {
 response = requests.post(url, headers=headers, json=data)
 ```
 
-<ParamField name="filters" type="object" default={{}}>
+<ParamField path="filters" type="object" default={{}}>
   The filters to be applied to the logs. For available options in the response body, use the `fetch_filters` parameter.
 
   example:
