@@ -6,11 +6,10 @@ api: POST https://api.keywordsai.co/api/request-logs/
 The Requests Log endpoint allows you to get the past logs by with filters
 
 
-```python 
-import requests
-```
+## GET params
 You can add these params to the **URL params**:
 for example:
+
 ```python
 url = "https://api.keywordsai.co/api/request-logs/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
 
@@ -53,4 +52,31 @@ url = f"https://api.keywordsai.co/api/request-logs/?{urlencode(params)}"
 
 <ParamField name="page" type="number" default={1}>
   The page number of the current logs.
+</ParamField>
+
+## POST params
+You can add these params to the **body**:
+```python
+url = "https://api.keywordsai.co/api/request-logs/"
+headers = {
+    "Authorization
+}
+data = {
+    "filters": {}
+}
+response = requests.post(url, headers=headers, json=data)
+```
+
+<ParamField name="filters" type="object" default={{}}>
+  The filters to be applied to the logs. For available options in the response body, use the `fetch_filters` parameter.
+
+  example:
+  ```json
+    {
+      "name_of_metric": {
+        "operator": "gt",
+        "value": [100]
+      },
+    }
+    ```
 </ParamField>
