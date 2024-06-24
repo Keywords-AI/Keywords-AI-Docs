@@ -9,7 +9,9 @@ The Requests Log endpoint allows you to get the past logs by with filters
 ## GET params
 You can add these params to the **URL params**:
 for example:
-
+```
+"https://api.keywordsai.co/api/request-logs/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
+```
 ```python
 url = "https://api.keywordsai.co/api/request-logs/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
 
@@ -24,6 +26,13 @@ params = {
     "page_size": 1
 }
 url = f"https://api.keywordsai.co/api/request-logs/?{urlencode(params)}"
+headers = {
+    "Authorization": f"Api-Key {YOUR_KEYWORDS_AI_API_KEY}",
+}
+data = {
+    "filters": {}
+}
+response = requests.post(url, headers=headers, json=data)
 ```
 
 <ParamField path="sort_by" type="string" required>
@@ -59,10 +68,15 @@ You can add these params to the **body**:
 ```python
 url = "https://api.keywordsai.co/api/request-logs/"
 headers = {
-    "Authorization
+    "Authorization": f"Api-Key {YOUR_KEYWORDS_AI_API_KEY}",
 }
 data = {
-    "filters": {}
+    "filters":    {
+      "cost": {
+        "operator": "gt",
+        "value": [0.01]
+      },
+    }
 }
 response = requests.post(url, headers=headers, json=data)
 ```
