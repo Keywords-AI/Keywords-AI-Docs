@@ -1,5 +1,5 @@
 ---
-title: Requests Log Endpoint
+title: Logs List
 api: POST https://api.keywordsai.co/api/request-logs/
 ---
 
@@ -38,6 +38,28 @@ response = requests.post(url, headers=headers, json=data)
 <ParamField path="sort_by" type="string" required>
   The field to sort by. Default is `-id` (same as sort by `-timestamp`, but with better performance).
   `-` is for descending order, if not provided, it will be ascending order.
+  <Expandable>
+        <ResponseField name="id" type="string">
+            The id of each request
+        </ResponseField>
+        <ResponseField name="cost" type="string">
+            Cost of each request.
+        </ResponseField>
+        <ResponseField name="time_to_first_token" type="string">
+           TTFT - useful for Voice AI applications
+        </ResponseField>
+        <ResponseField name="latency" type="string">
+          Generation time of each request.
+        </ResponseField>
+        <ResponseField name="prompt_tokens" type="string">
+          Input / prompt tokens of each request.
+        </ResponseField>
+        <ResponseField name="completion_tokens" type="string">
+          Output / completion tokens of each request.
+        </ResponseField>
+        <ResponseField name="all_tokens" type="string">
+        </ResponseField>
+    </Expandable>
 </ParamField>
 
 <ParamField path="is_test" type="string" default="false">
@@ -94,3 +116,97 @@ response = requests.post(url, headers=headers, json=data)
     }
     ```
 </ParamField>
+
+<ParamField path="operator" type="string" required>
+  Default is "" (equal).
+  <Expandable>
+        <ResponseField name="" type="string">
+            Equal
+        </ResponseField>
+        <ResponseField name="iexact" type="string">
+            case insensitive equal
+        </ResponseField>
+        <ResponseField name="lt" type="string">
+           Less than
+        </ResponseField>
+        <ResponseField name="lte" type="string">
+           Less than or equal
+        </ResponseField>
+        <ResponseField name="gt" type="string">
+          Greater than
+        </ResponseField>
+        <ResponseField name="gte" type="string">
+          Greater than or equal
+        </ResponseField>
+        <ResponseField name="contains" type="string">
+        </ResponseField>
+        <ResponseField name="endswith" type="string">
+        </ResponseField>
+        <ResponseField name="in" type="string">
+          Can be used in arrays or text
+        </ResponseField>
+        <ResponseField name="isnull" type="string">
+          Check if the field is null
+        </ResponseField>
+        <ResponseField name="icontains" type="string">
+          Case insensitive contains
+        </ResponseField>
+        <ResponseField name="not" type="string">
+        </ResponseField>
+    </Expandable>
+
+</ParamField>
+
+## Response format
+```json
+{
+    "results": [
+       {
+        "id": 12345,
+        "organization_key__name": "Keywords AI Default",
+        "organization": "Keywords AI",
+        "user": "hendrix@keywordsai.co",
+        "is_example": false,
+        "status": "success",
+        "unique_id": "xxxxx",
+        "prompt_tokens": 452,
+        "completion_tokens": 89,
+        "cost": 0.0005869,
+        "prompt_messages": [
+                {
+                    "role": "system",
+                    "content": "You are a helpful assistant"
+                },
+                {
+                    "role": "user",
+                    "content": "What is Keywords AI?"
+                }
+        ],
+        "completion_message": {
+                "role": "assistant",
+                "content": "Keywords AI is a unified DevOps platform for AI products."
+        },
+        "latency": 1.2114145755767822,
+        "model": "gpt-3.5-turbo",
+        "foundation_model": "gpt-3.5-turbo",
+        "provider_id": "openai",
+        "tool_choice": null,
+        "tools": null,
+        "tool_calls": null,
+        "timestamp": "2024-06-24T21:33:06.601353Z",
+        "failed": false,
+        "time_to_first_token": null,
+        "routing_time": 0.0,
+        "metadata": {
+            // any params you want to pass in the request
+            },
+        "stream": false,
+        "status_code": 200,
+        "customer_identifier": "123456",
+        "customer_email": "",
+        "used_custom_credential": false,
+       // ... other models ... 
+       },
+    ]
+}
+```
