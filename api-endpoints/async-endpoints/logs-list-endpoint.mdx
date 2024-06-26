@@ -56,7 +56,7 @@ response = requests.post(url, headers=headers, json=data)
 </ParamField>
 
 <ParamField path="page_size" type="number" default={100}>
-  The number of logs to return per page.
+  The number of logs to return per page. Maximum is 1000.
 </ParamField>
 
 <ParamField path="page" type="number" default={1}>
