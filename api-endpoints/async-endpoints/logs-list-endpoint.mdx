@@ -1,9 +1,9 @@
 ---
-title: Logs List
+title: Logs List Endpoint
 api: POST https://api.keywordsai.co/api/request-logs/
 ---
 
-The Requests Log endpoint allows you to get the past logs by with filters
+The Logs List endpoint allows you to get the past logs with specified filters.
 
 
 ## GET params
@@ -78,7 +78,7 @@ response = requests.post(url, headers=headers, json=data)
 </ParamField>
 
 <ParamField path="page_size" type="number" default={100}>
-  The number of logs to return per page.
+  The number of logs to return per page. Maximum is 1000.
 </ParamField>
 
 <ParamField path="page" type="number" default={1}>
