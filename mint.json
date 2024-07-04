@@ -157,8 +157,8 @@
       "group": "API",
       "pages": [
         "api-endpoints/proxy-endpoints/chat-completions",
-        "api-endpoints/async-endpoints/logs-list-endpoint",
         "api-endpoints/async-endpoints/request-logging-endpoint",
+        "api-endpoints/async-endpoints/logs-list-endpoint",
         "api-endpoints/data-endpoints/models-endpoint",
         "api-endpoints/async-endpoints/users-data-endpoint",
         "api-endpoints/async-endpoints/user-update-endpoint",
