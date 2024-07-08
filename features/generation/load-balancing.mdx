@@ -1,12 +1,60 @@
 ---
 title: "Load Balancing"
-description: "Balance the load of your requests between the same from different providers."
+description: "Balance the load of your requests between different models."
 ---
 
-The Keywords AI API will automatically balance the request load across the same model provided by different providers. This is achieved by hitting different provider endpoints based on their rate limit and their average latency across the day.
+Load balancing is a feature that allows you to balance the request load across different models provided by different providers. You could specify weights for each provider based on their rate limit and your preference.
 
-Keywords AI will ping the providers every hour to measure the average latency across the day. And update the latency data for the providers in the backend for this load-balancing calculation.
+_See all supported params [here](/api-endpoints/proxy-endpoints/chat-completions)._
 
+## Load balancing example
+
+You should use a valid model name from the list of supported models as the name of a load balancing group. You can find the list of supported models [here](/integration/supported-models). When you call a model name that is also a load balancing group name, the router will trigger the load balancing logic.
+
+
+```json
+{
+    // ...other parameters...
+    "model": "gpt-3.5-turbo",
+    "loadbalance_models": {
+        "gpt-3.5-turbo": [
+            {
+                "model": "claude-3-5-sonnet-20240620",
+                "weight": 34,
+                "credentials": { // Your own Anthropic API key, optional for team plan and above
+                    "api_key": "Your own Anthropic API key"
+                }
+            },
+            {
+                "model": "azure/gpt-35-turbo",
+                "weight": 34,
+                "credentials": { // Your own Azure credentials, optional for team plan and above
+                    "api_base": "Your own Azure api_base",
+                    "api_version": "Your own Azure api_version",
+                    "api_key": "Your own Azure api_key"
+                }
+            }
+        ]
+    }
+}
+```
+<ParamField path="model" type="string" required>
+  Specify which model to balance load. See the list of models [here](/integration/supported-models). 
+  <br/>For the example above, the model is `gpt-3.5-turbo`, but `gpt-3.5-turbo` is not included in the load balancing group, so it becomes a group name and it will not be called.
+</ParamField>
+<ParamField path="weight" type="integer" required>
+    Specify the weight of the model (has to be a positive integer). The higher the weight, the more requests will be sent to the model. <br/>
+    For the example above, the percentage of requests sent to `claude-3-5-sonnet-20240620` and `azure/gpt-35-turbo` is 50% each.
+</ParamField>
+<ParamField path="credentials" type="list" >
+This is required for all free plan users. For team plan and above, this is optional. <br/>
+See how to add your own credentials [here](/integration/providers/providers-overview).
+</ParamField>
+
+You could also set up fallback models to avoid downtime. If the model you specified in the `model` field is not available, it will fall back to the list of models you specified in the `fallback` field. Check out the [Fallbacks](/features/generation/fallbacks) section for more information.
+
+{/* 
+## How load balancing works
 Under the hood, here is the pseudo-code of how the load balancing works:
 
 ```python
@@ -38,7 +86,7 @@ keywords_generation(module, **other_kwargs)
 
 ```
 
-## How load balancing works
+
 distribution = [rate_limit_1, rate_limit_2, rate_limit_3] / sum_of_rate_limits <br/>
 weights = add_latency_weight_to_distribution(distribution, [latency_1, latency_2, latency_3])<br/>
-model = random.choices(balancing_between, weights=weights)
+model = random.choices(balancing_between, weights=weights) */}
