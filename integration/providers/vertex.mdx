@@ -1,0 +1,42 @@
+---
+title: "Vertex AI"
+description: "Use your own Azure OpenAI credits through Keywords AI"
+---
+
+Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy-endpoints/chat-completions) to use your own Vertex AI credits.
+
+{/* To find the parameters needed, you can follow these steps:
+- Visit your [Azure Portal](https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI).
+- You will see your deployments via the above link, choose the deployment you want to use.
+<img src="/images/providers/azure/blurred-azure-portal.png"/>
+- Click on the "Endpoints" link to get the API base URL.
+- Click on the "Manage Keys" link to get the API key.
+<img src="/images/providers/azure/blurred-azure-endpoint.png"/>
+- Pick the version from the [available versions](https://learn.microsoft.com/en-us/azure/ai-services/openai/reference). */}
+
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "google_vertex_ai": {
+      "vertex_ai_project": "your-project",
+      "vertex_ai_location": "your-location",
+      "vertex_ai_credentials": credentials // a JSON object, you could also pass an entire JSON object here
+    }
+  }
+}
+```
+
+### How to get your Vertex AI credentials
+1. Run `gcloud init` to initialize the gcloud CLI.
+2. Run `gcloud info` to get the path of your credential. You will see a line like <br/>`User Config Directory: [/home/USERNAME/.config/gcloud]`
+3. You will find a file named `application_default_credentials.json` in the path you got from the previous step. This file contains your credentials.
+4. Load this json file into the `vertex_ai_credentials` field in the request body.
+
+For example:
+
+```python
+with open("./credentials/google/application_default_credentials.json", "r") as f:
+    credentials = json.load(f)
+```
+
