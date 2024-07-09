@@ -79,6 +79,7 @@
             "integration/providers/openai",
             "integration/providers/anthropic",
             "integration/providers/groq",
+            "integration/providers/vertex",
             "integration/providers/perplexity",
             "integration/providers/together",
             "integration/providers/Fireworks",
