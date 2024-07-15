@@ -17,3 +17,10 @@ Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy
   }
 }
 ```
+
+### How to get your AWS Bedrock credentials
+1. Go to `https://aws.amazon.com/` and click on `Sign In to the Console`.
+2. Choose your region and click on `Security credentials` in the top right corner.
+3. Click on `Access keys` and then `Create New Access Key`.
+4. You will see your `Access key ID` and `Secret access key`. Copy these values and use them in the `aws_access_key_id` and `aws_secret_access_key` fields in the request body.
+5. You can find your `aws_region_name` in the URL of the AWS console. For example, if the URL is `https://us-west-2.console.aws.amazon.com/`, then the `aws_region_name` is `us-west-2`.

@@ -79,7 +79,7 @@ const chatCompletion = await openai.chat.completions.create({
 import requests
 def demo_call(input, 
               model="gpt-3.5-turbo",
-              token="a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z", # replace this with your Keywords AI API key
+              token="YOUR_KEYWORDS_AI_API_KEY",
               stream=False
               ):
     headers = {
@@ -107,7 +107,7 @@ fetch('https://api.keywordsai.co/api/chat/completions', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z' // replace this with your Keywords AI API key
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY'
   },
     body: JSON.stringify({
         model: 'gpt-3.5-turbo',
@@ -191,7 +191,7 @@ func main() {
 
 - **URL Change**: Modify the API endpoint URL in your code from OpenAI’s URL to the Keywords AI endpoint URL: `https://keywordsai.co/api/chat/completions`.
 - **API Key**: Replace the OpenAI API key with your Keywords AI API key.
-- **Parameters**: Models parameter becomes optional.
+- **Parameters**: See supported parameters in the [API reference](/api-endpoints/proxy-endpoints/chat-completions).
 
 ## The Response
 
