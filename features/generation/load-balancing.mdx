@@ -3,13 +3,20 @@ title: "Load Balancing"
 description: "Balance the load of your requests between different models."
 ---
 
-Load balancing is a feature that allows you to balance the request load across different models provided by different providers. You could specify weights for each provider based on their rate limit and your preference.
+Load balancing is a feature that allows you to balance the request load across different models or deployments. You could specify weights for each model/deployment based on their rate limit and your preference.
 
 _See all supported params [here](/api-endpoints/proxy-endpoints/chat-completions)._
 
-## Load balancing example
 
-You should use a valid model name from the list of supported models as the name of a load-balancing group. You can find the list of supported models [here](https://platform.keywordsai.co/platform/models?sort_by=model_name). When you call a model name that is also a load-balancing group name, the router will trigger the load-balancing logic.
+## Load balancing between deployments
+You could go to the platform and add multiple deployments for the same provider. You could specify the load balancing weights for each deployment, which could be helpful when you want to enhance rate limits for a single provider.
+
+## Load balancing between models
+You could specify the load balancing weights for different models. This is useful when you want to balance the load between different models from different providers. 
+
+You could also add your own credentials to use your credits. See how to add your own credentials [here](/integration/own-api-keys).
+
+For the example below, the percentage of requests sent to `claude-3-5-sonnet-20240620` and `azure/gpt-35-turbo` is 50% each.
 
 **This Parameter will overwrite the `model` parameter!**
 
@@ -40,8 +47,7 @@ You should use a valid model name from the list of supported models as the name 
   Specify which model to balance load. See the list of models [here](/integration/supported-models). 
 </ParamField>
 <ParamField path="weight" type="integer" required>
-    Specify the weight of the model (has to be a positive integer). The higher the weight, the more requests will be sent to the model. <br/>
-    For the example above, the percentage of requests sent to `claude-3-5-sonnet-20240620` and `azure/gpt-35-turbo` is 50% each.
+    Specify the weight of the model (has to be a positive integer). The higher the weight, the more requests will be sent to the model.
 </ParamField>
 <ParamField path="credentials" type="list" >
 This is required for all free plan users. For team plan and above, this is optional. <br/>

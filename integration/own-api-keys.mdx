@@ -1,9 +1,14 @@
 ---
-title: "Use your own API keys"
+title: "Overview"
 ---
 
-If you want to use your own API keys from other providers, you can 
-- pass in your customer’s credentials and deployment variables for supported providers and use their credits.*  Check out `customer_credentials` [here](/api-endpoints/proxy-endpoints/chat-completions) <br/>
+If you want to use your own API keys from supported providers, you can 
+
+- Add your own API keys on Keywords AI. Go to Settings -> [Credentials](https://platform.keywordsai.co/platform/api/credentials) -> Add your credentials.
+<br/>**Note**: For the `Load balancing weight` filed in the credential card, see details [here](/features/generation/load-balancing).
+<img height="200" width="600"  src="/images/bring-own-key.png" alt="Dashboard Page"/>
+
+- Pass in your credentials and deployment variables for supported providers and use your credits.*  Check out `customer_credentials` [here](/api-endpoints/proxy-endpoints/chat-completions) <br/>
 <sub>*Azure has some differences in code, check out the [Azure](/integration/providers/azure) page for more details.</sub>
 
 ```json
@@ -12,12 +17,24 @@ If you want to use your own API keys from other providers, you can
     "openai": {
       "api_key": "sk-DEacrWTDndFYhdcLYKF6T3BlbkdfghuyTj4sYL2v1EDhg3iz5",
     },
-    "provider_id": { // eg. azure_openai, anthropic
+    "provider_id": { // see the table below for provider IDs
       "some_provider_var_names": "some_provider_var_values" //eg. api_key
     }
   }
 }
 ```
 
-- Add your own API keys on Keywords AI. Go to Settings -> API Keys -> Turn on `Bring your own models`
-<img src="/images/bring-own-key.png" alt="Dashboard Page"/>
+## Available Providers
+| Provider Name     | Supported Models | Last Update  |Provider ID        |
+|-----|---|------|----|
+| OpenAI            | All                | Jun 29, 2024 |   openai             |
+| Azure OpenAI      | All                | Jun 29, 2024 | azure_openai       |
+| Anthropic         | All                | Jun 29, 2024 | anthropic          |
+| Cohere            | All                | Jun 29, 2024 | cohere             |
+| Google Gemini AI  | All                | Jun 29, 2024  | google_gemini_ai   |
+| Google Vertex AI  | All                | Jun 29, 2024  | google_vertex_ai   |
+| OpenRouter        | All                | Jun 29, 2024 | openrouter         |
+| Together AI       | All                | Jun 29, 2024 | togetherai         |
+| Perplexity AI     | All                | Jun 29, 2024 | perplexity         |
+| Groq              | All                | Jun 29, 2024  | groq               |
+| AWS Bedrock        | All                | Jun 29, 2024  | bedrock            |

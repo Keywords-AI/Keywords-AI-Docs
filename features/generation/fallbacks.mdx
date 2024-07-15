@@ -5,11 +5,14 @@ description: "Avoid downtime with failover models"
 
 Keywords AI will catch any errors occurring in a request to model and fall back to the list of models you specified in the `fallback` field. This is useful to avoid downtime and ensure that your application is always available.
 
-_See all params [here](/api-endpoints/proxy-endpoints/chat-completions)._
+See all Keywords AI params [here](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters).
 
-**Automatic Fallbacks** are enabled by default. If you want to disable them, you can do so by setting the [safety net](/features/monitoring/automatically-fallback).
+## Set up fallbacks on Keywords AI platform
+Go to Settings -> [Fallback](https://platform.keywordsai.co/platform/api/fallback) -> Click on `Add fallback models` -> Select the models you want to add as fallbacks.
 
-## Fallback example
+<img src="/images/api-features/fallback.jpg" alt="Dashboard Page"/>
+
+## Set up fallbacks in code
 
 ```json
 {
@@ -20,6 +23,13 @@ _See all params [here](/api-endpoints/proxy-endpoints/chat-completions)._
   ]
 }
 ```
+
+<sub>There are no restrictions on the number of fallback models you can add. The order of the models in the list is the order in which they will be tried.</sub>
+## Automatic Fallbacks
+
+We use Saftey net to automatically fallback to a system assigned model if fallback models are not responding or specified.
+
+Turn on the Safety net [here](https://platform.keywordsai.co/platform/api/fallback).
 
 ## Fallback Logic with Retries
 
