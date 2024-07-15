@@ -1,11 +1,12 @@
 ---
-title: Models
+title: Model List
 api: GET https://api.keywordsai.co/api/models/public
 authMethod: "none"
 ---
 
 <ResponseField name="data" type="array">
 A list of models.
+<Accordion title="Example">
 ```json
 {
     "models": [
@@ -28,7 +29,11 @@ A list of models.
     ]
 }
 ```
-Each model:
+</Accordion>
+
+
+</ResponseField>
+## Model parameters
 
 <ResponseField name="model_name" type="string">
     The name used in `model` parameter for calling the Keywords AI [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint.
@@ -47,7 +52,7 @@ Each model:
 </ResponseField>
 <ResponseField name="provider" type="object">
     The provider of the model.
-    <Expandable>
+    <Accordion title="Properties">
         <ResponseField name="provider_name" type="string">
             The name of the provider.
         </ResponseField>
@@ -60,6 +65,30 @@ Each model:
         <ResponseField name="credential_fields" type="array">
             The fields required to authenticate with the provider.
         </ResponseField>
-    </Expandable>
+    </Accordion>
 </ResponseField>
-</ResponseField>
+
+<ResponseExample>
+```json
+{
+    "models": [
+       {
+        "model_name":"gpt-3.5-turbo",
+        "max_context_window":4096,
+        "input_cost":0.5,
+        "output_cost":0.1,
+        "rate_limit":30000,
+        "provider": {
+            "provider_name": "OpenAI",
+            "provider_id": "openai",
+            "moderation": "Filtered",
+            "credential_fields": [
+                "api_key" // The API key for the provider
+            ]
+        }
+       },
+       // ... other models ... 
+    ]
+}
+```
+</ResponseExample>

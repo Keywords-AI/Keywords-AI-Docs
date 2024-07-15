@@ -1,0 +1,13 @@
+    {
+      "group": "Deprecated",
+      "pages": [
+        "api-endpoints/proxy-endpoints/text-generation/request-params",
+        {
+          "group": "Handling Response",
+          "pages": [
+            "api-endpoints/proxy-endpoints/text-generation/regular-response",
+            "api-endpoints/proxy-endpoints/text-generation/streaming-response"
+          ]
+        }
+      ]
+    },

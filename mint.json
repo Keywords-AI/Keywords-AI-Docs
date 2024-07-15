@@ -10,16 +10,17 @@
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
+  "theme": "venus",
   "primaryTab": {
     "name": "Documentation"
   },
-  "tabs":[
+  "tabs": [
     {
-      "name": "API",
+      "name": "API Reference",
       "url": "api-endpoints"
-  }
+    }
   ],
-  
+
   "favicon": "/logo.svg",
   "colors": {
     "primary": "#6483F0",
@@ -59,31 +60,34 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["get-started/overview", "get-started/quick-start", "get-started/fine-tuned-model"]
+      "pages": [
+        "get-started/overview",
+        "get-started/quick-start"
+      ]
     },
     {
       "group": "Integrations",
       "pages": [
         "integration/development-frameworks/openai-sdk",
+        "integration/development-frameworks/anthropic",
         "integration/development-frameworks/langchain",
         "integration/development-frameworks/llama-index",
         "integration/development-frameworks/vercel",
-        "integration/development-frameworks/anthropic",
+        "get-started/fine-tuned-model",
         "integration/supported-models",
-        "integration/own-api-keys",
         {
-          "group": "LLM Providers",
+          "group": "Use your own API keys",
           "pages": [
-            "integration/providers/providers-overview",
+            "integration/own-api-keys",
             "integration/providers/azure",
             "integration/providers/openai",
             "integration/providers/anthropic",
-            "integration/providers/groq",
             "integration/providers/vertex",
-            "integration/providers/perplexity",
-            "integration/providers/together",
-            "integration/providers/Fireworks",
             "integration/providers/bedrock",
+            "integration/providers/groq",
+            "integration/providers/Fireworks",
+            "integration/providers/together",
+            "integration/providers/perplexity",
             "integration/providers/openrouter"
           ]
         }
@@ -95,14 +99,14 @@
         {
           "group": "API",
           "pages": [
-            "features/generation/streaming",
             "features/generation/fallbacks",
             "features/generation/load-balancing",
-            "features/generation/retries",
             "features/generation/customer-identifier",
-            "features/generation/model-filtering",
+            "features/generation/metadata",
             "features/generation/disable-logs",
-            "features/generation/metadata"
+            "features/generation/retries",
+            "features/generation/model-filtering",
+            "features/generation/streaming"
           ]
         },
         {
@@ -155,29 +159,31 @@
       ]
     },
     {
-      "group": "API",
+      "group": "Inference",
       "pages": [
-        "api-endpoints/proxy-endpoints/chat-completions",
+        "api-endpoints/proxy-endpoints/chat-completions"
+      ]
+    },
+    {
+      "group": "Async Logging",
+      "pages": [
         "api-endpoints/async-endpoints/request-logging-endpoint",
-        "api-endpoints/async-endpoints/logs-list-endpoint",
-        "api-endpoints/data-endpoints/models-endpoint",
+        "api-endpoints/async-endpoints/logs-list-endpoint"
+      ]
+    },
+    {
+      "group": "User",
+      "pages": [
         "api-endpoints/async-endpoints/users-data-endpoint",
-        "api-endpoints/async-endpoints/user-update-endpoint",
-        "api-endpoints/async-endpoints/user-creation-endpoint",
         "api-endpoints/async-endpoints/user-detail-endpoint",
-        {
-          "group": "Deprecated",
-          "pages": [
-            "api-endpoints/proxy-endpoints/text-generation/request-params",
-            {
-              "group": "Handling Response",
-              "pages": [
-                "api-endpoints/proxy-endpoints/text-generation/regular-response",
-                "api-endpoints/proxy-endpoints/text-generation/streaming-response"
-              ]
-            }
-          ]
-        }
+        "api-endpoints/async-endpoints/user-creation-endpoint",
+        "api-endpoints/async-endpoints/user-update-endpoint"
+      ]
+    },
+    {
+      "group": "Model",
+      "pages": [
+        "api-endpoints/data-endpoints/models-endpoint"
       ]
     },
     {

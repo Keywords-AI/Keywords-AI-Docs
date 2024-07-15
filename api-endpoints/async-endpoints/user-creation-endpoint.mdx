@@ -3,52 +3,13 @@ title: "User Creation"
 api: "POST https://api.keywordsai.co/api/users/create/"
 ---
 
-User creation endpoint allows you create users and keep track of their usage/budget/limits.
+User creation endpoint allows you to create users and keep track of their usage/budget/limits.
 
 Make sure to replace `YOUR_KEYWORDSAI_API_KEY` with your actual Keywords AI API key.
 
-## Example Call
-<CodeGroup>
-```Python Python
-import requests
-
-url = "https://api.keywordsai.co/api/users/create/"
-api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
-data = {
-    "period_budget": 30,
-    "customer_identifier": "some_customer_identifier"
-}
-headers = {
-    "Authorization": f"Bearer {api_key}",
-    "Content-Type": "application/json"
-}
-
-response = requests.post(url, headers=headers, json=data)
-print(response.json())
-
-```
-
-```TypeScript TypeScript
-// Define the function with TypeScript
-fetch('https://api.keywordsai.co/api/users/create/', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer Your_Keywords_AI_API_Key '
-  },
-    body: JSON.stringify({
-        period_budget: 30,
-        customer_identifier: "some_customer_identifier"
-    })
-})
-.then(response => response.json())
-.then(data => console.log(data));
-```
-
-</CodeGroup>
 
 <ParamField path="customer_identifier" type="string" required={true}>
-    The unique identifier for the user. This field is required.
+    The unique identifier for the user.
 </ParamField>
 
 <ParamField path="name" type="string">
@@ -89,6 +50,43 @@ fetch('https://api.keywordsai.co/api/users/create/', {
     Customized metadata for the user. Any key-value pairs can be added here.
 </ParamField>
 
+<RequestExample>
+```Python Python
+import requests
+
+url = "https://api.keywordsai.co/api/users/create/"
+api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
+data = {
+    "period_budget": 30,
+    "customer_identifier": "some_customer_identifier"
+}
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/users/create/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer Your_Keywords_AI_API_Key '
+  },
+    body: JSON.stringify({
+        period_budget: 30,
+        customer_identifier: "some_customer_identifier"
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+</RequestExample>
 
 
 
