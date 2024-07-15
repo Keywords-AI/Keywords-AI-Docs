@@ -1,22 +1,94 @@
 ---
-title: Chat Completion
+title: Chat Completions
 api: POST https://api.keywordsai.co/api/chat/completions
 ---
 
-## Standard Parameters <br/> <sub>Check Keywords AI parameters after this section</sub>
+## OpenAI Parameters 
+To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `extra_body` parameter.
 
-<br />
+<RequestExample>
 
-<CodeGroup>
+```Python Python
+from openai import OpenAI
 
-```python Python
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[{"role":"user", "content":"Tell me a long story"}],
+    stream=True,
+    extra_body={"customer_identifier": "customer_11"}
+)
+```
+
+```TypeScript TypeScript
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api/",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const chatCompletion = await openai.chat.completions.create({
+  model: "gpt-3.5-turbo",
+  messages: [{"role": "user", "content": "Hello"}],
+});
+
+```
+```Python Functions.py
+from openai import OpenAI
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+tools = [
+  {
+    "type": "function",
+    "function": {
+      "name": "get_current_weather",
+      "description": "Get the current weather in a given location",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "The city and state, e.g. San Francisco, CA",
+          },
+          "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
+        },
+        "required": ["location"],
+      },
+    }
+  }
+]
+messages = [{"role": "user", "content": "What's the weather like in Boston today?"}]
+completion = client.chat.completions.create(
+  model="gpt-4o",
+  messages=messages,
+  tools=tools,
+  tool_choice="auto"
+)
+print(completion)
+```
+
+</RequestExample>
+
+
+
+{/* ```python Python
 import requests
 import os
+
+response = keywords_ai_generate(**params)
 
 def  keywords_ai_generate(
                 messages,
                 api_key=os.getenv("KEYWORDS_AI_API_KEY"),
-                url=os.getenv("KEYWORDS_AI_ENDPOINT") + "api/chat/completions",
+                url="https://api.keywordsai.co/api/chat/completions",
                 **kwargs
                 ):
     print("Calling: ",url)
@@ -32,8 +104,12 @@ def  keywords_ai_generate(
     response = requests.post(url=url, headers=headers, json=data)
     return response
 
-params ={"messages": [{"role": "user", "content": "Hello"}], "model": "gpt-3.5-turbo", "stream": False, "max_tokens": 100}
-response = keywords_ai_generate(**params)
+params ={"messages": [{"role": "user", "content": "Hello"}], 
+         "model": "gpt-3.5-turbo", 
+         "stream": False, 
+         "max_tokens": 100
+         }
+
 ```
 
 ```TypeScript TypeScript
@@ -42,7 +118,7 @@ fetch('https://api.keywordsai.co/api/chat/completions', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
+    'Authorization': 'Bearer {YOUR_KEYWORDSAI_API_KEY}'
   }
     body: JSON.stringify({
         model: 'gpt-3.5-turbo',
@@ -68,29 +144,27 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
   "stream": false,
   "max_tokens": 100
 }'
-```
-
-</CodeGroup>
-
-<ParamField path="model" type="string">
-  Specify which model to use. See the list of model
-  [here](/integration/supported-models)
-
-When this parameter is used, the router will not trigger, and the `models` parameter behaves as `fallback_models`.
-
-</ParamField>
+``` */}
 
 <ParamField path="messages" type="array" required={true}>
   List of messages to send to the endpoint in the [OpenAI style](https://platform.openai.com/docs/api-reference/chat/create#chat-create-messages), each of them following this format:
   ```json
-  {
-    "role": "user", // Available choices are user, system or assistant
-    "content": "Hello?"
-  }
+  messages=[
+    {"role": "system", // Available choices are user, system or assistant
+     "content": "You are a helpful assistant."
+    },
+    {"role": "user", "content": "Hello!"}
+  ]
   ```
+  <Accordion title="Properties">
+    <ParamField path="type" type="string">
+      The type of response format. Options: `json_object` or `text`
+    </ParamField>
+  </Accordion>
 
-  <strong>Image Processing</strong> If you want to use the image processing feature, you need to use the following format to upload the image
-  ```json
+  <strong>Image Processing:</strong> If you want to use the image processing feature, you need to use the following format to upload the image.
+  <Accordion title="Example">
+```json
 {
   "role": "user",
   "content": [
@@ -107,66 +181,25 @@ When this parameter is used, the router will not trigger, and the `models` param
   ]
 }
   ```
+</Accordion>
+ 
 </ParamField>
 
-<ParamField path="max_tokens" type="number">
-  Maximum number of tokens to generate in the response
-</ParamField>
+<ParamField path="model" type="string" required={true}>
+  Specify which model to use. See the list of model
+  [here](/integration/supported-models)
 
-<ParamField path="temperature" type="number" default={1}>
-  Controls randomness in the output in the range of 0-2, higher temperature will
-  a more random response.
-</ParamField>
+**Note**: This parameter will be overridden by the `loadbalance_models` parameter.
 
-<ParamField path="n" type="number" default={1}>
-  Specify many completion choices to generate for each prompt.
-
-  <strong>Caveat!</strong> While this can help improve generation quality by picking the optimal choice, this could also lead to more token usage.
 </ParamField>
 
 <ParamField path="stream" type="boolean" default={false}>
   Whether to stream back partial progress token by token
 </ParamField>
 
-{/* Add this to the concept page */}
-
-<ParamField path="logprobs" type="boolean" default={false}>
-  Include the log probabilities on each token being selected.
-</ParamField>
-
-<ParamField path="echo" type="boolean">
-  Echo back the prompt in addition to the completion
-</ParamField>
-
-{/* Add this to the concept page */}
-
-<ParamField path="stop" type="array[string]">
-  Stop sequence
-</ParamField>
-
-{/* Add this to the concept page */}
-
-<ParamField path="presence_penalty" type="number">
-  Specify how much to penalize new tokens based on whether they appear in the
-  text so far. Increases the model's likelihood of talking about new topics
-</ParamField>
-
-{/* Add this to the concept page */}
-
-<ParamField path="frequency_penalty" type="number">
-  Specify how much to penalize new tokens based on their existing frequency in
-  the text so far. Decreases the model's likelihood of repeating the same line
-  verbatim
-</ParamField>
-
-{/* Add this to the concept page */}
-
-<ParamField path="logit_bias" type="dict">
-  Used to modify the probability of tokens appearing in the response
-</ParamField>
-
 <ParamField path="tools" type="array[dict]">
   A list of tools the model may call. Currently, only functions are supported as a tool. Use this to provide an array of functions the model may generate JSON inputs for.
+  <Accordion title="Example">
   ```json
   {
       "type": "function",
@@ -190,16 +223,73 @@ When this parameter is used, the router will not trigger, and the `models` param
       }
     }
   ```
+    </Accordion>
 </ParamField>
 
 <ParamField path="tool_choice" type="dict">
-  Manually picking the choice of tool for the model to use. This will force the model to make a function call every time a function is passed in.
+Controls which (if any) tool is called by the model. `none` means the model will not call any tool and instead generates a message. `auto` means the model can pick between generating a message or calling one or more tools. required means the model must call one or more tools. 
+
+`none` is the default when no tools are present. `auto` is the default if tools are present.
+
+Specifying a particular tool via the code below forces the model to call that tool.
   ```json
   {
     "type": "function",
     "function": {"name": "name_of_the_function"},
   }
   ```
+</ParamField>
+
+<ParamField path="frequency_penalty" type="number">
+  Specify how much to penalize new tokens based on their existing frequency in
+  the text so far. Decreases the model's likelihood of repeating the same line
+  verbatim
+</ParamField>
+
+<ParamField path="max_tokens" type="number">
+  Maximum number of tokens to generate in the response
+</ParamField>
+
+<ParamField path="temperature" type="number" default={1}>
+  Controls randomness in the output in the range of 0-2, higher temperature will
+  a more random response.
+</ParamField>
+
+<ParamField path="n" type="number" default={1}>
+  How many chat completion choices to generate for each input message.
+
+  <strong>Caveat!</strong> While this can help improve generation quality by picking the optimal choice, this could also lead to more token usage.
+</ParamField>
+
+{/* Add this to the concept page */}
+
+<ParamField path="logprobs" type="boolean" default={false}>
+  Whether to return log probabilities of the output tokens or not. If true, returns the log probabilities of each output token returned in the `content` of `message`.
+</ParamField>
+
+<ParamField path="echo" type="boolean">
+  Echo back the prompt in addition to the completion
+</ParamField>
+
+{/* Add this to the concept page */}
+
+<ParamField path="stop" type="array[string]">
+  Stop sequence
+</ParamField>
+
+{/* Add this to the concept page */}
+
+<ParamField path="presence_penalty" type="number">
+  Specify how much to penalize new tokens based on whether they appear in the
+  text so far. Increases the model's likelihood of talking about new topics
+</ParamField>
+
+{/* Add this to the concept page */}
+
+{/* Add this to the concept page */}
+
+<ParamField path="logit_bias" type="dict">
+  Used to modify the probability of tokens appearing in the response
 </ParamField>
 
 <ParamField path="response_format" type="object">
@@ -209,20 +299,185 @@ Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the m
 
 You must have a "json" as a keyword in the prompt to use this feature.
 
-  <Expandable title="properties">
+  <Accordion title="properties">
     <ParamField path="type" type="string" required={true}>
-      The type of response format. options: "json_object", "text"
+      The type of response format. options: `json_object`, `text`
     </ParamField>
-  </Expandable>
+  </Accordion>
 </ParamField>
 
 ## Keywords AI Parameters
+See how to make a standard Keywords AI API call in the [Quick Start](/get-started/quick-start) guide.
+### Generation Parameters
+
+<ParamField path="loadbalance_models" type="array">
+  Balance the load of your requests between different models. See the [details of load balancing
+  here.](/features/generation/load-balancing)
+  <br/>**Note:** This parameter will override the `model` parameter.
+  <Accordion title="Example">
+  ```json
+  {
+    // ...other parameters...
+    "loadbalance_models": [
+        {
+            "model": "claude-3-5-sonnet-20240620",
+            "weight": 34,
+            "credentials": { // Your own Anthropic API key, optional for team plan and above
+                "api_key": "Your own Anthropic API key"
+            }
+        },
+        {
+            "model": "azure/gpt-35-turbo",
+            "weight": 34,
+            "credentials": { // Your own Azure credentials, optional for team plan and above
+                "api_base": "Your own Azure api_base",
+                "api_version": "Your own Azure api_version",
+                "api_key": "Your own Azure api_key"
+            }
+        }
+    ]
+}
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField path="fallback_models" type="array">
+  Specify the list of backup models (ranked by priority) to respond in case of a
+  failure in the primary model. See the [details of fallback models
+  here.](/features/generation/fallbacks)
+    <Accordion title="Example">
+  ```json
+{
+  // ...other parameters...
+    "fallback": [
+      "gemini/gemini-pro",
+      "mistral/mistral-small",
+      "gpt-4o"
+    ]
+}
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField path="customer_credentials" type="object">
+You can pass in your customer's credentials for [supported providers](/integration/providers/providers-overview) and use their credits when our proxy is calling models from those providers. <br/>See details [here](/integration/own-api-keys)
+<Accordion title="Example">
+```json
+"customer_credentials": {
+
+  "openai": {
+    "api_key": "YOUR_OPENAI_API_KEY",
+  }
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField path="prompt" type="object">
+  The prompt template to use for the completion. You can build and deploy prompts in the [Prompt](/features/prompt/prompt-management).
+<AccordionGroup>
+  <Accordion title="Properties">
+    <ParamField path="prompt_id" type="string" required={true}>
+      The ID of the prompt to use. You can find this on the Prompts page.
+    </ParamField>
+    <ParamField path="variables" type="object">
+      The variables to replace in the prompt template.
+    </ParamField>
+    <ParamField path="version" type="number">
+      The version of the prompt to use. If not specified, the latest version will be used.
+    </ParamField>
+  </Accordion>
+    <Accordion title="Example">
+```json
+{
+    "prompt_id": "prompt_id", //paste this from the prompt management page
+    "variables": {
+       "variable_name": "variable_value"
+    },
+    "version": 1
+}
+```
+      </Accordion>
+</AccordionGroup>
+
+</ParamField>
+
+<ParamField path="disable_log" type="boolean" deafault={false}>
+  When set to true, only the request and [performance
+  metrics](/performance-monitoring/monitoring-metrics) will be recorded, input
+  and output messages will be omitted from the log.
+</ParamField>
+
+<ParamField path="models" type="array">
+  Specify the list of models for the Keywords AI LLM router to choose between. 
+  If not specified,{" "}
+  <strong>all models</strong> will be used. See the list of models
+  [here](/integration/supported-models)
+
+If only one model is specified, it will be treated as if the `model` parameter is used and the router will not trigger.
+
+When the `model` parameter is used, the router will not trigger, and this parameter behaves as `fallback_models`.
+
+</ParamField>
+
+<ParamField path="exclude_providers" type="array" default={[]}>
+  The list of providers to exclude from the LLM router's selection. All models under the provider will be excluded. See the list of providers [here](/integration/providers/providers-overview)
+
+This only excludes providers in the LLM router, if `model` parameter takes precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
+
+</ParamField>
+
+<ParamField path="exclude_models" type="array" default={[]}>
+The list of models to exclude from the LLM router's selection. See the list of models [here](/integration/supported-models)
+
+This only excludes models in the LLM router, if `model` parameter takes precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
+
+</ParamField>
+
+### Observability Parameters
+
+<ParamField path="metadata" type="dict">
+You can add any key-value pair to this metadata field for your reference. Contact team@keywordsai.co if you need extra parameter support for your use case.
+
+<Accordion title="Example">
+```json
+{
+  "my_value_key": "my_value"
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField path="customer_identifier" type="string">
+  Use this as a tag to identify the user associated with the API call. See the [details of customer identifier here.](/features/generation/customer-identifier)
+  <Accordion title="Example">
+```json
+{
+    //...other_params,
+    "customer_identifier": "user_123"
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField path="customer_email" type="string">
+  This is the email address of the user associated with the API call. You can add your corresponding user's email address to the request, which is helpful for your tracking and monitoring purposes.
+    <Accordion title="Example">
+```json
+{
+    //...other_params,
+    "customer_email": "hendrix@keywordsai.co"
+}
+```
+</Accordion>
+</ParamField>
 
 <ParamField path="request_breakdown" type="boolean" default={false}>
-Adding this returns the summarization of the response in the response body. If streaming is on, the metrics will be streamed as the last chunk
+Adding this returns the summarization of the response in the response body. If streaming is on, the metrics will be streamed as the last chunk.
 
-<strong>Regular Response</strong>
-```json
+  <Accordion title="Properties">
+    <CodeGroup>
+    ```json Regular Response
 {
   "id": "chatcmpl-7476cf3f-fcc9-4902-a548-a12489856d8a",
   //... main part of the response body ...
@@ -264,10 +519,7 @@ Adding this returns the summarization of the response in the response body. If s
   }
 }
 ```
-
-<strong>Streaming Response</strong>
-
-```json
+```json Streaming Response
 //... other chunks ...
 // The following is the last chunk
 {
@@ -323,105 +575,10 @@ Adding this returns the summarization of the response in the response body. If s
   "usage": {}
 }
 ```
-
+    </CodeGroup>
+  </Accordion>
 </ParamField>
 
-<ParamField path="models" type="array">
-  Specify the list of models for the router to choose between. If not specified,{" "}
-  <strong>all models</strong> will be used. See the list of models
-  [here](/integration/supported-models)
-
-If only one model is specified, it will be treated as if the `model` parameter is used and the router will not trigger.
-
-When the `model` parameter is used, the router will not trigger, and this parameter behaves as `fallback_models`.
-
-</ParamField>
-
-<ParamField path="fallback_models" type="array">
-  Specify the list of backup models (ranked by priority) to respond in case of a
-  failure in the primary model. See the list of models
-  [here](/integration/supported-models)
-</ParamField>
-
-<ParamField path="customer_credentials" type="object">
-You can pass in your customer's credentials for [supported providers](/integration/providers/providers-overview) and use their credits when our proxy is calling models from those providers.
-```json
-"customer_credentials": {
-
-  "openai": {
-    "api_key": "YOUR_OPENAI_API_KEY",
-  }
-  // "anthropic": {
-  //   "api_key": "YOUR_ANTHROPIC_API_KEY",
-  // }
-}
-```
-</ParamField>
-
-<ParamField path="customer_identifier" type="string">
-  Use this as a tag to identify the user associated with the API call.
-</ParamField>
-<ParamField path="customer_email" type="string">
-  This is the email address of the user associated with the API call.
-</ParamField>
-
-<ParamField path="metadata" type="dict">
-You can add any key-value pair to this metadata field for your reference, contact team@keywordsai.co if you need extra parameter support for your use case.
-
-Example:
-
-```json
-{
-  "my_value_key": "my_value"
-}
-```
-
-</ParamField>
-
-<ParamField path="disable_log" type="boolean" deafault={false}>
-  When set to true, only the request and the [performance
-  metrics](/performance-monitoring/monitoring-metrics) will be recorded, input
-  and output messages will be omitted from the log.
-</ParamField>
-
-<ParamField path="exclude_models" type="array" default={[]}>
-  The list of models to exclude from the router's selection. See the list of models [here](/integration/supported-models)
-
-This only excludes models in the router, if `model` parameter will take precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
-
-</ParamField>
-
-<ParamField path="exclude_providers" type="array" default={[]}>
-  The list of providers to exclude from the router's selection. All models under the provider will be excluded. See the list of providers [here](/integration/providers/providers-overview)
-
-This only excludes models in the router, if `model` parameter will take precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
-
-</ParamField>
-
-<ParamField path="prompt" type="object">
-  The prompt template to use for the completion. You can build and deploy prompts in the [prompt management page](features/prompt/prompt-management).
-
-  <Expandable title="properties">
-    <ParamField path="prompt_id" type="string" required={true}>
-      The ID of the prompt to use.
-    </ParamField>
-    <ParamField path="variables" type="object">
-      The variables to replace in the prompt template.
-    </ParamField>
-    <ParamField path="version" type="number">
-      The version of the prompt to use. If not specified, the latest version will be used.
-    </ParamField>
-  </Expandable>
-```json
-{
-  "prompt_id": "prompt_id",
-  "variables": {
-    "variable_name": "variable_value"
-  },
-  "version": 1
-}
-```
-</ParamField>
 
 ## Deprecated Parameters
 

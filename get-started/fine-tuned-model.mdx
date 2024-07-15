@@ -28,11 +28,7 @@ import requests
 
 url = "https://api.keywordsai.co/api/request-logs/create/"
 payload = {
-    "id": 1091403,
-    "unique_id": "004NiQ",
-    "prompt_tokens": 8,
-    "completion_tokens": 16,
-    "cost": 0.00042,
+    "model": "gpt-4",
     "prompt_messages": [
         {
             "role": "user",
@@ -43,14 +39,13 @@ payload = {
         "role": "assistant",
         "content": "Hi, how can I assist you today?"
     },
+    "prompt_tokens": 8,
+    "completion_tokens": 16,
+    "cost": 0.00042,
     "latency": 0.0,
-    "model": "gpt-4",
     "timestamp": "2024-04-15T08:30:37.721313Z",
     "metadata": {},
     "customer_identifier": "456467",
-    "log_type": "logging_api",
-    "user": 303,
-    "customer_user": 55
 }
 headers = {
     "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
@@ -59,17 +54,59 @@ headers = {
 
 response = requests.request("POST", url, headers=headers, json=payload)
 ```
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/request-logs/create/';
+const headers = {
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    model: 'gpt-4',
+    prompt_messages: [
+        {
+            role: "user",
+            content: "Hi"
+        },
+    ],
+    completion_message: {
+        role: "assistant",
+        content: "Hi, how can I assist you today?"
+    },
+    customer_identifier: '456467',
+    prompt_tokens: 8,
+    completion_tokens: 16,
+    cost: 0.00042,
+    latency: 0.0,
+    timestamp: '2024-04-15T08:30:37.721313Z',
+    time_to_first_token: 0.0,
+    tokens_per_second: 0.0,
+    metadata: {},
+    stream: false,
+    status_code: 200,
+    warnings: '',
+    has_warnings: false,
+    error_message: '',
+    is_test: false,
+};
+
+fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+})
+```
 
 ```bash cURL
 curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
 -H "Content-Type: application/json" \
 -H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
 -d '{
-    "id": 1091403,
-    "unique_id": "004NiQ",
-    "prompt_tokens": 8,
-    "completion_tokens": 16,
-    "cost": 0.00042,
+    "model": "gpt-4",
     "prompt_messages": [
         {
           "role": "user",
@@ -80,14 +117,13 @@ curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
         "role": "assistant",
         "content": "Hi, how can I assist you today?"
     },
+    "prompt_tokens": 8,
+    "completion_tokens": 16,
+    "cost": 0.00042,
     "latency": 0.0,
-    "model": "gpt-4",
     "timestamp": "2024-04-15T08:30:37.721313Z",
     "metadata": {},
     "customer_identifier": "456467",
-    "log_type": "logging_api",
-    "user": 303,
-    "customer_user": 55
 }'
 ```
 </CodeGroup>

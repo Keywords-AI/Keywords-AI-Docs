@@ -1,49 +1,28 @@
 ---
-title: Logs List Endpoint
-api: POST https://api.keywordsai.co/api/request-logs/
+title: Log List
+api: GET https://api.keywordsai.co/api/request-logs/
 ---
 
 The Logs List endpoint allows you to get the past logs with specified filters.
 
 
 ## GET params
-You can add these params to the **URL params**:
-for example:
+You can add these params to the **URL params**.
+For example:
 ```
 "https://api.keywordsai.co/api/request-logs/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
-```
-```python
-url = "https://api.keywordsai.co/api/request-logs/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
-
-# or
-from urllib.parse import urlencode
-params = {
-    "page": 1,
-    "sort_by": "-id",
-    "is_test": "false",
-    "all_envs": "false",
-    "fetch_filters": "false",
-    "page_size": 1
-}
-url = f"https://api.keywordsai.co/api/request-logs/?{urlencode(params)}"
-headers = {
-    "Authorization": f"Api-Key {YOUR_KEYWORDS_AI_API_KEY}",
-}
-data = {
-    "filters": {}
-}
-response = requests.post(url, headers=headers, json=data)
 ```
 
 <ParamField path="sort_by" type="string" required>
   The field to sort by. Default is `-id` (same as sort by `-timestamp`, but with better performance).
-  `-` is for descending order, if not provided, it will be ascending order.
-  <Expandable>
+  `-` is for descending order, if not provided, it will be in ascending order.
+  <AccordionGroup>
+    <Accordion title="Properties">
         <ResponseField name="id" type="string">
-            The id of each request
+            Sort by the ID of each request.
         </ResponseField>
         <ResponseField name="cost" type="string">
-            Cost of each request.
+            Sort by the cost of each request.
         </ResponseField>
         <ResponseField name="time_to_first_token" type="string">
            TTFT - useful for Voice AI applications
@@ -59,21 +38,28 @@ response = requests.post(url, headers=headers, json=data)
         </ResponseField>
         <ResponseField name="all_tokens" type="string">
         </ResponseField>
-    </Expandable>
+    </Accordion>
+    <Accordion title="Example">
+    ```json
+    {
+      "sort_by": "cost" //sort by cost in ascending order.
+    }
+    ```
+    </Accordion>
+</AccordionGroup>
 </ParamField>
-
-<ParamField path="is_test" type="string" default="false">
-  Whether the log is a test call or not. Default is false. This parameter will override the `all_envs` parameter.
+<ParamField path="all_envs" type="string" default="false">
+  Whether to include logs from all environments. `is_test` parameter will override this parameter.
   Options: `true`, `false`.
 </ParamField>
 
-<ParamField path="all_envs" type="string" default="false">
-  Whether to include logs from all environments. Default is false. `is_test` parameter will override this parameter.
+<ParamField path="is_test" type="string" default="false">
+  Whether the log is a test call or not. This parameter will override the `all_envs` parameter.
   Options: `true`, `false`.
 </ParamField>
 
 <ParamField path="fetch_filters" type="string" default="false">
-  Whether to retrieve the available filtering options. Default is `false`. Enabling this could slow down the response time.
+  Whether to retrieve the available filtering options. Enabling this could slow down the response time.
   Options: `true`, `false`.
 </ParamField>
 
@@ -104,9 +90,8 @@ response = requests.post(url, headers=headers, json=data)
 ```
 
 <ParamField path="filters" type="object" default={{}}>
-  The filters to be applied to the logs. For available options in the response body, use the `fetch_filters` parameter.
-
-  example:
+  The filters be applied to the logs. For available options in the response body, use the `fetch_filters` parameter.
+<Accordion title="Example">
   ```json
     {
       "name_of_metric": {
@@ -115,13 +100,24 @@ response = requests.post(url, headers=headers, json=data)
       },
     }
     ```
+  </Accordion>
 </ParamField>
 
 <ParamField path="operator" type="string" required>
   Default is "" (equal).
-  <Expandable>
-        <ResponseField name="" type="string">
+  <Accordion title="Properties">
+        <ResponseField name=" " type="string">
             Equal
+            <Accordion title="Example">
+            ```json
+            {
+              "name_of_metric": {
+                "operator": "", // equal
+                "value": [100]
+              },
+            }
+            ```
+            </Accordion>
         </ResponseField>
         <ResponseField name="iexact" type="string">
             case insensitive equal
@@ -153,11 +149,76 @@ response = requests.post(url, headers=headers, json=data)
         </ResponseField>
         <ResponseField name="not" type="string">
         </ResponseField>
-    </Expandable>
+    </Accordion>
 
 </ParamField>
 
-## Response format
+<RequestExample>
+
+```python Python
+url = "https://api.keywordsai.co/api/request-logs/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
+
+
+from urllib.parse import urlencode
+params = {
+    "page": 1,
+    "sort_by": "-id",
+    "is_test": "false",
+    "all_envs": "false",
+    "fetch_filters": "false",
+    "page_size": 1
+}
+url = f"https://api.keywordsai.co/api/request-logs/?{urlencode(params)}"
+headers = {
+    "Authorization": f"Api-Key {YOUR_KEYWORDS_AI_API_KEY}",
+}
+data = {
+    "filters": {}
+}
+response = requests.post(url, headers=headers, json=data)
+```
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/request-logs/';
+
+const params = new URLSearchParams({
+    page: '1',
+    sort_by: '-id',
+    is_test: 'false',
+    all_envs: 'false',
+    fetch_filters: 'false',
+    page_size: '1'
+}).toString();
+
+const fullUrl = `${url}?${params}`;
+
+const headers = {
+    'Authorization': `Api-Key ${YOUR_KEYWORDS_AI_API_KEY}`,
+    'Content-Type': 'application/json'
+};
+
+const data = {
+    filters: {}
+};
+
+fetch(fullUrl, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(data)
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+})
+```
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/request-logs/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1" \
+-H "Authorization: Api-Key YOUR_KEYWORDS_AI_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{"filters": {}}'
+
+```
+</RequestExample>
+<ResponseExample>
 ```json
 {
     "results": [
@@ -209,4 +270,6 @@ response = requests.post(url, headers=headers, json=data)
        },
     ]
 }
+
 ```
+</ResponseExample>

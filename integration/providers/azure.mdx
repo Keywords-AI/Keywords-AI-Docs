@@ -2,18 +2,7 @@
 title: "Azure OpenAI"
 description: "Use your own Azure OpenAI credits through Keywords AI"
 ---
-
 Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy-endpoints/chat-completions) to use your own Azure OpenAI credits.
-
-To find the parameters needed, you can follow these steps:
-- Visit your [Azure Portal](https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI).
-- You will see your deployments via the above link, choose the deployment you want to use.
-<img src="/images/providers/azure/blurred-azure-portal.png"/>
-- Click on the "Endpoints" link to get the API base URL.
-- Click on the "Manage Keys" link to get the API key.
-<img src="/images/providers/azure/blurred-azure-endpoint.png"/>
-- Pick the version from the [available versions](https://learn.microsoft.com/en-us/azure/ai-services/openai/reference).
-
 ```json
 {
   // Rest of the request body
@@ -26,3 +15,16 @@ To find the parameters needed, you can follow these steps:
   }
 }
 ```
+
+
+### How to get your Azure OpenAI credentials
+
+To find the parameters needed, you can follow these steps:
+- Visit your [Azure Portal](https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI).
+- You will see your deployments via the above link, choose the deployment you want to use.
+<img src="/images/providers/azure/blurred-azure-portal.png"/>
+- Click on the "Endpoints" link to get the API base URL.
+- Click on the "Manage Keys" link to get the API key.
+<img src="/images/providers/azure/blurred-azure-endpoint.png"/>
+- Pick the version from the [available versions](https://learn.microsoft.com/en-us/azure/ai-services/openai/reference).
+
