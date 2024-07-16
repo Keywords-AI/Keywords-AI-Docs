@@ -6,7 +6,10 @@ description: "Create/update users to have better user observability on Keywords 
 To have better user observability, you can create new users through our [User Creation endpoint](/api-endpoints/async-endpoints/user-creation-endpoint) or update exsiting users through [User Update endpoint](/api-endpoints/async-endpoints/user-update-endpoint). 
 
 ## User Creation
-
+<Note>Use the [User Creation endpoint](/api-endpoints/async-endpoints/user-creation-endpoint) instead of our other endpoints</Note>
+```
+url = "https://api.keywordsai.co/api/users/create/"
+```
 <CodeGroup>
 ```Python Python
 import requests
@@ -57,10 +60,14 @@ Update existing users to have better user observability.
 ### Update users on the platform
 You can update user's name and email on the platform. Go to the [Users page](https://platform.keywordsai.co/platform/users) and click on the user you want to update. Type user's name and email in the corresponding fields.
 
-<img src="/images/users-page/user-update.png" alt="Users Page data" />
+<img width="300" src="/images/users-page/user-edit.png" alt="Users Page data" />
 
 ### Update users through API
-You can update all user's information through the [User Update endpoint](/api-endpoints/async-endpoints/user-update-endpoint).
+
+<Note>Use the [User Update endpoint](/api-endpoints/async-endpoints/user-update-endpoint). instead of our other endpoints</Note>
+```
+url = "https://api.keywordsai.co/api/user/update/some_customer_identifier"
+```
  <CodeGroup>
 ```Python Python
 import requests

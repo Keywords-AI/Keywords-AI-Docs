@@ -1,5 +1,5 @@
 ---
-Title: Requests Log
+title: Logs
 ---
 
 {/* The requests log page is a table view that shows all the API calls that have been made to the Keywords AI. This is useful for debugging and monitoring the API usage. */}
@@ -7,39 +7,39 @@ Keywords AI automatically logs all LLM requests when using Keywords AI's API.
 
 By clicking on an entry, a side panel opens up, revealing a detailed view of the request and response objects. You can see Metadata, Request/Response content, and Evaluation results in it.
 
-<img src="/images/requests-log/logging.png"/>
+<img src="/images/requests-log/logging.jpg"/>
 
-## Components of the Requests Log
-{/* ### Control Bar
-The control bar is located at the top of the page.
-<img src="/images/requests-log/control-bar.png" />
-You can filter and search for logs by [various metrics](/platform-features/requests-log#available-metrics)
-<img src="images/requests-log/filter-and-search.gif" />
-You can also export the logs in CSV/JSON format by clicking on the `Export` button on the top right corner of the control bar. */}
+## Debug requests in LLM playground
+You can debug requests in the LLM playground by clicking on the `Open in playground` button on the side panel or just pressing `P`. This will open the request to our playground, where you can debug the request and see the response in real-time.
 
-### Filters
-<Frame caption="Check it out on our Requests page">
+<img src="/images/requests-log/open-in-playground.png"/>
+## Filters
+<Frame caption="Check it out on our Logs page">
 <img src="/images/requests-log/Filters.png" />
 </Frame>
 {/* <sup>check it out here: [Request](https://platform.keywordsai.co/platform/requests) </sup> */}
 
-You can locate requests by filtering them based on the criteria such as:
-- **API Key**
-- **Model**
-- **Status**
-- **User**
-- **Time**
-- **Error code**
-- **...**
 
 ### Filter by custom metadata
-You can now filter by custom metadata columns on the Dashboard and the Requests page. <br/> See how to send Metadata to Keywords AI here: **Custom Metadata**
+You can also filter by custom metadata columns on the Dashboard and the Logs page. <br/> See how to send metadata to Keywords AI here: **Custom Metadata** 
 
-Example:<br/><img src="/images/requests-log/custom-metadata.png" />
+**Example:** <br/><img height="300" width="200" src="/images/requests-log/custom-metadata.png" />
 
-### Data export
-Export your data to CSV or JSON for external analysis.
-<img src="/images/requests-log/data-export.png" />
+## Export logs
+You can export your logs to CSV or JSON for external analysis by clicking the `Export` button on the top right corner of the log table.
+{/* <img height="300" width="300" src="/images/requests-log/data-export.png" /> */}
+<video
+  controls
+  className="w-full aspect-video"
+  src="/images/requests-log/export.mp4"
+></video>
+### Create a golden dataset
+You can also filter the logs by applying filters and handpick your logs to create a golden dataset. After you have selected the logs, click the `Create dataset` button and push it to our [dataset page](https://platform.keywordsai.co/platform/datasets) to create a dataset.
+
+## Share logs with your team
+You could share a log with your team by clicking the `link` icon on the side panel or pressing `C`. This will generate a link that you can share with your team to view the log.
+
+<img height="300" width="300" src="/images/requests-log/share.jpg" />
 
 
 {/* ### Log Table
