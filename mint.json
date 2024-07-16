@@ -187,12 +187,12 @@
       "pages": [
         "error-handling/400",
         "error-handling/401",
+        "error-handling/402",
         "error-handling/403",
         "error-handling/404",
         "error-handling/408",
         "error-handling/429",
-        "error-handling/500",
-        "error-handling/504"
+        "error-handling/500"
       ]
     }
   ],

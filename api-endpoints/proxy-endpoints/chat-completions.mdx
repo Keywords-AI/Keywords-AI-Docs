@@ -437,7 +437,9 @@ This only excludes models in the LLM router, if `model` parameter takes preceden
 ### Observability Parameters
 
 <ParamField path="metadata" type="dict">
-You can add any key-value pair to this metadata field for your reference. Contact team@keywordsai.co if you need extra parameter support for your use case.
+You can add any key-value pair to this metadata field for your reference. Check the [details of metadata here.](/features/generation/metadata)
+
+Contact team@keywordsai.co if you need extra parameter support for your use case.
 
 <Accordion title="Example">
 ```json
@@ -461,7 +463,9 @@ You can add any key-value pair to this metadata field for your reference. Contac
 </ParamField>
 
 <ParamField path="customer_email" type="string">
-  This is the email address of the user associated with the API call. You can add your corresponding user's email address to the request, which is helpful for your tracking and monitoring purposes.
+  This is the email address of the user associated with the API call. You can add your corresponding user's email address to the request.
+  
+  You could also edit customer's emails on the platform. Check the [details of user editing here.](/features/user/user-creation)
     <Accordion title="Example">
 ```json
 {
