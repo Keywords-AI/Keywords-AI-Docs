@@ -31,6 +31,10 @@ We use Saftey net to automatically fallback to a system assigned model if fallba
 
 Turn on the Safety net [here](https://platform.keywordsai.co/platform/api/fallback).
 
+## Exceptions for Triggering Fallbacks
+- You turned off the safety net and did not specify your own fallback models
+- You uploaded some invalid [`customer_credentials`](/integration/own-api-keys)
+
 ## Fallback Logic with Retries
 
 Below is the pseudo-code for the fallback logic with retries:

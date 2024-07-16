@@ -1,17 +1,37 @@
 ---
-title: "Prompt Management"
+title: "Prompt management"
 description: "Iterating and versioning prompts as a team."
 ---
-Try to manage your prompt on the [Prompts page](https://platform.keywordsai.co/platform/prompts).
-<img src="/images/platform-features/prompts/prompts.png" alt="playground"/>
+With our Prompts management feature, you could easily iterate and version your prompts as a team, deploy them to your codebase with 1 line of code, and share them with your team, test them in the Playground, and more.
 
-## Instructions
+Check out the [Prompts page](https://platform.keywordsai.co/platform/prompts) to see the prompts you have created and deployed.
+
+
+
+
+## How to create a prompt
+
+<img width="400" src="/images/platform-features/prompts/prompts.png" alt="playground"/>
 
 1. **Create a new prompt**: Click the `+ New prompt` button to create a new prompt. Give it a name and a description.
 {/* <img src="/images/platform-features/prompts/new-prompt.png" alt="prompts"/> */}
 2. **Write your template**: First choose a model you want to test, then write the system prompt and user prompt.
-3. **Check output in the Playground**: Click the `Open in Playground` button to see how your prompt will look in the Playground.
+3. **Check output in the Playground**: Click the `Playground` button to view the output of your prompt across different models.
 {/* <img src="/images/platform-features/prompts/open-in-playground.png" alt="prompts"/> */}
 4. **Input variables**: Insert dynamic input variables into your prompt template using curly brackets `{{your variables}}`.
 5. **Deploy your version to the team**: Click the `Deploy version` button to deploy your prompt to the team. You can check the deployed version on the **left sidebar**.
-6. **Copy the code into your codebase** Click the `View code` button to copy the prompt code into your codebase.
+6. **Copy the code into your codebase** Click the `View code` button to copy the prompt code into your codebase or copy the prompt ID and paste it into your codebase.
+<Check>After you have added your prompt ID to your codebase, you can now iterate your prompts and versions in the Prompts page without changing your codebase.</Check>
+## Example
+```json
+{
+    "prompt_id": "prompt_id", //paste this from the prompt management page
+    "variables": {
+       "variable_name": "variable_value"
+    },
+    "version": 1 //specify which version of the prompt you want to use
+}
+```
+<Info>Check out [all Keywords AI supported params here](/api-endpoints/proxy-endpoints/chat-completions#generation-parameters).</Info>
+
+
