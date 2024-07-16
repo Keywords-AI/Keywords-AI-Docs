@@ -189,7 +189,7 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
   Specify which model to use. See the list of model
   [here](/integration/supported-models)
 
-**Note**: This parameter will be overridden by the `loadbalance_models` parameter.
+<Note> This parameter will be overridden by the `loadbalance_models` parameter.</Note>
 
 </ParamField>
 
@@ -299,7 +299,7 @@ Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the m
 
 You must have a "json" as a keyword in the prompt to use this feature.
 
-  <Accordion title="properties">
+  <Accordion title="Properties">
     <ParamField path="type" type="string" required={true}>
       The type of response format. options: `json_object`, `text`
     </ParamField>
@@ -313,7 +313,7 @@ See how to make a standard Keywords AI API call in the [Quick Start](/get-starte
 <ParamField path="loadbalance_models" type="array">
   Balance the load of your requests between different models. See the [details of load balancing
   here.](/features/generation/load-balancing)
-  <br/>**Note:** This parameter will override the `model` parameter.
+<Note> This parameter will override the `model` parameter. </Note>
   <Accordion title="Example">
   ```json
   {

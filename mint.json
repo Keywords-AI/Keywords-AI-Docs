@@ -59,7 +59,7 @@
   },
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Get started",
       "pages": [
         "get-started/overview",
         "get-started/quick-start"
@@ -97,12 +97,13 @@
       "group": "Features",
       "pages": [
         {
-          "group": "API",
+          "group": "Unified LLM API",
           "pages": [
             "features/generation/fallbacks",
             "features/generation/load-balancing",
             "features/generation/customer-identifier",
             "features/generation/metadata",
+            "features/generation/key-management",
             "features/generation/disable-logs",
             "features/generation/retries",
             "features/generation/model-filtering",
@@ -114,13 +115,12 @@
           "pages": [
             "features/monitoring/analytics",
             "features/monitoring/logging",
-            "features/monitoring/webhooks",
             "features/monitoring/subscribe-alerts",
-            "features/monitoring/automatically-fallback"
+            "features/monitoring/webhooks"
           ]
         },
         {
-          "group": "User",
+          "group": "User analytics",
           "pages": [
             "features/user/user-data",
             "features/user/user-creation",
@@ -136,7 +136,7 @@
               "pages": ["features/evaluation/retrieval/context-precision"]
             },
             {
-              "group": "Text Generation",
+              "group": "Text generation",
               "pages": [
                 "features/evaluation/generation/faithfulness",
                 "features/evaluation/generation/flesch-kincaid",
@@ -149,13 +149,9 @@
             }
           ]
         },
-        {
-          "group": "Prompt",
-          "pages": [
             "features/prompt/test&compare",
-            "features/prompt/prompt-management"
-          ]
-        }
+            "features/prompt/prompt-management",
+            "features/datasets"
       ]
     },
     {
@@ -165,7 +161,7 @@
       ]
     },
     {
-      "group": "Async Logging",
+      "group": "Async logging",
       "pages": [
         "api-endpoints/async-endpoints/request-logging-endpoint",
         "api-endpoints/async-endpoints/logs-list-endpoint"
@@ -187,7 +183,7 @@
       ]
     },
     {
-      "group": "Error Handling",
+      "group": "Error handling",
       "pages": [
         "error-handling/400",
         "error-handling/401",
