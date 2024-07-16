@@ -3,10 +3,10 @@ title: 'Overview'
 # description: 'An introduction to Keywords AI API'
 ---
 
-## Keywords AI Documentation
+## Keywords AI
 
 {/* Keywords AI improves your large language model (LLM) application uptime and cost saving without sacrificing the quality of the model. We connect your request to the best model for the task and help you keep track of its performance, usage, and cost. We experienced challenges in scaling LLM applications cost-effectively, so we built Keywords AI to help you overcome them. */}
-Keywords AI makes it easy for developers to build LLM applications. With 2 lines of code, developers get a complete DevOps platform that speeds up deploying & monitoring AI apps.
+Keywords AI makes it easy for developers to build LLM applications. With 2 lines of code, developers get a complete DevOps platform that speeds up deploying & monitoring AI apps in production.
 <img src="/images/poster.png" alt="Users Page data" />
 ## Getting Started
 
@@ -16,7 +16,7 @@ Keywords AI makes it easy for developers to build LLM applications. With 2 lines
   </Card>
 </CardGroup>
 
-## Integrations
+{/* ## Integrations
 <CardGroup cols={3}>
   <Card title="OpenAI" icon="link" href="/integration/development-frameworks/openai-sdk">
     Switch from OpenAI to Keywords AI with 2 lines of code.
@@ -36,54 +36,79 @@ Keywords AI makes it easy for developers to build LLM applications. With 2 lines
   <Card title="Custom model" icon="link" href="/get-started/fine-tuned-model">
   Use our async logging API to monitor your custom model
   </Card>
-</CardGroup>
+</CardGroup> */}
 
-## Platform Features
+## LLM monitoring
 <CardGroup cols={2}>
-  <Card title="Analytics" icon="link" href="/features/monitoring/analytics">
+  <Card title="LLM dashboard" icon="link" href="/features/monitoring/analytics">
     A graphical view for monitoring your usage, performance, and cost.
   </Card>
-  <Card title="Logging" icon="link" href="/features/monitoring/logging">
+  <Card title="Logs" icon="link" href="/features/monitoring/logging">
     A table view for monitoring your usage, performance, and cost.
   </Card>
-  <Card title="Alerts" icon="link" href="/features/monitoring/subscribe-alerts">
+    <Card title="Alerts" icon="link" href="/features/monitoring/subscribe-alerts">
     Subscribe to the system status and get notified
   </Card>
   <Card title="Webhooks" icon="link" href="/features/monitoring/webhooks">
     receive notifications when certain events occur
   </Card>
-  <Card title="User Analytics" icon="link" href="/features/monitoring/users-data">
-    Insights into your users' behavior and usage.
-  </Card>
+
+</CardGroup>
+
+## Unified LLM API
+<CardGroup cols={2}>
+
   <Card title="Fallbacks" icon="link" href="/features/generation/fallbacks">
     Avoid downtime with failover models
   </Card>
-  <Card title="Streaming" icon="link" href="/features/generation/stream">
-    Pushing the output token by token
-  </Card>
-  <Card title="Load Balancing" icon="link" href="/features/generation/load-balancing">
+    <Card title="Load balancing" icon="link" href="/features/generation/load-balancing">
     Customized rate limit and load balancing
   </Card>
-  <Card title="Disable Logs" icon="link" href="/features/generation/disable-logs">
-        Disable requests and responses
+  <Card title="Metadata" icon="link" href="/features/generation/metadata">
+    Pass extra parameters to your LLM requests 
   </Card>
-  <Card title="Prompt Playground" icon="link" href="/features/prompt/test&compare">
+  <Card title="API keys management" icon="link" href="/features/generation/key-management">
+        Manage your API keys and monitor your usage.
+  </Card>
+
+</CardGroup>
+
+## User analytics
+<CardGroup cols={2}>
+  <Card title="User data" icon="link" href="/features/user/users-data">
+    Insights into your users' behavior and usage.
+  </Card>
+    <Card title="User creation & update" icon="link" href="/features/user/user-creation">
+    Insights into your users' behavior and usage.
+  </Card>
+</CardGroup>
+
+## Platform features
+<CardGroup cols={2}>
+<Card title="LLM playground" icon="link" href="/features/prompt/test&compare">
     Test the API with your prompts on different models and compare the results.
   </Card>
-  <Card title="Prompt Management" icon="link" href="/features/prompt/prompt-management">
+  <Card title="Prompt management" icon="link" href="/features/prompt/prompt-management">
+    Iterating and versioning prompts as a team.
+  </Card>
+    <Card title="Datasets" icon="link" href="/features/datasets">
     Iterating and versioning prompts as a team.
   </Card>
     <Card title="Evaluations" icon="link" href="/features/evaluation/overview">
     Evaluate your AI performance based on built-in or your own metrics.
-  </Card>
+</Card>
 </CardGroup>
 
-## API Endpoints
+
+## API reference
 <CardGroup cols={2}>
-  <Card title="Chat Complete Endpoint" icon="link" href="/api-endpoints/proxy-endpoints/chat-completions">
+  <Card title="LLM inference" icon="link" href="/api-endpoints/proxy-endpoints/chat-completions">
     The `/api/chat/completions` endpoint allows you to generate text based on text/images input.
   </Card>
-  <Card title="Models Endpoint" icon="link" href="/api-endpoints/data-endpoints/models-endpoints">
+    <Card title="Async logging" icon="link" href="/api-endpoints/async-endpoints/request-logging-endpoint.mdx">
+    The `/api/request-logs/create/` endpoint allows you to log your requests and responses.
+  </Card>
+  <Card title="Models" icon="link" href="/api-endpoints/data-endpoints/models-endpoints">
     The `models` endpoint allows you to see all the models available on Keywords AI.
   </Card>
 </CardGroup>
