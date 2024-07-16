@@ -1,10 +1,14 @@
 ---
-title: "Prompt Playground"
+title: "LLM playground"
 ---
 
 You can test and compare prompts for different models on the _[playground page](https://platform.keywordsai.co/platform/playground)_.
 
-<img src="/images/platform-features/playground/playground.png" alt="playground"/>
+<video
+  controls
+  className="w-full aspect-video"
+  src="/images/platform-features/playground/playground.mp4"
+></video>
 
 {/* ## Components of the Playground */}
 {/* ### System Prompt
@@ -24,30 +28,31 @@ You can select the model to use from the dropdown menu. The models available are
 <img src="/images/platform-features/playground/none-model.png" alt="playground"/> */}
 
 
-## Select models to compare
-1. Select the number of models to compare. You can select up to 2 models to compare:
-<Frame caption="Left: single model  -> Right: two model mode.">
-<img src="/images/platform-features/playground/model_number.png" alt="playground"/>
-</Frame>
+## A/B test LLM models
+You can compare the responses of two models side by side. Click the `Compare` button in the top bar to compare the responses of the two models.
+<img width="400" src="/images/platform-features/playground/compare.png" alt="playground"/>
 
-2. Choose the models you want to compare in the `right sidebar`.
+## Test models with different settings
+You could adjust the settings of the model to see how it affects the response. 
+Check out to [OpenAI params page](api-endpoints/proxy-endpoints/chat-completions) for more information about these parameters.
+
+`Variants`: You can set variants from 1 - 50 to test different responses from the model. This is helpful to see how consistent the model is.
+
+<img width="250" src="/images/platform-features/playground/settings.png" alt="playground"/>
 
 
-## Copy code with the prompt
+## Function calling and image
+We provide you with the ability to test the LLMs with function calling and image. You can click on the `Add tool` button or `link` icon to add a function or image.
+<img width="400" src="images/platform-features/playground/function.png"/>
+
+## 1 click to integrate models
 Click the `View code` button in the top bar to copy the code with the prompt and paste it into your code editor.
-<img src="/images/platform-features/playground/view-code.png" alt="playground"/>
+<img src="/images/platform-features/playground/code.gif" alt="playground"/>
 
 ## Save prompts to the library
 After you have created a prompt, you can save it to the library for future use. Click the `Save as new prompt` button in the top bar to save the prompt. <br/>
 You can check the new prompt on the [Prompts page](/features/prompt/prompt-management).
 <img src="/images/platform-features/playground/save-prompt.png" alt="playground"/>
-
-## Input Parameters:
-You can adjust the input parameters to control the behavior of the model. The input parameters available are:
-- Temperature: A value between 0 and 1. A higher value will make the model more creative.
-- Max Tokens: The maximum number of tokens in the response.
-- Frequency Penalty: A value between 0 and 2. A higher value will make the model less repetitive. [See more](/concepts/llm-params)
-- Presence Penalty: A value between 0 and 2. A higher value will make the model use more variety of tokens. [See more](/concepts/llm-params)
 
 {/* ### Recent Session Panel
 You can see the recent session in the right panel after generating one response and see metrics of the current session:

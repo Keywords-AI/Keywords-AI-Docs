@@ -2,15 +2,16 @@
 Title: User Data
 ---
 
-The users page helps you keep track of your users. You can tag each of your API calls with a [customer_identifier](/api-usage/request-params#:~:text=%7B%7D%0A%7D-,customer_identifier,-string)
+The users page helps you keep track of your users. You can tag each of your API calls with a [customer_identifier](/features/generation/customer-identifier)
 and we will keep track of the usage of each of your users.
 
 
 We keep track of each user's behavior with the following metrics:
-- Last active time, when the user last made an API call
-- Active for, how long the user has been active in days
-- Requests, the number of API calls the user has made
-- Tokens, the number of tokens the user has used
+- **Last active time:** When the user last made an API call
+- **Active for:** How long the user has been active in days
+- **Requests:** The number of API calls the user has made
+- **Tokens:** The number of tokens the user has used
+- **Cost:** The total cost of the user's API calls
 
 After making an API call with `customer_identifier`, specified, you can see the aggregated data of each users:
 
@@ -82,6 +83,15 @@ fetch('https://api.keywordsai.co/api/chat/completions', {
 </CodeGroup>
 
 3. Go to the [users page](https://keywordsai.co/platform/users) and you will see the user's data being logged
-<img src="/images/users-page/logged-user.png" alt="Users Page data" />
 
-4. You are all set! You can now keep track of your users' usage and behavior.
+## Edit user profile
+You could also add or edit your user's name or email by clicking on the user's name/email in the right sidebar.
+<img width="300" src="/images/users-page/user-edit.png"/>
+Check out to [User creation & update](/features/user/user-creation) for more actions you can take on the user's data.
+
+## Filter user on Logs page
+You could filter the logs by the user's name or email by clicking on the filter icon on the right sidebar.
+<img width="300" src="/images/users-page/filter.png"/>
+
+## User observability
+Go to our [dashboard](/features/monitoring/analytics#users) to see your user data in a more detailed view. You can see the user's data in the user's graph section.
