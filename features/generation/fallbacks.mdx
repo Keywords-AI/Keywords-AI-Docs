@@ -25,17 +25,17 @@ Go to Settings -> [Fallback](https://platform.keywordsai.co/platform/api/fallbac
 ```
 
 <sub>There are no restrictions on the number of fallback models you can add. The order of the models in the list is the order in which they will be tried.</sub>
-## Automatic Fallbacks
+## Automatic fallbacks
 
 We use Saftey net to automatically fallback to a system assigned model if fallback models are not responding or specified.
 
 Turn on the Safety net [here](https://platform.keywordsai.co/platform/api/fallback).
 
-## Exceptions for Triggering Fallbacks
+## Exceptions for triggering fallbacks
 - You turned off the safety net and did not specify your own fallback models
 - You uploaded some invalid [`customer_credentials`](/integration/own-api-keys)
 
-## Fallback Logic with Retries
+## Fallback logic with retries
 
 Below is the pseudo-code for the fallback logic with retries:
 
