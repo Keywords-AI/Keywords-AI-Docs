@@ -157,7 +157,7 @@
             }
           ]
         },
-            "features/prompt/test&compare",
+            "features/prompt/test-compare",
             "features/prompt/prompt-management",
             "features/datasets"
       ]
