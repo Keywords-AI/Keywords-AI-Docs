@@ -4,14 +4,14 @@ title: "Faithfulness"
 
 Faithfulness measures how grounded is the generated answer on the retrieved contexts.
 
-## Deterministic Metrics [(read more)](https://docs.relari.ai/v0.3/metrics/generation/deterministic/faithfulness)
-Below are the list of deterministic metrics that measure the relationship between the generated answer and the retrieved contexts.
+## Deterministic metrics [(read more)](https://docs.relari.ai/v0.3/metrics/generation/deterministic/faithfulness)
+Below is the list of deterministic metrics that measure the relationship between the generated answer and the retrieved contexts.
 
-- **ROUGE-L Precision** measures the longest common subsequence between the generated answer and the retrieved contexts.
+- **ROUGE-L precision** measures the longest common subsequence between the generated answer and the retrieved contexts.
 
 <img src="/images/evaluation/generation/rouge-l-precision.png"/>
 
-- **Token Overlap Precision** calculates the precision of token overlap between the generated answer and the retrieved contexts.
+- **Token overlap precision** calculates the precision of token overlap between the generated answer and the retrieved contexts.
 
 <img src="/images/evaluation/generation/token-overlap.png"/>
 
@@ -25,15 +25,15 @@ Keywords AI defines the `threshold` as **0.5**.
 
 <img src="/images/evaluation/generation/faithfulness.png"/>
 
-## LLM-Based Metrics [(read more)](https://docs.relari.ai/v0.3/metrics/generation/llm-based/llm_faithfulness)
+## LLM-Based metrics [(read more)](https://docs.relari.ai/v0.3/metrics/generation/llm-based/llm_faithfulness)
 
-Keywords AI prompt the LLM to calculate faithfulness based on classifying faithfulness by statement:
+Keywords AI prompts the LLM to calculate faithfulness based on classifying faithfulness by statement:
 
 `classify_by_statement = TRUE` where LLM is prompted to evaluate the faithfulness of each statement in the Generated Answer and outputs a `float` score:
 
 <img src="/images/evaluation/generation/llm-based-faithfulness.png"/>
 
-## Settings and Parameters
+## Settings and parameters
 
 1. Go to Keywords AI (on top of the left nav bar) > Evaluation > Text generation > Faithfulness
 <img src="/images/evaluation/generation/faithfulness-settings.png"/>
