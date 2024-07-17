@@ -27,18 +27,70 @@ title: 'Guide'
 ## Unified LLM API
 <CardGroup cols={2}>
   <Card title="Integrate 200+ LLMs" icon="arrows-split-up-and-left" color="#FFB340" href="/features/generation/fallbacks">
-    Avoid downtime with failover models
+    Connect to over 200 best-in-class models through a single, unified API.
   </Card>
-  <Card title="Fallbacks" icon="arrows-split-up-and-left" color="#FFB340" href="/features/generation/fallbacks">
-    Avoid downtime with failover models
+  <Card title="Enable fallback models" icon="arrows-split-up-and-left" color="#FFB340" href="/features/generation/fallbacks">
+    Guarantee uptime with fallback models
   </Card>
     <Card title="Load balancing" icon="arrows-split-up-and-left" color="#FFB340" href="/features/generation/load-balancing">
-    Customized rate limit and load balancing
+    Boost LLM rate limits and reliability.
   </Card>
   <Card title="Custom metadata" icon="arrows-split-up-and-left" color="#FFB340" href="/features/generation/metadata">
-    Pass extra parameters to your LLM requests 
+    Easily track and annotate your data with your custom metadata.
   </Card>
   <Card title="API keys management" icon="arrows-split-up-and-left" color="#FFB340" href="/features/generation/key-management">
-        Manage your API keys and monitor your usage.
+       Centralize all API keys, enabling access control and user permissions.
   </Card>
   </CardGroup>
+
+## LLM monitoring
+  <CardGroup cols={2}>
+  <Card title="Usage dashboard" icon="eyes" color="#66D4CF" href="/features/monitoring/analytics">
+    A graphical view for monitoring your usage, performance, and cost.
+  </Card>
+  <Card title="Logs" icon="eyes" color="#66D4CF" href="/features/monitoring/logging">
+    Debug, test, and improve LLM outputs with detailed metrics.
+  </Card>
+    <Card title="User analytics" icon="eyes" color="#66D4CF" href="/features/user/users-data">
+    Insights into your users' behavior and usage.
+  </Card>
+    <Card title="Alerts" icon="eyes" color="#66D4CF" href="/features/monitoring/subscribe-alerts">
+    Subscribe to the system status and get notified when an outage occurs.
+  </Card>
+  <Card title="Webhooks" icon="eyes" color="#66D4CF" href="/features/monitoring/webhooks">
+    Get notified when a request is completed.
+  </Card>
+</CardGroup>
+
+## Prompt testing
+  <CardGroup cols={2}>
+<Card title="LLM playground" icon="flask" color="#FF6482" href="/features/prompt/test&compare">
+    Test the API with your prompts on different models and compare the results.
+  </Card>
+  <Card title="Prompt management" icon="flask" color="#FF6482" href="/features/prompt/prompt-management">
+    Iterating and versioning prompts as a team.
+  </Card>
+</CardGroup>
+
+## Evaluation & improvement
+  <CardGroup cols={2}>
+    <Card title="Evaluations" icon="medal" color="#5DE6FF" href="/features/evaluation/overview">
+    Evaluate your AI performance based on built-in or custom metrics.
+    </Card>
+    <Card title="Datasets" icon="medal" color="#5DE6FF" href="/features/datasets">
+    Create high-quality golden datasets for model fine-tuning.
+    </Card>
+</CardGroup>
+
+## API reference
+<CardGroup cols={2}>
+  <Card title="LLM inference" icon="books" color="#73CB98" href="/api-endpoints/proxy-endpoints/chat-completions">
+    The `/api/chat/completions` endpoint allows you to generate text based on text/images input.
+  </Card>
+    <Card title="Async logging" icon="books" color="#73CB98" href="/api-endpoints/async-endpoints/request-logging-endpoint.mdx">
+    The `/api/request-logs/create/` endpoint allows you to log your requests and responses.
+  </Card>
+  <Card title="Models" icon="books" color="#73CB98" href="/api-endpoints/data-endpoints/models-endpoints">
+    The `models` endpoint allows you to see all the models available on Keywords AI.
+  </Card>
+</CardGroup>
