@@ -24,7 +24,7 @@
   "favicon": "/logo.svg",
   "colors": {
     "primary": "#6483F0",
-    "light": "#F9FAFC",
+    "light": "#7590F2",
     "dark": "#05050A",
     "background": {
       "dark": "#05050A",
@@ -62,7 +62,15 @@
       "group": "Get started",
       "pages": [
         "get-started/overview",
-        "get-started/quick-start"
+        {
+          "group": "Quick start",
+          "pages": [
+            "get-started/llm-inference",
+            "get-started/async-logging"
+          ]
+        },
+
+        "get-started/guide"
       ]
     },
     {
