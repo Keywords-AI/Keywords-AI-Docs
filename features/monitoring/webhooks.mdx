@@ -49,7 +49,7 @@ compare_signature = hmac.new(secret_key.encode(), msg=stringify_data.encode(), d
 if compare_signature != signature:
     return Response({"message": "Webhook signature does not match."}, status=401)
 ```
-## Example for using Webhooks
+## Example for using webhooks
 1. Define a webhook endpoint in your application.
 
 This endpoint sends an email to the admin when a webhook event is received.
