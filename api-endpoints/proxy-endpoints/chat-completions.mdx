@@ -3,7 +3,7 @@ title: Chat Completions
 api: POST https://api.keywordsai.co/api/chat/completions
 ---
 
-## OpenAI Parameters 
+## OpenAI parameters 
 To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `extra_body` parameter.
 
 <RequestExample>
@@ -162,7 +162,7 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
     </ParamField>
   </Accordion>
 
-  <strong>Image Processing:</strong> If you want to use the image processing feature, you need to use the following format to upload the image.
+  <strong>Image processing:</strong> If you want to use the image processing feature, you need to use the following format to upload the image.
   <Accordion title="Example">
 ```json
 {
@@ -306,9 +306,9 @@ You must have a "json" as a keyword in the prompt to use this feature.
   </Accordion>
 </ParamField>
 
-## Keywords AI Parameters
+## Keywords AI parameters
 See how to make a standard Keywords AI API call in the [Quick Start](/get-started/quick-start) guide.
-### Generation Parameters
+### Generation parameters
 
 <ParamField path="loadbalance_models" type="array">
   Balance the load of your requests between different models. See the [details of load balancing
@@ -434,7 +434,7 @@ This only excludes models in the LLM router, if `model` parameter takes preceden
 
 </ParamField>
 
-### Observability Parameters
+### Observability parameters
 
 <ParamField path="metadata" type="dict">
 You can add any key-value pair to this metadata field for your reference. Check the [details of metadata here.](/features/generation/metadata)
@@ -584,7 +584,7 @@ Adding this returns the summarization of the response in the response body. If s
 </ParamField>
 
 
-## Deprecated Parameters
+## Deprecated parameters
 
 <ParamField path="customer_api_keys" type="object">
 You can pass in a dictionary of your customer's API keys for specific models. If the router selects a model that is in the dictionary, it will attempt to use the customer's API key for calling the model before using your [integration API key](/integration/llm-credits) or Keywords AI's default API key.
