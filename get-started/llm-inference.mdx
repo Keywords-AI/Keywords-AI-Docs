@@ -1,9 +1,18 @@
 ---
-title: "LLM inference"
-description: "A quick example for Keywords AI API usage"
+title: "Unified LLM API"
+description: "A guide to using the unified LLM API"
 ---
+## Benefits of unified LLM API:
+- Call over 200 LLMs using the same format.
+- Gain comprehensive observability of your LLM applications.
+- Ensure your LLM applications become more scalable and reliable.
 
-## Create an account
+## Considerations:
+- May not be suitable for applications with strict latency requirements (100 - 300ms added).
+- May not be ideal for those who do not want to integrate a third-party service into the core of their application.
+
+## Steps:
+### Create an account
 
 Go to Keywords AI's [sign up page](https://platform.keywordsai.co/signup) to create an account. You can use email or Google account to sign up.
 
@@ -13,7 +22,7 @@ Go to Keywords AI's [sign up page](https://platform.keywordsai.co/signup) to cre
 
 {/* Welcome to Keywords AI! */}
 
-## Create an API key
+### Create an API key
 
 To create an API key, visit the [API key page](https://platform.keywordsai.co/platform/api/api-keys)
 
@@ -33,10 +42,11 @@ The API key will show up only once, <strong>Be careful and save it somewhere saf
   Learn More about Keywords AI API keys here
 </Card> */}
 
-## Add credentials
+### Add credentials
 For the **Free plan users**, you have to use your own credentials to call LLMs. See how to [add your credentials here](/integration/own-api-keys).
-## Try Keywords AI with the OpenAI SDK 
-### Install the OpenAI SDK 
+<img height="200" width="500"  src="/images/bring-own-key.png" alt="Dashboard Page"/>
+### Try Keywords AI with the OpenAI SDK 
+**Install the OpenAI SDK **
 
 ```bash 
 pip install openai 
@@ -75,7 +85,7 @@ const chatCompletion = await openai.chat.completions.create({
 ```
 </CodeGroup>
 
-## Try Keywords AI with a standard API call
+### Try Keywords AI with a standard API call
 
 <CodeGroup>
 ```python Python
