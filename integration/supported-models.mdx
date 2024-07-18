@@ -6,9 +6,19 @@ description: 'A list of models available in the Keywords AI API endpoint'
 
 
 ### Pricing
-Same as the provider's pricing. You can find the pricing details in the **_[Models Page](https://platform.keywordsai.co/platform/models)_**
+Same as the provider's pricing. You can find the pricing details in the **[Models Page](https://platform.keywordsai.co/platform/models)**
 
-## Available providers
+## Integration example
+Choose a model from the **[Models Page](https://platform.keywordsai.co/platform/models)**, then add the ``model`` to your payload.
+```json
+{
+    "model": "claude-3-5-sonnet-20240620", //example
+    // other parameters
+}
+```
+## Support?
+<Tip>Request more models [here](https://discord.com/invite/KEanfAafQQ)</Tip>
+## Available providers and models
 | Provider Name     | Supported Models | Last Update  | Provider ID        |
 |-----|---|------|----|
 | OpenAI            | All                | Jun 29, 2024 | openai             |
@@ -23,7 +33,7 @@ Same as the provider's pricing. You can find the pricing details in the **_[Mode
 | Groq              | All                | Jun 29, 2024  | groq               |
 | AWS Bedrock        | All                | Jun 29, 2024  | bedrock            |
 
-You can learn more about the providers and their supported credentials/extra parameters in the [providers page](/integration/providers/providers-overview)
+{/* You can learn more about the providers and their supported credentials/extra parameters in the [providers page](/integration/providers/providers-overview) */}
 {/* ### Models
 See the full model list on the **_[Models Page](https://platform.keywordsai.co/platform/models)_**
 
