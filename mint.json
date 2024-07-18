@@ -73,7 +73,12 @@
     },
     {
       "group": "Integrations",
-      
+      "pages": [
+        "integration/supported-models"
+      ]
+    },
+    {
+      "group": "Proxy integrations",
       "pages": [
         {
           "group": "Supported SDKs",
@@ -86,7 +91,7 @@
           "get-started/fine-tuned-model"]
         },
         {
-          "group": "Supported providers",
+          "group": "Bring your own API keys",
           "pages": [
             "integration/own-api-keys",
             "integration/providers/azure",
@@ -100,8 +105,7 @@
             "integration/providers/perplexity",
             "integration/providers/openrouter"
           ]
-        },
-        "integration/supported-models"
+        }
       ]
     },
     {
