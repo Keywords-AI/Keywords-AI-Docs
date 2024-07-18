@@ -3,20 +3,142 @@ title: 'Overview'
 # description: 'An introduction to Keywords AI API'
 ---
 
-## Keywords AI
+## What is Keywords AI?
 
 {/* Keywords AI improves your large language model (LLM) application uptime and cost saving without sacrificing the quality of the model. We connect your request to the best model for the task and help you keep track of its performance, usage, and cost. We experienced challenges in scaling LLM applications cost-effectively, so we built Keywords AI to help you overcome them. */}
 Keywords AI makes it easy for developers to build LLM applications. With 2 lines of code, developers get a complete DevOps platform that speeds up deploying & monitoring AI apps in production.
-<img src="/images/poster.png" alt="Users Page data" />
+{/* Keywords AI is an LLM engineering platform where you can build, monitor, and optimize your LLM applications with ease. We provide a unified API to access 200+ best-in-class models, enabling you to connect to the best model for your task.  */}
+{/* <img src="/images/poster.png" alt="Users Page data" /> */}
+
+## What can I use Keywords AI for?
+Developers use Keywords AI to:
+- Access 200+ best-in-class models through our unified LLM API.
+- Monitor LLM applications with detailed performance metrics and usage data.
+- Test prompts across different models and compare their responses.
+- Evaluate AI performance based on built-in or custom metrics.
+
+
+
+
+
 ## Getting started
+You can start using Keywords AI in 2 ways:
+- **Unified LLM API**:
+  - Leverage 200+ best-in-class models with a single API.
+  - Compatible with OpenAI, Anthropic, LangChain, and other mainstream SDKs.
+  - Guarantee your LLM applications's uptime with fallback models.
+  - Enhance LLM rate limits and reliability with load balancing.
+- **Aysnc Logging**:
+  - Integration time < 5 minutes.
+  - 0 latency impact on your application.
+  - Operates outside the critical path of your application.
+  - Get complete observability immediately.
+<CardGroup cols={2}>
+  <Card title="Unified LLM API" icon="key" href="/get-started/llm-inference">
+    A single API endpoint to access 200+ LLMs and log your LLM requests.
+  </Card>
+  <Card title="Async logging" icon="key" href="/get-started/async-logging">
+    Log your LLM requests without any latency.
+  </Card>
+</CardGroup>
+
+## Integrations
+<CardGroup cols={3}>
+<Card title="OpenAI SDK" icon="merge" color="#DA8FFF" href="/integration/development-frameworks/openai-sdk">
+   Switch from OpenAI SDK to Keywords AI with 2 lines of code.
+  </Card>
+  <Card title="Anthropic SDK" icon="merge" color="#DA8FFF" href="/integration/development-frameworks/anthropic">
+    Switch from Anthropic SDK to Keywords AI with 2 lines of code.
+  </Card>
+    <Card title="LangChain SDK" icon="merge" color="#DA8FFF" href="/integration/development-frameworks/langchain">
+    Switch from LangChain SDK to Keywords AI with 2 lines of code.
+  </Card>
+      <Card title="Vercel SDK" icon="merge" color="#DA8FFF" href="/integration/development-frameworks/vercel">
+    Switch from Vercel SDK to Keywords AI with 2 lines of code.
+  </Card>
+        <Card title="LlamaIndex SDK" icon="merge" color="#DA8FFF" href="/integration/development-frameworks/llama-index">
+    Switch from Vercel SDK to Keywords AI with 2 lines of code.
+  </Card>
+</CardGroup>
+
+## Unified LLM API
+<CardGroup cols={2}>
+  <Card title="Integrate 200+ LLMs" icon="arrows-split-up-and-left" color="#FFB340" href="/features/generation/fallbacks">
+    Connect to over 200 best-in-class models through a single, unified API.
+  </Card>
+  <Card title="Enable fallback models" icon="arrows-split-up-and-left" color="#FFB340" href="/features/generation/fallbacks">
+    Guarantee uptime with fallback models
+  </Card>
+    <Card title="Load balancing" icon="arrows-split-up-and-left" color="#FFB340" href="/features/generation/load-balancing">
+    Boost LLM rate limits and reliability.
+  </Card>
+  <Card title="Custom metadata" icon="arrows-split-up-and-left" color="#FFB340" href="/features/generation/metadata">
+    Easily track and annotate your data with your custom metadata.
+  </Card>
+  <Card title="API keys management" icon="arrows-split-up-and-left" color="#FFB340" href="/features/generation/key-management">
+       Centralize all API keys, enabling access control and user permissions.
+  </Card>
+  </CardGroup>
+
+  ## LLM monitoring
+  <CardGroup cols={2}>
+  <Card title="Usage dashboard" icon="eyes" color="#66D4CF" href="/features/monitoring/analytics">
+    A graphical view for monitoring your usage, performance, and cost.
+  </Card>
+  <Card title="Logs" icon="eyes" color="#66D4CF" href="/features/monitoring/logging">
+    Debug, test, and improve LLM outputs with detailed metrics.
+  </Card>
+    <Card title="User analytics" icon="eyes" color="#66D4CF" href="/features/user/users-data">
+    Insights into your users' behavior and usage.
+  </Card>
+    <Card title="Alerts" icon="eyes" color="#66D4CF" href="/features/monitoring/subscribe-alerts">
+    Subscribe to the system status and get notified when an outage occurs.
+  </Card>
+  <Card title="Webhooks" icon="eyes" color="#66D4CF" href="/features/monitoring/webhooks">
+    Get notified when a request is completed.
+  </Card>
+</CardGroup>
+
+## Prompt testing
+  <CardGroup cols={2}>
+<Card title="LLM playground" icon="flask" color="#FF6482" href="/features/prompt/test&compare">
+    Test the API with your prompts on different models and compare the results.
+  </Card>
+  <Card title="Prompt management" icon="flask" color="#FF6482" href="/features/prompt/prompt-management">
+    Iterating and versioning prompts as a team.
+  </Card>
+</CardGroup>
+
+## Evaluation & improvement
+  <CardGroup cols={2}>
+    <Card title="Evaluations" icon="medal" color="#5DE6FF" href="/features/evaluation/overview">
+    Evaluate your AI performance based on built-in or custom metrics.
+    </Card>
+    <Card title="Datasets" icon="medal" color="#5DE6FF" href="/features/datasets">
+    Create high-quality golden datasets for model fine-tuning.
+    </Card>
+</CardGroup>
+
+## API reference
+<CardGroup cols={2}>
+  <Card title="LLM inference" icon="books" color="#73CB98" href="/api-endpoints/proxy-endpoints/chat-completions">
+    The `/api/chat/completions` endpoint allows you to generate text based on text/images input.
+  </Card>
+    <Card title="Async logging" icon="books" color="#73CB98" href="/api-endpoints/async-endpoints/request-logging-endpoint.mdx">
+    The `/api/request-logs/create/` endpoint allows you to log your requests and responses.
+  </Card>
+  <Card title="Models" icon="books" color="#73CB98" href="/api-endpoints/data-endpoints/models-endpoints">
+    The `models` endpoint allows you to see all the models available on Keywords AI.
+  </Card>
+</CardGroup>
 
 {/* <CardGroup cols={1}>
   <Card title="Quick Start" icon="link" href="/get-started/quick-start">
     Check out a sample project for your first API call to Keywords AI.
   </Card>
 </CardGroup> */}
-You can start using Keywords AI in 2 ways:
-- **LLM inference**: Use our unified LLM API to build, monitor, and enhance your LLM applications with just 2 lines of code.
+{/* You can start using Keywords AI in 2 ways:
+- **API proxy**: Use our unified LLM API to build, monitor, and enhance your LLM applications with just 2 lines of code.
   - Guarantee your LLM applications's uptime with fallback models.
   - Enhance LLM rate limits and reliability with load balancing.
   - Leverage 200+ best-in-class models with a single API.
@@ -26,7 +148,7 @@ You can start using Keywords AI in 2 ways:
   - 0 latency impact on your application.
   - Operates outside the critical path of your application.
 
-[Get started with 2 lines of code](/get-started/guide)
+[Get started with 2 lines of code](/get-started/guide) */}
 
 
 {/* ## Integrations
@@ -51,7 +173,7 @@ You can start using Keywords AI in 2 ways:
   </Card>
 </CardGroup> */}
 
-## Unified LLM API
+{/* ## Unified LLM API
 The Keywords AI Unified LLM API offers you a streamlined and powerful solution to enhance your LLM applications:
 - **Single API Access:** Connect to over 200 best-in-class models through a single, unified API.
 - **API Keys Management:** Centralize all API keys, enabling access control and user permissions within your organization.
@@ -84,7 +206,7 @@ Evaluate your AI performance based on built-in or custom metrics and improve you
 - Perform evaluations on production data or sample a percentage of your data.
 - Utilize the best data to create high-quality golden datasets.
 
-[Check out our evaluation features!](/get-started/guide#evaluation-and-improvement)
+[Check out our evaluation features!](/get-started/guide#evaluation-and-improvement) */}
 
 {/* ## User analytics
 <CardGroup cols={2}>

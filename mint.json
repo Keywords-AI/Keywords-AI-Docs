@@ -68,23 +68,25 @@
             "get-started/llm-inference",
             "get-started/async-logging"
           ]
-        },
-
-        "get-started/guide"
+        }
       ]
     },
     {
       "group": "Integrations",
+      
       "pages": [
-        "integration/development-frameworks/openai-sdk",
-        "integration/development-frameworks/anthropic",
-        "integration/development-frameworks/langchain",
-        "integration/development-frameworks/llama-index",
-        "integration/development-frameworks/vercel",
-        "get-started/fine-tuned-model",
-        "integration/supported-models",
         {
-          "group": "Use your own API keys",
+          "group": "Supported SDKs",
+          "pages": [        
+          "integration/development-frameworks/openai-sdk",
+          "integration/development-frameworks/anthropic",
+          "integration/development-frameworks/langchain",
+          "integration/development-frameworks/llama-index",
+          "integration/development-frameworks/vercel",
+          "get-started/fine-tuned-model"]
+        },
+        {
+          "group": "Supported providers",
           "pages": [
             "integration/own-api-keys",
             "integration/providers/azure",
@@ -98,7 +100,8 @@
             "integration/providers/perplexity",
             "integration/providers/openrouter"
           ]
-        }
+        },
+        "integration/supported-models"
       ]
     },
     {
@@ -119,7 +122,7 @@
           ]
         },
         {
-          "group": "Monitoring",
+          "group": "LLM monitoring",
           "pages": [
             "features/monitoring/analytics",
             "features/monitoring/logging",
@@ -163,15 +166,15 @@
       ]
     },
     {
-      "group": "Inference",
+      "group": "Integration methods",
       "pages": [
-        "api-endpoints/proxy-endpoints/chat-completions"
+        "api-endpoints/integration/request-logging-endpoint",
+        "api-endpoints/integration/chat-completions"
       ]
     },
     {
-      "group": "Async logging",
+      "group": "Logs",
       "pages": [
-        "api-endpoints/async-endpoints/request-logging-endpoint",
         "api-endpoints/async-endpoints/logs-list-endpoint"
       ]
     },

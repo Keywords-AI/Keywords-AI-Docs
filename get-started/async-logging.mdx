@@ -1,9 +1,18 @@
 ---
 title: "Async logging"
-description: "Gettings started with Keywords AI Async logging"
+description: "A guide to logging your LLM requests without any latency"
 ---
+## Benefits of async logging:
+- Monitor your LLM performance with 0 latency impact.
+- Operates outside the critical path of your application, ensuring no disruptions.
+- Gain comprehensive observability of your LLM applications.
 
-## Create an account
+## What you will miss:
+- The ability to call over 200 LLMs using the same format.
+- Comprehensive features that ensure the scalability and reliability of your LLM applications.
+
+## Steps:
+### Create an account
 
 Go to Keywords AI's [sign up page](https://platform.keywordsai.co/signup) to create an account. You can use email or Google account to sign up.
 
@@ -13,7 +22,7 @@ Go to Keywords AI's [sign up page](https://platform.keywordsai.co/signup) to cre
 
 {/* Welcome to Keywords AI! */}
 
-## Create an API key
+### Create an API key
 
 To create an API key, visit the [API key page](https://platform.keywordsai.co/platform/api/api-keys)
 
@@ -28,7 +37,7 @@ The API key will show up only once, <strong>Be careful and save it somewhere saf
 
 <Note>For the **Free plan users**, you can only log 10k LLM requests per month. Subscribe to our [team plan](https://keywordsai.co/#/pricing) to get more credits.</Note>
 
-## Example call:
+### Example call:
 Using the endpoint below, you can log your requests and responses to the Keywords AI API.
 ```json
 url = "https://api.keywordsai.co/api/request-logs/create/"
