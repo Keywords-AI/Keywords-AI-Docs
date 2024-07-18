@@ -20,6 +20,11 @@
       "url": "api-endpoints"
     }
   ],
+  "metadata": {
+    "og:site_name": "Keywords AI | LLM monitoring platform",
+    "og:image": "/logo.svg",
+    "twitter:site": "@keywordsai"
+  },
 
   "favicon": "/logo.svg",
   "colors": {
