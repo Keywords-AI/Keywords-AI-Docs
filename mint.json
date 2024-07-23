@@ -135,6 +135,7 @@
           "pages": [
             "features/monitoring/analytics",
             "features/monitoring/logging",
+            "features/monitoring/thread",
             "features/monitoring/subscribe-alerts",
             "features/monitoring/webhooks"
           ]
