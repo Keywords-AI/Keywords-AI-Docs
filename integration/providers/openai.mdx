@@ -3,7 +3,15 @@ title: "OpenAI"
 description: "Use your own OpenAI credits through Keywords AI"
 ---
 
-Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy-endpoints/chat-completions) to use your own OpenAI credits.
+There are 2 ways to add your OpenAI credentials to your requests:
+## Add it from the UI
+1. Go to [Credentials page](https://platform.keywordsai.co/platform/api/credentials)
+<img height="200" width="500"  src="/images/bring-own-key.png" alt="Dashboard Page"/>
+2. Add your OpenAI credentials.
+<img height="200" width="300"  src="/images/providers/openai.png" alt="Dashboard Page"/>
+
+## Add it in code
+- Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy-endpoints/chat-completions) to use your own OpenAI credits.
 
 ```json
 {
