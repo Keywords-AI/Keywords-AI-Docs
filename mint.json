@@ -77,12 +77,6 @@
       ]
     },
     {
-      "group": "Integrations",
-      "pages": [
-        "integration/supported-models"
-      ]
-    },
-    {
       "group": "Proxy integrations",
       "pages": [
         {
@@ -95,6 +89,7 @@
           "integration/development-frameworks/vercel",
           "get-started/fine-tuned-model"]
         },
+        "integration/supported-models",
         {
           "group": "Bring your own API keys",
           "pages": [
@@ -119,11 +114,11 @@
         {
           "group": "Unified LLM API",
           "pages": [
-            "features/generation/fallbacks",
-            "features/generation/load-balancing",
-            "features/generation/customer-identifier",
-            "features/generation/metadata",
             "features/generation/key-management",
+            "features/generation/fallbacks",
+            "features/generation/customer-identifier",
+            "features/generation/load-balancing",
+            "features/generation/metadata",
             "features/generation/disable-logs",
             "features/generation/retries",
             "features/generation/model-filtering",
@@ -131,7 +126,7 @@
           ]
         },
         {
-          "group": "LLM monitoring",
+          "group": "Monitoring",
           "pages": [
             "features/monitoring/analytics",
             "features/monitoring/logging",
