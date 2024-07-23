@@ -3,7 +3,15 @@ title: "AWS Bedrock"
 description: "Use your own AWS credits through Keywords AI"
 ---
 
-Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy-endpoints/chat-completions) to use your own AWS credits.
+There are 2 ways to add your AWS Bedrock credentials to your requests:
+## Add it from the UI
+1. Go to [Credentials page](https://platform.keywordsai.co/platform/api/credentials)
+<img height="200" width="500"  src="/images/bring-own-key.png" alt="Dashboard Page"/>
+2. Add your AWS Bedrock credentials.
+<img height="200" width="300"  src="/images/providers/bedrock.png" alt="Dashboard Page"/>
+
+## Add it in code
+- Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy-endpoints/chat-completions) to use your own AWS credits.
 
 ```json
 {
