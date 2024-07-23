@@ -475,6 +475,17 @@ Contact team@keywordsai.co if you need extra parameter support for your use case
 ```
 </Accordion>
 </ParamField>
+<ParamField path="thread_identifier" type="string">
+  See logs as a conversation log thread. Pass all logs with the same `thread_identifier` to see them in the same thread.
+    <Accordion title="Example">
+```json
+{
+    //...other_params,
+    "thread_identifier": "test_thread"
+}
+```
+</Accordion>
+</ParamField>
 
 <ParamField path="request_breakdown" type="boolean" default={false}>
 Adding this returns the summarization of the response in the response body. If streaming is on, the metrics will be streamed as the last chunk.
