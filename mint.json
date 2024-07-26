@@ -119,6 +119,7 @@
             "features/generation/customer-identifier",
             "features/generation/load-balancing",
             "features/generation/metadata",
+            "features/generation/update-logs",
             "features/generation/disable-logs",
             "features/generation/retries",
             "features/generation/model-filtering",
@@ -180,7 +181,8 @@
     {
       "group": "Logs",
       "pages": [
-        "api-endpoints/async-endpoints/logs-list-endpoint"
+        "api-endpoints/async-endpoints/logs-list-endpoint",
+        "api-endpoints/async-endpoints/logs-update-endpoint"
       ]
     },
     {
