@@ -22,11 +22,15 @@ import requests
 url = "https://api.keywordsai.co/api/request-logs/batch-update/"
 api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
 data = {
-    "unique_id": "xxxxxx",
-    metadata: {
-        "metadata_key": "updated_value"
-    },
-    note: "updated note"
+    "logs": [
+        {   "unique_id": "xxxxxx",
+            "metadata": {
+                "metadata_key": "updated_value"
+            },
+            "note": "updated note"
+        }
+        # other logs to update
+    ]
 }
 headers = {
     "Authorization": f"Bearer {api_key}",
@@ -44,11 +48,15 @@ fetch("https://api.keywordsai.co/api/request-logs/batch-update/", {
     'Authorization': 'Bearer Your_Keywords_AI_API_Key '
   },
     body: JSON.stringify({
-        "unique_id": "xxxxxx",
-        metadata: {
-            "metadata_key": "updated_value"
-        },
-        note: "updated note"
+        logs: [
+            {   unique_id: "xxxxxx",
+                metadata: {
+                    metadata_key: "updated_value"
+                },
+                note: "updated note"
+            }
+            // other logs to update
+        ]
     })
 })
 .then(response => response.json())
