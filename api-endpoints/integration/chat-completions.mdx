@@ -373,6 +373,30 @@ You can pass in your customer's credentials for [supported providers](/integrati
 </Accordion>
 </ParamField>
 
+<ParamField path="cache_enabled" type="boolean">
+Enable or disable caches. Check the [details of caches here.](/features/generation/caches)
+<Accordion title="Example">
+```json
+{
+    "cache_enabled": true
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField path="cache_ttl" type="number">
+This parameter specifies the time-to-live (TTL) for the cache in seconds. 
+
+<Note>It's optional and the default value is 30 **days** now.</Note>
+<Accordion title="Example">
+```json
+{
+    "cache_ttl": 3600 // in seconds
+}
+```
+</Accordion>
+</ParamField>
+
 <ParamField path="prompt" type="object">
   The prompt template to use for the completion. You can build and deploy prompts in the [Prompt](/features/prompt/prompt-management).
 <AccordionGroup>
