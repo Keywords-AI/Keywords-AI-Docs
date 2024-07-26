@@ -117,7 +117,7 @@
             "features/generation/key-management",
             "features/generation/fallbacks",
             "features/generation/customer-identifier",
-            "features/generation/cache",
+            "features/generation/caches",
             "features/generation/load-balancing",
             "features/generation/metadata",
             "features/generation/retries",
