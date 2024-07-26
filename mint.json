@@ -117,10 +117,9 @@
             "features/generation/key-management",
             "features/generation/fallbacks",
             "features/generation/customer-identifier",
+            "features/generation/cache",
             "features/generation/load-balancing",
             "features/generation/metadata",
-            "features/generation/update-logs",
-            "features/generation/disable-logs",
             "features/generation/retries",
             "features/generation/model-filtering",
             "features/generation/streaming"
@@ -131,6 +130,8 @@
           "pages": [
             "features/monitoring/analytics",
             "features/monitoring/logging",
+            "features/generation/update-logs",
+            "features/generation/disable-logs",
             "features/monitoring/thread",
             "features/monitoring/subscribe-alerts",
             "features/monitoring/webhooks"
