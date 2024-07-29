@@ -6,12 +6,6 @@ api: POST https://api.keywordsai.co/api/run-evaluations/
 You can run batch evaluations on specific metrics using this endpoint. Instead of running evaluations manually in the frontend, you could just set up `evaluations_identifier` in the request body and run evaluations on the logs.
 
 ## Parameters
-You can add these params to the **URL params**.
-For example:
-```
-"https://api.keywordsai.co/api/run-evaluations/"
-```
-
 
 <ParamField path="evaluations_identifier" type="string" default={100}>
 When you are making a call to the chat/completions endpoint, you will need to pass in the evaluation_identifier to mark the logs you want to run evals on:
@@ -69,6 +63,18 @@ headers = {
 
 response = post(url, json=body, headers=headers)
 print(response.json())
+```
+```python ChatCompletions
+
+url = "https://api.keywordsai.co/api/chat/completions"
+headers = {
+    "Authorization": f"Bearer {api_key}",
+}
+api_key = "YOUR_API_KEY"
+body = {
+    ...other params...
+    "evalutation_identifier":"some_identifier" # you need to pass this in the body!
+}
 ```
 
 </RequestExample>
