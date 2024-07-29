@@ -132,7 +132,7 @@
             "features/monitoring/logging",
             "features/generation/update-logs",
             "features/generation/disable-logs",
-            "features/monitoring/thread",
+            "features/monitoring/threads",
             "features/monitoring/subscribe-alerts",
             "features/monitoring/webhooks"
           ]
