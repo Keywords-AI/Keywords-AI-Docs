@@ -196,6 +196,12 @@
       ]
     },
     {
+      "group": "Evaluations",
+      "pages": [
+        "api-endpoints/async-endpoints/evaluations"
+      ]
+    },
+    {
       "group": "Model",
       "pages": [
         "api-endpoints/data-endpoints/models-endpoint"
