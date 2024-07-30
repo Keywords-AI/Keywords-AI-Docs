@@ -130,7 +130,7 @@
           "pages": [
             "features/monitoring/analytics",
             "features/monitoring/logging",
-            "features/generation/update-logs",
+            "features/monitoring/update-logs",
             "features/generation/disable-logs",
             "features/monitoring/threads",
             "features/monitoring/subscribe-alerts",
@@ -167,7 +167,7 @@
             }
           ]
         },
-            "features/prompt/test-compare",
+            "features/prompt/model-playground",
             "features/prompt/prompt-management",
             "features/datasets"
       ]
