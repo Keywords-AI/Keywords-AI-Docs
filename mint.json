@@ -70,8 +70,9 @@
         {
           "group": "Quick start",
           "pages": [
-            "get-started/llm-inference",
-            "get-started/async-logging"
+            "get-started/async-logging",
+            "get-started/llm-inference"
+
           ]
         }
       ]
@@ -91,7 +92,7 @@
         },
         "integration/supported-models",
         {
-          "group": "Bring your own API keys",
+          "group": "Supported providers",
           "pages": [
             "integration/own-api-keys",
             "integration/providers/azure",
@@ -112,29 +113,29 @@
       "group": "Features",
       "pages": [
         {
-          "group": "Unified LLM API",
-          "pages": [
-            "features/generation/key-management",
-            "features/generation/fallbacks",
-            "features/generation/customer-identifier",
-            "features/generation/caches",
-            "features/generation/load-balancing",
-            "features/generation/metadata",
-            "features/generation/retries",
-            "features/generation/model-filtering",
-            "features/generation/streaming"
-          ]
-        },
-        {
           "group": "Monitoring",
           "pages": [
             "features/monitoring/analytics",
             "features/monitoring/logging",
             "features/monitoring/update-logs",
             "features/generation/disable-logs",
+            "features/generation/customer-identifier",
+            "features/generation/metadata",
             "features/monitoring/threads",
             "features/monitoring/subscribe-alerts",
             "features/monitoring/webhooks"
+          ]
+        },
+        {
+          "group": "Proxy",
+          "pages": [
+            "features/generation/key-management",
+            "features/generation/fallbacks",
+            "features/generation/load-balancing",
+            "features/generation/caches",
+            "features/generation/retries",
+            "features/generation/model-filtering",
+            "features/generation/streaming"
           ]
         },
         {
