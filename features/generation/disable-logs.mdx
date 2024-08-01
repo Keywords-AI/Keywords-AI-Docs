@@ -1,0 +1,43 @@
+---
+title: "Disable logs"
+description: "Disable requests and responses"
+icon: "eye-slash"
+---
+
+If you do not want to have Keywords AI to store your logs, you can disable it by setting the `disable_log` option to `true` in the object.
+
+_See all params [here](/api-endpoints/proxy-endpoints/chat-completions)._
+
+## Example code
+<CodeGroup>
+```python Python
+    data = {
+        "..." #other params
+        "disable_log": True,
+    }
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+    body: JSON.stringify({
+        models: ['gpt-3.5-turbo', 'gpt-3.5-turbo-16k'],
+        messages: [{role: 'user', content: "Say 'Hello World'"}],
+        disable_log: true,
+    })
+```
+
+```bash cURL
+-d '{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello"
+    }
+  ],
+  "models": ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"],
+  "disable_log": true,
+  "max_tokens": 100
+}'
+```
+
+</CodeGroup>

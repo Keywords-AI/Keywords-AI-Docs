@@ -1,0 +1,16 @@
+---
+title: LLM Parameters
+description: 'Definitions and explanations for parameters for LLM router API'
+---
+
+## Logprobs
+
+The logprobs parameter in LLM (Language Model) generation refers to the logarithm of the predicted probabilities assigned by the model to each possible next word or token in a generated sequence. This parameter allows users to control the level of uncertainty in the generated text by adjusting the temperature value. Higher temperature values result in more diverse and creative output, as the model assigns higher probabilities to a wider range of words. Conversely, lower temperature values lead to more focused and deterministic output, as the model assigns higher probabilities to highly likely words. By analyzing the logprobs, users can gain insights into the model's confidence and make informed choices about the generated text.
+
+## Frequency Penalty
+
+This parameter is used to discourage the model from repeating the same words or phrases too frequently within the generated text. It is a value that is added to the log probability of a token each time it occurs in the generated text. A higher frequency_penalty value will result in the model being more conservative in its use of repeated tokens.
+
+## Presence Penalty
+
+This parameter is used to encourage the model to include a diverse range of tokens in the generated text. It is a value that is subtracted from the log probability of a token each time it is generated. A higher presence_penalty value will result in the model being more likely to generate tokens that have not yet been included in the generated text.

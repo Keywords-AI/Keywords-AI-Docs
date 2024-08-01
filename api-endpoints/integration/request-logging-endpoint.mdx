@@ -1,0 +1,503 @@
+---
+title: Async logging (recommended)
+api: POST https://api.keywordsai.co/api/request-logs/create/
+---
+
+The Async logging endpoint allows you to directly log an LLM inference to Keywords AI, instead of using Keywords AI as a proxy with the [chat completion endpoint](/api-endpoints/proxy-endpoints/chat-completions).
+
+<ResponseField name="model" type="string" required>
+Model used for the LLM inference. Default is an empty string. See the list of model
+  [here](/integration/supported-models)
+</ResponseField>
+
+<ResponseField name="prompt_messages" type="array" required>
+An Array of prompt messages. Default is an empty list. 
+
+```python 
+"prompt_messages": [
+  {
+    "role": "user",
+    "content": "Hi"
+  },
+  # optional function call
+  {
+    "role": "tool",
+    "tool_call_id": "your tool call id",
+    "content": "...." # tool call content
+  }
+],
+```
+</ResponseField>
+
+<ResponseField name="completion_message" type="dict" required>
+Completion message in JSON format. Default is an empty dictionary.
+```python 
+"completion_message": {
+    "role": "assistant",
+    "content": "Hi, how can I assist you today?"
+},
+```
+</ResponseField>
+
+{/* <ResponseField name="tool_calls" type="array">
+  Tools used by the inference model
+</ResponseField>
+
+<Accordion>
+  <ResponseField name="id" type="string">
+  Tool call that this message is responding to.
+  </ResponseField>
+
+  <ResponseField name="type" type="string">
+  The type of the tool. Currently, only `function` is supported.
+  </ResponseField>
+
+  <ResponseField name="function" type="dict">
+  </ResponseField>
+
+  <Accordion>
+    <ResponseField name="name" type="string">
+    </ResponseField>
+    <ResponseField name="arguements" type="string">
+    </ResponseField>
+
+```python
+"function": {
+  "name": "get_current_weather", # Function name
+  "arguments": "{\n\"location\": \"Boston, MA\"\n}" # Function arguments
+}
+```
+  </Accordion>
+
+</Accordion> */}
+
+{/* <ResponseField name="full_request" type="object">
+  The full request object. Default is an empty dictionary.
+  ```python
+"full_request": {
+  "temperature": 0.5,
+  "top_p": 0.5,
+  #... other parameters
+},
+
+```
+</ResponseField> */}
+
+
+<ResponseField name="tool_choice" type="object">
+Controls which (if any) tool is called by the model. `none` means the model will not call any tool and instead generates a message. 
+<Accordion title="Properties">
+
+  <ResponseField name="type" type="string" required>
+  The type of the tool. Currently, only `function` is supported.
+  </ResponseField>
+
+  <ResponseField name="function" type="object" required>
+  </ResponseField>
+
+<AccordionGroup>
+  <Accordion title="Properties">
+    <ResponseField name="name" type="string" required>
+    </ResponseField>
+
+  </Accordion >
+  <Accordion title="Example">
+  ```python
+    "tool_choice": {
+        "type": "function",
+        "function": {
+            "name": "get_current_weather"
+        }
+    },
+```
+</Accordion>
+</AccordionGroup>
+</Accordion>
+</ResponseField>
+
+
+
+<ResponseField name="tools" type="array">
+  A list of tools the model may call. Currently, only functions are supported as a tool. 
+  <AccordionGroup>
+  <Accordion title="Properties">
+
+    <ResponseField name="type" type="string" required>
+    The type of the tool. Currently, only `function` is supported.
+    </ResponseField>
+
+    <ResponseField name="function" type="object" required>
+        <Accordion title="Properties">
+          <ResponseField name="name" type="string" required>
+          </ResponseField>
+          <ResponseField name="description" type="string">
+          </ResponseField>
+          <ResponseField name="parameters" type="object">
+          </ResponseField>
+        </Accordion>
+    </ResponseField>
+</Accordion>
+
+<Accordion title="Example">
+  ```python
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a given location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The city and state, e.g. San Francisco, CA",
+            },
+            "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
+          },
+          "required": ["location"],
+        },
+      },
+    }
+]
+```
+</Accordion>
+</AccordionGroup>
+</ResponseField>
+
+<ResponseField name="stream" type="boolean">
+  Whether the LLM inference was streamed. Default is false.
+</ResponseField>
+
+<ResponseField name="customer_identifier" type="string">
+  An identifier for the customer that invoked this LLM inference, helps with
+  visualizing user activities. Default is an empty string.  See the [details of customer identifier here.](/features/generation/customer-identifier)
+</ResponseField>
+
+<ResponseField name="metadata" type="dict">
+You can add any key-value pair to this metadata field for your reference. 
+<Accordion title="Example">
+```json
+{
+  "my_value_key": "my_value"
+}
+```
+</Accordion>
+</ResponseField>
+
+<ResponseField name="prompt_tokens" type="integer" default={0}>
+Number of tokens in the prompt.
+</ResponseField>
+
+<ResponseField name="completion_tokens" type="integer" default={0}>
+Number of tokens in the completion. 
+</ResponseField>
+
+<ResponseField name="prompt_unit_price" type="number">
+Pass this parameter in if you want to log your self-host / fine-tuned model.
+<Accordion title="Example">
+```json
+{
+"prompt_unit_price": 0.0042 // $0.0042 per 1M tokens
+}
+```
+</Accordion>
+</ResponseField>
+
+<ResponseField name="completion_unit_price" type="number">
+Pass this parameter in if you want to log your self-host / fine-tuned model.
+<Accordion title="Example">
+```json
+{
+"completion_unit_price": 0.0042 // $0.0042 per 1M tokens
+}
+```
+</Accordion>
+</ResponseField>
+
+<ResponseField name="cost" type="float" default={0}>
+Cost of the inference in US dollars.
+</ResponseField>
+
+<ResponseField name="latency" type="float" default={0}>
+Total generation time. Time from receiving the first token to receiving the last token in seconds. **Do not** confuse this with `time_to_first_token`.
+</ResponseField>
+
+<ResponseField name="time_to_first_token" type="float" default={0.0}>
+The time it takes for the model to generate the first token after receiving a request.
+</ResponseField>
+<ResponseField name="tokens_per_second" type="float" default={0.0}>
+The number of tokens generated per second.
+</ResponseField>
+
+<ResponseField name="error_message" type="text">
+Error message if the LLM inference failed. Default is an empty string.
+</ResponseField>
+
+<ResponseField name="status_code" type="integer" default={200}>
+  The status code of the LLM inference. Default is 200 (ok). See supported status codes [here](/error-handling).
+
+</ResponseField>
+<ResponseField name="has_warnings" type="boolean">
+  Whether the LLM inference has any warnings. Default is false.
+</ResponseField>
+<ResponseField name="warnings" type="string">
+  Any warnings that occurred during the LLM inference. You could pass a warning message here. Default is an empty string.
+</ResponseField>
+
+
+{/* <ResponseField name="category" type="string">
+Category of the log. Default is an empty string.
+</ResponseField> */}
+
+{/* <ResponseField name="cached_response" type="integer">
+  Whether the response was cached. Default is 0.
+</ResponseField> */}
+
+<ResponseField name="is_test" type="boolean">
+  Whether the LLM inference is a test call. If set to true, you will only be able to see this log in `Test Mode` in the platform. Default is false.
+</ResponseField>
+
+<RequestExample>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.request("POST", url, headers=headers, json=payload)
+payload = {
+    "model": "gpt-4",
+    "prompt_messages": [
+        {
+          "role": "user",
+          "content": "Hi"
+        },
+        {
+          "role": "assistant",
+          "content": None,
+          "tool_calls": [
+            {
+              "id": "xxxx",
+              "type": "function",
+              "function": {
+                "name": "get_current_weather", # Function name
+                "arguments": "{\n\"location\": \"Boston, MA\"\n}" # Function arguments
+              }
+            }
+          ]
+        }, #optional
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "tool_choice": {
+        "type": "function",
+        "function": {
+            "name": "get_current_weather"
+        }
+    },
+    "tools":[
+      {
+      "type": "function",
+      "function": {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a given location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The city and state, e.g. San Francisco, CA",
+            },
+            "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
+          },
+          "required": ["location"],
+        },
+      },
+      }
+    ]
+    "customer_identifier": "456467",
+    "prompt_tokens": 8,
+    "completion_tokens": 16,
+    "cost": 0.00042,
+    "latency": 0.0,
+    "timestamp": "2024-04-15T08:30:37.721313Z",
+    "time_to_first_token": 0.0,
+    "tokens_per_second": 0.0,
+    "metadata": {},
+    "stream": False,
+    "status_code": 200,
+    "warnings": "",
+    "has_warnings": False,
+    "error_message": "",
+    "is_test": False,
+}
+```
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/request-logs/create/';
+const headers = {
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    model: 'gpt-4',
+    prompt_messages: [
+      {
+        role: 'user',
+        content: 'Hi'
+      },
+      {
+        role: 'assistant',
+        content: null,
+        tool_calls: [
+          {
+            id: 'xxxx',
+            type: 'function',
+            function: {
+              name: 'get_current_weather',
+              arguments: '{"location": "Boston, MA"}'
+            }
+          }
+        ]
+      }
+    ],
+    completion_message: {
+        role: 'assistant',
+        content: 'Hi, how can I assist you today?'
+    },   
+    tool_choice: {
+        type: 'function',
+        function: {
+            name: 'get_current_weather'
+        }
+    },
+    tools: [
+        {
+            type: 'function',
+            function: {
+                name: 'get_current_weather',
+                description: 'Get the current weather in a given location',
+                parameters: {
+                    type: 'object',
+                    properties: {
+                        location: {
+                            type: 'string',
+                            description: 'The city and state, e.g. San Francisco, CA'
+                        },
+                        unit: { type: 'string', enum: ['celsius', 'fahrenheit'] }
+                    },
+                    required: ['location']
+                }
+            }
+        }
+    ],
+    customer_identifier: '456467',
+    prompt_tokens: 8,
+    completion_tokens: 16,
+    cost: 0.00042,
+    latency: 0.0,
+    timestamp: '2024-04-15T08:30:37.721313Z',
+    time_to_first_token: 0.0,
+    tokens_per_second: 0.0,
+    metadata: {},
+    stream: false,
+    status_code: 200,
+    warnings: '',
+    has_warnings: false,
+    error_message: '',
+    is_test: false,
+};
+
+fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+})
+```
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
+-d '{
+    "model": "gpt-4",
+    "prompt_messages": [
+        {
+          "role": "user",
+          "content": "Hi"
+        },
+        {
+          "role": "assistant",
+          "content": null,
+          "tool_calls": [
+            {
+              "id": "xxxx",
+              "type": "function",
+              "function": {
+                "name": "get_current_weather",
+                "arguments": "{\n\"location\": \"Boston, MA\"\n}" 
+              }
+            }
+          ]
+        }
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "tool_choice": {
+        "type": "function",
+        "function": {
+            "name": "get_current_weather"
+        }
+    },
+    "tools":[
+      {
+        "type": "function",
+        "function": {
+          "name": "get_current_weather",
+          "description": "Get the current weather in a given location",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string",
+                "description": "The city and state, e.g. San Francisco, CA"
+              },
+              "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]}
+            },
+            "required": ["location"]
+          }
+        }
+      }
+    ],
+    "prompt_tokens": 8,
+    "completion_tokens": 16,
+    "cost": 0.00042,
+    "latency": 0.0,
+    "timestamp": "2024-04-15T08:30:37.721313Z",
+    "time_to_first_token": null,
+    "metadata": {},
+    "stream": false,
+    "status_code": 200,
+    "tokens_per_second": 0.0,
+    "warnings": "",
+    "has_warnings": false,
+    "error_message": "",
+    "is_test": false,
+    "customer_identifier": "456467",
+}'
+```
+</RequestExample>
+<ResponseExample>
+</ResponseExample>

@@ -1,0 +1,137 @@
+---
+title: "Streaming"
+description: "Pushing the output token by token"
+icon: "typewriter"
+---
+
+When streaming is available, Keywords AI will forward the streaming response to your end token by token. This is useful when you want to process the output as soon as it is available, rather than waiting for the entire response to be received, and can significantly improve the user experience.
+
+_See all params [here](/api-endpoints/proxy-endpoints/chat-completions)._
+## Streaming example
+<CodeGroup>
+```python Python
+def  keywords_ai_generate( "..."):
+    print("Calling: ",url)
+    headers = {"..."}
+    data = {
+        "..." #other params
+        "stream": True,
+    }
+        
+    response = requests.post(url=url, headers=headers, json=data)
+    return response
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
+  }
+    body: JSON.stringify({
+        models: ['gpt-3.5-turbo', 'gpt-3.5-turbo-16k'],
+        messages: [{role: 'user', content: "Say 'Hello World'"}],
+        stream: true,
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/chat/completions" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
+-d '{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello"
+    }
+  ],
+  "models": ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"],
+  "stream": true,
+  "max_tokens": 100
+}'
+```
+
+</CodeGroup>
+
+## How it Works in Keywords AI (Optional reading)
+Keywords AI runs on ASGI server to handle large loads of concurrent requests.
+
+We receive the stream from our provider as synchronous generator, and we forward it to the frontend as an asynchronous generator as soon as we start receiving the data:
+
+```python
+from asyncio import sleep as async_sleep
+async def stream_response(response: Response):
+    wait_time = 0.001
+    async for chunk in response.iter_lines():
+        await async_sleep(1)
+        yield chunk
+```
+
+The wait_time will not add actual latency. It is necessary for the asynchronous event loop to "break" from this task and send the request chunk by chunk.
+
+## Deprecated
+### Mannually handling streaming
+**This one is deprecated, just for reference!**
+
+<CodeGroup>
+```TypeScript TypeScript
+type CallbackFunction = (line: string) => void;
+type StreamComplete = (done?: boolean) => void;
+
+const readStream = async (
+  streamResponse: Response, // HTTP response from Keywords AI API
+  callbackFunction: CallbackFunction, // The callback function to handle each "token" from the stream
+  streamComplete: StreamComplete = (done) => console.log("Stream done")
+): Promise<() => void> => {
+
+  /* Return an abort control */
+  const reader = streamResponse.body.getReader();
+  const decoder = new TextDecoder();
+  const abortController = new AbortController();
+  const signal = abortController.signal;
+
+  // Start reading the stream
+  (async () => {
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done || signal.aborted) {
+          streamComplete();
+          break;
+        }
+        const message = decoder.decode(value);
+        // Splitting the returned text chunk with the delimiter
+        for (const line of message.split("---")) {
+          // Line is a JSON string
+          callbackFunction(line);
+        }
+      }
+    } catch (e) {
+      console.error("Stream error:", e);
+    }
+  })();
+
+  // Return a function to abort the stream from outside
+  return () => {
+    console.log("Aborting stream");
+    abortController.abort();
+  };
+};
+```
+
+```Python Python
+import requests
+
+response = requests.post("https://api.keywordsai.co/api/chat/completions" ...rest of your params)
+
+if response.status_code == 200:
+    for chunk in response.iter_content(chunk_size=None):
+        print(chunk)
+```
+</CodeGroup>

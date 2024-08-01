@@ -1,0 +1,78 @@
+---
+title: 'Regular Response'
+description: 'JSON response that is straight forward to read and parse'
+---
+
+## Basic Response Body
+
+When streaming is disabled, the API endpoint delivers a singular JSON response, containing the model-generated text along with pertinent information, ensuring succinct and straightforward data processing.
+
+```json
+{
+    "id": "chatcmpl-123",
+    "object": "chat.completion.chunk",
+    "created": 1677652288,
+    "choices": [{
+        "index": 0,
+        "delta": {
+        "content": "Hello",
+        },
+        "finish_reason": "stop"
+    }]
+}
+```
+
+## Logprobs
+
+If you have [logprobs](/api-usage/request-params) set to true, you will receive the the logarithm of the probablity of choosing each token. This shows how confident the LLM is when generating the answer. Read more in the [concept page](/get-started/llm-params#logprobs)
+
+```json
+{
+    "id": "chatcmpl-8oK8GnO4O2wCZuzmU8FZYiIKPBmPh",
+    "choices": [
+        {
+            "finish_reason": "stop",
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": "As an AI, I do not have feelings or emotions, but I am here to assist you. How may I help you today?"
+            },
+            "logprobs": {
+                "content": [
+                    {
+                        "token": "As",
+                        "bytes": [
+                            65,
+                            115
+                        ],
+                        "logprob": -0.10255117,
+                        "top_logprobs": []
+                    },
+                    {
+                        "token": ",",
+                        "bytes": [
+                            44
+                        ],
+                        "logprob": -0.16775227,
+                        "top_logprobs": []
+                    },
+                    //...ommitting token probablites in between
+                    {
+                        "token": "?",
+                        "bytes": [
+                            63
+                        ],
+                        "logprob": -0.00016468366,
+                        "top_logprobs": []
+                    }
+                ],
+                "bytes": null,
+                "logprob": null,
+                "top_logprobs": null
+            }
+        }
+    ],
+    "created": 1707004480,
+    "model": "gpt-3.5-turbo-16k-0613"
+}
+```

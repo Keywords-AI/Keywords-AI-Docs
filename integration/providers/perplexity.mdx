@@ -1,0 +1,26 @@
+---
+title: "Perplexity AI"
+description: "Use your own Perplexity AI credits through Keywords AI"
+icon: "lock-keyhole-open"
+---
+
+There are 2 ways to add your Perplexity credentials to your requests:
+## Add it from the UI at the organization level.
+1. Go to [Credentials page](https://platform.keywordsai.co/platform/api/credentials)
+<img height="200" width="500"  src="/images/bring-own-key.png" alt="Dashboard Page"/>
+2. Add your Perplexity credentials.
+<img height="200" width="300"  src="/images/providers/perplexity.png" alt="Dashboard Page"/>
+
+## Add it in code
+- Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy-endpoints/chat-completions) to use your own Perplexity credits.
+
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "perplexity": {
+      "api_key": "your-api-key"
+    }
+  }
+}
+```

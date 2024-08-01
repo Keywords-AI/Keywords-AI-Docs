@@ -1,0 +1,48 @@
+---
+title: OpenAI SDK
+description: Use OpenAI SDK with Keywords AI
+icon: "cube"
+---
+
+You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint with OpenAI SDK under two lines of code change.
+
+<CodeGroup>
+```Python Python
+from openai import OpenAI
+
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key=YOUR_KEYWORDSAI_API_KEY,
+)
+
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[{"role":"user", "content":"Tell me a long story"}],
+    stream=True,
+    extra_body={"customer_identifier": "customer_11"}
+)
+```
+
+```TypeScript TypeScript
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api/",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const chatCompletion = await openai.chat.completions.create({
+  model: "gpt-3.5-turbo",
+  messages: [{"role": "user", "content": "Hello"}],
+});
+
+```
+</CodeGroup>
+
+
+You can pass any of the [OpenAI parameters](/api-endpoints/proxy-endpoints/chat-completions#openai-parameters) directly in the `client.chat.completions.create` method. 
+
+To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `extra_body` parameter. In the above example, `customer_identifier` is the Keywords AI parameter. These parameters will take precedence over the OpenAI parameters if they are conflicting.
+
+

@@ -1,0 +1,21 @@
+---
+title: "401: Unauthorized"
+icon: "circle-exclamation"
+---
+
+
+## Description
+
+This error code usually means your authentication credential (API Key in this case) is invalid, either because it is expired or it is revoked by someone in your organization.
+
+<AccordionGroup>
+  <Accordion title="API Key Invalid">
+    This error indicates that the API key provided in the request is not recognized by the server. Ensure that the key is correctly inserted and matches the key provided during your API setup. Double-check for any typographical errors or misconfigurations.
+
+    **Possible Solutions**
+    - Verify the API key for accuracy.
+    - Ensure right header is present: ```Bearer {KEYWORDSAI_API_KEY}```
+    - Ensure no extra spaces or characters are added.
+  </Accordion>
+
+</AccordionGroup>
