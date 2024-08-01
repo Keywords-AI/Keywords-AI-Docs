@@ -1,0 +1,77 @@
+---
+title: "User update"
+api: "PATCH https://api.keywordsai.co/api/user/update/<str:customer_identifier>"
+---
+
+User update endpoint allows you to update user information, and set budgets and limits for a specific user. 
+
+Make sure to replace `YOUR_KEYWORDSAI_API_KEY` with your actual Keywords AI API key, and `<str:customer_identifier>` with the actual customer identifier.
+
+
+
+<ParamField path="name" type="string">
+    User's name.
+</ParamField>
+<ParamField path="email" type="string">
+    User's email address.
+</ParamField>
+<ParamField path="period_start" type="string">
+    The start of the budget period in ISO Format: `YYYY-MM-DD` (e.g. `2024-03-09`). If not provided, the current date will be used.
+
+    This field will automatically roll over to the next period if the current date is past the end of the period.
+</ParamField>
+
+<ParamField path="period_end" type="string">
+    The end of the budget period in ISO Format: `YYYY-MM-DD` (e.g. `2024-03-09`). If not provided, it will be set based on the `period_start` + `budget_duration`. (e.g. `2024-03-09` + `1 month` = `2024-04-09`)
+
+    This field will automatically roll over to the next period if the current date is past the end of the period.
+</ParamField>
+
+<ParamField path="budget_duration" type="string">
+    Type of budget duration. Possible values are `daily`, `weekly`, `monthly`, and `yearly`. The default value is `monthly`.
+</ParamField>
+
+<ParamField path="period_budget" type="number">
+    The budget amount for the period. The default value is `null`, which means no budget is set.
+</ParamField>
+<ParamField path="metadata" type="object">
+    Customized metadata for the user. Any key-value pairs can be added here.
+</ParamField>
+
+<RequestExample>
+```Python Python
+import requests
+
+url = "https://api.keywordsai.co/api/user/update/some_customer_identifier"
+api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
+data = {
+    "period_budget": 30
+}
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch("https://api.keywordsai.co/api/user/update/some_customer_identifier", {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer Your_Keywords_AI_API_Key '
+  },
+    body: JSON.stringify({
+        period_budget: 30,
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+</RequestExample>
+
+

@@ -1,0 +1,40 @@
+---
+title: "AWS Bedrock"
+description: "Use your own AWS credits through Keywords AI"
+icon: "lock-keyhole-open"
+---
+
+There are 2 ways to add your AWS Bedrock credentials to your requests:
+## Add it from the UI
+1. Go to [Credentials page](https://platform.keywordsai.co/platform/api/credentials)
+<img height="200" width="500"  src="/images/bring-own-key.png" alt="Dashboard Page"/>
+2. Add your AWS Bedrock credentials.
+<img height="200" width="300"  src="/images/providers/bedrock.png" alt="Dashboard Page"/>
+
+## Add it in code
+- Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy-endpoints/chat-completions) to use your own AWS credits.
+
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "bedrock": {
+      "aws_access_key_id": "aws_access_key_id",
+      "aws_secret_access_key": "aws_secret_access_key",
+      "aws_region_name": "aws_region_name",
+    }
+  }
+}
+```
+
+## Requirements
+1. Ensure your **deployment name** matches those listed on our [Models page](https://platform.keywordsai.co/platform/models).
+2. Confirm that your models are available in the region specified by your credentials.
+<Warning>Credentials validation is not supported. Failure to comply with these requirements will result in errors!</Warning>
+
+### How to get your AWS Bedrock credentials
+1. Go to `https://aws.amazon.com/` and click on `Sign In to the Console`.
+2. Choose your region and click on `Security credentials` in the top right corner.
+3. Click on `Access keys` and then `Create New Access Key`.
+4. You will see your `Access key ID` and `Secret access key`. Copy these values and use them in the `aws_access_key_id` and `aws_secret_access_key` fields in the request body.
+5. You can find your `aws_region_name` in the URL of the AWS console. For example, if the URL is `https://us-west-2.console.aws.amazon.com/`, then the `aws_region_name` is `us-west-2`.

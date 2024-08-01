@@ -1,0 +1,154 @@
+---
+title: "Async logging"
+description: "Log your LLM requests and responses asynchronously"
+icon: "calendar-lines-pen"
+---
+## Benefits of async logging:
+- Monitor your LLM performance with 0 latency impact.
+- Operates outside the critical path of your application, ensuring no disruptions.
+- Gain comprehensive observability of your LLM applications.
+
+## What you will miss:
+- The ability to call over 200 LLMs using the same format.
+- Comprehensive features that ensure the scalability and reliability of your LLM applications.
+
+## Steps:
+### Create an account
+
+Go to Keywords AI's [sign up page](https://platform.keywordsai.co/signup) to create an account. You can use email or Google account to sign up.
+
+{/* After you complete your onboarding questions, you will see this page: */}
+
+{/* <img src="/images/welcome-page.png" /> */}
+
+{/* Welcome to Keywords AI! */}
+
+### Create an API key
+
+To create an API key, visit the [API key page](https://platform.keywordsai.co/platform/api/api-keys)
+
+{/* <img src="/images/create-api-key.jpg" alt="Create API key placeholder" /> */}
+
+- Name your API key for future reference
+- Pick an environment (test or production)
+- Paste your API key in the code snippet below
+
+The API key will show up only once, <strong>Be careful and save it somewhere safe!</strong>
+
+
+<Note>For the **Free plan users**, you can only log 10k LLM requests per month. Subscribe to our [team plan](https://keywordsai.co/#/pricing) to get more credits.</Note>
+
+### Example call:
+Using the endpoint below, you can log your requests and responses to the Keywords AI API.
+```json
+url = "https://api.keywordsai.co/api/request-logs/create/"
+```
+
+Check out the [Logging endpoint page](/api-endpoints/async-endpoints/request-logging-endpoint) to see all supported parameters.
+
+
+<CodeGroup>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "model": "gpt-4",
+    "prompt_messages": [
+        {
+            "role": "user",
+            "content": "Hi"
+        },
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "prompt_tokens": 8,
+    "completion_tokens": 16,
+    "cost": 0.00042,
+    "latency": 0.0,
+    "timestamp": "2024-04-15T08:30:37.721313Z",
+    "metadata": {},
+    "customer_identifier": "456467",
+}
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.request("POST", url, headers=headers, json=payload)
+```
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/request-logs/create/';
+const headers = {
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    model: 'gpt-4',
+    prompt_messages: [
+        {
+            role: "user",
+            content: "Hi"
+        },
+    ],
+    completion_message: {
+        role: "assistant",
+        content: "Hi, how can I assist you today?"
+    },
+    customer_identifier: '456467',
+    prompt_tokens: 8,
+    completion_tokens: 16,
+    cost: 0.00042,
+    latency: 0.0,
+    timestamp: '2024-04-15T08:30:37.721313Z',
+    time_to_first_token: 0.0,
+    tokens_per_second: 0.0,
+    metadata: {},
+    stream: false,
+    status_code: 200,
+    warnings: '',
+    has_warnings: false,
+    error_message: '',
+    is_test: false,
+};
+
+fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+})
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
+-d '{
+    "model": "gpt-4",
+    "prompt_messages": [
+        {
+          "role": "user",
+          "content": "Hi"
+        },
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "prompt_tokens": 8,
+    "completion_tokens": 16,
+    "cost": 0.00042,
+    "latency": 0.0,
+    "timestamp": "2024-04-15T08:30:37.721313Z",
+    "metadata": {},
+    "customer_identifier": "456467",
+}'
+```
+</CodeGroup>

@@ -1,0 +1,59 @@
+---
+title: "Faithfulness"
+icon: "book-bible"
+---
+
+Faithfulness measures how grounded is the generated answer on the retrieved contexts.
+
+## Deterministic metrics [(read more)](https://docs.relari.ai/v0.3/metrics/generation/deterministic/faithfulness)
+Below is the list of deterministic metrics that measure the relationship between the generated answer and the retrieved contexts.
+
+- **ROUGE-L precision** measures the longest common subsequence between the generated answer and the retrieved contexts.
+
+<img src="/images/evaluation/generation/rouge-l-precision.png"/>
+
+- **Token overlap precision** calculates the precision of token overlap between the generated answer and the retrieved contexts.
+
+<img src="/images/evaluation/generation/token-overlap.png"/>
+
+- **BLEU** (Bilingual Evaluation Understudy) calculates the n-gram precision. (Below: `p_n` is the n-gram precision, `w_n` is the weight for each n-gram, and BP is the brevity penalty to penalize short answers)
+
+<img src="/images/evaluation/generation/BLEU.png"/>
+
+- **Rouge|Token Overlap|Bleu Faithfulness** is defined as the proportion of the sentences in the generated answer that can matched to the retrieved context above a `threshold`.
+
+Keywords AI defines the `threshold` as **0.5**.
+
+<img src="/images/evaluation/generation/faithfulness.png"/>
+
+## LLM-Based metrics [(read more)](https://docs.relari.ai/v0.3/metrics/generation/llm-based/llm_faithfulness)
+
+Keywords AI prompts the LLM to calculate faithfulness based on classifying faithfulness by statement:
+
+`classify_by_statement = TRUE` where LLM is prompted to evaluate the faithfulness of each statement in the Generated Answer and outputs a `float` score:
+
+<img src="/images/evaluation/generation/llm-based-faithfulness.png"/>
+
+## Settings and parameters
+
+1. Go to Keywords AI (on top of the left nav bar) > Evaluation > Text generation > Faithfulness
+<img src="/images/evaluation/generation/faithfulness-settings.png"/>
+
+2. Click on the `Faithfulness` card to create the setting:
+<img src="/images/evaluation/generation/faithfulness-modal.png"/>
+- Click the enable switch to turn on the evaluation
+- Pick which method you want to use:
+    - LLM-based
+    - ROUGE-L Precision
+    - Token Overlap Precision
+    - BLEU
+- Pick a LLM model you want to run the evaluation with (if you choose LLM-based method)
+- Hit the "Save" button.
+
+3. Make an API call, and the evaluation will be run based on the [`Ramdom sampling`](/features/evaluation/overview#sampling) setting.
+
+4. Check results in the [requests log](https://platform.keywordsai.co/platform/requests)
+
+<img src="/images/evaluation/check-results.png" />
+
+

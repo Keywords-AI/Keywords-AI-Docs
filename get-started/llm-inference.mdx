@@ -1,0 +1,233 @@
+---
+title: "LLM proxy"
+description: "Call 200+ LLMs using the same input/output format with 2 lines of code"
+icon: "arrows-split-up-and-left"
+---
+## Benefits of LLM proxy:
+- Call over 200 LLMs using the same format.
+- Gain comprehensive observability of your LLM applications.
+- Ensure your LLM applications become more scalable and reliable.
+
+## Considerations:
+- May not be suitable for applications with strict latency requirements (100 - 300ms added).
+- May not be ideal for those who do not want to integrate a third-party service into the core of their application.
+
+## Steps:
+### Create an account
+
+Go to Keywords AI's [sign up page](https://platform.keywordsai.co/signup) to create an account. You can use your email or Google account to sign up.
+
+{/* After you complete your onboarding questions, you will see this page: */}
+
+{/* <img src="/images/welcome-page.png" /> */}
+
+{/* Welcome to Keywords AI! */}
+
+### Create an API key
+
+To create an API key, visit the [API key page](https://platform.keywordsai.co/platform/api/api-keys)
+
+{/* <img src="/images/create-api-key.jpg" alt="Create API key placeholder" /> */}
+
+- Name your API key for future reference
+- Pick an environment (test or production)
+- Click the `View code` button to copy the code into your codebase
+{/* - Pick an expiry date (optional, default is never expired) */}
+{/* - Choose the models you want the router to route between (pick at least one) */}
+{/* - Pick a rate limit (option, default as the maximum rate limit of your plan, see [rate limit](/guides/limits#rate-limits)) */}
+{/* - Pick a spending limit (optional) */}
+
+The API key will show up only once, <strong>Be careful and save it somewhere safe!</strong>
+
+{/* <Card icon="link" href="/api-usage/api-keys" title="API Key Concepts">
+  Learn More about Keywords AI API keys here
+</Card> */}
+
+### Add credentials
+For the **Free plan users**, you have to use your own credentials to call LLMs. See how to [add your credentials here](/integration/own-api-keys).
+<img height="200" width="500"  src="/images/bring-own-key.png" alt="Dashboard Page"/>
+### Try Keywords AI with the OpenAI SDK 
+**Install the OpenAI SDK **
+
+```bash 
+pip install openai 
+```
+<CodeGroup>
+```Python Python
+from openai import OpenAI
+
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[{"role":"user", "content":"Tell me a long story"}],
+    stream=True,
+    extra_body={"customer_identifier": "customer_11"}
+)
+```
+
+```TypeScript TypeScript
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api/",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const chatCompletion = await openai.chat.completions.create({
+  model: "gpt-3.5-turbo",
+  messages: [{"role": "user", "content": "Hello"}],
+});
+
+```
+</CodeGroup>
+
+### Try Keywords AI with a standard API call
+
+<CodeGroup>
+```python Python
+import requests
+def demo_call(input, 
+              model="gpt-3.5-turbo",
+              token="YOUR_KEYWORDS_AI_API_KEY",
+              stream=False
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        "stream": stream,
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data, stream=stream)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY'
+  },
+    body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [{role: 'user', content: "Say 'Hello World'"}]
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+```bash Bash
+curl -X POST "https://api.keywordsai.co/chat/completions" 
+-H "Content-Type: application/json" 
+-H "Authorization: Bearer Your_KeywordsAI_API_Key" 
+-d "{
+  "model": "gpt-3.5-turbo",
+  "messages": [{"role": "user", "content": "Hello"}],
+  "stream": false,
+  "max_tokens": 100,
+  ... other parameters in similar format ...
+}"
+```
+
+```PHP PHP
+<?php
+  $ch = curl_init();
+    
+  curl_setopt($ch, CURLOPT_URL, "https://api.keywordsai.co/chat/completions");
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    "Content-Type: application/json",
+    "Authorization: Bearer Your_KeywordsAI_API_Key",
+  ));
+  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array(
+    "model" => "gpt-3.5-turbo",
+    "messages" => array(["role" => "user", "content" => "Hello"]),
+    "stream" => false,
+    "max_tokens" => 100,
+    // ... other parameters in similar format ...
+  )));
+    
+  $response = curl_exec($ch);
+  curl_close($ch);
+?>
+```
+
+```Go Go
+package main
+import (
+  "bytes"
+  "net/http"
+)
+    
+func main() {
+  url := "https://api.keywordsai.co/chat/completions"
+  method := "POST"
+    
+  payload := []byte(`{
+    "model" : "gpt-3.5-turbo",
+    "messages": [{"role": "user", "content": "Hello"}],
+    "stream": false,
+    "max_tokens": 100,
+    ... other parameters in similar format ...
+  }`)
+    
+  client := &http.Client{}
+  req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+    
+  if err != nil {
+    panic(err)
+  }
+    
+  req.Header.Add("Content-Type", "application/json")
+  req.Header.Add("Authorization", "Bearer Your_KeywordsAI_API_Key")
+    
+  res, err := client.Do(req)
+  defer res.Body.Close()
+}
+```
+</CodeGroup>
+
+- **URL change**: Modify the API endpoint URL in your code from OpenAI’s URL to the Keywords AI endpoint URL: `https://keywordsai.co/api/chat/completions`.
+- **API key**: Replace the OpenAI API key with your Keywords AI API key.
+- **Parameters**: See supported parameters in the [API reference](/api-endpoints/proxy-endpoints/chat-completions).
+
+## Response
+
+The results should be printed in the console.
+
+```json
+{
+  "id": "chatcmpl-8Ygj0WAGNhHBFjatPCefcPeNi12ct",
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": { "content": "Hello World", "role": "assistant" }
+    }
+  ],
+  "created": 1703230636,
+  "model": "gpt-3.5-turbo",
+  "object": "chat.completion",
+  "system_fingerprint": null,
+  "usage": { "completion_tokens": 2, "prompt_tokens": 12, "total_tokens": 14 },
+  "_response_ms": 653.2679999999999
+}
+```
+
+Congratulations! You have finished the “Hello World” tutorial for Keywords AI API
