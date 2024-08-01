@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "mintlify": "^4.0.131",
-    "posthog-js": "^1.137.0",
-    "yarn": "^1.22.21"
-  }
-}
