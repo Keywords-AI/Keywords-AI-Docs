@@ -69,6 +69,7 @@
         "get-started/overview",
         {
           "group": "Quick start",
+          "icon": "rocket",
           "pages": [
             "get-started/async-logging",
             "get-started/llm-inference"
@@ -82,6 +83,7 @@
       "pages": [
         {
           "group": "Supported SDKs",
+          "icon": "briefcase",
           "pages": [        
           "integration/development-frameworks/openai-sdk",
           "integration/development-frameworks/anthropic",
@@ -93,6 +95,7 @@
         "integration/supported-models",
         {
           "group": "Supported providers",
+          "icon": "hand-holding-heart",
           "pages": [
             "integration/own-api-keys",
             "integration/providers/azure",
@@ -114,6 +117,7 @@
       "pages": [
         {
           "group": "Monitoring",
+          "icon": "eyes",
           "pages": [
             "features/monitoring/analytics",
             "features/monitoring/logging",
@@ -128,6 +132,7 @@
         },
         {
           "group": "Proxy",
+          "icon": "cloud",
           "pages": [
             "features/generation/key-management",
             "features/generation/fallbacks",
@@ -140,6 +145,7 @@
         },
         {
           "group": "User analytics",
+          "icon": "user-magnifying-glass",
           "pages": [
             "features/user/user-data",
             "features/user/user-creation",
@@ -148,14 +154,17 @@
         },
         {
           "group": "Evaluation",
+          "icon": "microscope",
           "pages": [
             "features/evaluation/overview",
             {
               "group": "Retrieval",
+              "icon": "puzzle-piece",
               "pages": ["features/evaluation/retrieval/context-precision"]
             },
             {
               "group": "Text generation",
+              "icon": "text",
               "pages": [
                 "features/evaluation/generation/faithfulness",
                 "features/evaluation/generation/flesch-kincaid",
@@ -164,6 +173,7 @@
             },
             {
               "group": "Other",
+              "icon": "gem",
               "pages": ["features/evaluation/other/sentiment"]
             }
           ]
