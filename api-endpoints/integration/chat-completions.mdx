@@ -298,13 +298,34 @@ Specifying a particular tool via the code below forces the model to call that to
 Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message the model generates is valid JSON.
 
 You must have a "json" as a keyword in the prompt to use this feature.
-
+<AccordionGroup>
   <Accordion title="Properties">
     <ParamField path="type" type="string" required={true}>
       The type of response format. options: `json_object`, `text`
-      <Note>If you're using models from **Vertex AI**, the options should be`application\json` for JSON mode and `text/plain` for text mode </Note>
     </ParamField>
   </Accordion>
+    <Accordion title="Vertex AI example">
+    If you are using Vertex AI and want to use JSON mode, you should specify a `response_schema` in the `response_format` parameter. Check the [details of response schema here.](https://json-schema.org/understanding-json-schema/reference/string)
+```python Example.py
+response_schema = {
+    "type": "array", # or "string", "number", "object", "boolean"....
+    "items": { # items only for array type
+        "type": "object", 
+        "properties": {  # properties only for object type
+          "number": { "type": "number" },
+          "street_name": { "type": "string" },
+          "street_type": { "enum": ["Street", "Avenue", "Boulevard"] }
+        } 
+    },
+}
+
+response_format={
+        "type": "json_object",
+        "response_schema": response_schema,
+    },
+```
+  </Accordion>
+  </AccordionGroup>
 </ParamField>
 
 ## Keywords AI parameters
