@@ -256,7 +256,7 @@ Specifying a particular tool via the code below forces the model to call that to
 </ParamField>
 
 <ParamField path="n" type="number" default={1}>
-  How many chat completion choices to generate for each input message.
+  How many chat completion choices are generated for each input message.
 
   <strong>Caveat!</strong> While this can help improve generation quality by picking the optimal choice, this could also lead to more token usage.
 </ParamField>
@@ -302,6 +302,7 @@ You must have a "json" as a keyword in the prompt to use this feature.
   <Accordion title="Properties">
     <ParamField path="type" type="string" required={true}>
       The type of response format. options: `json_object`, `text`
+      <Note>If you're using models from **Vertex AI**, the options should be`application\json` for JSON mode and `text/plain` for text mode </Note>
     </ParamField>
   </Accordion>
 </ParamField>
@@ -430,6 +431,21 @@ This parameter specifies the time-to-live (TTL) for the cache in seconds.
   When set to true, only the request and [performance
   metrics](/performance-monitoring/monitoring-metrics) will be recorded, input
   and output messages will be omitted from the log.
+</ParamField>
+
+<ParamField path="model_name_map" type="object">
+<Note>This parameter is for Azure deployment only!! </Note>
+We understand that you may have a custom name for your Azure deployment. Keywords AI is using the model's origin name which may not be able to match your deployment. You can use this parameter to map the default name to your custom name. 
+    <Accordion title="Example">
+```json
+{
+    "model_name_map": {
+      "original_model_name": "custom_model_name"
+      // "azure/gpt-4o": "your azure gpt-4o's deployment name"
+    }
+}
+```
+      </Accordion>
 </ParamField>
 
 <ParamField path="models" type="array">
