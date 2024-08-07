@@ -3,7 +3,7 @@ title: Overview
 icon: "scale-unbalanced"
 ---
 
-Keywords AI integrates with [Continuous Eval](https://docs.relari.ai/v0.3/getting-started/introduction), an open-source package created for granular and holistic evaluation of GenAI application pipelines, to provide a comprehensive evaluation of the LLM-generated results from the Keywords AI API.
+Keywords AI integrates with [Continuous Eval](https://docs.relari.ai/metrics/intro), an open-source package created for granular and holistic evaluation of GenAI application pipelines, to provide a comprehensive evaluation of the LLM-generated results from the Keywords AI API.
 
 You can find the evaluation settings at Keywords AI (top of left nav bar) > [Evaluation](https://platform.keywordsai.co/platform/api/evaluations).
 <img src="/images/evaluation/overview.png"/>
@@ -23,11 +23,11 @@ Keywords AI provides the following categories of evaluation metrics:
 ### 2. Text generation metrics:
 - **Faithfulness**: measures how grounded is the answer on the retrieved contexts ([see more](/features/evaluation/generation/faithfulness)).
 - **Flesch–Kincaid readability**: measures the readability of the generated text ([see more](/features/evaluation/generation/flesch-kincaid)).
-- **Relevance**: measures the relevance of the generated text to the query ([see more](/features/evaluation/generation/relevance)).
+- **Relevance**: measures the relevance of the generated text to the query ([see more](/features/evaluation/generation/answer-relevance)).
 
 ### 3. Other metrics:
 - **Sentiment**: measures the sentiment of the generated text ([see more](/features/evaluation/other/sentiment)).
-- **Topic**: classify the topic of the generated text ([see more](/features/evaluation/other/topic)).
+{/* - **Topic**: classify the topic of the generated text ([see more](/features/evaluation/other/topic)). */}
 
 
 ## Run evaluation mannually
