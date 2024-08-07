@@ -45,28 +45,28 @@ You could specify the load balancing weights for different models. This is usefu
 
     The `models` field will overwrite the `load_balance_group` you specified in the UI.
     <Accordion title="Example code">
-    ```json
-    {
-        "load_balance_group": {
-            "group_id":"THE_GROUP_ID" // from Load balancing page
-            "models": [
-            {
-                "model": "azure/gpt-35-turbo",
-                "weight": 1
-            },
-            {
-                "model": "azure/gpt-4",
-                "credentials": { // add your own credentials if you want to use your own Azure credentials or custom model name
-                    "api_base": "Your own Azure api_base",
-                    "api_version": "Your own Azure api_version",
-                    "api_key": "Your own Azure api_key"
-            }
-                "weight": 1
-            }
-        ]
-        }
-    }
-    ```
+```json
+{
+  "load_balance_group": {
+      "group_id":"THE_GROUP_ID", // from Load balancing page
+      "models": [
+        {
+          "model": "azure/gpt-35-turbo",
+          "weight": 1
+        },
+        {
+          "model": "azure/gpt-4",
+          "credentials": { // add your own credentials if you want to use your own Azure credentials or custom model name
+              "api_base": "Your own Azure api_base",
+              "api_version": "Your own Azure api_version",
+              "api_key": "Your own Azure api_key"
+          },
+          "weight": 1
+        } 
+      ]
+  }
+}
+```
     </Accordion>
     </Step>
 </Steps>
