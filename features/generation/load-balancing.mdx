@@ -1,12 +1,81 @@
 ---
 title: "Load balancing"
-description: "Balance the load of your LLM requests between different models."
+description: "Balance the load of your LLM requests between different models and API keys."
 icon: "chart-network"
 ---
 
 Load balancing is a feature that allows you to balance the request load across different models or deployments. You could specify weights for each model/deployment based on their rate limit and your preference.
 
-_See all supported params [here](/api-endpoints/proxy-endpoints/chat-completions)._
+_See all supported params [here](/api-endpoints/integration/chat-completions)._
+
+## Load balancing between models
+You could specify the load balancing weights for different models. This is useful when you want to balance the load between different models from different providers. 
+
+
+<Steps>
+    <Step title="Go to the Load balancing page">
+        Go to the [Load balancing page](https://platform.keywordsai.co/platform/api/load-balance) and click on ` Create load balancing group`
+        <img src="/images/api-features/lb_group.jpg" alt="Load balancing group"/>
+    </Step>
+    <Step title="Add models">
+        Click `Add model` to add models and specify the weight for each model and add your own credentials.
+    </Step>
+        <Step title="Copy group ID to your codebase">
+        After you have added the models, copy the group ID (**the blue text**) to your codebase and use it in your requests.
+
+<Note> **The `model` parameter will overwrite the `load_balance_group`!**  </Note>
+```json
+{
+// you don't need to specify the model parameter, otherwise, the model parameter will overwrite the load balance group
+    "messages": [
+        {
+            "role": "user",
+            "content": "Hi, how are you?"
+        }
+    ],
+    "load_balance_group": {
+        "group_id":"THE_GROUP_ID" // from Load balancing page
+    }
+}
+```
+    </Step>
+
+    <Step title="Add load balancing group in code (Optional)">
+    You could also add the load balancing group in your codebase directly. 
+
+    The `models` field will overwrite the `load_balance_group` you specified in the UI.
+    <Accordion title="Example code">
+```json
+{
+  "load_balance_group": {
+      "group_id":"THE_GROUP_ID", // from Load balancing page
+      "models": [
+        {
+          "model": "azure/gpt-35-turbo",
+          "weight": 1
+        },
+        {
+          "model": "azure/gpt-4",
+          "credentials": { // add your own credentials if you want to use your own Azure credentials or custom model name
+              "api_base": "Your own Azure api_base",
+              "api_version": "Your own Azure api_version",
+              "api_key": "Your own Azure api_key"
+          },
+          "weight": 1
+        } 
+      ]
+  }
+}
+```
+    </Accordion>
+    </Step>
+</Steps>
+
+
+
+You could also set up fallback models to avoid errors. It will fall back to the list of models you specified in the `fallback` field once have any outages. Check out the [Fallbacks](/features/generation/fallbacks) section for more information.
+
+
 
 
 ## Load balancing between deployments
@@ -18,50 +87,6 @@ You could go to the platform and add multiple deployments for the same provider.
   src="/images/api-features/webhooks/loadbalancing.mp4"
 ></video>
 
-## Load balancing between models
-You could specify the load balancing weights for different models. This is useful when you want to balance the load between different models from different providers. 
-
-You could also add your own credentials to use your credits. See how to add your own credentials [here](/integration/own-api-keys).
-
-For the example below, the percentage of requests sent to `claude-3-5-sonnet-20240620` and `azure/gpt-35-turbo` is 50% each.
-
-**This Parameter will overwrite the `model` parameter!**
-
-```json
-{
-    // ...other parameters...
-    "loadbalance_models": [
-        {
-            "model": "claude-3-5-sonnet-20240620",
-            "weight": 34,
-            "credentials": { // Your own Anthropic API key, optional for team plan and above
-                "api_key": "Your own Anthropic API key"
-            }
-        },
-        {
-            "model": "azure/gpt-35-turbo",
-            "weight": 34,
-            "credentials": { // Your own Azure credentials, optional for team plan and above
-                "api_base": "Your own Azure api_base",
-                "api_version": "Your own Azure api_version",
-                "api_key": "Your own Azure api_key"
-            }
-        }
-    ]
-}
-```
-<ParamField path="model" type="string" required>
-  Specify which model to balance load. See the list of models [here](/integration/supported-models). 
-</ParamField>
-<ParamField path="weight" type="integer" required>
-    Specify the weight of the model (has to be a positive integer). The higher the weight, the more requests will be sent to the model.
-</ParamField>
-<ParamField path="credentials" type="list" >
-This is required for all free plan users. For team plan and above, this is optional. <br/>
-See how to add your own credentials [here](/integration/providers/providers-overview).
-</ParamField>
-
-You could also set up fallback models to avoid downtime. If the model you specified in the `model` field is not available, it will fall back to the list of models you specified in the `fallback` field. Check out the [Fallbacks](/features/generation/fallbacks) section for more information.
 
 {/* 
 ## How load balancing works
@@ -100,3 +125,48 @@ keywords_generation(module, **other_kwargs)
 distribution = [rate_limit_1, rate_limit_2, rate_limit_3] / sum_of_rate_limits <br/>
 weights = add_latency_weight_to_distribution(distribution, [latency_1, latency_2, latency_3])<br/>
 model = random.choices(balancing_between, weights=weights) */}
+
+
+## Deprecated params
+The `loadbalance_models` parameter is deprecated. You should use the `load_balance_group` parameter instead.
+<AccordionGroup>
+<Accordion title="Example code">
+```json
+{
+    // ...other parameters...
+    "loadbalance_models": [
+        {
+            "model": "claude-3-5-sonnet-20240620",
+            "weight": 34,
+            "credentials": { // Your own Anthropic API key, optional for team plan and above
+                "api_key": "Your own Anthropic API key"
+            }
+        },
+        {
+            "model": "azure/gpt-35-turbo",
+            "weight": 34,
+            "credentials": { // Your own Azure credentials, optional for team plan and above
+                "api_base": "Your own Azure api_base",
+                "api_version": "Your own Azure api_version",
+                "api_key": "Your own Azure api_key"
+            }
+        }
+    ]
+}
+```
+
+</Accordion>
+<Accordion title="Depracted params">
+<ParamField path="model" type="string" required>
+  Specify which model to balance load. See the list of models [here](/integration/supported-models). 
+</ParamField>
+<ParamField path="weight" type="integer" required>
+    Specify the weight of the model (has to be a positive integer). The higher the weight, the more requests will be sent to the model.
+</ParamField>
+<ParamField path="credentials" type="list" >
+This is required for all free plan users. For team plan and above, this is optional. <br/>
+See how to add your own credentials [here](/integration/providers/providers-overview).
+</ParamField>
+</Accordion>
+</AccordionGroup>
+
