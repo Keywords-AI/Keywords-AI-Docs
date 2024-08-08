@@ -268,7 +268,6 @@ headers = {
     "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
     "Content-Type": "application/json"
 }
-
 payload = {
     "model": "gpt-4",
     "prompt_messages": [
@@ -337,7 +336,6 @@ payload = {
     "error_message": "",
     "is_test": False,
 }
-
 response = requests.request("POST", url, headers=headers, json=payload)
 ```
 ```typescript TypeScript
