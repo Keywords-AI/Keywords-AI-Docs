@@ -113,6 +113,12 @@
       ]
     },
     {
+      "group": "Integrations",
+      "pages": [
+        "integration/posthog"
+      ]
+    },
+    {
       "group": "Features",
       "pages": [
         {
