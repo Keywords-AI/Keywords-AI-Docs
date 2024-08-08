@@ -269,7 +269,6 @@ headers = {
     "Content-Type": "application/json"
 }
 
-response = requests.request("POST", url, headers=headers, json=payload)
 payload = {
     "model": "gpt-4",
     "prompt_messages": [
@@ -338,6 +337,7 @@ payload = {
     "error_message": "",
     "is_test": False,
 }
+response = requests.request("POST", url, headers=headers, json=payload)
 ```
 ```typescript TypeScript
 const url = 'https://api.keywordsai.co/api/request-logs/create/';
