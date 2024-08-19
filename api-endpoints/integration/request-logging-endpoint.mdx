@@ -219,12 +219,12 @@ Pass this parameter in if you want to log your self-host / fine-tuned model.
 Cost of the inference in US dollars.
 </ResponseField>
 
-<ResponseField name="latency" type="float" default={0}>
+<ResponseField name="generation_time" type="float" default={0}>
 Total generation time. Time from receiving the first token to receiving the last token in seconds. **Do not** confuse this with `time_to_first_token`.
 </ResponseField>
 
-<ResponseField name="time_to_first_token" type="float" default={0.0}>
-The time it takes for the model to generate the first token after receiving a request.
+<ResponseField name="ttft" type="float" default={0.0}>
+Time to first token. The time it takes for the model to generate the first token after receiving a request.
 </ResponseField>
 <ResponseField name="tokens_per_second" type="float" default={0.0}>
 The number of tokens generated per second.
