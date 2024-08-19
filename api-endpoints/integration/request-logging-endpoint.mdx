@@ -220,7 +220,7 @@ Cost of the inference in US dollars.
 </ResponseField>
 
 <ResponseField name="generation_time" type="float" default={0}>
-Total generation time. Time from receiving the first token to receiving the last token in seconds. **Do not** confuse this with `time_to_first_token`.
+Total generation time. Generation time = TTFT (Time To First Token) + TPOT (Time Per Output Token) * #tokens. **Do not** confuse this with `ttft`.
 </ResponseField>
 
 <ResponseField name="ttft" type="float" default={0.0}>
@@ -402,9 +402,9 @@ const payload = {
     prompt_tokens: 8,
     completion_tokens: 16,
     cost: 0.00042,
-    latency: 0.0,
+    generation_time: 0.0,
     timestamp: '2024-04-15T08:30:37.721313Z',
-    time_to_first_token: 0.0,
+    ttft: 0.0,
     tokens_per_second: 0.0,
     metadata: {},
     stream: false,
@@ -484,9 +484,9 @@ curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
     "prompt_tokens": 8,
     "completion_tokens": 16,
     "cost": 0.00042,
-    "latency": 0.0,
+    "generation_time": 0.0,
     "timestamp": "2024-04-15T08:30:37.721313Z",
-    "time_to_first_token": null,
+    "ttft": 0.0,
     "metadata": {},
     "stream": false,
     "status_code": 200,
