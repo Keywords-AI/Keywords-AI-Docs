@@ -1,17 +1,21 @@
 ---
-title: "Customer identifier"
-description: "Use this as a tag to identify the user associated with the API call."
+title: "Customer"
+description: "Pass your customer's identifier to monitor the user's data in the Keywords AI platform."
 icon: "users"
 ---
 
-After you pass the `customer_identifier` parameter in your API call, you can monitor the user's data in the Keywords AI platform. 
+After you pass the `customer_params` parameter in your API call, you can monitor the user's data in the Keywords AI platform. 
 See how to get insights into your users' data [here](/features/user/user-data)
 
 ## Example code
 ```json
 {
     //...other_params,
-    "customer_identifier": "user_123"
+    "customer_params": {
+        "customer_identifier": "customer_123",
+        "name": "Hendrix Liu", //optional
+        "email": "hendrix@keywordsai.co" //optional
+    }
 }
 
 ```
@@ -45,7 +49,10 @@ response = keywords_ai_generate(
                      model="gpt-3.5-turbo", 
                      api_key="En5XoPkf.kSE2edr33UCjttnqhCzlN5tz5niosedg",
                      # Add the customer_identifier
-                    customer_identifier="customer_1"
+                    customer_params={"customer_identifier": "customer_1",
+                                      "name": "Hendrix Liu",
+                                      "email": "hendrix@keywordsai.co"}
+
               )
 ```
 
@@ -61,7 +68,10 @@ fetch('https://api.keywordsai.co/api/chat/completions', {
         model: 'gpt-3.5-turbo',
         messages: [{role: 'user', content: "Say 'Hello World'"}]
         // Add the customer_identifier
-        customer_identifier: "customer_1"
+        customer_params: {
+            customer_identifier: "customer_1",
+            name: "Hendrix Liu",
+            email: "hendrix@keywordsai.co"}
     })
 })
 .then(response => response.json())
