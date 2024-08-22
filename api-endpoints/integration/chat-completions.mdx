@@ -1,5 +1,5 @@
 ---
-title: Proxy
+title: LLM Proxy
 api: POST https://api.keywordsai.co/api/chat/completions
 ---
 
@@ -180,7 +180,7 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
     }
   ]
 }
-  ```
+```
 </Accordion>
  
 </ParamField>
@@ -222,7 +222,7 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
         }
       }
     }
-  ```
+```
     </Accordion>
 </ParamField>
 
@@ -237,7 +237,7 @@ Specifying a particular tool via the code below forces the model to call that to
     "type": "function",
     "function": {"name": "name_of_the_function"},
   }
-  ```
+```
 </ParamField>
 
 <ParamField path="frequency_penalty" type="number">
@@ -713,6 +713,6 @@ You can pass in a dictionary of your customer's API keys for specific models. If
         }
     ]
 }
-  ```
+```
   </Accordion>
 </ParamField>

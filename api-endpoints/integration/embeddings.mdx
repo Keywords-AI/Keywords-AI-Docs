@@ -1,0 +1,271 @@
+---
+title: Embeddings
+api: POST https://api.keywordsai.co/api/embeddings
+mode: wide
+---
+
+You could use Keywords AI's unified LLM API to call Embeddings model to turn text into numbers, unlocking use cases like search.
+
+Keywords AI now supports `text-embedding-3-large`, `text-embedding-3-small`, and `text-embedding-ada-002` models from OpenAI.
+
+| Model    | Description                           |  Output Dimension                     |
+| -------- | ------------------------------------- | ------------------------------------- |
+|`text-embedding-3-large`   | Most capable embedding model for both english and non-english tasks| 3,072|
+|`text-embedding-3-small`   |Increased performance over 2nd generation ada embedding model | 1,536|
+|`text-embedding-ada-002`   |Most capable 2nd generation embedding model, replacing 16 first generation models | 1,536|
+
+
+## Integration steps:
+
+<Steps>
+<Step title="Get your OpenAI API key" >
+Go to [OpenAI API plaform](https://platform.openai.com/api-keys) to get your OpenAI API key.
+</Step>
+<Step title="Add your credentials on Keywords AI credentials page" >
+You should add your OpenAI's API key on [Keywords AI credentials page](https://platform.keywordsai.co/platform/api/credentials).
+<img height="200" width="500"  src="/images/api-features/credentials.png"/>
+</Step>
+
+<Step title="Call your Embeddings model">
+<CodeGroup>
+```Python OpenAI Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/embeddings",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.embeddings.create(
+    model="text-embedding-3-small" # or "text-embedding-3-large" or "text-embedding-ada-002"
+    input="Your text string goes here",
+    extra_body={"customer_identifier": "customer_11"}  # All Keywords AI parameters are supported
+)
+```
+
+```TypeScript OpenAI TypeScript
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api/embeddings",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const embedding = await openai.embeddings.create({
+  model: "text-embedding-3-small",
+  input: "Your text string goes here",
+  encoding_format: "float",
+  extra_body: { customer_identifier: "customer_11" } // All Keywords AI parameters are supported
+});
+
+```
+</CodeGroup>
+</Step>
+
+</Steps>
+## OpenAI parameters 
+<ParamField path="model" type="string" required>
+ID of the model to use. Supported models are `text-embedding-3-large`, `text-embedding-3-small`, and `text-embedding-ada-002`.
+</ParamField>
+<ParamField path="input" type="string or array" required>
+nput text to embed, encoded as a string or array of tokens. To embed multiple inputs in a single request, pass an array of strings or array of token arrays. The input must not exceed the max input tokens for the model (8192 tokens for text-embedding-ada-002), cannot be an empty string, and any array must be 2048 dimensions or less.
+</ParamField>
+<ParamField path="encoding_format" type="string" Defaults={"float"}>
+The format to return the embeddings in. Can be either `float` or `base64`.
+</ParamField>
+<ParamField path="dimensions" type="integer">
+
+The number of dimensions the resulting output embeddings should have. Only supported in `text-embedding-3` and later models.
+</ParamField>
+
+## Keywords AI parameters
+See how to make a standard Keywords AI API call in the [Quick Start](/get-started/quick-start) guide.
+### Generation parameters
+
+<ParamField path="customer_credentials" type="object">
+You can pass in your customer's credentials for [supported providers](/integration/providers/providers-overview) and use their credits when our proxy is calling models from those providers. <br/>See details [here](/integration/own-api-keys)
+<Accordion title="Example">
+```json
+"customer_credentials": {
+
+  "openai": {
+    "api_key": "YOUR_OPENAI_API_KEY",
+  }
+}
+```
+</Accordion>
+</ParamField>
+
+
+<ParamField path="disable_log" type="boolean" deafault={false}>
+  When set to true, only the request and [performance
+  metrics](/performance-monitoring/monitoring-metrics) will be recorded, input
+  and output messages will be omitted from the log.
+</ParamField>
+
+### Observability parameters
+
+<ParamField path="metadata" type="dict">
+You can add any key-value pair to this metadata field for your reference. Check the [details of metadata here.](/features/generation/metadata)
+
+Contact team@keywordsai.co if you need extra parameter support for your use case.
+
+<Accordion title="Example">
+```json
+{
+  "my_value_key": "my_value"
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField path="customer_identifier" type="string">
+  Use this as a tag to identify the user associated with the API call. See the [details of customer identifier here.](/features/generation/customer-identifier)
+  <Accordion title="Example">
+```json
+{
+    //...other_params,
+    "customer_identifier": "user_123"
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField path="customer_email" type="string">
+  This is the email address of the user associated with the API call. You can add your corresponding user's email address to the request.
+  
+  You could also edit customer's emails on the platform. Check the [details of user editing here.](/features/user/user-creation)
+    <Accordion title="Example">
+```json
+{
+    //...other_params,
+    "customer_email": "hendrix@keywordsai.co"
+}
+```
+</Accordion>
+</ParamField>
+<ParamField path="thread_identifier" type="string">
+  See logs as a conversation log thread. Pass all logs with the same `thread_identifier` to see them in the same thread.
+    <Accordion title="Example">
+```json
+{
+    //...other_params,
+    "thread_identifier": "test_thread"
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField path="request_breakdown" type="boolean" default={false}>
+Adding this returns the summarization of the response in the response body. If streaming is on, the metrics will be streamed as the last chunk.
+
+  <Accordion title="Properties">
+    <CodeGroup>
+```json Regular Response
+{
+  "id": "chatcmpl-7476cf3f-fcc9-4902-a548-a12489856d8a",
+  //... main part of the response body ...
+  "request_breakdown": {
+    "prompt_tokens": 6,
+    "completion_tokens": 9,
+    "cost": 4.8e-5,
+    "prompt_messages": [
+      {
+        "role": "user",
+        "content": "How are you doing today?"
+      }
+    ],
+    "completion_message": {
+      "content": " I'm doing well, thanks for asking!",
+      "role": "assistant"
+    },
+    "model": "claude-2",
+    "cached": false,
+    "timestamp": "2024-02-20T01:23:39.329729Z",
+    "status_code": 200,
+    "stream": false,
+    "latency": 1.8415491580963135,
+    "scores": {},
+    "category": "Questions",
+    "metadata": {},
+    "routing_time": 0.18612787732854486,
+    "full_request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "How are you doing today?"
+        }
+      ],
+      "model": "claude-2",
+      "logprobs": true
+    },
+    "sentiment_score": 0
+  }
+}
+```
+```json Streaming Response
+//... other chunks ...
+// The following is the last chunk
+{
+  "id": "request_breakdown",
+  "choices": [
+    {
+      "delta": { "content": null, "role": "assistant" },
+      "finish_reason": "stop",
+      "request_breakdown": {
+        "prompt_tokens": 6,
+        "completion_tokens": 9,
+        "cost": 4.8e-5, //  In usd
+        "prompt_messages": [
+          {
+            "role": "user",
+            "content": "How are you doing today?"
+          }
+        ],
+        "completion_message": {
+          "content": " I'm doing well, thanks for asking!",
+          "role": "assistant"
+        },
+        "model": "claude-2",
+        "cached": false,
+        "timestamp": "2024-02-20T01:23:39.329729Z",
+        "status_code": 200,
+        "stream": false,
+        "latency": 1.8415491580963135, // in seconds
+        "scores": {},
+        "category": "Questions",
+        "metadata": {},
+        "routing_time": 0.18612787732854486, // in seconds
+        "full_request": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "How are you doing today?"
+            }
+          ],
+          "model": "claude-2",
+          "logprobs": true
+        },
+        "sentiment_score": 0
+      },
+      "index": 0,
+      "message": { "content": null, "role": "assistant" }
+    }
+  ],
+  "created": 1706100589,
+  "model": "extra_parameter",
+  "object": "chat.completion.chunk",
+  "system_fingerprint": null,
+  "usage": {}
+}
+```
+    </CodeGroup>
+  </Accordion>
+</ParamField>
+
+
+
+
+
+<RequestExample>
+</RequestExample>
