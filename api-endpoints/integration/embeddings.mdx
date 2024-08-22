@@ -37,7 +37,7 @@ client = OpenAI(
 )
 
 response = client.embeddings.create(
-    model="text-embedding-3-small" # or "text-embedding-3-large" or "text-embedding-ada-002"
+    model="text-embedding-3-small", # or "text-embedding-3-large" or "text-embedding-ada-002"
     input="Your text string goes here",
     extra_body={"customer_identifier": "customer_11"}  # All Keywords AI parameters are supported
 )
