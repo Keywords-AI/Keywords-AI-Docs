@@ -204,6 +204,14 @@
       ]
     },
     {
+      "group": "Multimodal integrations",
+      "pages": [
+        "api-endpoints/integration/text-to-speech",
+        "api-endpoints/integration/speech-to-text",
+        "api-endpoints/integration/embeddings"
+      ]
+    },
+    {
       "group": "User",
       "pages": [
         "api-endpoints/async-endpoints/users-data-endpoint",
