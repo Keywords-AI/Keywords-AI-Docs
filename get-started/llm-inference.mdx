@@ -71,17 +71,23 @@ response = client.chat.completions.create(
 ```
 
 ```TypeScript TypeScript
-import OpenAI from "openai";
+import { OpenAI } from "openai";
 
-const openai = new OpenAI({
-  baseURL: "https://api.keywordsai.co/api/",
-  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: process.env.KEYWORDS_AI_API_KEY,
 });
 
-const chatCompletion = await openai.chat.completions.create({
-  model: "gpt-3.5-turbo",
-  messages: [{"role": "user", "content": "Hello"}],
-});
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-3.5-turbo",
+    // @ts-expect-error
+    customer_identifier: "test_openai_chat",
+  })
+  .asResponse();
+
+console.log(await response.json());
 
 ```
 </CodeGroup>
