@@ -27,12 +27,23 @@ Check out the [Prompts page](https://platform.keywordsai.co/platform/prompts) to
 ## Example
 ```json
 {
-    "prompt_id": "prompt_id", //paste this from the prompt management page
-    "variables": {
+  "prompt"{
+     "prompt_id": "prompt_id", //paste this from the prompt management page
+     "variables": {
        "variable_name": "variable_value"
-    },
-    "version": 1 //specify which version of the prompt you want to use
+     },
+     "version": 1 //specify which version of the prompt you want to use
+     // "echo": true //optional parameter
+  }
 }
 ```
+### Optional parameter
+<ParamField path="echo" type="boolean" default={true}>
+  with echo on, the response body will have an extra field
+```json
+  "prompt_message" [an array of messages]
+```
+</ParamField>
+
 <Info>Check out [all Keywords AI supported params here](/api-endpoints/proxy-endpoints/chat-completions#generation-parameters).</Info>
 

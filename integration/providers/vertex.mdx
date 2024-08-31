@@ -35,6 +35,29 @@ Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy
   }
 }
 ```
+
+## Override credentials for a particular model. (Optional)
+One-off credential overrides. Instead of using what is uploaded for each provider, this targets credentials for individual models.
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "google_vertex_ai": {
+      "vertex_ai_project": "your-project",
+      "vertex_ai_location": "your-location",
+      "vertex_ai_credentials": credentials // a JSON object, you could also pass an entire JSON object here
+    }
+  },
+  "credential_override": {
+    "vertex_ai_beta/gemini-1.0-pro-001":{ // override for a specific model.
+      "vertex_ai_project": "your-project",
+      "vertex_ai_location": "your-location",
+      "vertex_ai_credentials": another_credentials // a JSON object, you could also pass an entire JSON object here
+    }
+  }
+}
+```
+
 ## Requirements
 1. Ensure your **deployment name** matches those listed on our [Models page](https://platform.keywordsai.co/platform/models).
 2. Confirm that your models are available in the region specified by your credentials.

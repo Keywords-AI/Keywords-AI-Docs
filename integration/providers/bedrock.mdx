@@ -27,6 +27,28 @@ There are 2 ways to add your AWS Bedrock credentials to your requests:
 }
 ```
 
+## Override credentials for a particular model. (Optional)
+One-off credential overrides. Instead of using what is uploaded for each provider, this targets credentials for individual models.
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "bedrock": {
+      "aws_access_key_id": "aws_access_key_id",
+      "aws_secret_access_key": "aws_secret_access_key",
+      "aws_region_name": "aws_region_name",
+    }
+  },
+  "credential_override": {
+    "bedrock/anthropic.claude-3-5-sonnet-20240620-v1:0":{ // override for a specific model.
+      "aws_access_key_id": "aws_access_key_id",
+      "aws_secret_access_key": "aws_secret_access_key",
+      "aws_region_name": "aws_region_name",
+    }
+  }
+}
+```
+
 ## Requirements
 1. Ensure your **deployment name** matches those listed on our [Models page](https://platform.keywordsai.co/platform/models).
 2. Confirm that your models are available in the region specified by your credentials.
