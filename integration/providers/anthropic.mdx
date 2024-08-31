@@ -25,3 +25,21 @@ Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy
   }
 }
 ```
+
+## Override credentials for a particular model. (Optional)
+One-off credential overrides. Instead of using what is uploaded for each provider, this targets credentials for individual models.
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "anthropic": {
+      "api_key": "your-api-key"
+    }
+  },
+  "credential_override": {
+    "claude-3-5-sonnet-20240620":{ // override for a specific model.
+      "api_key": "another-api-key"
+    }
+  }
+}
+```
