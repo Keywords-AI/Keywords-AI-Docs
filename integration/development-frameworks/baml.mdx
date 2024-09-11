@@ -1,0 +1,110 @@
+---
+title: "BAML"
+description: "BAML is a domain-specific language to write and test LLM functions. Use BAML with Keywords AI to get complete LLM observability"
+icon: "star"
+---
+
+## Quick start: 
+<Steps >
+<Step title="Install extension">
+Install [BAML](https://github.com/BoundaryML/baml) extension in VS code. create a `.baml` file (test.baml) and get started!
+<img  width="500"  src="/images/providers/baml.jpg" />
+</Step>
+
+<Step title= "Initialize a Keywords AI client">
+Initialize a Keywords AI client in BAML by switching the base URL and adding the KEYWORDSAI_API_KEY in the environmental variable. Learn how to create a Keywords AI API key [here](https://docs.keywordsai.co/get-started/llm-inference#create-an-api-key).   
+
+```json BAML
+client<llm> KeywordsAI {
+  
+  provider openai
+
+  options {
+    model gpt-4o
+    api_key env.KEYWORDSAI_API_KEY
+    base_url "https://api.keywordsai.co/api"
+  }
+}
+```
+
+</Step>
+
+<Step title= "Use the client and get LLM observability">
+This is an official example from BAML
+```json BAML
+// This is a BAML file, which extends the Jinja2 templating language to write LLM functions.
+// Run a test to see how it works!
+
+// https://docs.boundaryml.com
+
+// We want the LLM to extract this info from an image receipt
+class Receipt {
+  establishment_name string
+  date string @description("ISO8601 formatted date")
+  total int @description("The total amount of the receipt")
+  currency string
+  items Item[] @description("The items on the receipt")
+}
+
+class Item {
+  name string
+  price float
+  quantity int @description("If not specified, assume 1")
+}
+ 
+// This is our LLM function we can call in Python or Typescript
+// the receipt can be an image OR text here!
+function ExtractReceipt(receipt: image | string) -> Receipt {
+  // see clients.baml
+  client KeywordsAI
+  prompt #"
+    {# start a user message #}
+    {{ _.role("user") }}
+
+    Extract info from this receipt:
+    {{ receipt }}
+
+    {# special macro to print the output schema instructions. #}
+    {{ ctx.output_format }}
+  "#
+}
+
+// Test when the input is an image
+test ImageReceiptTest {
+  functions [ExtractReceipt]
+  args {
+    receipt { url "https://i.redd.it/adzt4bz4llfc1.jpeg"}
+  }
+}
+
+// Test when the input is a string
+test StarbucksTextReceiptTest {
+  functions [ExtractReceipt]
+  args {
+    // use #""# for multi-line strings
+    receipt #"
+      Starbucks
+      Date: 2022-01-01
+      Total: $5.00 USD
+      Items:
+      - Coffee
+        - $2.50
+        - 1
+      - Croissant
+        - $2.50
+        - 1
+    "#
+  }
+}
+
+
+
+```
+
+</Step>
+
+<Step title="Tes & monitor">
+After you have the code, `cmd+shift+p` > BAML: Open In Playground and run your tests. You can also monitor your LLM performance in the Keywords AI dashboard. Sign up here: `https://www.keywordsai.co`
+</Step>
+
+</Steps>
