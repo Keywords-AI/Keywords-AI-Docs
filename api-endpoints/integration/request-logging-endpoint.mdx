@@ -71,7 +71,23 @@ Completion message in JSON format. Default is an empty dictionary.
 
 </Accordion> */}
 
-{/* <ResponseField name="full_request" type="object">
+<ResponseField name="customer_identifier" type="string">
+  An identifier for the customer that invoked this LLM inference, helps with
+  visualizing user activities. Default is an empty string.  See the [details of customer identifier here.](/features/generation/customer-identifier)
+</ResponseField>
+
+<ResponseField name="metadata" type="dict">
+You can add any key-value pair to this metadata field for your reference. 
+<Accordion title="Example">
+```json
+{
+  "my_value_key": "my_value"
+}
+```
+</Accordion>
+</ResponseField>
+
+<ResponseField name="full_response" type="object">
   The full request object. Default is an empty dictionary.
   ```python
 "full_request": {
@@ -81,7 +97,7 @@ Completion message in JSON format. Default is an empty dictionary.
 },
 
 ```
-</ResponseField> */}
+</ResponseField>
 
 
 <ResponseField name="tool_choice" type="object">
@@ -169,21 +185,6 @@ Controls which (if any) tool is called by the model. `none` means the model will
   Whether the LLM inference was streamed. Default is false.
 </ResponseField>
 
-<ResponseField name="customer_identifier" type="string">
-  An identifier for the customer that invoked this LLM inference, helps with
-  visualizing user activities. Default is an empty string.  See the [details of customer identifier here.](/features/generation/customer-identifier)
-</ResponseField>
-
-<ResponseField name="metadata" type="dict">
-You can add any key-value pair to this metadata field for your reference. 
-<Accordion title="Example">
-```json
-{
-  "my_value_key": "my_value"
-}
-```
-</Accordion>
-</ResponseField>
 
 <ResponseField name="prompt_tokens" type="integer">
 Number of tokens in the prompt.
@@ -332,9 +333,8 @@ payload = {
     "stream": False,
     "status_code": 200,
     "warnings": "",
-    "has_warnings": False,
     "error_message": "",
-    "is_test": False,
+    "type":"text", # "json_schema", "json_object"
 }
 response = requests.request("POST", url, headers=headers, json=payload)
 
@@ -410,9 +410,8 @@ const payload = {
     stream: false,
     status_code: 200,
     warnings: '',
-    has_warnings: false,
     error_message: '',
-    is_test: false,
+    type:"text", // "json_schema", "json_object"
 };
 
 fetch(url, {
@@ -492,10 +491,9 @@ curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
     "status_code": 200,
     "tokens_per_second": 0.0,
     "warnings": "",
-    "has_warnings": false,
     "error_message": "",
-    "is_test": false,
     "customer_identifier": "456467",
+    "type":"text",
 }'
 ```
 </RequestExample>
