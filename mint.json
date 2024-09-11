@@ -88,11 +88,12 @@
           "integration/development-frameworks/openai-sdk",
           "integration/development-frameworks/anthropic",
           "integration/development-frameworks/langchain",
-          "integration/development-frameworks/llama-index",
           "integration/development-frameworks/vercel",
+          "integration/development-frameworks/llama-index",
           "get-started/fine-tuned-model"]
         },
         "integration/supported-models",
+        "integration/development-frameworks/baml"
         {
           "group": "Supported providers",
           "icon": "hand-holding-heart",
@@ -199,9 +200,9 @@
     {
       "group": "Logs",
       "pages": [
+        "api-endpoints/async-endpoints/batch-logging-endpoint",
         "api-endpoints/async-endpoints/logs-list-endpoint",
-        "api-endpoints/async-endpoints/logs-update-endpoint",
-        "api-endpoints/async-endpoints/batch-logging-endpoint"
+        "api-endpoints/async-endpoints/logs-update-endpoint"
       ]
     },
     {
@@ -215,9 +216,9 @@
     {
       "group": "User",
       "pages": [
+        "api-endpoints/async-endpoints/user-creation-endpoint",
         "api-endpoints/async-endpoints/users-data-endpoint",
         "api-endpoints/async-endpoints/user-detail-endpoint",
-        "api-endpoints/async-endpoints/user-creation-endpoint",
         "api-endpoints/async-endpoints/user-update-endpoint"
       ]
     },
