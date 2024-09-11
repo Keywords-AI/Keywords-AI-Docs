@@ -93,7 +93,7 @@
           "get-started/fine-tuned-model"]
         },
         "integration/supported-models",
-        "integration/development-frameworks/baml"
+        "integration/development-frameworks/baml",
         {
           "group": "Supported providers",
           "icon": "hand-holding-heart",
