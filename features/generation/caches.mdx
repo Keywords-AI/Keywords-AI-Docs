@@ -28,11 +28,16 @@ See the example below, we will cache the user message "Hi, how are you?" and its
             "content": "Hi, how are you?" // message to be cached, its response will be cached as well
         }
     ],
-    "max_tokens": 30,
-    "customer_identifier": "a_model_customer",
-    "stream": true,
     "cache_enabled": true, // enable cache
-    "cache_ttl":600 // cache for 10 minutes, optional
+    "cache_ttl":600, // cache for 10 minutes, optional
+    "cache_options": { // optional
+        "cache_by_customer": true // or false
+    },
+    "customer_params": {
+        "customer_identifier": "customer_123",
+        "name": "Hendrix Liu", //optional
+        "email": "hendrix@keywordsai.co" //optional
+    }
 }
 ```
 ## Cashes parameters
@@ -54,6 +59,19 @@ This parameter specifies the time-to-live (TTL) for the cache in seconds.
 ```json
 {
     "cache_ttl": 3600 // in seconds
+}
+```
+</ParamField>
+
+<ParamField path="cache_options" type="boolean">
+This parameter specifies the cache options. Currently we support `cache_by_customer` option, you can set it to `true` or `false`. If `cache_by_customer` is set to `true`, the cache will be stored by the customer identifier.
+
+<Note>It's an optional parameter</Note>
+```json
+{
+    "cache_options": { // optional
+        "cache_by_customer": true // or false
+    }
 }
 ```
 </ParamField>
