@@ -457,6 +457,18 @@ This parameter specifies the time-to-live (TTL) for the cache in seconds.
 ```
 </Accordion>
 </ParamField>
+<ParamField path="cache_options" type="boolean">
+This parameter specifies the cache options. Currently we support `cache_by_customer` option, you can set it to `true` or `false`. If `cache_by_customer` is set to `true`, the cache will be stored by the customer identifier.
+
+<Note>It's an optional parameter</Note>
+```json
+{
+    "cache_options": { // optional
+        "cache_by_customer": true // or false
+    }
+}
+```
+</ParamField>
 
 <ParamField path="prompt" type="object">
   The prompt template to use for the completion. You can build and deploy prompts in the [Prompt](/features/prompt/prompt-management).
