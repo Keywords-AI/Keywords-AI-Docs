@@ -71,9 +71,49 @@ Completion message in JSON format. Default is an empty dictionary.
 
 </Accordion> */}
 
+<ResponseField name="cost" type="float" default={0}>
+Cost of the inference in US dollars.
+</ResponseField>
+
+<ResponseField name="completion_tokens" type="integer" >
+Number of tokens in the completion. 
+</ResponseField>
+
+<ResponseField name="completion_unit_price" type="number">
+Pass this parameter in if you want to log your self-host / fine-tuned model.
+<Accordion title="Example">
+```json
+{
+"completion_unit_price": 0.0042 // $0.0042 per 1M tokens
+}
+```
+</Accordion>
+</ResponseField>
+
 <ResponseField name="customer_identifier" type="string">
   An identifier for the customer that invoked this LLM inference, helps with
   visualizing user activities. Default is an empty string.  See the [details of customer identifier here.](/features/generation/customer-identifier)
+</ResponseField>
+
+<ResponseField name="error_message" type="text">
+Error message if the LLM inference failed. Default is an empty string.
+</ResponseField>
+
+<ResponseField name="full_request" type="object">
+  The full request object. Default is an empty dictionary. This is optional and it is helpful for logging configurations such as `temperature`, `precence_penalty` etc.
+  <Note>`completion_messages`, `tool_calls` will be automatically extracted from full_request</Note>
+  ```python
+"full_request": {
+  "temperature": 0.5,
+  "top_p": 0.5,
+  #... other parameters
+},
+
+```
+</ResponseField>
+
+<ResponseField name="generation_time" type="float" default={0}>
+Total generation time. Generation time = TTFT (Time To First Token) + TPOT (Time Per Output Token) * #tokens. **Do not** confuse this with `ttft`.
 </ResponseField>
 
 <ResponseField name="metadata" type="dict">
@@ -87,51 +127,38 @@ You can add any key-value pair to this metadata field for your reference.
 </Accordion>
 </ResponseField>
 
-<ResponseField name="full_response" type="object">
-  The full request object. Default is an empty dictionary.
-  ```python
-"full_request": {
-  "temperature": 0.5,
-  "top_p": 0.5,
-  #... other parameters
-},
-
-```
+<ResponseField name="prompt_tokens" type="integer">
+Number of tokens in the prompt.
 </ResponseField>
 
+<ResponseField name="prompt_unit_price" type="number">
+Pass this parameter in if you want to log your self-host / fine-tuned model.
+<Accordion title="Example">
+```json
+{
+"prompt_unit_price": 0.0042 // $0.0042 per 1M tokens
+}
+```
+</Accordion>
+</ResponseField>
 
-<ResponseField name="tool_choice" type="object">
-Controls which (if any) tool is called by the model. `none` means the model will not call any tool and instead generates a message. 
-<Accordion title="Properties">
-
-  <ResponseField name="type" type="string" required>
-  The type of the tool. Currently, only `function` is supported.
-  </ResponseField>
-
-  <ResponseField name="function" type="object" required>
-  </ResponseField>
-
-<AccordionGroup>
+<ResponseField name="response_format" type="object">
+  The format of the response.
   <Accordion title="Properties">
-    <ResponseField name="name" type="string" required>
+    <ResponseField name="type" type="string" required>
+    The type of the response. Currently, only `text`, `json_schema`, `json_object` are supported.
     </ResponseField>
-
-  </Accordion >
-  <Accordion title="Example">
-  ```python
-    "tool_choice": {
-        "type": "function",
-        "function": {
-            "name": "get_current_weather"
-        }
-    },
-```
-</Accordion>
-</AccordionGroup>
-</Accordion>
+  </Accordion>
 </ResponseField>
 
+<ResponseField name="stream" type="boolean">
+  Whether the LLM inference was streamed. Default is false.
+</ResponseField>
 
+<ResponseField name="status_code" type="integer" default={200}>
+  The status code of the LLM inference. Default is 200 (ok). See supported status codes [here](/error-handling).
+
+</ResponseField>
 
 <ResponseField name="tools" type="array">
   A list of tools the model may call. Currently, only functions are supported as a tool. 
@@ -181,47 +208,35 @@ Controls which (if any) tool is called by the model. `none` means the model will
 </AccordionGroup>
 </ResponseField>
 
-<ResponseField name="stream" type="boolean">
-  Whether the LLM inference was streamed. Default is false.
-</ResponseField>
+<ResponseField name="tool_choice" type="object">
+Controls which (if any) tool is called by the model. `none` means the model will not call any tool and instead generates a message. 
+<Accordion title="Properties">
 
+  <ResponseField name="type" type="string" required>
+  The type of the tool. Currently, only `function` is supported.
+  </ResponseField>
 
-<ResponseField name="prompt_tokens" type="integer">
-Number of tokens in the prompt.
-</ResponseField>
+  <ResponseField name="function" type="object" required>
+  </ResponseField>
 
-<ResponseField name="completion_tokens" type="integer" >
-Number of tokens in the completion. 
-</ResponseField>
+<AccordionGroup>
+  <Accordion title="Properties">
+    <ResponseField name="name" type="string" required>
+    </ResponseField>
 
-<ResponseField name="prompt_unit_price" type="number">
-Pass this parameter in if you want to log your self-host / fine-tuned model.
-<Accordion title="Example">
-```json
-{
-"prompt_unit_price": 0.0042 // $0.0042 per 1M tokens
-}
+  </Accordion >
+  <Accordion title="Example">
+  ```python
+    "tool_choice": {
+        "type": "function",
+        "function": {
+            "name": "get_current_weather"
+        }
+    },
 ```
 </Accordion>
-</ResponseField>
-
-<ResponseField name="completion_unit_price" type="number">
-Pass this parameter in if you want to log your self-host / fine-tuned model.
-<Accordion title="Example">
-```json
-{
-"completion_unit_price": 0.0042 // $0.0042 per 1M tokens
-}
-```
+</AccordionGroup>
 </Accordion>
-</ResponseField>
-
-<ResponseField name="cost" type="float" default={0}>
-Cost of the inference in US dollars.
-</ResponseField>
-
-<ResponseField name="generation_time" type="float" default={0}>
-Total generation time. Generation time = TTFT (Time To First Token) + TPOT (Time Per Output Token) * #tokens. **Do not** confuse this with `ttft`.
 </ResponseField>
 
 <ResponseField name="ttft" type="float" default={0.0}>
@@ -231,21 +246,9 @@ Time to first token. The time it takes for the model to generate the first token
 The number of tokens generated per second.
 </ResponseField>
 
-<ResponseField name="error_message" type="text">
-Error message if the LLM inference failed. Default is an empty string.
-</ResponseField>
-
-<ResponseField name="status_code" type="integer" default={200}>
-  The status code of the LLM inference. Default is 200 (ok). See supported status codes [here](/error-handling).
-
-</ResponseField>
-<ResponseField name="has_warnings" type="boolean">
-  Whether the LLM inference has any warnings. Default is false.
-</ResponseField>
 <ResponseField name="warnings" type="string">
   Any warnings that occurred during the LLM inference. You could pass a warning message here. Default is an empty string.
 </ResponseField>
-
 
 {/* <ResponseField name="category" type="string">
 Category of the log. Default is an empty string.
@@ -254,10 +257,6 @@ Category of the log. Default is an empty string.
 {/* <ResponseField name="cached_response" type="integer">
   Whether the response was cached. Default is 0.
 </ResponseField> */}
-
-<ResponseField name="is_test" type="boolean">
-  Whether the LLM inference is a test call. If set to true, you will only be able to see this log in `Test Mode` in the platform. Default is false.
-</ResponseField>
 
 <RequestExample>
 
