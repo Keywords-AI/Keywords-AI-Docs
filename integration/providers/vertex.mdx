@@ -6,10 +6,24 @@ icon: "lock-keyhole-open"
 
 There are 2 ways to add your Vertex AI credentials to your requests:
 ## Add it from the UI
-1. Go to [Credentials page](https://platform.keywordsai.co/platform/api/credentials)
+
+<Steps>
+<Step title="Go to the Credentials page">
+Go to [Credentials page](https://platform.keywordsai.co/platform/api/credentials)
 <img height="200" width="500"  src="/images/bring-own-key.png" alt="Dashboard Page"/>
-2. Add your Vertex AI credentials.
+</Step>
+<Step title="Add your Vertex AI credentials.">
+
 <img height="200" width="300"  src="/images/providers/vertex.png" alt="Dashboard Page"/>
+</Step>
+<Step title="(Optional) Choose models you want to use credits">
+You can choose the models you want to use your credits with. Just simply type the model ID from the [Models page](https://platform.keywordsai.co/platform/models) and copy the model id and paste it in the Available models. Press `Enter` to add the model. 
+
+**Leave it empty to apply your credentials for all Vertex AI models.**
+
+<img height="200" width="500"  src="/images/providers/vertex_model.png" alt="Dashboard Page"/>
+</Step>
+</Steps>
 
 ## Add it in code
 Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy-endpoints/chat-completions) to use your own Vertex AI credits.
