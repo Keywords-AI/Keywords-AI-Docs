@@ -345,7 +345,7 @@ See how to make a standard Keywords AI API call in the [Quick Start](/get-starte
 <ParamField path="load_balance_group" type="object">
   Balance the load of your requests between different models. See the [details of load balancing
   here.](/features/generation/load-balancing)
-<Note> The `model` parameter will override this parameter. </Note>
+<Note> The proxy will pick one model from the group and override the `model` parameter </Note>
   <Accordion title="Example">
 ```json
 {
