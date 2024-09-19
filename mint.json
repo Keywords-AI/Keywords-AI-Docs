@@ -250,7 +250,9 @@
     {
       "group": "Resources",
       "pages": [
-        "resources/what-is-llm-observability-and-monitoring"
+        "resources/what-is-llm-observability-and-monitoring",
+        "features/generation/retries",
+        "features/generation/streaming"
       ]
     }
   ],
