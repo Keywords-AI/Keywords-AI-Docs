@@ -49,9 +49,9 @@ Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy
   // Rest of the request body
   "customer_credentials": {
     "azure_openai": {
-      "api_key": "your-api-key",
-      "api_base": "your-api-base-url",
-      "api_version": "your-api-version",
+      "api_key": "YOUR_AZURE_OPENAI_API_KEY",
+      "api_base": "YOUR_AZURE_OPENAI_API_BASE_URL",
+      "api_version": "YOUR_AZURE_OPENAI_API_VERSION",
     }
   }
 }
@@ -65,16 +65,16 @@ One-off credential overrides. Instead of using what is uploaded for each provide
   // Rest of the request body
   "customer_credentials": {
     "azure_openai": {
-      "api_key": "your-api-key",
-      "api_base": "your-api-base-url",
-      "api_version": "your-api-version",
+      "api_key": "YOUR_AZURE_OPENAI_API_KEY",
+      "api_base": "YOUR_AZURE_OPENAI_API_BASE_URL",
+      "api_version": "YOUR_AZURE_OPENAI_API_VERSION",
     }
   },
   "credential_override": {
     "azure/gpt-4o":{ // override for a specific model.
-      "api_key": "your-api-key",
-      "api_base": "your-api-base-url",
-      "api_version": "your-api-version",
+      "api_key": "YOUR_ANOTHER_AZURE_OPENAI_API_KEY",
+      "api_base": "YOUR_AZURE_OPENAI_API_BASE_URL",
+      "api_version": "YOUR_AZURE_OPENAI_API_VERSION",
     }
   }
 }

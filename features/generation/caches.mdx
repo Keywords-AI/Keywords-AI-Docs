@@ -12,7 +12,7 @@ You may find caches useful when you want to:
 - **Improve performance**: Deliver consistently high-quality outputs by serving pre-vetted, cached responses.
 
 ## How to use Caches?
-Turn on caches by setting `cache_enabled` to `true`. We currently will cache the last message of the conversation. 
+Turn on caches by setting `cache_enabled` to `true`. We currently will cache the whole conversation, including the system message, user message and the response.
 
 See the example below, we will cache the user message "Hi, how are you?" and its response.
 ```json
@@ -21,7 +21,7 @@ See the example below, we will cache the user message "Hi, how are you?" and its
     "messages": [
         {
             "role": "system",
-            "content": "Hello, how can I help you today?"
+            "content": "Hello, how can I help you today?" // message to be cached, its response will be cached as well
         },
         {
             "role": "user",

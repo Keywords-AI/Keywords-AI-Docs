@@ -26,7 +26,7 @@ Go to [Credentials page](https://platform.keywordsai.co/platform/api/credentials
   // Rest of the request body
   "customer_credentials": {
     "openai": {
-      "api_key": "your-api-key"
+      "api_key": "YOUR_OPENAI_API_KEY",
     }
   }
 }
@@ -39,12 +39,12 @@ One-off credential overrides. Instead of using what is uploaded for each provide
   // Rest of the request body
   "customer_credentials": {
     "openai": {
-      "api_key": "your-api-key"
+      "api_key": "YOUR_OPENAI_API_KEY",
     }
   },
   "credential_override": {
     "gpt-4o":{ // override for a specific model.
-      "api_key": "another-api-key"
+      "api_key": "YOUR_ANOTHER_OPENAI_API_KEY",
     }
   }
 }
