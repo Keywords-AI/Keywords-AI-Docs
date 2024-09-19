@@ -71,7 +71,11 @@ payload = {
     "ttft": 0.0,
     "timestamp": "2024-04-15T08:30:37.721313Z",
     "metadata": {},
-    "customer_identifier": "456467",
+    "customer_params": {
+        "customer_identifier": "customer_123",
+        "name": "Hendrix Liu", # optional
+        "email": "hendrix@keywordsai.co" # optional
+    }
 }
 headers = {
     "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
@@ -99,7 +103,11 @@ const payload = {
         role: "assistant",
         content: "Hi, how can I assist you today?"
     },
-    customer_identifier: '456467',
+    customer_params: {
+        customer_identifier: "customer_123",
+        name: "Hendrix Liu",  // optional
+        email: "hendrix@keywordsai.co" // optional
+    },
     prompt_tokens: 8,
     completion_tokens: 16,
     cost: 0.00042,
@@ -148,7 +156,11 @@ curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
     "ttft": 0.0,
     "timestamp": "2024-04-15T08:30:37.721313Z",
     "metadata": {},
-    "customer_identifier": "456467",
+    "customer_params": {
+        "customer_identifier": "customer_123",
+        "name": "Hendrix Liu", 
+        "email": "hendrix@keywordsai.co" 
+    },
 }'
 ```
 </CodeGroup>
