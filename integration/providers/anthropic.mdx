@@ -28,7 +28,7 @@ Add `customer_credentials` parameter in your [request body](/api-endpoints/proxy
   // Rest of the request body
   "customer_credentials": {
     "anthropic": {
-      "api_key": "your-api-key"
+      "api_key": "YOUR_ANTHROPIC_API_KEY",
     }
   }
 }
@@ -41,12 +41,12 @@ One-off credential overrides. Instead of using what is uploaded for each provide
   // Rest of the request body
   "customer_credentials": {
     "anthropic": {
-      "api_key": "your-api-key"
+      "api_key": "YOUR_ANTHROPIC_API_KEY"
     }
   },
   "credential_override": {
     "claude-3-5-sonnet-20240620":{ // override for a specific model.
-      "api_key": "another-api-key"
+      "api_key": "ANOTHER_ANTHROPIC_API_KEY"
     }
   }
 }
