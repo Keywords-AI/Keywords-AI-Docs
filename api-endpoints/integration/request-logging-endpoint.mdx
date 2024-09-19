@@ -90,11 +90,35 @@ Pass this parameter in if you want to log your self-host / fine-tuned model.
 </Accordion>
 </ResponseField>
 
-<ResponseField name="customer_identifier" type="string">
-  An identifier for the customer that invoked this LLM inference, helps with
-  visualizing user activities. Default is an empty string.  See the [details of customer identifier here.](/features/generation/customer-identifier)
-</ResponseField>
+<ResponseField name="customer_params" type="string">
+  Parameters related to the customer. Default is an empty dictionary.
+  <AccordionGroup>
+    <Accordion title="Properties">
+      <ResponseField name="customer_identifier" type="string" required>
+        An identifier for the customer that invoked this LLM inference, helps with
+        visualizing user activities. Default is an empty string.  See the [details of customer identifier here.](/features/generation/customer-identifier)
+      </ResponseField>
+      <ResponseField name="name" type="string" >
+        Name of the customer. Default is an empty string.
+      </ResponseField>
+      <ResponseField name="email" type="string" >
+        Email of the customer. Default is an empty string.
+      </ResponseField>
+    </Accordion>
+    <Accordion title="Example">
+```json
+{
+      "customer_params": {
+        "customer_identifier": "customer_123",
+        "name": "Hendrix Liu", //optional
+        "email": "hendrix@keywordsai.co" //optional
+    }
+}
+```
+    </Accordion>
 
+  </AccordionGroup>
+</ResponseField>
 <ResponseField name="error_message" type="text">
 Error message if the LLM inference failed. Default is an empty string.
 </ResponseField>
@@ -102,18 +126,41 @@ Error message if the LLM inference failed. Default is an empty string.
 <ResponseField name="full_request" type="object">
   The full request object. Default is an empty dictionary. This is optional and it is helpful for logging configurations such as `temperature`, `precence_penalty` etc.
   <Note>`completion_messages`, `tool_calls` will be automatically extracted from full_request</Note>
-  ```python
+  ```json
+{
 "full_request": {
   "temperature": 0.5,
   "top_p": 0.5,
-  #... other parameters
+  //... other parameters
 },
+}
 
 ```
 </ResponseField>
 
 <ResponseField name="generation_time" type="float" default={0}>
 Total generation time. Generation time = TTFT (Time To First Token) + TPOT (Time Per Output Token) * #tokens. **Do not** confuse this with `ttft`.
+</ResponseField>
+
+<ResponseField name="keywordsai_api_controls" type="object">
+Use this parameter to control the behavior of the Keywords AI API. Default is an empty dictionary.
+<AccordionGroup>
+  <Accordion title="Properties">
+    <ResponseField name="block" type="boolean" default={true}>
+    If false, the server will immediately return a status of whether the logging task is initialized successfully with no log data.
+    </ResponseField>
+  </Accordion>
+  <Accordion title="Example">
+```json
+{
+  "keywordsai_api_controls": {
+    "block": true // true or false.
+  }
+//...other params...
+}
+```
+  </Accordion>
+</AccordionGroup>
 </ResponseField>
 
 <ResponseField name="metadata" type="dict">
@@ -317,14 +364,17 @@ payload = {
       },
       }
     ],
-    "customer_identifier": "456467",
+    "customer_params": {
+        "customer_identifier": "customer_123",
+        "name": "Hendrix Liu", # optional
+        "email": "hendrix@keywordsai.co" # optional
+    },
     "prompt_tokens": 8,
     "completion_tokens": 16,
     "cost": 0.00042,
     "latency": 0.0,
     "timestamp": "2024-04-15T08:30:37.721313Z",
     "time_to_first_token": 0.0,
-    "tokens_per_second": 0.0,
     "metadata": {},
     "stream": False,
     "status_code": 200,
@@ -394,14 +444,17 @@ const payload = {
             }
         }
     ],
-    customer_identifier: '456467',
+    customer_params: {
+        customer_identifier: "customer_123",
+        name: "Hendrix Liu",  // optional
+        email: "hendrix@keywordsai.co" // optional
+    },
     prompt_tokens: 8,
     completion_tokens: 16,
     cost: 0.00042,
     generation_time: 0.0,
     timestamp: '2024-04-15T08:30:37.721313Z',
     ttft: 0.0,
-    tokens_per_second: 0.0,
     metadata: {},
     stream: false,
     status_code: 200,
@@ -485,10 +538,13 @@ curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
     "metadata": {},
     "stream": false,
     "status_code": 200,
-    "tokens_per_second": 0.0,
     "warnings": "",
     "error_message": "",
-    "customer_identifier": "456467",
+    "customer_params": {
+        "customer_identifier": "customer_123",
+        "name": "Hendrix Liu", 
+        "email": "hendrix@keywordsai.co" 
+    },
     "type":"text",
 }'
 ```
