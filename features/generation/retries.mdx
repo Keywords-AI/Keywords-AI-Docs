@@ -1,30 +1,42 @@
 ---
-title: "Automatic retries"
-description: "Retry failed request due to busy upstream provider"
+title: "Retries"
+description: "When an LLM call fails, our system detects the error and retries the request to prevent failovers."
+icon: "arrows-repeat"
 ---
 
-Keywords AI will retry the failed request if the failing reason is a rate limit issue from the upstream provider. 
-Below is the pseudo-code for the retry logic:
+There are 2 ways to enable Retries and set the number of retries and the time to wait before retrying:
+## Add it from the UI
+Go to the [Retries page](https://platform.keywordsai.co/platform/api/retries) and enable retries and set the number of retries and the initial retry time.
+<img height="200" width="500"  src="/images/api-features/retries.png" alt="Retries Page"/>
 
-```python
-model # User requested model
-# Load the models into compatible_models_format
-model_params = keywords_models_data[model] # A slice from our database
-# Exponential backoff retry logic
-for i in range(0, fallback_retries):
-    try:
-        response = keywords_response_with_load_balance(model)
-        return response
-        break
-    except RateLimitError:
-        if model_params["fallback_models"]:
-            # If there is a fallback, use that immediately without waiting
-            for fallback_model in model_params["fallback_models"]:
-                response = keywords_response_with_load_balance(fallback_model)
-                return response
-        sleep(2 ** i)
-    except Exception as e:
-        raise e
 
+## Add it in code
+You can also add the retry parameters in the request body to enable retries and set the number of retries and the time to wait before retrying.
+```json 
+{
+// ...some other Keywords AI params...
+    "retry_params": {
+        "num_retries": 3,
+        "retry_after": 0.1,  // seconds, minimum time to wait before retry.
+        "retry_enabled": true
+    }
+}
 ```
+
+## Supported parameters
+
+<ResponseField name="retry_params" type="object">
+    Enable or disable retries and set the number of retries and the time to wait before retrying.
+  <Accordion title="Properties">
+    <ResponseField name="retry_enabled" type="boolean" required>
+        Enable or disable retries.
+    </ResponseField>
+    <ResponseField name="num_retries" type="number">
+        The number of retries to attempt.
+    </ResponseField>
+    <ResponseField name="retry_after" type="number">
+        The time to wait before retrying in seconds.
+    </ResponseField>
+  </Accordion>
+</ResponseField>
 
