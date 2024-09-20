@@ -152,8 +152,8 @@
           "group": "User analytics",
           "icon": "user-magnifying-glass",
           "pages": [
-            "features/user/user-data",
             "features/user/user-creation",
+            "features/user/user-data",
             "features/user/user-budget"
           ]
         },
