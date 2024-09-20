@@ -4,11 +4,87 @@ description: "Create/update users to have better user observability on Keywords 
 icon: "user-plus"
 ---
 
-To have better user observability, you can create new users through our [User Creation endpoint](/api-endpoints/async-endpoints/user-creation-endpoint) or update exsiting users through [User Update endpoint](/api-endpoints/async-endpoints/user-update-endpoint). 
+To have better user observability, you can create new users using `customr_params` in your API call or use our [User Creation endpoint](/api-endpoints/async-endpoints/user-creation-endpoint).
 
-## User creation
-You have 2 ways to create users on Keywords AI: through API call with the inference/logging endpoint or through the User Creation endpoint.
+## Pass `customer_params` in your API call
+After you pass the `customer_params` parameter in your API call, you can monitor the user's data in the Keywords AI platform. 
+See how to get insights into your users' data [here](/features/user/user-data)
 
+### Example code
+```json
+{
+    //...other_params,
+    "customer_params": {
+        "customer_identifier": "customer_123",
+        "name": "Hendrix Liu", //optional
+        "email": "hendrix@keywordsai.co" //optional
+    }
+}
+
+```
+
+### Detailed example
+<CodeGroup>
+```python Python
+import requests
+
+def  keywords_ai_generate( 
+                messages, 
+                api_key=None,
+                **kwargs
+                ):
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Api-Key {api_key}',
+    }
+    data = {
+        "messages": messages,
+        **kwargs
+    }
+        
+    response = requests.post(
+        'https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+response = keywords_ai_generate(
+    messages=[{"role":"user", "content":"Hi"}], 
+    model="gpt-3.5-turbo", 
+    api_key="En5XoPkf.kSE2edr33UCjttnqhCzlN5tz5niosedg",
+    # Add the customer_identifier
+    customer_params={"customer_identifier": "customer_1",
+                     "name": "Hendrix Liu",
+                     "email": "hendrix@keywordsai.co"}
+    )
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Api-Key a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
+  },
+    body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [{role: 'user', content: "Say 'Hello World'"}]
+        // Add the customer_identifier
+        customer_params: {
+            customer_identifier: "customer_1",
+            name: "Hendrix Liu",
+            email: "hendrix@keywordsai.co"}
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+</CodeGroup>
+
+
+
+
+## User creation Endpoint
 <Note>Use the [User Creation endpoint](/api-endpoints/async-endpoints/user-creation-endpoint) instead of our other endpoints</Note>
 ```
 url = "https://api.keywordsai.co/api/users/create/"
