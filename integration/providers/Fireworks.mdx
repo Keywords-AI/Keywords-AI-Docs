@@ -30,3 +30,55 @@ Go to [Credentials page](https://platform.keywordsai.co/platform/api/credentials
   }
 }
 ```
+
+## Full request example
+<Accordion title="Example">
+<CodeGroup>
+```python openai_example.py
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role":"user", "content":"Tell me a long story"}],
+    extra_body={"customer_credentials": {
+                  "fireworks": {
+                      "api_key": "YOUR_FIREWORKS_API_KEY",
+                  }
+                }
+              }
+)
+```
+```python api_example.py
+import requests
+def demo_call(input, 
+              model="gpt-4o",
+              token="YOUR_KEYWORDS_AI_API_KEY"
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        'customer_credentials': {
+            'fireworks': {
+                'api_key': "YOUR_FIREWORKS_API_KEY",
+            }
+        }
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+</CodeGroup>
+</Accordion>
