@@ -183,6 +183,7 @@
             }
           ]
         },
+
             "features/prompt/model-playground",
             "features/prompt/prompt-management",
             "features/datasets"
