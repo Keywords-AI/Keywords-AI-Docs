@@ -183,7 +183,15 @@
             }
           ]
         },
+        {
+          "group": "Test",
+          "icon": "vial-circle-check",
+          "pages": [
             "features/prompt/model-playground",
+            "features/prompt/lab"
+          ]
+        },
+
             "features/prompt/prompt-management",
             "features/datasets"
       ]
