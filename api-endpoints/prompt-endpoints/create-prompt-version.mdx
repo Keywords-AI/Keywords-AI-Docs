@@ -1,0 +1,236 @@
+---
+title: "Prompt version"
+api: "POST https://api.keywordsai.co/prompts/<prompt_id>/versions/"
+---
+
+You can create a prompt version by sending a POST request to the prompt versions endpoint. The request should include the list of messages for the prompt version, the model you want to use, and other optional parameters. After you created a prompt version, you can deploy it as the live version by setting the `deploy` parameter to `true`. 
+
+Get the `prompt_id` from the [prompts endpoint](/api-endpoints/prompt-endpoints/create-prompts).
+
+<ParamField path="messages" type="array" required={true}>
+    The list of messages for the prompt version. If you want to add a variable, you can use the following format: `{{variable_name}}`.
+    <Accordion title="Example">
+```json
+{
+"messages": [
+    {"role": "system", "content": "You are a helpful {{role}}."}, // role could be assistant, teacher, etc.
+    {"role": "user", "content": "Hello, how are you?"}
+  ],
+}
+```
+    </Accordion>
+</ParamField>
+<ParamField path="model" type="string" required>
+ Speciy the model you want to use in this version. 
+</ParamField>
+
+<ParamField path="description" type="string">
+    Description of the prompt version
+</ParamField>
+
+<ParamField path="stream" type="boolean">
+  Whether the prompt version should be streamed or not. Default is `false`.
+</ParamField>
+
+<ParamField path="temperature" type="float">
+    The temperature of the model.
+</ParamField>
+
+<ParamField path="max_tokens" type="integer">
+    The maximum number of tokens to generate.
+</ParamField>
+
+<ParamField path="top_p" type="float">
+    The nucleus sampling probability.
+</ParamField>
+
+<ParamField path="frequency_penalty" type="float">
+Specify how much to penalize new tokens based on their existing frequency in the text so far. Decreases the model's likelihood of repeating the same line verbatim
+</ParamField>
+
+<ParamField path="presence_penalty" type="float">
+Specify how much to penalize new tokens based on whether they appear in the text so far. Increases the model’s likelihood of talking about new topics
+</ParamField>
+
+<ParamField path="variables" type="object">
+    The list of variables for the prompt version. You can use these variables in the messages.
+    <Accordion title="Example">
+```json
+{
+  "variables": {
+    "role": ["assistant", "teacher", "student"]
+  }
+}
+```
+    </Accordion>
+</ParamField>
+
+<ParamField path="fallback_models" type="array">
+    The list of fallback models for the prompt version. Check out [fallback models](/features/generation/fallbacks) for more information.
+    <Accordion title="Example">
+```json
+{
+  "fallback_models": ["gpt-4o", "gpt-4o-mini"]
+}
+```
+    </Accordion>
+</ParamField>
+
+<ParamField path="load_balance_models" type="array">
+    The list of models to load balance the prompt version. Check out [load balancing](/features/generation/load-balancing) for more information.
+    <Accordion title="Example">
+```json
+{
+"load_balance_models": [
+    {"model": "gpt-4o", "weight": 0.7},
+    {"model": "gpt-4o-mini", "weight": 0.3}
+  ],
+}
+```
+    </Accordion>
+</ParamField>
+
+<ParamField path="tools" type="array">
+    The list of tools to use for the prompt version. Check out [tools](/features/generation/tools) for more information.
+    <Accordion title="Example">
+```json
+{
+"tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "description": "Get the current weather in a given location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The city and state, e.g. San Francisco, CA"
+            }
+          },
+          "required": ["location"]
+        }
+      }
+    }
+  ],
+}
+```
+    </Accordion>
+</ParamField>
+
+<ParamField path="deploy" type="boolean">
+   Whether to deploy this version as the live version Default is `false`.
+</ParamField>
+
+<RequestExample>
+```Python Python
+import requests
+
+url = "https://api.keywordsai.co/prompts/<prompt_id>/versions/"
+api_key = "YOUR_KEYWORDS_AI_API_KEY" # Replace with your actual Keywords AI API key
+data = {
+"description": "A description of the prompt version",
+  "messages": [
+    {"role": "system", "content": "You are a helpful {{role}}."},
+    {"role": "user", "content": "Hello, how are you?"}
+  ],
+  "model": "gpt-3.5-turbo",
+  "stream": false,
+  "temperature": 0.7,
+  "max_tokens": 256,
+  "top_p": 1.0,
+  "frequency_penalty": 0.0,
+  "presence_penalty": 0.0,
+  "variables": {},
+  "fallback_models": ["gpt-3.5-turbo-16k", "gpt-4"],
+  "load_balance_models": [
+    {"model": "gpt-3.5-turbo", "weight": 0.7},
+    {"model": "gpt-4", "weight": 0.3}
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "description": "Get the current weather in a given location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The city and state, e.g. San Francisco, CA"
+            }
+          },
+          "required": ["location"]
+        }
+      }
+    }
+  ],
+  "deploy": true
+}
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+
+fetch('hhttps://api.keywordsai.co/prompts/<prompt_id>/versions/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY'
+    },
+    body: JSON.stringify({
+        description: "A description of the prompt version",
+        messages: [
+            {"role": "system", "content": "You are a helpful {{role}}."},
+            {"role": "user", "content": "Hello, how are you?"}
+        ],
+        model: "gpt-3.5-turbo",
+        stream: false,
+        temperature: 0.7,
+        max_tokens: 256,
+        top_p: 1.0,
+        frequency_penalty: 0.0,
+        presence_penalty: 0.0,
+        variables: {},
+        fallback_models: ["gpt-3.5-turbo-16k", "gpt-4"],
+        load_balance_models: [
+            {"model": "gpt-3.5-turbo", "weight": 0.7},
+            {"model": "gpt-4", "weight": 0.3}
+        ],
+        tools: [
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_weather",
+                    "description": "Get the current weather in a given location",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "location": {
+                                "type": "string",
+                                "description": "The city and state, e.g. San Francisco, CA"
+                            }
+                        },
+                        "required": ["location"]
+                    }
+                }
+            }
+        ],
+        deploy: true
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+</RequestExample>
+
+
