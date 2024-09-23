@@ -204,6 +204,35 @@
       ]
     },
     {
+      "group": "Prompt",
+      "pages": [
+        {
+        "group": "Prompt creation",
+        "pages": [
+          "api-endpoints/prompt-endpoints/create-prompts",
+          "api-endpoints/prompt-endpoints/create-prompt-version"
+        ]},
+        {
+          "group": "Prompt retrieval",
+          "pages": [
+            "api-endpoints/prompt-endpoints/get-prompts",
+            "api-endpoints/prompt-endpoints/get-prompt-versions"
+          ]},
+        {
+          "group": "Prompt update",
+          "pages": [
+            "api-endpoints/prompt-endpoints/update-prompt",
+            "api-endpoints/prompt-endpoints/update-prompt-version"
+          ]},
+          {
+          "group": "Prompt delete",
+          "pages": [
+            "api-endpoints/prompt-endpoints/delete-prompt",
+            "api-endpoints/prompt-endpoints/delete-prompt-version"
+          ]}
+      ]
+    },
+    {
       "group": "Multimodal integrations",
       "pages": [
         "api-endpoints/integration/text-to-speech",
