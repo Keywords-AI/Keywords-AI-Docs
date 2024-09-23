@@ -4,16 +4,22 @@ description: "Add custom metadata to your logs"
 icon: "plus"
 ---
 
-You can add any key-value pair to this metadata field for your reference, contact team@keywordsai.co if you need extra parameter support for your use case.
+You can add any key-value pair to this metadata field for your reference. 
 
 You will see your metadata in the right side bar on the Logs page in the Keywords AI platform.
 
 <img width="300" src="/images/api-features/metadata.jpg"/>
+<Note>If you are using OpenAI Python SDK, metadata filed should under the `extra_body` field</Note>
 
 ## Example:
 
 ```json
 {
-  "node_id": "qaisrgPyKr4NSugZeOqRt"
+  "metadata": {
+    "node_id": "qaisrgPyKr4NSugZeOqRt"
+    // Add any key-value pair here
+  }
 }
 ```
+
+Contact team@keywordsai.co if you need extra parameter support for your use case.
