@@ -1,0 +1,58 @@
+---
+title: "Mem0"
+description: "Mem0 provides a memory layer for LLM applications, enabling them to remember and learn from user interactions over time."
+icon: "star"
+---
+
+Mem0 enhances AI assistants and agents with an intelligent memory layer, enabling personalized AI interactions. Mem0 remembers user preferences and traits and continuously updates over time, making it ideal for applications like customer support chatbots and AI assistants.
+
+Mem0 + Keywords AI provides a powerful combination for building AI applications that can remember user interactions over time and get complete LLM observability.  
+
+Check out the [Mem0 documentation](https://docs.mem0.ai) for more information.
+
+## Quick start 
+
+<Steps>
+
+<Step title="Create an API key">
+You should first create an API key on Keywords AI. Learn how to create a Keywords AI API key [here](/get-started/llm-inference#create-an-api-key).
+</Step>
+
+
+```python
+from mem0 import Memory
+from dotenv import load_dotenv
+
+loaded = load_dotenv(".env", override=True)
+print("loaded", loaded)
+import os
+
+api_key = os.getenv("MEM0_API_KEY")
+keywordsai_api_key = os.getenv("KEYWORDSAI_API_KEY")
+base_url = os.getenv("KEYWORDSAI_BASE_URL") # "https://api.keywordsai.co/api/"
+
+config = {
+    "llm": {
+        "provider": "openai",
+        "config": {
+            "model": "gpt-4o-2024-08-06",
+            "temperature": 0.0,
+            "api_key": keywordsai_api_key,
+            "openai_base_url": base_url,
+        },
+    }
+}
+
+
+m = Memory.from_config(config_dict=config)
+
+result = m.add(
+    "I like to take long walks on weekends.",
+    user_id="alice",
+    metadata={"category": "hobbies"},
+)
+
+print(result)
+```
+
+</Steps>
