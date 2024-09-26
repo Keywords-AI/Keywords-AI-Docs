@@ -3,20 +3,37 @@ title: "Lab"
 description: "A spreadsheet-like interface built for multi-config prompt testing"
 icon: "flask"
 ---
+<Note> This is a **beta** feature. Please do let us know if you encounter any issues. We'll continuously improve it.</Note>
+A spreadsheet-style editor for running prompts and models across multiple test cases. Import testsets to easily test, evaluate, and optimize your LLM outputs.
 
-You can test and compare multi-config prompts on [lab page](https://platform.keywordsai.co/platform/lab).
+<video
+  controls
+  className="w-full aspect-video"
+  src="https://keywordsai-static.s3.amazonaws.com/landing/changelog/lab.mp4"
+></video>
 
 ## Guide
 
 <Steps>
-<Step title="Create a new prompt">
-
+<Step title="Create a prompt">
+You should first create a new prompt on the [Prompts page](/features/prompt/prompt-management) to use in the lab.
 </Step>
-<Step title="Import prompt">
 
+<Step title="Create a testset (optional)">
+If you want to run prompts with various dynamic test cases, you can create a new testset on the [Testsets page](/features/prompt/testsets).
+</Step>
+
+<Step title="Import prompt and testset">
+Now, choose the prompt and the versions you want to test. You can also import a testset if you have one.
+<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/lab-import.gif" />
 </Step>
 
 <Step title="Evaluate prompts">
+Variables in prompts will be detected and displayed in the lab. You can edit the values and run the prompts to evaluate the outputs.
+<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/lab-run.gif" />
 
 </Step>
 </Steps>
+
+## What's next?
+After you have evaluated the prompts, you can save the results to the [Logs page](/features/generation/logs) for further analysis. If you're satisfied with the results, you can deploy the prompt to your application. Check out the [Prompts page](/features/prompt/prompt-management) for more information. 
