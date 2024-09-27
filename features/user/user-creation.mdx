@@ -23,6 +23,49 @@ See how to get insights into your users' data [here](/features/user/user-data)
 
 ```
 
+### All parameters
+
+<ParamField path="customer_identifier" type="string" required>
+The unique identifier for the customer. It can be any string.
+</ParamField>
+
+<ParamField path="name" type="string">
+The name of the customer. It can be any string.
+</ParamField>
+
+<ParamField path="email" type="string">
+The email of the customer. It shoud be a valid email.
+</ParamField>
+
+<ParamField path="email" type="string">
+The email of the customer. It shoud be a valid email.
+</ParamField>
+
+<ParamField path="period_start" type="string">
+The start date of the period. It should be in the format `YYYY-MM-DD`.
+</ParamField>
+
+<ParamField path="period_end" type="string">
+The start date of the period. It should be in the format `YYYY-MM-DD`.
+</ParamField>
+
+<ParamField path="budget_duration" type="string">
+Choices are `yearly`, `monthly`, `weekly`, and `daily`
+</ParamField>
+
+<ParamField path="period_budget" type="float">
+The budget for the period. It should be a float.
+</ParamField>
+
+<ParamField path="markup_percentage" type="float">
+The markup percentage for the period. Usage report of your customers through this key will be increased by this percentge.
+</ParamField>
+
+<ParamField path="total_budget" type="float">
+The total budget for a user.
+</ParamField>
+
+
 ### Detailed example
 <CodeGroup>
 ```python Python
@@ -54,7 +97,14 @@ response = keywords_ai_generate(
     # Add the customer_identifier
     customer_params={"customer_identifier": "customer_1",
                      "name": "Hendrix Liu",
-                     "email": "hendrix@keywordsai.co"}
+                     "email": "hendrix@keywordsai.co",
+                     "period_start": "2022-01-01",
+                     "period_end": "2022-12-31",
+                     "budget_duration": "yearly",
+                     "period_budget": 1000,
+                     "markup_percentage": 10,
+                     "total_budget": 10000                     
+                     }
     )
 ```
 
@@ -73,7 +123,14 @@ fetch('https://api.keywordsai.co/api/chat/completions', {
         customer_params: {
             customer_identifier: "customer_1",
             name: "Hendrix Liu",
-            email: "hendrix@keywordsai.co"}
+            email: "hendrix@keywordsai.co",
+            period_start: "2022-01-01",
+            period_end: "2022-12-31",
+            budget_duration: "yearly",
+            period_budget: 1000,
+            markup_percentage: 10,
+            total_budget: 10000
+            }
     })
 })
 .then(response => response.json())
