@@ -24,7 +24,7 @@ message = client.messages.create(
     ]
     metadata={
         "keywordsai_params": {
-            "customer_identifier": "something"
+            "customer_identifier": "something" # You need to wrap the customer_identifier into the "keywordsai_params" key
         }
     },
 )
@@ -54,13 +54,18 @@ messages: [
         }
     ]
     }
-]
+],
+metadata: {
+    "keywordsai_params": {
+        "customer_identifier": "something"
+    }
+}
 });
 console.log(msg);
 ```
 </CodeGroup>
 
 
-To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `metadata` parameter. In the above example, `customer_identifier` is the Keywords AI parameter. These parameters will take precedence over the Anthropic parameters if they are conflicting.
+To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `metadata` parameter. In the above example, `customer_identifier` is a Keywords AI parameter. These parameters will take precedence over the Anthropic parameters if they are conflicting.
 
 
