@@ -1,10 +1,10 @@
 ---
-title: "Prompt management"
+title: "Prompts"
 description: "Iterating and versioning prompts as a team."
 icon: "pen"
 iconType: "solid"
 ---
-With our Prompts management feature, you could easily iterate and version your prompts as a team, deploy them to your codebase with 1 line of code, and share them with your team, test them in the Playground, and more.
+With our Prompts management feature, you can easily iterate and version your prompts as a team, deploy them to your codebase with one line of code, share them with your team, test them in the Playground, and more.
 
 Check out the [Prompts page](https://platform.keywordsai.co/platform/prompts) to see the prompts you have created and deployed.
 
@@ -13,21 +13,35 @@ Check out the [Prompts page](https://platform.keywordsai.co/platform/prompts) to
 
 ## How to create a prompt
 
-<img width="400" src="/images/platform-features/prompts/prompts.png" alt="playground"/>
+<Steps>
+<Step title="Create a prompt">
+Go to [Prompts page](https://platform.keywordsai.co/platform/prompts), click on the`+ New prompt` button, and fill in the required fields.
+<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/prompt-create.png" />
+</Step>
+<Step title="Write your prompt">
+You can write your prompt in the editor and use variables in your prompt by using double curly braces `{{variable_name}}`.
+<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/promptMessage.png" />
+</Step>
 
-1. **Create a new prompt**: Click the `+ New prompt` button to create a new prompt. Give it a name and a description.
-{/* <img src="/images/platform-features/prompts/new-prompt.png" alt="prompts"/> */}
-2. **Write your template**: First choose a model you want to test, then write the system prompt and user prompt.
-3. **Check output in the Playground**: Click the `Playground` button to view the output of your prompt across different models.
-{/* <img src="/images/platform-features/prompts/open-in-playground.png" alt="prompts"/> */}
-4. **Input variables**: Insert dynamic input variables into your prompt template using curly brackets `{{your variables}}`.
-5. **Deploy your version to the team**: Click the `Deploy version` button to deploy your prompt to the team. You can check the deployed version on the **left sidebar**.
-6. **Copy the code into your codebase** Click the `View code` button to copy the prompt code into your codebase or copy the prompt ID and paste it into your codebase.
-<Check>After you have added your prompt ID to your codebase, you can now iterate your prompts and versions in the Prompts page without changing your codebase.</Check>
+<Step title="Configure your prompt" >
+You can configure your prompt by specify model, temperature, max_tokens, top_p, frequency_penalty, presence_penalty, and stream.
+<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/prompt-config.png" />
+</Step>
+
+<Step title="Test your prompt" >
+After you have created your prompt, you can test it in the Playground to see the outputs. Click on the `Playground` button to test your prompt.
+<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/prompt-playground.png" />
+</Step>
+
+<Step title="Deploy your prompt to the production" >
+After you have tested your prompt and are satisfied with the outputs, you can commit it and then deploy it to your codebase with one line of code.
+<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/deploy-prompt.gif" />
+</Step>
+</Steps>
 ## Example
 ```json
 {
-  "prompt"{
+  "prompt": {
      "prompt_id": "prompt_id", //paste this from the prompt management page
      "variables": {
        "variable_name": "variable_value"
@@ -41,7 +55,7 @@ Check out the [Prompts page](https://platform.keywordsai.co/platform/prompts) to
 <ParamField path="echo" type="boolean" default={true}>
   with echo on, the response body will have an extra field
 ```json
-  "prompt_message" [an array of messages]
+  "prompt_message": [an array of messages]
 ```
 </ParamField>
 

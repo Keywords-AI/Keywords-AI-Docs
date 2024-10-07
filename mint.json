@@ -185,8 +185,8 @@
           ]
         },
         {
-          "group": "Test",
-          "icon": "vial-circle-check",
+          "group": "Prompt engineering",
+          "icon": "wand-magic-sparkles",
           "pages": [
             "features/prompt/prompt-management",
             "features/prompt/model-playground",
