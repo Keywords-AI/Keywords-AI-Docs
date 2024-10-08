@@ -65,7 +65,7 @@ After you have tested your prompt and are satisfied with the outputs, you can co
 ## Enable steam when you're using OpenAI SDK
 If you're using OpenAI SDK and want to connect with the prompt you created, you have to specify `stream=True` in the call body.
 <CodeGroup>
-```python OpenAI SDK
+```python OpenAI SDK Python
 from openai import OpenAI
 
 client = OpenAI(
@@ -90,7 +90,7 @@ response = client.chat.completions.create(
 )
 ```
 
-```typescript OpenAI SDK
+```typescript OpenAI SDK TS
 import { OpenAI } from "openai";
 
 const client = new OpenAI({
