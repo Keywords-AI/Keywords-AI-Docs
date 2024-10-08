@@ -36,6 +36,7 @@ After you have created your prompt, you can test it in the Playground to see the
 <Step title="Deploy your prompt to the production" >
 After you have tested your prompt and are satisfied with the outputs, you can commit it and then deploy it to your codebase with one line of code.
 <img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/deploy-prompt.gif" />
+<Note>Once you commit the prompt, you should click on the `Commit history` button and choose the previous read-only version to deploy it. </Note>
 </Step>
 </Steps>
 ## Example
@@ -61,3 +62,59 @@ After you have tested your prompt and are satisfied with the outputs, you can co
 
 <Info>Check out [all Keywords AI supported params here](/api-endpoints/proxy-endpoints/chat-completions#generation-parameters).</Info>
 
+## Enable steam when you're using OpenAI SDK
+If you're using OpenAI SDK and want to connect with the prompt you created, you have to specify `stream=True` in the call body.
+<CodeGroup>
+```python OpenAI SDK Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[{"role":"user", "content":"Tell me a long story"}],
+    stream=True,
+    extra_body={
+      "prompt": {
+          "prompt_id": "prompt_id", # paste this from the prompt management page
+          "variables": {
+            "variable_name": "variable_value"
+          },
+          "version": 1 # specify which version of the prompt you want to use. e.g. 1 for v1
+          # "echo": true //optional parameter
+        }
+    }
+)
+```
+
+```typescript OpenAI SDK TS
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: process.env.KEYWORDS_AI_API_KEY,
+});
+
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-3.5-turbo",
+    stream: true,
+    // @ts-expect-error
+    prompt: {
+      prompt_id: "prompt_id", // paste this from the prompt management page
+      variables: {
+        variable_name: "variable_value",
+      },
+      version: 1, // specify which version of the prompt you want to use. e.g. 1 for v1
+      // echo: true //optional parameter
+    },
+  })
+  .asResponse();
+
+console.log(await response.json());
+```
+</CodeGroup>
