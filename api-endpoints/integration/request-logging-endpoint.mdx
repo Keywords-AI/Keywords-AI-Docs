@@ -138,6 +138,12 @@ Error message if the LLM inference failed. Default is an empty string.
 ```
 </ResponseField>
 
+<ParamField path="frequency_penalty" type="number">
+  Specify how much to penalize new tokens based on their existing frequency in
+  the text so far. Decreases the model's likelihood of repeating the same line
+  verbatim
+</ParamField>
+
 <ResponseField name="generation_time" type="float" default={0}>
 Total generation time. Generation time = TTFT (Time To First Token) + TPOT (Time Per Output Token) * #tokens. **Do not** confuse this with `ttft`.
 </ResponseField>
@@ -174,6 +180,11 @@ You can add any key-value pair to this metadata field for your reference.
 </Accordion>
 </ResponseField>
 
+<ParamField path="presence_penalty" type="number">
+  Specify how much to penalize new tokens based on whether they appear in the
+  text so far. Increases the model's likelihood of talking about new topics
+</ParamField>
+
 <ResponseField name="prompt_tokens" type="integer">
 Number of tokens in the prompt.
 </ResponseField>
@@ -206,6 +217,15 @@ Pass this parameter in if you want to log your self-host / fine-tuned model.
   The status code of the LLM inference. Default is 200 (ok). See supported status codes [here](/error-handling).
 
 </ResponseField>
+
+<ParamField path="stop" type="array[string]">
+  Stop sequence
+</ParamField>
+
+<ParamField path="temperature" type="number" default={1}>
+  Controls randomness in the output in the range of 0-2, higher temperature will
+  a more random response.
+</ParamField>
 
 <ResponseField name="tools" type="array">
   A list of tools the model may call. Currently, only functions are supported as a tool. 
@@ -284,6 +304,13 @@ Controls which (if any) tool is called by the model. `none` means the model will
 </Accordion>
 </AccordionGroup>
 </Accordion>
+</ResponseField>
+
+
+<ResponseField name="top_p" type="number" default={1}>
+An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
+
+We generally recommend altering this or temperature but not both.
 </ResponseField>
 
 <ResponseField name="ttft" type="float" default={0.0}>
