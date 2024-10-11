@@ -162,26 +162,7 @@
           "group": "Evaluation",
           "icon": "microscope",
           "pages": [
-            "features/evaluation/overview",
-            {
-              "group": "Retrieval",
-              "icon": "puzzle-piece",
-              "pages": ["features/evaluation/retrieval/context-precision"]
-            },
-            {
-              "group": "Text generation",
-              "icon": "text",
-              "pages": [
-                "features/evaluation/generation/faithfulness",
-                "features/evaluation/generation/flesch-kincaid",
-                "features/evaluation/generation/answer-relevance"
-              ]
-            },
-            {
-              "group": "Other",
-              "icon": "gem",
-              "pages": ["features/evaluation/other/sentiment"]
-            }
+            "features/evaluation/llm-as-a-judge"
           ]
         },
         {
@@ -288,7 +269,28 @@
       "pages": [
         "resources/what-is-llm-observability-and-monitoring",
         "features/generation/automatic-retries",
-        "features/generation/streaming"
+        "features/generation/streaming",
+        {
+          "group": "Relari eval",
+          "pages": [
+            {
+              "group": "Retrieval",
+              "pages": ["features/evaluation/retrieval/context-precision"]
+            },
+            {
+              "group": "Text generation",
+              "pages": [
+                "features/evaluation/generation/faithfulness",
+                "features/evaluation/generation/flesch-kincaid",
+                "features/evaluation/generation/answer-relevance"
+              ]
+            },
+            {
+              "group": "Other",
+              "pages": ["features/evaluation/other/sentiment"]
+            }
+          ]
+        }
       ]
     }
   ],
