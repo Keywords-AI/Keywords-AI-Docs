@@ -159,7 +159,7 @@
           ]
         },
         {
-          "group": "Evaluation",
+          "group": "Evaluations",
           "icon": "microscope",
           "pages": [
             "features/evaluation/llm-as-a-judge"
