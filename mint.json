@@ -142,6 +142,7 @@
           "group": "Proxy",
           "icon": "cloud",
           "pages": [
+            "features/generation/gateway",
             "features/generation/key-management",
             "features/generation/fallbacks",
             "features/generation/load-balancing",
