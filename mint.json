@@ -10,7 +10,8 @@
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
-  "theme": "venus",
+  "theme": "prism",
+  "background": { "style": "gradient" },
   "primaryTab": {
     "name": "Documentation"
   },
@@ -18,6 +19,10 @@
     {
       "name": "API reference",
       "url": "api-endpoints"
+    },
+    {
+      "name": "Changelog ↗",
+      "url": "https://www.keywordsai.co/changelog"
     }
   ],
   "metadata": {
