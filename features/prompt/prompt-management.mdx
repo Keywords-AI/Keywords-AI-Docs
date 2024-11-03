@@ -60,6 +60,28 @@ After you have tested your prompt and are satisfied with the outputs, you can co
 ```
 </ParamField>
 
+<ParamField path="override" type="boolean" default={true}>
+Turn on override to use params in `override_params` instead of the params in the prompt.
+```json
+{
+  "override": true,
+}
+
+```
+</ParamField>
+
+<ParamField path="override_params" type="boolean" default={true}>
+You can put any OpenAI chat/completions parameters here to override the prompt's parameters. This will only work if `override` is set to `true`.
+```json
+{
+  "override_params": {
+    "temperature": 0.5,
+    "max_tokens": 100
+  }
+}
+```
+</ParamField>
+
 <Info>Check out [all Keywords AI supported params here](/api-endpoints/proxy-endpoints/chat-completions#generation-parameters).</Info>
 
 ## Enable steam when you're using OpenAI SDK
