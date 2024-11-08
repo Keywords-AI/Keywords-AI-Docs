@@ -79,6 +79,9 @@ You could also set up fallback models to avoid errors. It will fall back to the 
 
 
 ## Load balancing between deployments
+
+### In the platform
+
 You could go to the platform and add multiple deployments for the same provider. You could specify the load balancing weights for each deployment, which could be helpful when you want to enhance rate limits for a single provider.
 
 <video
@@ -87,9 +90,76 @@ You could go to the platform and add multiple deployments for the same provider.
   src="/images/api-features/webhooks/loadbalancing.mp4"
 ></video>
 
+### In the codebase
 
-{/* 
-## How load balancing works
+You could also load balance between deployments in your codebase. You can add different deployments in the `customer_credentials` field and specify the weight for each deployment.
+
+**Example:**
+
+```json
+{
+  "customer_credentials": [
+    {
+        "credentials": {
+            "openai": {
+                "api_key": "YOUR_OPENAI_API_KEY",
+            }
+        },
+        "weight": 1.0 // The weight of the deployment
+    },
+    {
+        "credentials": {
+            "openai": {
+                "api_key": "YOUR_OPENAI_API_KEY", // Another deployment
+            }
+        },
+        "weight": 1.0 // The weight of the deployment
+    },
+  ],
+}
+```
+In this example, requests to OpenAI models will be evenly distributed between the two deployments based on their specified weights.
+
+### Specify available models
+
+You could also specify the available models for load balancing. This is useful when you want to specify the models you want to load balance. For example, if you only want to use `gpt-3.5-turbo` in an OpenAI deployment, you could specify it in the `available_models` field or do it in the platform.
+
+Learn more about how to specify available models in the platform [here](/integration/providers/azure).
+
+Example code:
+```json
+{
+  "customer_credentials": [
+    {
+        "credentials": {
+            "openai": {
+                "api_key": "YOUR_OPENAI_API_KEY",
+            }
+        },
+        "weight": 1.0, // The weight of the deployment
+        "available_models": ["gpt-3.5-turbo"],
+        "exclude_models": ["gpt-4"] // Exclude gpt-4 from this deployment
+    },
+    {
+        "credentials": {
+            "openai": {
+                "api_key": "YOUR_OPENAI_API_KEY", // Another deployment
+            }
+        },
+        "weight": 1.0, // The weight of the deployment
+    },
+  ],
+}
+```
+
+In this example, requests to OpenAI models will be distributed between the two deployments, with the first deployment only handling gpt-3.5-turbo requests and explicitly excluding gpt-4, while the second deployment can handle requests for any OpenAI model.
+
+Based on the deployment weights and model configurations:
+- GPT-3.5-turbo requests are evenly split (50/50) between both deployments
+- GPT-4 requests are routed exclusively to the second deployment since it's excluded from the first
+- All other model requests are distributed evenly between deployments according to their weights
+
+{/* ## How load balancing works
 Under the hood, here is the pseudo-code of how the load balancing works:
 
 ```python
@@ -124,7 +194,7 @@ keywords_generation(module, **other_kwargs)
 
 distribution = [rate_limit_1, rate_limit_2, rate_limit_3] / sum_of_rate_limits <br/>
 weights = add_latency_weight_to_distribution(distribution, [latency_1, latency_2, latency_3])<br/>
-model = random.choices(balancing_between, weights=weights) */}
+model = random.choices(balancing_between, weights=weights) */} 
 
 
 ## Deprecated params
