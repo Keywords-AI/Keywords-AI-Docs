@@ -8,7 +8,8 @@
   "name": "Docs",
   "logo": {
     "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "light": "/logo/light.svg",
+    "href": "https://www.keywordsai.co"
   },
   "theme": "prism",
   "background": { "style": "gradient" },
