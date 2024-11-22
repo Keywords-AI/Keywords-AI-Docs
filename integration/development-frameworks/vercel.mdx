@@ -7,7 +7,7 @@ icon: "cube"
 You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint with Vercel AI SDK under two lines of code change.
 
 <CodeGroup>
-```TypeScript Vercel
+```TypeScript OpenAI
 import { createOpenAI, OpenAIProvider } from '@ai-sdk/openai'
 import { streamText, streamObject } from 'ai'
 
@@ -46,6 +46,29 @@ async function main() {
 main()
 ```
 
+```TypeScript Anthropic
+import { createAnthropic } from '@ai-sdk/anthropic';
+import { streamText, convertToCoreMessages } from 'ai';
+
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
+
+const anthropic = createAnthropic({
+    baseURL: "https://api.keywordsai.co/api/anthropic/v1",
+    apiKey: "Keywords AI API Key",
+   });
+   
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+
+  const result = await streamText({
+    model: anthropic('claude-3-5-sonnet-20240620'), // choose any model
+    messages: convertToCoreMessages(messages),
+  });
+
+  return result.toDataStreamResponse();
+}
 </CodeGroup>
 
 
