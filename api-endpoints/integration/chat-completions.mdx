@@ -493,6 +493,27 @@ This parameter specifies the cache options. Currently we support `cache_by_custo
   "prompt_message" [an array of messages]
 ```
 </ParamField>
+<ParamField path="override" type="boolean" default={true}>
+Turn on override to use params in `override_params` instead of the params in the prompt.
+```json
+{
+  "override": true,
+}
+
+```
+</ParamField>
+
+<ParamField path="override_params" type="boolean" default={true}>
+You can put any OpenAI chat/completions parameters here to override the prompt's parameters. This will only work if `override` is set to `true`.
+```json
+{
+  "override_params": {
+    "temperature": 0.5,
+    "max_tokens": 100
+  }
+}
+```
+</ParamField>
   </Accordion>
     <Accordion title="Example">
 ```json
