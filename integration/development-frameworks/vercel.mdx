@@ -1,11 +1,11 @@
 ---
-title: Vercel SDK
+title: Vercel AI SDK
 description: Use Vercel AI SDK with Keywords AI
 icon: "cube"
 ---
 
 You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint with Vercel AI SDK under two lines of code change.
-
+## Example
 <CodeGroup>
 ```TypeScript OpenAI
 import { createOpenAI, OpenAIProvider } from '@ai-sdk/openai'
@@ -87,4 +87,127 @@ Generates text and tool calls. This function is ideal for non-interactive use ca
     Generates a typed, structured object that matches a [Zod](https://zod.dev/) schema. You can use this function to force the language model to return structured data, e.g. for information extraction, synthetic data generation, or classification tasks.
 </ParamField> */}
 
-Extra parameters are not yet supported by the Vercel SDK as of June 4 1:12 PM. It will be live when the Vercel SDK is updated.
+## Add Keywords AI parameters
+
+Adding Keywords AI parameters to the Vercel AI SDK is different than other frameworks. Here is an example of how to do it:
+
+<Steps>
+<Step title="Specify Keywords AI params in an object">
+You should create an object with the Keywords AI parameters you want to use. Add parameters you want to use as keys in the object.
+```typescript
+const keywordsAIHeaderContent = {
+    "customer_params": {
+        "customer_identifier": "customer_123",
+        "name": "Hendrix Liu", //optional
+        "email": "hendrix@keywordsai.co" //optional
+    }
+    // "cache_enabled": true or other parameters
+}
+```
+</Step>
+<Step title="Encode the object as a string">
+You should encode the object as a string and then you can send it as a header in your request.
+```typescript
+const encoded = Buffer.from(JSON.stringify(keywordsAIHeaderContent)).toString('base64');
+```
+</Step>
+<Step title="Add the header to your request">
+You should send it in the `X-Data-Keywordsai-Params` header.
+<CodeGroup>
+```typescript OpenAI
+const client = createOpenAI({
+  baseURL: process.env.KEYWORDSAI_ENDPOINT_LOCAL,
+  apiKey: process.env.KEYWORDSAI_API_KEY_TEST,
+  compatibility: "strict",
+  headers: {
+    "X-Data-Keywordsai-Params": encoded
+  }
+});
+```
+```typescript Anthropic
+const client = createAnthropic({
+  baseURL: process.env.KEYWORDSAI_ENDPOINT_LOCAL,
+  apiKey: process.env.KEYWORDSAI_API_KEY_TEST,
+  headers: {
+    "X-Data-Keywordsai-Params": encoded
+  }
+});
+```
+</CodeGroup>
+</Step>
+<Step title="Full example">
+<CodeGroup>
+```typescript OpenAI
+import { streamText, streamObject } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
+
+const keywordsAIHeaderContent = {
+    "customer_identifier": "test_customer_identifier_from_header"
+}
+const encoded = Buffer.from(JSON.stringify(keywordsAIHeaderContent)).toString('base64');
+
+const client = createOpenAI({
+  baseURL: process.env.KEYWORDSAI_ENDPOINT_LOCAL,
+  apiKey: process.env.KEYWORDSAI_API_KEY_TEST,
+  compatibility: "strict",
+  headers: {
+    "X-Data-Keywordsai-Params": encoded
+  }
+});
+
+const requestParamsDefault: Parameters<typeof streamText>[0] = {
+  model: client.chat("gpt-4o"),
+  messages: [
+    {
+      role: "user",
+      content: "Hello! How are you doing today?",
+    },
+  ],
+  temperature: 0.5,
+};
+
+try {
+  console.log("Calling OpenAI with Keywords proxy...");
+
+  const { textStream: proxyTextStream } = await streamText(
+    requestParamsDefault
+  );
+  for await (const textPart of proxyTextStream) {
+    console.log("Keywords Proxy Response:", textPart);
+  }
+} catch (error) {
+  console.error("Error:", error);
+}
+```
+```typescript Anthropic
+import { createAnthropic } from '@ai-sdk/anthropic';
+import { streamText, convertToCoreMessages } from 'ai';
+
+const keywordsAIHeaderContent = {
+    "customer_identifier": "test_customer_identifier_from_header"
+}
+const encoded = Buffer.from(JSON.stringify(keywordsAIHeaderContent)).toString('base64');
+
+const anthropic = createAnthropic({
+  baseURL: process.env.KEYWORDSAI_ENDPOINT_LOCAL,
+  apiKey: process.env.KEYWORDSAI_API_KEY_TEST,
+  headers: {
+    "X-Data-Keywordsai-Params": encoded
+  }
+});
+   
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+
+  const result = await streamText({
+    model: anthropic('claude-3-5-sonnet-20240620'), // choose any model
+    messages: convertToCoreMessages(messages),
+  });
+
+  return result.toDataStreamResponse();
+}
+```
+</CodeGroup>
+</Step>
+</Steps>
