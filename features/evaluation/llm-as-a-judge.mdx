@@ -21,7 +21,7 @@ Choose a metric to evaluate your prompts. We integrted Evaluation framework from
 </Step> */}
 
 <Step title="Configure the evaluator">
-Configure the evaluator with the prompt and the customer you want to evaluate. You can also test the evaluator with a sample prompt. You should also define what metrics are required for the evaluator.
+Configure the evaluator with the prompt and the customer you want to evaluate. You can also test the evaluator with a sample prompt。
 {/* <img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/eval-config.png" /> */}
 </Step>
 
@@ -47,8 +47,8 @@ By default, input_text will be extracted from messages array and output_text wil
   "evaluation_params": { 
     "evaluators": [{"evaluator_slug":"evaluator-slug1"}],
     "extra_params": {
-        "retrieved_contexts": ["the capital of France is Paris", "France is a country in Europe"], //you should define this parameter in UI
-        "expected_response": "Paris" //you should define this parameter in UI
+        "retrieved_contexts": ["the capital of France is Paris", "France is a country in Europe"],
+        "expected_response": "Paris"
     },
     "last_n_messages": 3, // We will use the last 3 messages of the `messages` array as the input.
   },
