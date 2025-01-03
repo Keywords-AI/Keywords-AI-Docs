@@ -1,15 +1,19 @@
 ---
 title: OpenAI SDK
-description: Use OpenAI SDK with Keywords AI
-icon: "cube"
+description: Learn how to use OpenAI SDK with Keywords AI LLM proxy.
 ---
 
-You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint with OpenAI SDK under two lines of code change.
+<Note> This section is only for **Keywords AI LLM proxy** user.</Note>
 
-<CodeGroup>
-```Python Python
+Keywords AI provides a robust and flexible LLM proxy with 250+ LLMs. You can use Keywords AI with OpenAI SDK by just passing the `base_url` and `api_key` to the OpenAI SDK.
+
+## Integration examples
+
+<Tabs>
+
+<Tab title="Python">
+```python {4-5}
 from openai import OpenAI
-
 
 client = OpenAI(
     base_url="https://api.keywordsai.co/api/",
@@ -17,14 +21,13 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="gpt-3.5-turbo",
+    model="gpt-4o-mini",
     messages=[{"role":"user", "content":"Tell me a long story"}],
-    stream=True,
-    extra_body={"customer_identifier": "customer_11"}
 )
 ```
-
-```TypeScript TypeScript
+</Tab>
+<Tab title="TypeScript">
+```typescript {4-5}
 import { OpenAI } from "openai";
 
 const client = new OpenAI({
@@ -35,20 +38,73 @@ const client = new OpenAI({
 const response = await client.chat.completions
   .create({
     messages: [{ role: "user", content: "Say this is a test" }],
-    model: "gpt-3.5-turbo",
-    // @ts-expect-error
-    customer_identifier: "test_openai_chat",
+    model: "gpt-4o-mini",
   })
   .asResponse();
 
 console.log(await response.json());
-
 ```
-</CodeGroup>
+</Tab>
+</Tabs>
+
+## Supported parameters
+### OpenAI parameters
+We support all the [OpenAI parameters](/api-endpoints/integration/chat-completions#openai-parameters). You can pass them directly in the request body.
+<Tabs>
+<Tab title="Python">
+You can pass Keywords AI parameters in the `extra_body` parameter.
+
+```python {4}
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Tell me a story"}],
+    stream=True,
+)
+```
+</Tab>
+
+<Tab title="TypeScript">
+For TypeScript, you should add a `// @ts-expect-error` to the parameter.
+
+```typescript {4}
+const response = await client.chat.completions.create({
+    messages: [{ role: "user", content: "Tell me a story" }],
+    model: "gpt-4o-mini",
+    stream: true,
+})
+```
+</Tab>
+</Tabs>
 
 
-You can pass any of the [OpenAI parameters](/api-endpoints/proxy-endpoints/chat-completions#openai-parameters) directly in the `client.chat.completions.create` method. 
+### Keywords AI parameters
+[Keywords AI parameters](/api-endpoints/integration/chat-completions#keywords-ai-parameters) can be passed differently depending on your programming language:
 
-To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `extra_body` parameter. In the above example, `customer_identifier` is the Keywords AI parameter. These parameters will take precedence over the OpenAI parameters if they are conflicting.
+<Tabs>
+<Tab title="Python">
+You can pass Keywords AI parameters in the `extra_body` parameter.
 
+```python {4}
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Tell me a story"}],
+    extra_body={"customer_identifier": "test_user_1"}
+)
+```
+</Tab>
 
+<Tab title="TypeScript">
+For TypeScript, you should add a `// @ts-expect-error` to the parameter.
+
+```typescript {4-5}
+const response = await client.chat.completions.create({
+    messages: [{ role: "user", content: "Tell me a story" }],
+    model: "gpt-4o-mini",
+    // @ts-expect-error
+    customer_identifier: "test_user_1",
+})
+```
+</Tab>
+</Tabs>
+
+These parameters will take precedence over the OpenAI parameters if they are conflicting.

@@ -1,59 +1,40 @@
 ---
-title: "Async logging"
+title: "Set up observability"
 description: "Log your LLM requests and responses asynchronously"
-icon: "calendar-lines-pen"
 ---
+
+## Why you need LLM observability?
+LLM observability is the comprehensive process of monitoring, evaluating, and gaining insights into the performance and activities of Large Language Models in real-time. LLM observability is crucial for several reasons:
+
+1. **Ensuring Accuracy and Relevance**: LLMs can produce hallucinations, so observability helps detect and fix these issues.
+2. **Maintaining Performance**: Tracking response times, throughput, and error rates ensures optimal LLM performance.
+3. **Enhancing Reliability**: Monitoring helps prevent and quickly resolve downtime from provider outages, rate limits, or delayed alerts.
+4. **Optimizing Costs**: Monitoring identifies cost-effective models and leverages caching to reduce expenses.
+
+Keywords AI provides an **Async Logging API** that allows you to log your LLM requests and responses asynchronously, which offers complete observability of your LLM applications and won't disrupt your application's performance.
+
+
 ## Benefits of async logging:
-- Monitor your LLM performance with 0 latency impact.
+- Monitor your LLM performance with **0 latency impact**.
 - Operates outside the critical path of your application, ensuring no disruptions.
 - Gain comprehensive observability of your LLM applications.
 
-## What you will miss:
-- The ability to call over 200 LLMs using the same format.
-- Comprehensive features that ensure the scalability and reliability of your LLM applications.
+## How to use Keywords AI Async Logging
+### 1. Get your Keywords AI API key
 
-## Steps:
-### Create an account
+After you create an account on [Keywords AI](https://platform.keywordsai.co), you can get your API key from the [API keys page](https://platform.keywordsai.co/platform/api/api-keys).
 
-Go to Keywords AI's [sign up page](https://platform.keywordsai.co/signup) to create an account. You can use email or Google account to sign up.
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/api-keys.png" alt="Create API key placeholder" />
 
-{/* After you complete your onboarding questions, you will see this page: */}
-
-{/* <img src="/images/welcome-page.png" /> */}
-
-{/* Welcome to Keywords AI! */}
-
-### Create an API key
-
-To create an API key, visit the [API key page](https://platform.keywordsai.co/platform/api/api-keys)
-
-{/* <img src="/images/create-api-key.jpg" alt="Create API key placeholder" /> */}
-
-- Name your API key for future reference
-- Pick an environment (test or production)
-- Paste your API key in the code snippet below
-
-The API key will show up only once, <strong>Be careful and save it somewhere safe!</strong>
-
-
-<Note>For the **Free plan users**, you can only log 10k LLM requests per month. Subscribe to our [team plan](https://keywordsai.co/#/pricing) to get more credits.</Note>
-
-### Example call:
-Using the endpoint below, you can log your requests and responses to the Keywords AI API.
-```json
-url = "https://api.keywordsai.co/api/request-logs/create/"
-```
-
-Check out the [Logging endpoint page](/api-endpoints/async-endpoints/request-logging-endpoint) to see all supported parameters.
-
+### 2. Integrate Async Logging into your codebase
 
 <CodeGroup>
-```python Python
+```python Python {3, 26}
 import requests
 
 url = "https://api.keywordsai.co/api/request-logs/create/"
 payload = {
-    "model": "gpt-4",
+    "model": "claude-3-5-sonnet-20240620",
     "prompt_messages": [
         {
             "role": "user",
@@ -64,17 +45,13 @@ payload = {
         "role": "assistant",
         "content": "Hi, how can I assist you today?"
     },
-    "prompt_tokens": 8,
-    "completion_tokens": 16,
     "cost": 0.00042,
-    "generaion_time": 0.0,
-    "ttft": 0.0,
-    "timestamp": "2024-04-15T08:30:37.721313Z",
-    "metadata": {},
+    "generation_time": 5.7,
+    "ttft": 3.1,
     "customer_params": {
         "customer_identifier": "customer_123",
-        "name": "Hendrix Liu", # optional
-        "email": "hendrix@keywordsai.co" # optional
+        "name": "Hendrix Liu",
+        "email": "hendrix@keywordsai.co" 
     }
 }
 headers = {
@@ -84,7 +61,7 @@ headers = {
 
 response = requests.request("POST", url, headers=headers, json=payload)
 ```
-```typescript TypeScript
+```typescript TypeScript {1, 3}
 const url = 'https://api.keywordsai.co/api/request-logs/create/';
 const headers = {
     'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY',
@@ -92,7 +69,7 @@ const headers = {
 };
 
 const payload = {
-    model: 'gpt-4',
+    model: 'claude-3-5-sonnet-20240620',
     prompt_messages: [
         {
             role: "user",
@@ -105,20 +82,12 @@ const payload = {
     },
     customer_params: {
         customer_identifier: "customer_123",
-        name: "Hendrix Liu",  // optional
-        email: "hendrix@keywordsai.co" // optional
+        name: "Hendrix Liu", 
+        email: "hendrix@keywordsai.co" 
     },
-    prompt_tokens: 8,
-    completion_tokens: 16,
     cost: 0.00042,
-    generation_time: 0.0,
-    timestamp: '2024-04-15T08:30:37.721313Z',
-    ttft: 0.0,
-    metadata: {},
-    stream: false,
-    status_code: 200,
-    warnings: '',
-    error_message: '',
+    generation_time: 5.7,
+    ttft: 3.1,
 };
 
 fetch(url, {
@@ -132,34 +101,54 @@ fetch(url, {
 })
 ```
 
-```bash cURL
+```bash cURL {1, 3}
 curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
 -H "Content-Type: application/json" \
--H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
+-H "Authorization: Bearer {YOUR_KEYWORDS_AI_API_KEY}" \
 -d '{
-    "model": "gpt-4",
+    "model": "claude-3-5-sonnet-20240620",
     "prompt_messages": [
         {
           "role": "user",
           "content": "Hi"
-        },
+        }
     ],
     "completion_message": {
         "role": "assistant",
         "content": "Hi, how can I assist you today?"
     },
-    "prompt_tokens": 8,
-    "completion_tokens": 16,
     "cost": 0.00042,
-    "generation_time": 0.0,
-    "ttft": 0.0,
-    "timestamp": "2024-04-15T08:30:37.721313Z",
-    "metadata": {},
+    "generation_time": 5.7,
+    "ttft": 3.1,
     "customer_params": {
         "customer_identifier": "customer_123",
         "name": "Hendrix Liu", 
         "email": "hendrix@keywordsai.co" 
-    },
+    }
 }'
 ```
 </CodeGroup>
+
+
+### 3. Check your logs on the platform
+After you integrate the async logging into your codebase and send the request successfully, you can check your logs on the [Logs page](https://platform.keywordsai.co/platform/requests).
+
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/logs_async.png" alt="Logs page placeholder" />
+
+
+### 4. Parameters
+Check out the [Logging endpoint page](/api-endpoints/integration/request-logging-endpoint) to see all supported parameters.
+
+Parameters like: `cost`, `completion_tokens`, and `prompt_tokens` will be automatically calculated if your model is supported. Check out our [models page](https://platform.keywordsai.co/platform/models?sort_by=model_name) to see the list of supported models.
+
+## Next steps
+<CardGroup cols={2}>
+<Card title="Evaluate LLM outputs">
+</Card>
+<Card title="Set up user analytics">
+</Card>
+<Card title="Export your LLM data">
+</Card>
+<Card title="Pass custom metadata">
+</Card>
+</CardGroup>
