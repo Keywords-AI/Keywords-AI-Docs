@@ -4,7 +4,22 @@
       "apiKey": "phc_rL8MrmFrie28wgxtDurKt9t1bwCzChaJQ7WYaj1F1gH"
     }
   },
+  "font": {
+  "headings": {
+    "family": "Inter"
+  },
+  "body": {
+    "family": "Inter"
+  }
+  },
+  "codeBlock": {
+    "mode": "auto"
+  },
   "$schema": "https://mintlify.com/schema.json",
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true
+  },
   "name": "Docs",
   "logo": {
     "dark": "/logo/dark.svg",
@@ -12,7 +27,6 @@
     "href": "https://www.keywordsai.co"
   },
   "theme": "prism",
-  "background": { "style": "gradient" },
   "primaryTab": {
     "name": "Documentation"
   },
@@ -20,6 +34,10 @@
     {
       "name": "API reference",
       "url": "api-endpoints"
+    },
+    {
+      "name": "Integrations",
+      "url": "integration"
     },
     {
       "name": "Changelog ↗",
@@ -34,12 +52,12 @@
 
   "favicon": "/logo.svg",
   "colors": {
-    "primary": "#6483F0",
+    "primary": "#282a2f",
     "light": "#7590F2",
     "dark": "#05050A",
     "background": {
       "dark": "#05050A",
-      "light": "#F9FAFC"
+      "light": "#ffffff"
     },
     "anchors": {
       "from": "#0D9373",
@@ -75,63 +93,20 @@
         "get-started/overview",
         {
           "group": "Quick start",
-          "icon": "rocket",
           "pages": [
             "get-started/async-logging",
-            "get-started/llm-inference"
+            "get-started/llm-inference",
+            "get-started/prompt-engineering"
 
           ]
         }
       ]
     },
     {
-      "group": "Proxy integrations",
+      "group": "Guides",
       "pages": [
         {
-          "group": "Supported SDKs",
-          "icon": "briefcase",
-          "pages": [        
-          "integration/development-frameworks/openai-sdk",
-          "integration/development-frameworks/anthropic",
-          "integration/development-frameworks/langchain",
-          "integration/development-frameworks/vercel",
-          "integration/development-frameworks/llama-index",
-          "get-started/fine-tuned-model"]
-        },
-        "integration/supported-models",
-        {
-          "group": "Supported providers",
-          "icon": "hand-holding-heart",
-          "pages": [
-            "integration/own-api-keys",
-            "integration/providers/azure",
-            "integration/providers/openai",
-            "integration/providers/anthropic",
-            "integration/providers/vertex",
-            "integration/providers/bedrock",
-            "integration/providers/groq",
-            "integration/providers/Fireworks",
-            "integration/providers/together",
-            "integration/providers/perplexity",
-            "integration/providers/openrouter"
-          ]
-        }
-      ]
-    },
-    {
-      "group": "Integrations",
-      "pages": [
-        "integration/posthog",
-        "integration/development-frameworks/baml",
-        "integration/development-frameworks/mem0"
-      ]
-    },
-    {
-      "group": "Features",
-      "pages": [
-        {
-          "group": "Monitoring",
-          "icon": "eyes",
+          "group": "Observability",
           "pages": [
             "features/monitoring/analytics",
             "features/monitoring/logging",
@@ -146,7 +121,6 @@
         },
         {
           "group": "Proxy",
-          "icon": "cloud",
           "pages": [
             "features/generation/gateway",
             "features/generation/key-management",
@@ -158,7 +132,6 @@
         },
         {
           "group": "User analytics",
-          "icon": "user-magnifying-glass",
           "pages": [
             "features/user/user-creation",
             "features/user/user-data",
@@ -167,14 +140,12 @@
         },
         {
           "group": "Evaluations",
-          "icon": "microscope",
           "pages": [
             "features/evaluation/llm-as-a-judge"
           ]
         },
         {
           "group": "Prompt engineering",
-          "icon": "wand-magic-sparkles",
           "pages": [
             "features/prompt/prompt-management",
             "features/prompt/model-playground",
@@ -183,6 +154,50 @@
           ]
         },
             "features/datasets"
+      ]
+    },
+    {
+      "group": "LLM providers",
+      "pages": [
+        "integration/own-api-keys",
+        {
+          "group": "OpenAI",
+          "pages": [
+            "integration/development-frameworks/openai-sdk",
+            "integration/providers/openai"
+          ]
+        },
+        {
+          "group": "Anthropic",
+          "pages": [
+            "integration/development-frameworks/anthropic",
+            "integration/providers/anthropic"
+          ]
+        },
+        "integration/providers/azure",
+        "integration/providers/vertex",
+        "integration/providers/bedrock",
+        "integration/providers/groq",
+        "integration/providers/Fireworks",
+        "integration/providers/together",
+        "integration/providers/perplexity",
+        "integration/providers/openrouter"
+      ]
+    },
+    {
+      "group": "LLM Frameworks",
+      "pages": [
+        "integration/development-frameworks/langchain",
+        "integration/development-frameworks/vercel",
+        "integration/development-frameworks/llama-index",
+        "integration/development-frameworks/baml",
+        "integration/development-frameworks/mem0"
+      ]
+    },
+    {
+      "group": "Analytics",
+      "pages": [
+        "integration/posthog"
       ]
     },
     {
