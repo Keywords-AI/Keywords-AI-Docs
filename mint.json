@@ -110,9 +110,11 @@
           "pages": [
             "features/monitoring/analytics",
             "features/monitoring/logging",
+            "features/monitoring/logs-advanced",
             "features/monitoring/update-logs",
             "features/generation/disable-logs",
             "features/generation/customer-identifier",
+            "features/user/user-budget",
             "features/generation/metadata",
             "features/monitoring/threads",
             "features/monitoring/subscribe-alerts",
@@ -120,8 +122,9 @@
           ]
         },
         {
-          "group": "Proxy",
+          "group": "LLM proxy",
           "pages": [
+            "features/generation/overview",
             "features/generation/gateway",
             "features/generation/key-management",
             "features/generation/fallbacks",
@@ -134,8 +137,7 @@
           "group": "User analytics",
           "pages": [
             "features/user/user-creation",
-            "features/user/user-data",
-            "features/user/user-budget"
+            "features/user/user-data"
           ]
         },
         {

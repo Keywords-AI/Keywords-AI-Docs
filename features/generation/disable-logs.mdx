@@ -1,43 +1,124 @@
 ---
-title: "Disable logs"
-description: "Disable requests and responses"
-icon: "eye-slash"
+title: "Disable logging"
 ---
 
-If you do not want to have Keywords AI to store your logs, you can disable it by setting the `disable_log` option to `true` in the object.
+<Note>This feature is available for the **LLM proxy** (chat completions endpoint) and **Async logging**.</Note>
 
-_See all params [here](/api-endpoints/proxy-endpoints/chat-completions)._
+At Keywords AI, data privacy is our priority. We understand that you might want to disable logging for your sensitive data. We have added a `disable_log` option to help you achieve this.
 
-## Example code
+## What information will be disabled?
+
+The following fields will not be logged:
+
+- `full_request`
+- `full_response`
+- `messages`, `prompt_messages`, and `completion_message`
+- `tools`
+
+See all supported parameters [here](/api-endpoints/proxy-endpoints/chat-completions).
+
+## How to disable logging?
+To disable logging, set the `disable_log` parameter to `true` in the request body.
+<Tabs>
+<Tab title="OpenAI Python SDK">
+Here is an example of how to disable logging using the OpenAI Python SDK:
+```python {14}
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "user", "content": "Tell me a long story"}
+    ],
+    extra_body={
+        "disable_log": true
+    }
+)
+```
+</Tab>
+<Tab title="OpenAI TypeScript SDK">
+Here is an example of how to disable logging in the OpenAI TypeScript SDK. In OpenAI TypeScript SDK, you should add a `// @ts-expect-error` before the disable_log field.
+```typescript {12}
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-4o-mini",
+    // @ts-expect-error
+    disable_log: true
+  })
+  .asResponse();
+
+console.log(await response.json());
+```
+</Tab>
+<Tab title="Standard API">
 <CodeGroup>
-```python Python
+```python LLM proxy {14}
+import requests
+def demo_call(input, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY",
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
     data = {
-        "..." #other params
-        "disable_log": True,
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        'disable_log': true
     }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
 ```
 
-```TypeScript TypeScript
-// Define the function with TypeScript
-    body: JSON.stringify({
-        models: ['gpt-3.5-turbo', 'gpt-3.5-turbo-16k'],
-        messages: [{role: 'user', content: "Say 'Hello World'"}],
-        disable_log: true,
-    })
-```
 
-```bash cURL
--d '{
-  "messages": [
-    {
-      "role": "user",
-      "content": "Hello"
-    }
-  ],
-  "models": ["gpt-3.5-turbo", "gpt-3.5-turbo-16k"],
-  "disable_log": true,
-  "max_tokens": 100
-}'
-```
+```python Async logging {16}
+import requests
 
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "model": "gpt-4o-mini",
+    "prompt_messages": [
+        {
+            "role": "user",
+            "content": "Hi"
+        },
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "disable_log": true
+    # other parameters
+}
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.request("POST", url, headers=headers, json=payload)
+```
 </CodeGroup>
+</Tab>
+<Tab title="Other SDKs">
+We also support sending custom properties in other SDKs or languages, please check out our 
+</Tab>
+</Tabs>
