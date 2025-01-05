@@ -14,8 +14,48 @@ Keywords AI provides a comprehensive dashboard to monitor your LLM usage and spe
 </Frame>
 
 ## Logs
+In the logs page, you can check details of each LLM request and response. The logs contain useful information including the request, response, model used, and costs — making it helpful for debugging and monitoring.
 
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/logs.jpg" alt="Logs Page"/>
+</Frame>
 
+### Metadata of each log
+We built a side panel for our users to get more details of each log. When you are in the `Metadata` tab, you can see the metadata of the log, including Speed metrics, cost, and more.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/side-panel-metadata.png" alt="Logs Side Panel"/>
+</Frame>
+
+### Request and response
+By clicking on the `Log` tab, you can see the whole conversation between the LLM and the user.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/side-panel-log.png" alt="Logs Side Panel"/>
+</Frame>
+
+## User analytics
+Keywords AI provides a Users page to help you understand your users and their behavior on your LLM applications. When you send a request to the LLM, you can pass a `customer_params` to the request. Keywords AI will use this parameter to track the user's behavior on your LLM applications.
+
+<Card title="Learn how to enable user analytics" href="/guides/user-analytics" icon="user-magnifying-glass" horizontal={true}>
+</Card>
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/user-monitoring.png" alt="Users Page"/>
+</Frame>
+
+## Prompt monitoring
+You can track each prompt's performance with a simple mini dashboard.
+
+It helps you gain better insight and control over your prompts.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/prompt-monitoring.gif" alt="Prompt Monitoring"/>
+</Frame>
+
+<Tip>
+You can learn more about prompt monitoring in our [prompt monitoring guide](/guides/prompt-monitoring).
+</Tip>
 
 {/* ## Dashboard Components */}
 
