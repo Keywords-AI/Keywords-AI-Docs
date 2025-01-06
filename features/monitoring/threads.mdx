@@ -1,18 +1,127 @@
 ---
-title: Threads
+title: Create a thread
 description: Threads allow you to group chatlogs together as a single conversation thread.
-icon: "layer-group"
 ---
 
-You could pass all the logs in the same conversation with the same `thread_identifier`. This fits use cases of conversational AI better than Logs as the chatlogs will be grouped together as an entire conversation thread, with only the most recent request on display for each conversation.
+You can pass all the logs in the same conversation using the same `thread_identifier`. This approach fits conversational AI use cases better than individual logs, as the chat logs will be grouped together as an entire conversation thread, with only the most recent request displayed for each conversation.
 
-You will see logs with the same `thread_identifier` in the logs page like this:
-<img width="300" src="/images/requests-log/thread.png" />
+<Tabs>
+<Tab title="OpenAI Python SDK">
+```python {14}
+from openai import OpenAI
 
-## Example
-```json
-{
-    //...other_params,
-    "thread_identifier": "test_thread"
-}
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "user", "content": "Tell me a long story"}
+    ],
+    extra_body={
+        "thread_identifier": "the_first_thread"
+    }
+)
 ```
+</Tab>
+<Tab title="OpenAI TypeScript SDK">
+Here is an example of how to disable logging in the OpenAI TypeScript SDK. In OpenAI TypeScript SDK, you should add a `// @ts-expect-error` before the disable_log field.
+```typescript {12}
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-4o-mini",
+    // @ts-expect-error
+    thread_identifier: "the_first_thread"
+  })
+  .asResponse();
+
+console.log(await response.json());
+```
+</Tab>
+<Tab title="Standard API">
+<CodeGroup>
+```python LLM proxy {14}
+import requests
+def demo_call(input, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY",
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        'thread_identifier': "the_first_thread"
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+
+
+```python Async logging {16}
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "model": "gpt-4o-mini",
+    "prompt_messages": [
+        {
+            "role": "user",
+            "content": "Hi"
+        },
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "thread_identifier": "the_first_thread"
+    # other parameters
+}
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.request("POST", url, headers=headers, json=payload)
+```
+</CodeGroup>
+</Tab>
+<Tab title="Other SDKs">
+We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/own-api-keys) for more information.
+</Tab>
+</Tabs>
+
+## View threads on the platform
+### Threads page
+There's a Threads page on the platform where you can view all the threads you've created.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/thread.gif" />
+</Frame>
+
+### Logs page
+You can click the `Open in Logs` button in the side panel to view the logs of the thread on the Logs page.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/threads-to-logs.png" />
+</Frame>
+
+Once there, you can see all logs associated with the thread. Click on any individual log to view its details.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/threads-in-logs.png" />
+</Frame>

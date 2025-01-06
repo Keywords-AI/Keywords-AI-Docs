@@ -1,37 +1,46 @@
 ---
-title: "LLM proxy"
-description: "Call 200+ LLMs using the same input/output format with 2 lines of code"
-icon: "arrows-split-up-and-left"
+title: "Begin with LLM proxy"
+description: "Keywords AI LLM proxy supports you call 250+ LLMs using the same input/output format."
 ---
+
+## What is an LLM proxy?
+An LLM proxy is a simple “middleman” between you and Large Language Models (LLMs). It handles things like:
+
+- **Routing**: Sending requests to different models or versions
+- **Fallback models**: If the primary model is down, the proxy will route to a fallback model
+- **Load balancing**: Distributing requests across multiple models
+- **Caching**: Caching responses to improve latency and reduce costs
+
+```mermaid
+  flowchart TD;
+    A[Input]-->B[LLM proxy];
+    B-->C[250+ LLMs];
+    B-->D[Model fallback];
+    B-->E[Load balancing];
+    B-->F[Prompt caching];
+    C-->Z[Optimized LLM Output];
+    D-->Z[Optimized LLM Output];
+    E-->Z[Optimized LLM Output];
+    F-->Z[Optimized LLM Output];
+```
+
 ## Benefits of LLM proxy:
-- Call over 200 LLMs using the same format.
-- Gain comprehensive observability of your LLM applications.
+- Call over 250 LLMs using the same format.
 - Ensure your LLM applications become more scalable and reliable.
+- Manage LLM costs in a single place.
+- Mange API keys in a single place without exposing them.
 
 ## Considerations:
-- May not be suitable for applications with strict latency requirements (100 - 300ms added).
+- May not be suitable for products with strict latency requirements (**50 - 150ms** added).
 - May not be ideal for those who do not want to integrate a third-party service into the core of their application.
 
-## Steps:
-### Create an account
+## How to use Keywords AI LLM proxy
+### 1. Get your Keywords AI API key
 
-Go to Keywords AI's [sign up page](https://platform.keywordsai.co/signup) to create an account. You can use your email or Google account to sign up.
+After you create an account on [Keywords AI](https://platform.keywordsai.co), you can get your API key from the [API keys page](https://platform.keywordsai.co/platform/api/api-keys).
 
-{/* After you complete your onboarding questions, you will see this page: */}
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/api-keys.png" alt="Create API key placeholder" />
 
-{/* <img src="/images/welcome-page.png" /> */}
-
-{/* Welcome to Keywords AI! */}
-
-### Create an API key
-
-To create an API key, visit the [API key page](https://platform.keywordsai.co/platform/api/api-keys)
-
-{/* <img src="/images/create-api-key.jpg" alt="Create API key placeholder" /> */}
-
-- Name your API key for future reference
-- Pick an environment (test or production)
-- Click the `View code` button to copy the code into your codebase
 {/* - Pick an expiry date (optional, default is never expired) */}
 {/* - Choose the models you want the router to route between (pick at least one) */}
 {/* - Pick a rate limit (option, default as the maximum rate limit of your plan, see [rate limit](/guides/limits#rate-limits)) */}
@@ -43,11 +52,154 @@ The API key will show up only once, <strong>Be careful and save it somewhere saf
   Learn More about Keywords AI API keys here
 </Card> */}
 
-### Add credentials
-For the **Free plan users**, you have to use your own credentials to call LLMs. See how to [add your credentials here](/integration/own-api-keys).
-<img height="200" width="500"  src="/images/bring-own-key.png" alt="Dashboard Page"/>
-### Try Keywords AI with the OpenAI SDK 
-**Install the OpenAI SDK**
+### 2. Integrate LLM proxy into your codebase
+Keywords AI offers various integration options, including: mainstream LLM frameworks and REST APIs.
+
+<Tabs>
+<Tab title="Standard API call">
+If you are not using any LLM frameworks, you can use the standard API call to connect 250+ LLMs.
+<CodeGroup>
+```python Python
+import requests
+def demo_call(input, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY"
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+
+```TypeScript TypeScript
+fetch('https://api.keywordsai.co/api/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY'
+  },
+    body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [{role: 'user', content: "Say 'Hello World'"}]
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+```bash Bash
+curl -X POST "https://api.keywordsai.co/chat/completions" 
+-H "Content-Type: application/json" 
+-H "Authorization: Bearer Your_KeywordsAI_API_Key" 
+-d "{
+  "model": "gpt-4o-mini",
+  "messages": [{"role": "user", "content": "Hello"}],
+}"
+```
+
+```PHP PHP
+<?php
+  $ch = curl_init();
+    
+  curl_setopt($ch, CURLOPT_URL, "https://api.keywordsai.co/chat/completions");
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    "Content-Type: application/json",
+    "Authorization: Bearer Your_KeywordsAI_API_Key",
+  ));
+  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array(
+    "model" => "gpt-4o-mini",
+    "messages" => array(["role" => "user", "content" => "Hello"]),
+  )));
+    
+  $response = curl_exec($ch);
+  curl_close($ch);
+?>
+```
+
+```Go Go
+package main
+import (
+  "bytes"
+  "net/http"
+)
+    
+func main() {
+  url := "https://api.keywordsai.co/chat/completions"
+  method := "POST"
+    
+  payload := []byte(`{
+    "model" : "gpt-4o-mini",
+    "messages": [{"role": "user", "content": "Hello"}],
+  }`)
+    
+  client := &http.Client{}
+  req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+    
+  if err != nil {
+    panic(err)
+  }
+    
+  req.Header.Add("Content-Type", "application/json")
+  req.Header.Add("Authorization", "Bearer Your_KeywordsAI_API_Key")
+    
+  res, err := client.Do(req)
+  defer res.Body.Close()
+}
+```
+</CodeGroup>
+</Tab>
+<Tab title="OpenAI SDK">
+If you are using OpenAI SDK, it's pretty straightforward to integrate LLM proxy into your codebase.
+* set the `base_url` to `https://api.keywordsai.co/api`
+* set the `api_key` to your Keywords AI API key
+Go to this page to learn details of OpenAI SDK Integration.
+<Card title="OpenAI SDK Integration" href="/integration/development-frameworks/openai-sdk">
+</Card>
+</Tab>
+<Tab title="Other LLM frameworks">
+We also support other LLM frameworks, pick the one you are using and follow the instructions.
+<CardGroup columns={3}>
+<Card title="Anthropic" href="/integration/development-frameworks/anthropic">
+</Card>
+<Card title="LangChain" href="/integration/development-frameworks/langchain">
+</Card>
+<Card title="Vercel AI SDK" href="/integration/development-frameworks/vercel">
+</Card>
+<Card title="LlamaIndex" href="/integration/development-frameworks/llama-index">
+</Card>
+</CardGroup>
+</Tab>
+</Tabs>
+
+### 3. Add your credentials to activate LLM proxy
+For all LLM proxy users, you have to add your own credentials to activate LLM proxy. We will use your credentials to call LLMs on your behalf. For example, if you want to use OpenAI, you have to add your OpenAI API key to activate LLM proxy.
+
+We **won't use your credentials** for any other purposes.
+
+You can go to the [Credentials page](https://platform.keywordsai.co/platform/api/credentials) to add your credentials. 
+<img  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/credentials.png" alt="Credentials page"/>
+
+<Tip>Learn how to add credentials to a specific provider [here](/integration/own-api-keys).</Tip>
+
+### 4. Parameters
+We support all OpenAI parameters. which is the standard format for LLMs. You can check out important [OpenAI parameters in this page](/api-endpoints/integration/chat-completions#openai-parameters). You can also learn more about OpenAI parameters [here](https://platform.openai.com/docs/api-reference/chat).
+
+For **Keywords AI parameters**, you should use them when you want to achieve specific goals. For example, you can use `fallback_models` to specify fallback models when the primary model is down. You can check out all [Keywords AI parameters in this page](/api-endpoints/integration/chat-completions#keywords-ai-parameters).
+
+{/* ### Try Keywords AI with the OpenAI SDK  */}
+{/* **Install the OpenAI SDK**
 
 ```bash 
 pip install openai 
@@ -90,124 +242,11 @@ const response = await client.chat.completions
 console.log(await response.json());
 
 ```
-</CodeGroup>
+</CodeGroup> */}
 
-### Try Keywords AI with a standard API call
+{/* ### Try Keywords AI with a standard API call
 
-<CodeGroup>
-```python Python
-import requests
-def demo_call(input, 
-              model="gpt-3.5-turbo",
-              token="YOUR_KEYWORDS_AI_API_KEY",
-              stream=False
-              ):
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Bearer {token}',
-    }
 
-    data = {
-        'model': model,
-        'messages': [{'role': 'user', 'content': input}],
-        "stream": stream,
-    }
-
-    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data, stream=stream)
-    return response
-
-messages = "Say 'Hello World'"
-print(demo_call(messages).json())
-
-```
-
-```TypeScript TypeScript
-// Define the function with TypeScript
-fetch('https://api.keywordsai.co/api/chat/completions', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY'
-  },
-    body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: [{role: 'user', content: "Say 'Hello World'"}]
-    })
-})
-.then(response => response.json())
-.then(data => console.log(data));
-```
-
-```bash Bash
-curl -X POST "https://api.keywordsai.co/chat/completions" 
--H "Content-Type: application/json" 
--H "Authorization: Bearer Your_KeywordsAI_API_Key" 
--d "{
-  "model": "gpt-3.5-turbo",
-  "messages": [{"role": "user", "content": "Hello"}],
-  "stream": false,
-  "max_tokens": 100,
-  ... other parameters in similar format ...
-}"
-```
-
-```PHP PHP
-<?php
-  $ch = curl_init();
-    
-  curl_setopt($ch, CURLOPT_URL, "https://api.keywordsai.co/chat/completions");
-  curl_setopt($ch, CURLOPT_POST, 1);
-  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    "Content-Type: application/json",
-    "Authorization: Bearer Your_KeywordsAI_API_Key",
-  ));
-  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array(
-    "model" => "gpt-3.5-turbo",
-    "messages" => array(["role" => "user", "content" => "Hello"]),
-    "stream" => false,
-    "max_tokens" => 100,
-    // ... other parameters in similar format ...
-  )));
-    
-  $response = curl_exec($ch);
-  curl_close($ch);
-?>
-```
-
-```Go Go
-package main
-import (
-  "bytes"
-  "net/http"
-)
-    
-func main() {
-  url := "https://api.keywordsai.co/chat/completions"
-  method := "POST"
-    
-  payload := []byte(`{
-    "model" : "gpt-3.5-turbo",
-    "messages": [{"role": "user", "content": "Hello"}],
-    "stream": false,
-    "max_tokens": 100,
-    ... other parameters in similar format ...
-  }`)
-    
-  client := &http.Client{}
-  req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
-    
-  if err != nil {
-    panic(err)
-  }
-    
-  req.Header.Add("Content-Type", "application/json")
-  req.Header.Add("Authorization", "Bearer Your_KeywordsAI_API_Key")
-    
-  res, err := client.Do(req)
-  defer res.Body.Close()
-}
-```
-</CodeGroup>
 
 - **URL change**: Modify the API endpoint URL in your code from OpenAI’s URL to the Keywords AI endpoint URL: `https://keywordsai.co/api/chat/completions`.
 - **API key**: Replace the OpenAI API key with your Keywords AI API key.
@@ -234,6 +273,17 @@ The results should be printed in the console.
   "usage": { "completion_tokens": 2, "prompt_tokens": 12, "total_tokens": 14 },
   "_response_ms": 653.2679999999999
 }
-```
+``` */}
 
-Congratulations! You have finished the “Hello World” tutorial for Keywords AI API
+## Next steps
+Congratulations! You have integrated LLM proxy into your codebase! When you make any API call, you will see the LLM log on [the platform](https://platform.keywordsai.co/platform/).
+<CardGroup cols={2}>
+<Card title="Switch to a different model" href="/features/generation/gateway">
+</Card>
+<Card title="Reliability settings" href="/features/generation/fallbacks">
+</Card>
+<Card title="Set up observability" href="/get-started/async-logging">
+</Card>
+<Card title="Prompt engineering" href="/features/prompt/create-a-prompt">
+</Card>
+</CardGroup>

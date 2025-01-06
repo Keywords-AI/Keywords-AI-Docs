@@ -1,13 +1,84 @@
 ---
 title: "Overview"
 description: "Use your own API keys through Keywords AI"
-icon: "lock-keyhole-open"
 ---
+<Note> This section is only for **Keywords AI LLM proxy** user.</Note>
 
-If you want to use your own API keys from supported providers, you can 
+Keywords AI provides a robust and flexible LLM proxy with 250+ LLMs. In this section, you will learn how to call those models and how to use Keywords AI with your current LLM frameworks.
 
-- Add your own API keys on Keywords AI. Go to Settings -> [Credentials](https://platform.keywordsai.co/platform/api/credentials) -> Add your credentials.
-<Note> For the `Load balancing weight` filed in the credential card, see details [here](/features/generation/load-balancing).</Note>
+## Supported LLMs:
+To know the full list of supported LLMs, you can check out our [public model library](https://www.keywordsai.co/llm-library).
+
+
+## Supported providers
+<CardGroup cols={3}>
+  <Card title="OpenAI" href="/integration/providers/openai">  
+    <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/openai.png" alt="OpenAI" /></Frame>
+  </Card>
+  <Card title="Anthropic" href="/integration/providers/anthropic">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/anthropic.png" alt="Anthropic" /></Frame>
+  </Card>
+    <Card title="Azure OpenAI" href="/integration/providers/azure">
+    <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/azure_openai.png" alt="Azure OpenAI" /></Frame>
+  </Card>
+  <Card title="Google Vertex AI" href="/integration/providers/vertex">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/vertex.png" alt="Google Vertex AI" /></Frame>
+  </Card>
+  <Card title="AWS Bedrock" href="/integration/providers/bedrock">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/bedrock.png" alt="AWS Bedrock" /></Frame>
+  </Card>
+  <Card title="Groq" href="/integration/providers/groq">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/groq.png" alt="Groq" /></Frame>
+  </Card>
+  <Card title="Fireworks" href="/integration/providers/fireworks">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/fireworks.png" alt="Fireworks" /></Frame>
+  </Card>
+  <Card title="Together AI" href="/integration/providers/togetherai">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/together.png" alt="Together AI" /></Frame>
+  </Card>
+  <Card title="Perplexity AI" href="/integration/providers/perplexity">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/perplexity.png" alt="Perplexity AI" /></Frame>
+  </Card>
+  <Card title="OpenRouter" href="/integration/providers/openrouter">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/openrouter.png" alt="OpenRouter" /></Frame>
+  </Card>
+  <Card title="Cohere" href="/integration/providers/cohere">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/cohere.png" alt="Cohere" /></Frame>
+  </Card>
+  <Card title="Google Gemini AI" href="/integration/providers/gemini">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/gemini.png" alt="Google Gemini AI" /></Frame>
+  </Card>
+  <Card title="Mistral" href="/integration/providers/mistral">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/mistral.png" alt="Mistral" /></Frame>
+  </Card>
+  </CardGroup>
+
+## Supported frameworks
+<CardGroup cols={3}>
+
+  <Card title="Langchain" href="/integration/frameworks/langchain">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/langchain.png" alt="Langchain" /></Frame>
+  </Card>
+
+  <Card title="Vercel AI SDK" href="/integration/frameworks/vercel">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/ai_sdk.png" alt="Vercel AI SDK" /></Frame>
+  </Card>
+  <Card title="LlamaIndex" href="/integration/frameworks/llamaindex">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/llamaindex.png" alt="LlamaIndex" /></Frame>
+  </Card>
+  <Card title="BAML" href="/integration/frameworks/baml">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/baml.png" alt="BAML" /></Frame>
+  </Card>
+  <Card title="Mem0" href="/integration/frameworks/mem0">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/mem0.png" alt="Mem0" /></Frame>
+  </Card>
+  <Card title="PostHog" href="/integration/frameworks/posthog">
+  <Frame><img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/posthog.png" alt="PostHog" /></Frame>
+  </Card> 
+</CardGroup>
+
+{/* - Add your own API keys on Keywords AI. Go to Settings -> [Credentials](https://platform.keywordsai.co/platform/api/credentials) -> Add your credentials.
+
 <img height="200" width="600"  src="/images/bring-own-key.png" alt="Dashboard Page"/>
 
 - Pass in your credentials and deployment variables for supported providers and use your credits.*  Check out `customer_credentials` [here](/api-endpoints/proxy-endpoints/chat-completions) <br/>
@@ -24,9 +95,9 @@ If you want to use your own API keys from supported providers, you can
     }
   }
 }
-```
+``` */}
 
-## Available providers
+{/* ## Available providers
 | Provider Name     | Supported Models | Last Update  |Provider ID        |
 |-----|---|------|----|
 | OpenAI            | All                | Jun 29, 2024 |   openai             |
@@ -39,4 +110,4 @@ If you want to use your own API keys from supported providers, you can
 | Together AI       | All                | Jun 29, 2024 | togetherai         |
 | Perplexity AI     | All                | Jun 29, 2024 | perplexity         |
 | Groq              | All                | Jun 29, 2024  | groq               |
-| AWS Bedrock        | All                | Jun 29, 2024  | bedrock            |
+| AWS Bedrock        | All                | Jun 29, 2024  | bedrock            | */}
