@@ -5,12 +5,12 @@
     }
   },
   "font": {
-  "headings": {
-    "family": "Inter"
-  },
-  "body": {
-    "family": "Inter"
-  }
+    "headings": {
+      "family": "Inter"
+    },
+    "body": {
+      "family": "Inter"
+    }
   },
   "codeBlock": {
     "mode": "auto"
@@ -100,7 +100,6 @@
             "get-started/async-logging",
             "get-started/llm-inference",
             "get-started/prompt-engineering"
-
           ]
         }
       ]
@@ -168,6 +167,9 @@
         }
       ]
     },
+    { 
+    "group": "Ecosystem",
+    "pages": ["integration/own-api-keys"] },
     {
       "group": "LLM Frameworks",
       "pages": [
@@ -183,7 +185,6 @@
     {
       "group": "LLM providers",
       "pages": [
-        "integration/own-api-keys", 
         "integration/providers/openai",
         "integration/providers/anthropic",
         "integration/providers/azure",
@@ -198,9 +199,7 @@
     },
     {
       "group": "Analytics",
-      "pages": [
-        "integration/posthog"
-      ]
+      "pages": ["integration/posthog"]
     },
     {
       "group": "Integration methods",
@@ -221,29 +220,33 @@
       "group": "Prompt",
       "pages": [
         {
-        "group": "Prompt creation",
-        "pages": [
-          "api-endpoints/prompt-endpoints/create-prompts",
-          "api-endpoints/prompt-endpoints/create-prompt-version"
-        ]},
+          "group": "Prompt creation",
+          "pages": [
+            "api-endpoints/prompt-endpoints/create-prompts",
+            "api-endpoints/prompt-endpoints/create-prompt-version"
+          ]
+        },
         {
           "group": "Prompt retrieval",
           "pages": [
             "api-endpoints/prompt-endpoints/get-prompts",
             "api-endpoints/prompt-endpoints/get-prompt-versions"
-          ]},
+          ]
+        },
         {
           "group": "Prompt update",
           "pages": [
             "api-endpoints/prompt-endpoints/update-prompt",
             "api-endpoints/prompt-endpoints/update-prompt-version"
-          ]},
-          {
+          ]
+        },
+        {
           "group": "Prompt delete",
           "pages": [
             "api-endpoints/prompt-endpoints/delete-prompt",
             "api-endpoints/prompt-endpoints/delete-prompt-version"
-          ]}
+          ]
+        }
       ]
     },
     {
@@ -265,21 +268,15 @@
     },
     {
       "group": "Evaluations",
-      "pages": [
-        "api-endpoints/async-endpoints/evaluations"
-      ]
+      "pages": ["api-endpoints/async-endpoints/evaluations"]
     },
     {
       "group": "Model",
-      "pages": [
-        "api-endpoints/data-endpoints/models-endpoint"
-      ]
+      "pages": ["api-endpoints/data-endpoints/models-endpoint"]
     },
     {
       "group": "Error handling",
-      "pages": [
-        "error-handling/400"
-      ]
+      "pages": ["error-handling/400"]
     },
     {
       "group": "Resources",
