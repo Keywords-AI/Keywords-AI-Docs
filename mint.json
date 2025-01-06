@@ -109,19 +109,23 @@
       "group": "Guides",
       "pages": [
         {
-          "group": "Observability",
+          "group": "LLM observability",
           "pages": [
             "features/monitoring/analytics",
-            "features/monitoring/logging",
-            "features/monitoring/logs-advanced",
-            "features/monitoring/update-logs",
-            "features/generation/disable-logs",
             "features/generation/customer-identifier",
             "features/user/user-budget",
             "features/generation/metadata",
             "features/monitoring/threads",
             "features/monitoring/subscribe-alerts",
-            "features/monitoring/webhooks"
+            "features/monitoring/logging",
+            "features/generation/disable-logs",
+            {
+              "group": "Observability advanced",
+              "pages": [
+                "features/monitoring/share-log",
+                "features/monitoring/webhooks"
+              ]
+            }
           ]
         },
         {
@@ -133,7 +137,8 @@
             "features/generation/fallbacks",
             "features/generation/load-balancing",
             "features/generation/caches",
-            "features/generation/retries"
+            "features/generation/retries",
+            "features/generation/function-calling"
           ]
         },
         {
@@ -142,7 +147,8 @@
             "features/prompt/create-a-prompt",
             "features/prompt/deploy-a-prompt",
             "features/prompt/monitor-a-prompt",
-            "features/prompt/model-playground"
+            "features/prompt/model-playground",
+            "features/prompt/share-a-prompt"
           ]
         },
         {
@@ -156,29 +162,30 @@
         {
           "group": "Organization management",
           "pages": [
-            "features/generation/key-management"
+            "features/generation/key-management",
+            "features/organization/create-team"
           ]
         }
       ]
     },
     {
+      "group": "LLM Frameworks",
+      "pages": [
+        "integration/development-frameworks/openai-sdk",
+        "integration/development-frameworks/anthropic",
+        "integration/development-frameworks/langchain",
+        "integration/development-frameworks/vercel",
+        "integration/development-frameworks/llama-index",
+        "integration/development-frameworks/baml",
+        "integration/development-frameworks/mem0"
+      ]
+    },
+    {
       "group": "LLM providers",
       "pages": [
-        "integration/own-api-keys",
-        {
-          "group": "OpenAI",
-          "pages": [
-            "integration/development-frameworks/openai-sdk",
-            "integration/providers/openai"
-          ]
-        },
-        {
-          "group": "Anthropic",
-          "pages": [
-            "integration/development-frameworks/anthropic",
-            "integration/providers/anthropic"
-          ]
-        },
+        "integration/own-api-keys", 
+        "integration/providers/openai",
+        "integration/providers/anthropic",
         "integration/providers/azure",
         "integration/providers/vertex",
         "integration/providers/bedrock",
@@ -187,16 +194,6 @@
         "integration/providers/together",
         "integration/providers/perplexity",
         "integration/providers/openrouter"
-      ]
-    },
-    {
-      "group": "LLM Frameworks",
-      "pages": [
-        "integration/development-frameworks/langchain",
-        "integration/development-frameworks/vercel",
-        "integration/development-frameworks/llama-index",
-        "integration/development-frameworks/baml",
-        "integration/development-frameworks/mem0"
       ]
     },
     {

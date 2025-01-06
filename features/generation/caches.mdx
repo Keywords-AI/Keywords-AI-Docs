@@ -30,10 +30,10 @@ response = client.chat.completions.create(
         {"role": "user", "content": "Tell me a long story"}
     ],
     extra_body={
-        "cache_enabled": true,
+        "cache_enabled": True,
         "cache_ttl": 600,
         "cache_options": {
-            "cache_by_customer": true
+            "cache_by_customer": True
         }
     }
 )
@@ -80,10 +80,10 @@ def demo_call(input,
     data = {
         'model': model,
         'messages': [{'role': 'user', 'content': input}],
-        'cache_enabled': true,
+        'cache_enabled': True,
         'cache_ttl': 600,
         'cache_options': {
-            'cache_by_customer': true
+            'cache_by_customer': True
         }
     }
 

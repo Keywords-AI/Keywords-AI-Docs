@@ -1,0 +1,45 @@
+---
+title: "Function calling"
+description: "This is the guide for how to use function calling in Keywords AI"
+---
+
+Function calling is a feature that allows you to call a function from a model. This is useful to call a function from a model and get the result.
+
+Here's the guide for how to use function calling in Keywords AI.
+
+```Python Functions.py
+from openai import OpenAI
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+tools = [
+  {
+    "type": "function",
+    "function": {
+      "name": "get_current_weather",
+      "description": "Get the current weather in a given location",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string",
+            "description": "The city and state, e.g. San Francisco, CA",
+          },
+          "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
+        },
+        "required": ["location"],
+      },
+    }
+  }
+]
+messages = [{"role": "user", "content": "What's the weather like in Boston today?"}]
+completion = client.chat.completions.create(
+  model="gpt-4o",
+  messages=messages,
+  tools=tools,
+  tool_choice="auto"
+)
+print(completion)
+```

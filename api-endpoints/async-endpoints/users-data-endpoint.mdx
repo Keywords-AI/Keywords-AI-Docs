@@ -31,73 +31,73 @@ You can paste the command below into your terminal to run your first API request
     Example: PST time is -8 hours from UTC, so the timezone_offset is 8.
 </ParamField>
 
-<ResponseField name="count" type="int">
+<ParamField name="count" type="int">
     The number of UserData objects in the results array.
-</ResponseField>
-<ResponseField name="next" type="string">
+</ParamField>
+<ParamField name="next" type="string">
     The URL to the next page of results.
-</ResponseField>
-<ResponseField name="previous" type="string">
+</ParamField>
+<ParamField name="previous" type="string">
     The URL to the previous page of results.
-</ResponseField>
+</ParamField>
 
 ### Response params:
 
-<ResponseField name="results" type="array" >
+<ParamField name="results" type="array" >
     An array of UserData objects.
     <Accordion title="Properties">
-        <ResponseField name="active_days" default={0}>
+        <ParamField name="active_days" default={0}>
             The number of days the user has been active.
-        </ResponseField>
-        <ResponseField name="last_active_timeframe" default={0}>
+        </ParamField>
+        <ParamField name="last_active_timeframe" default={0}>
             The last time the user was active (sent a request to the API).
-        </ResponseField>
-        <ResponseField name="total_tokens" default={0}>
+        </ParamField>
+        <ParamField name="total_tokens" default={0}>
             Depending on summary_type, the total tokens used within the timeframe.
-        </ResponseField>
-        <ResponseField name="total_cost" default={0}>
+        </ParamField>
+        <ParamField name="total_cost" default={0}>
             Depending on summary_type, the total cost of the tokens used within the timeframe.
 
             For example: summary_type=monthly, total_cost=1000 means the user has used 1000 tokens in the current month.
-        </ResponseField>
-        <ResponseField name="average_sentiment" default={0}>
+        </ParamField>
+        <ParamField name="average_sentiment" default={0}>
             Depending on summary_type, the average sentiment score of the user's requests over this timeframe
-        </ResponseField>
-        <ResponseField name="active_duration" default={0}>
+        </ParamField>
+        <ParamField name="active_duration" default={0}>
             The total duration of the user using the API (time from the first request to the last request).
-        </ResponseField>
-        <ResponseField name="average_sentiment" default={0}>
+        </ParamField>
+        <ParamField name="average_sentiment" default={0}>
             Depending on summary_type, the average sentiment score of the user's requests over this timeframe
-        </ResponseField>
-        <ResponseField name="customer_identifier" default={0}>
+        </ParamField>
+        <ParamField name="customer_identifier" default={0}>
             The customer ID you assigned to identify the user in your request.
-        </ResponseField>
+        </ParamField>
     </Accordion>
-</ResponseField>
+</ParamField>
 
-<ResponseField name="aggregation_data" type="Aggregation Object">
+<ParamField name="aggregation_data" type="Aggregation Object">
     A summary of the data in request results (of all pages).
     <Accordion title="Properties">
-        <ResponseField name="new_users" default={0}>
+        <ParamField name="new_users" default={0}>
             Depending on the summary_type, the number of total users in the current timeframe - the number of users in the previous timeframe.
-        </ResponseField>
-        <ResponseField name="total_users" default={0}>
+        </ParamField>
+        <ParamField name="total_users" default={0}>
             The total number of users in the current timeframe.
-        </ResponseField>
-        <ResponseField name="montly_active_users" default={0}>
+        </ParamField>
+        <ParamField name="montly_active_users" default={0}>
             The number of users who have been active in the current month.
-        </ResponseField>
-        <ResponseField name="daily_active_users" default={0}>
+        </ParamField>
+        <ParamField name="daily_active_users" default={0}>
             The number of users who have been active in the current day.
-        </ResponseField>
-        <ResponseField name="daily_requests" default={0}>
+        </ParamField>
+        <ParamField name="daily_requests" default={0}>
             The number of requests made in the current day.
-        </ResponseField>
-        <ResponseField name="montly_cost" default={0}>
+        </ParamField>
+        <ParamField name="montly_cost" default={0}>
             The total cost of the tokens used in the current month.
-        </ResponseField>
+        </ParamField>
     </Accordion>
-</ResponseField>
+</ParamField>
 
 <RequestExample>
 ```Python Python
