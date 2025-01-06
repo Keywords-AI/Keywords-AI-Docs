@@ -1,45 +1,33 @@
 ---
 title: "Integrate 200+ LLMs"
 description: "Call 200+ LLMs with a single OpenAI compatible format"
-icon: "arrows-split-up-and-left"
 ---
 
-Keywords AI allows you to call 200+ LLMs with a single OpenAI compatible format. You can switch between models with only 1 line of code change. 
+The most used feature of the LLM proxy is the ability to call 200+ LLMs with a single API format. You can switch between models with only 1 line of code change. 
 
-```mermaid
-  flowchart TD;
-    A[Input]-->B[LLM proxy];
-    B-->C[GPT 4o];
-    B-->D[Claude 3.5 Sonnet];
-    B-->E[Gemini 1.5 Pro];
-    B-->F[200+ other LLMs];
-    C-->Z[Optimized LLM Output];
-    D-->Z[Optimized LLM Output];
-    E-->Z[Optimized LLM Output];
-    F-->Z[Optimized LLM Output];
-```
+## Choose a model
+After you integrate the LLM proxy, you can choose a model from the [Models page](https://platform.keywordsai.co/platform/models). In this page, you can see each model's description, pricing, and other metrics, which helps you choose the best model for your use case.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/models.png"/>
+</Frame>
 
-<Steps>
-<Step title="Create an API key">
-To create an API key, visit the [API key page](https://platform.keywordsai.co/platform/api/api-keys)
-</Step>
-<Step title="Copy the code from the code box">
-After you create an API key, click on the `View code` button to copy the code into your codebase.
-<img height="200" width="500"  src="https://keywordsai-static.s3.amazonaws.com/docs/codebox.png" alt="Dashboard Page"/>
-</Step>
+### Model family
+You can also click an exact model to see it's model family, which is a group of models that hosted by the different LLM providers.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/model-details.png"/>
+</Frame>
 
-<Step title="Choose the best model in Models page">
-Go to the [Models page](https://platform.keywordsai.co/platform/models) and choose the best model for your use case. Click the Copy button to copy the model id.
-<img height="200" width="500"  src="https://keywordsai-static.s3.amazonaws.com/docs/models.png" alt="Dashboard Page"/>
-</Step>
+### Integration code
+If you have already integrated the LLM proxy, you can click the `Code` button to copy the integration code with the language you are using.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/model-code.png"/>
+</Frame>
 
-</Steps>
-
-## Call models with OpenAI SDK
-<CodeGroup>
-```Python Python
+## Call models in different frameworks
+<Tabs>
+<Tab title="OpenAI Python SDK">
+```python {9}
 from openai import OpenAI
-
 
 client = OpenAI(
     base_url="https://api.keywordsai.co/api/",
@@ -47,43 +35,39 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="claude-3-sonnet-20240229", ## Change the model id here
-    messages=[{"role":"user", "content":"Tell me a long story"}],
-    stream=True,
-    extra_body={"customer_identifier": "customer_11"}
+    model="claude-3-5-haiku-20241022",
+    messages=[
+        {"role": "user", "content": "Tell me a long story"}
+    ]
 )
 ```
-
-```TypeScript TypeScript
+</Tab>
+<Tab title="OpenAI TypeScript SDK">
+Here is an example of how to disable logging in the OpenAI TypeScript SDK. In OpenAI TypeScript SDK, you should add a `// @ts-expect-error` before the disable_log field.
+```typescript {11}
 import { OpenAI } from "openai";
 
 const client = new OpenAI({
   baseURL: "https://api.keywordsai.co/api",
-  apiKey: process.env.KEYWORDS_AI_API_KEY,
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
 });
 
 const response = await client.chat.completions
   .create({
     messages: [{ role: "user", content: "Say this is a test" }],
-    model: "claude-3-sonnet-20240229", // Change the model id here 
-    // @ts-expect-error
-    customer_identifier: "test_openai_chat",
+    model: "claude-3-5-sonnet-20241022"
   })
   .asResponse();
 
 console.log(await response.json());
-
 ```
-</CodeGroup>
-
-## Call models with a standard API call
-<CodeGroup>
-```python Python
+</Tab>
+<Tab title="Standard API">
+```python  {3}
 import requests
 def demo_call(input, 
-              model="claude-3-sonnet-20240229", ## Change the model id here
+              model="groq/llama-3.3-70b-specdec",
               token="YOUR_KEYWORDS_AI_API_KEY",
-              stream=False
               ):
     headers = {
         'Content-Type': 'application/json',
@@ -93,110 +77,21 @@ def demo_call(input,
     data = {
         'model': model,
         'messages': [{'role': 'user', 'content': input}],
-        "stream": stream,
     }
 
-    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data, stream=stream)
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
     return response
 
 messages = "Say 'Hello World'"
 print(demo_call(messages).json())
-
 ```
+</Tab>
+<Tab title="Other SDKs">
+We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/own-api-keys) for more information.
+</Tab>
+</Tabs>
 
-```TypeScript TypeScript
-// Define the function with TypeScript
-fetch('https://api.keywordsai.co/api/chat/completions', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY'
-  },
-    body: JSON.stringify({
-        model: "gpt-4o", // Change the model id here
-        messages: [{role: 'user', content: "Say 'Hello World'"}]
-    })
-})
-.then(response => response.json())
-.then(data => console.log(data));
-```
-
-```bash Bash
-curl -X POST "https://api.keywordsai.co/chat/completions" 
--H "Content-Type: application/json" 
--H "Authorization: Bearer Your_KeywordsAI_API_Key" 
--d "{
-  "model": "gpt-3.5-turbo",
-  "messages": [{"role": "user", "content": "Hello"}],
-  "stream": false,
-  "max_tokens": 100,
-  ... other parameters in similar format ...
-}"
-```
-
-```PHP PHP
-<?php
-  $ch = curl_init();
-    
-  curl_setopt($ch, CURLOPT_URL, "https://api.keywordsai.co/chat/completions");
-  curl_setopt($ch, CURLOPT_POST, 1);
-  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    "Content-Type: application/json",
-    "Authorization: Bearer Your_KeywordsAI_API_Key",
-  ));
-  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array(
-    "model" => "gpt-3.5-turbo",
-    "messages" => array(["role" => "user", "content" => "Hello"]),
-    "stream" => false,
-    "max_tokens" => 100,
-    // ... other parameters in similar format ...
-  )));
-    
-  $response = curl_exec($ch);
-  curl_close($ch);
-?>
-```
-
-```Go Go
-package main
-import (
-  "bytes"
-  "net/http"
-)
-    
-func main() {
-  url := "https://api.keywordsai.co/chat/completions"
-  method := "POST"
-    
-  payload := []byte(`{
-    "model" : "gpt-3.5-turbo",
-    "messages": [{"role": "user", "content": "Hello"}],
-    "stream": false,
-    "max_tokens": 100,
-    ... other parameters in similar format ...
-  }`)
-    
-  client := &http.Client{}
-  req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
-    
-  if err != nil {
-    panic(err)
-  }
-    
-  req.Header.Add("Content-Type", "application/json")
-  req.Header.Add("Authorization", "Bearer Your_KeywordsAI_API_Key")
-    
-  res, err := client.Do(req)
-  defer res.Body.Close()
-}
-```
-</CodeGroup>
-
-- **URL change**: Modify the API endpoint URL in your code from OpenAI’s URL to the Keywords AI endpoint URL: `https://keywordsai.co/api/chat/completions`.
-- **API key**: Replace the OpenAI API key with your Keywords AI API key.
-- **Parameters**: See supported parameters in the [API reference](/api-endpoints/proxy-endpoints/chat-completions).
-
-## Response
+{/* ## Response
 
 The results should be printed in the console.
 
@@ -217,6 +112,6 @@ The results should be printed in the console.
   "usage": { "completion_tokens": 2, "prompt_tokens": 12, "total_tokens": 14 },
   "_response_ms": 653.2679999999999
 }
-```
+``` */}
 
 

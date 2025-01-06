@@ -4,7 +4,25 @@
       "apiKey": "phc_rL8MrmFrie28wgxtDurKt9t1bwCzChaJQ7WYaj1F1gH"
     }
   },
+  "font": {
+  "headings": {
+    "family": "Inter"
+  },
+  "body": {
+    "family": "Inter"
+  }
+  },
+  "codeBlock": {
+    "mode": "auto"
+  },
+  "sidebar": {
+    "items": "border"
+  },
   "$schema": "https://mintlify.com/schema.json",
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true
+  },
   "name": "Docs",
   "logo": {
     "dark": "/logo/dark.svg",
@@ -12,7 +30,6 @@
     "href": "https://www.keywordsai.co"
   },
   "theme": "prism",
-  "background": { "style": "gradient" },
   "primaryTab": {
     "name": "Documentation"
   },
@@ -20,6 +37,10 @@
     {
       "name": "API reference",
       "url": "api-endpoints"
+    },
+    {
+      "name": "Integrations",
+      "url": "integration"
     },
     {
       "name": "Changelog ↗",
@@ -34,12 +55,12 @@
 
   "favicon": "/logo.svg",
   "colors": {
-    "primary": "#6483F0",
+    "primary": "#111112",
     "light": "#7590F2",
     "dark": "#05050A",
     "background": {
       "dark": "#05050A",
-      "light": "#F9FAFC"
+      "light": "#ffffff"
     },
     "anchors": {
       "from": "#0D9373",
@@ -75,114 +96,110 @@
         "get-started/overview",
         {
           "group": "Quick start",
-          "icon": "rocket",
           "pages": [
             "get-started/async-logging",
-            "get-started/llm-inference"
+            "get-started/llm-inference",
+            "get-started/prompt-engineering"
 
           ]
         }
       ]
     },
     {
-      "group": "Proxy integrations",
+      "group": "Guides",
       "pages": [
         {
-          "group": "Supported SDKs",
-          "icon": "briefcase",
-          "pages": [        
-          "integration/development-frameworks/openai-sdk",
-          "integration/development-frameworks/anthropic",
-          "integration/development-frameworks/langchain",
-          "integration/development-frameworks/vercel",
-          "integration/development-frameworks/llama-index",
-          "get-started/fine-tuned-model"]
-        },
-        "integration/supported-models",
-        {
-          "group": "Supported providers",
-          "icon": "hand-holding-heart",
+          "group": "LLM observability",
           "pages": [
-            "integration/own-api-keys",
-            "integration/providers/azure",
-            "integration/providers/openai",
-            "integration/providers/anthropic",
-            "integration/providers/vertex",
-            "integration/providers/bedrock",
-            "integration/providers/groq",
-            "integration/providers/Fireworks",
-            "integration/providers/together",
-            "integration/providers/perplexity",
-            "integration/providers/openrouter"
+            "features/monitoring/analytics",
+            "features/generation/customer-identifier",
+            "features/user/user-budget",
+            "features/generation/metadata",
+            "features/monitoring/threads",
+            "features/monitoring/subscribe-alerts",
+            "features/monitoring/logging",
+            "features/generation/disable-logs",
+            {
+              "group": "Observability advanced",
+              "pages": [
+                "features/monitoring/share-log",
+                "features/monitoring/webhooks"
+              ]
+            }
+          ]
+        },
+        {
+          "group": "LLM proxy",
+          "pages": [
+            "features/generation/overview",
+            "features/generation/gateway",
+            "features/generation/add-credentials",
+            "features/generation/fallbacks",
+            "features/generation/load-balancing",
+            "features/generation/caches",
+            "features/generation/retries",
+            "features/generation/function-calling"
+          ]
+        },
+        {
+          "group": "Prompt engineering",
+          "pages": [
+            "features/prompt/create-a-prompt",
+            "features/prompt/deploy-a-prompt",
+            "features/prompt/monitor-a-prompt",
+            "features/prompt/model-playground",
+            "features/prompt/share-a-prompt"
+          ]
+        },
+        {
+          "group": "Evaluations",
+          "pages": [
+            "features/datasets",
+            "features/prompt/testsets",
+            "features/prompt/lab"
+          ]
+        },
+        {
+          "group": "Organization management",
+          "pages": [
+            "features/generation/key-management",
+            "features/organization/create-team"
           ]
         }
       ]
     },
     {
-      "group": "Integrations",
+      "group": "LLM Frameworks",
       "pages": [
-        "integration/posthog",
+        "integration/development-frameworks/openai-sdk",
+        "integration/development-frameworks/anthropic",
+        "integration/development-frameworks/langchain",
+        "integration/development-frameworks/vercel",
+        "integration/development-frameworks/llama-index",
         "integration/development-frameworks/baml",
         "integration/development-frameworks/mem0"
       ]
     },
     {
-      "group": "Features",
+      "group": "LLM providers",
       "pages": [
-        {
-          "group": "Monitoring",
-          "icon": "eyes",
-          "pages": [
-            "features/monitoring/analytics",
-            "features/monitoring/logging",
-            "features/monitoring/update-logs",
-            "features/generation/disable-logs",
-            "features/generation/customer-identifier",
-            "features/generation/metadata",
-            "features/monitoring/threads",
-            "features/monitoring/subscribe-alerts",
-            "features/monitoring/webhooks"
-          ]
-        },
-        {
-          "group": "Proxy",
-          "icon": "cloud",
-          "pages": [
-            "features/generation/gateway",
-            "features/generation/key-management",
-            "features/generation/fallbacks",
-            "features/generation/load-balancing",
-            "features/generation/caches",
-            "features/generation/retries"
-          ]
-        },
-        {
-          "group": "User analytics",
-          "icon": "user-magnifying-glass",
-          "pages": [
-            "features/user/user-creation",
-            "features/user/user-data",
-            "features/user/user-budget"
-          ]
-        },
-        {
-          "group": "Evaluations",
-          "icon": "microscope",
-          "pages": [
-            "features/evaluation/llm-as-a-judge"
-          ]
-        },
-        {
-          "group": "Prompt engineering",
-          "icon": "wand-magic-sparkles",
-          "pages": [
-            "features/prompt/prompt-management",
-            "features/prompt/model-playground",
-            "features/prompt/lab",
-            "features/prompt/testsets"
-          ]
-        },
-            "features/datasets"
+        "integration/own-api-keys", 
+        "integration/providers/openai",
+        "integration/providers/anthropic",
+        "integration/providers/azure",
+        "integration/providers/vertex",
+        "integration/providers/bedrock",
+        "integration/providers/groq",
+        "integration/providers/Fireworks",
+        "integration/providers/together",
+        "integration/providers/perplexity",
+        "integration/providers/openrouter"
+      ]
+    },
+    {
+      "group": "Analytics",
+      "pages": [
+        "integration/posthog"
       ]
     },
     {
@@ -261,14 +278,7 @@
     {
       "group": "Error handling",
       "pages": [
-        "error-handling/400",
-        "error-handling/401",
-        "error-handling/402",
-        "error-handling/403",
-        "error-handling/404",
-        "error-handling/408",
-        "error-handling/429",
-        "error-handling/500"
+        "error-handling/400"
       ]
     },
     {

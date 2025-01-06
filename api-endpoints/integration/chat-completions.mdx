@@ -4,11 +4,11 @@ api: POST https://api.keywordsai.co/api/chat/completions
 ---
 
 ## OpenAI parameters 
-To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `extra_body` parameter.
+To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `extra_body` parameter if you're using the OpenAI SDK.
 
 <RequestExample>
 
-```Python Python
+{/* ```Python OpenAI Python
 from openai import OpenAI
 
 client = OpenAI(
@@ -20,11 +20,11 @@ response = client.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=[{"role":"user", "content":"Tell me a long story"}],
     stream=True,
-    extra_body={"customer_identifier": "customer_11"}
+    extra_body={"metadata": {"session_id": "session_11"}}
 )
 ```
 
-```TypeScript TypeScript
+```TypeScript OpenAI TypeScript
 import { OpenAI } from "openai";
 
 const client = new OpenAI({
@@ -37,48 +37,111 @@ const response = await client.chat.completions
     messages: [{ role: "user", content: "Say this is a test" }],
     model: "gpt-3.5-turbo",
     // @ts-expect-error
-    customer_identifier: "test_openai_chat",
+    metadata: {"session_id": "session_11"}
   })
   .asResponse();
 
 console.log(await response.json());
 
-```
-```Python Functions.py
-from openai import OpenAI
-client = OpenAI(
-    base_url="https://api.keywordsai.co/api/",
-    api_key="YOUR_KEYWORDSAI_API_KEY",
-)
-
-tools = [
-  {
-    "type": "function",
-    "function": {
-      "name": "get_current_weather",
-      "description": "Get the current weather in a given location",
-      "parameters": {
-        "type": "object",
-        "properties": {
-          "location": {
-            "type": "string",
-            "description": "The city and state, e.g. San Francisco, CA",
-          },
-          "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
-        },
-        "required": ["location"],
-      },
+``` */}
+```python Python
+import requests
+def demo_call(input, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY"
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
     }
-  }
-]
-messages = [{"role": "user", "content": "What's the weather like in Boston today?"}]
-completion = client.chat.completions.create(
-  model="gpt-4o",
-  messages=messages,
-  tools=tools,
-  tool_choice="auto"
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+
+```TypeScript TypeScript
+fetch('https://api.keywordsai.co/api/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY'
+  },
+    body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [{role: 'user', content: "Say 'Hello World'"}]
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+```bash Bash
+curl -X POST "https://api.keywordsai.co/chat/completions" 
+-H "Content-Type: application/json" 
+-H "Authorization: Bearer Your_KeywordsAI_API_Key" 
+-d "{
+  "model": "gpt-4o-mini",
+  "messages": [{"role": "user", "content": "Hello"}],
+}"
+```
+
+```PHP PHP
+<?php
+  $ch = curl_init();
+    
+  curl_setopt($ch, CURLOPT_URL, "https://api.keywordsai.co/chat/completions");
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    "Content-Type: application/json",
+    "Authorization: Bearer Your_KeywordsAI_API_Key",
+  ));
+  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array(
+    "model" => "gpt-4o-mini",
+    "messages" => array(["role" => "user", "content" => "Hello"]),
+  )));
+    
+  $response = curl_exec($ch);
+  curl_close($ch);
+?>
+```
+
+```Go Go
+package main
+import (
+  "bytes"
+  "net/http"
 )
-print(completion)
+    
+func main() {
+  url := "https://api.keywordsai.co/chat/completions"
+  method := "POST"
+    
+  payload := []byte(`{
+    "model" : "gpt-4o-mini",
+    "messages": [{"role": "user", "content": "Hello"}],
+  }`)
+    
+  client := &http.Client{}
+  req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+    
+  if err != nil {
+    panic(err)
+  }
+    
+  req.Header.Add("Content-Type", "application/json")
+  req.Header.Add("Authorization", "Bearer Your_KeywordsAI_API_Key")
+    
+  res, err := client.Do(req)
+  defer res.Body.Close()
+}
 ```
 
 </RequestExample>
@@ -533,20 +596,20 @@ You can put any OpenAI chat/completions parameters here to override the prompt's
 
 </ParamField>
 
-<ResponseField name="retry_params" type="object">
+<ParamField name="retry_params" type="object">
     Enable or disable retries and set the number of retries and the time to wait before retrying. Check the [details of retries here.](/features/generation/retries)
   <Accordion title="Properties">
-    <ResponseField name="retry_enabled" type="boolean" required>
+    <ParamField name="retry_enabled" type="boolean" required>
         Enable or disable retries.
-    </ResponseField>
-    <ResponseField name="num_retries" type="number">
+    </ParamField>
+    <ParamField name="num_retries" type="number">
         The number of retries to attempt.
-    </ResponseField>
-    <ResponseField name="retry_after" type="number">
+    </ParamField>
+    <ParamField name="retry_after" type="number">
         The time to wait before retrying in seconds.
-    </ResponseField>
+    </ParamField>
   </Accordion>
-</ResponseField>
+</ParamField>
 
 <ParamField path="disable_log" type="boolean" deafault={false}>
   When set to true, only the request and [performance
@@ -616,7 +679,7 @@ Contact team@keywordsai.co if you need extra parameter support for your use case
 </ParamField>
 
 
-<ResponseField name="customer_params" type="object">
+<ParamField name="customer_params" type="object">
   Pass the customer's parameters in the API call to monitor the user's data in the Keywords AI platform. See how to get insights into your users' data [here](/features/user/user-creation)
   <Accordion title="Properties">
 <ParamField path="customer_identifier" type="string" required>
@@ -655,19 +718,8 @@ The markup percentage for the period. Usage report of your customers through thi
 The total budget for a user.
 </ParamField>
   </Accordion>
-</ResponseField>
-
-<ParamField path="customer_identifier" type="string">
-  Use this as a tag to identify the user associated with the API call. See the [details of customer identifier here.](/features/generation/customer-identifier)
-  <Accordion title="Example">
-```json
-{
-    //...other_params,
-    "customer_identifier": "user_123"
-}
-```
-</Accordion>
 </ParamField>
+
 
 
 
@@ -780,6 +832,17 @@ Adding this returns the summarization of the response in the response body. If s
 
 
 ## Deprecated parameters
+<ParamField path="customer_identifier" type="string">
+  Use this as a tag to identify the user associated with the API call. See the [details of customer identifier here.](/features/generation/customer-identifier)
+  <Accordion title="Example">
+```json
+{
+    //...other_params,
+    "customer_identifier": "user_123"
+}
+```
+</Accordion>
+</ParamField>
 
 <ParamField path="customer_api_keys" type="object">
 You can pass in a dictionary of your customer's API keys for specific models. If the router selects a model that is in the dictionary, it will attempt to use the customer's API key for calling the model before using your [integration API key](/integration/llm-credits) or Keywords AI's default API key.
@@ -823,3 +886,4 @@ You can pass in a dictionary of your customer's API keys for specific models. If
 ```
   </Accordion>
 </ParamField>
+

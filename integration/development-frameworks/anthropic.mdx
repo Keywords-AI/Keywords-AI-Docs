@@ -1,7 +1,6 @@
 ---
-title: Anthropic
+title: Anthropic SDK
 description: "Use Anthropic SDK through Keywords AI"
-icon: "cube"
 ---
 
 You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint with Anthropic SDK under two lines of code change.
@@ -35,7 +34,7 @@ print(message.content)
 import Anthropic from "@anthropic-ai/sdk";
 
 const anthropic = new Anthropic({
-   base_url="https://api.keywordsai.co/api/anthropic/",  
+  baseUrl: "https://api.keywordsai.co/api/anthropic/",  
   apiKey: 'YOUR_KEYWORDS_AI_API_KEY',
 });
 

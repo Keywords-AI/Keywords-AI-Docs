@@ -1,63 +1,63 @@
 ---
-title: Usage dashboard
-description: The best LLM dashboard to monitor your API usage and spending.
-icon: "monitor-waveform"
+title: Overview
+description: Keywords AI provides complete observability for your LLM applications. With this guide, you can learn how to use Keywords AI observability features to monitor and improve LLM outputs.
 ---
 
-Keywords AI's [dashboard page](https://platform.keywordsai.co/platform/dashboard) assists developers in identifying and fixing code or LLM-related issues.
+## Prerequisites
+To use Keywords AI observability features, you should have integrated our [LLM proxy](/get-started/llm-inference.mdx) or [async logging API](/get-started/async-logging.mdx) into your codebase. After that, you can use Keywords AI to get complete observability for your apps.
 
-You can see aggregated metrics such as the number of requests over time, average generation time, time to first token (TTFT), total cost, average number of tokens, and user activity.
+## Usage dashboard
+Keywords AI provides a comprehensive dashboard to monitor your LLM usage and spending. Once you have integrated our [LLM proxy](/get-started/llm-inference.mdx) or [async logging API](/get-started/async-logging.mdx) into your application, you can see the usage and spending of your LLM applications.
 
-<img src="/images/platform-features/dashboard/dashboard.png" alt="Dashboard Page"/>
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/dashboard.png" alt="Dashboard Page"/>
+</Frame>
+
+## Logs
+In the logs page, you can check details of each LLM request and response. The logs contain useful information including the request, response, model used, and costs — making it helpful for debugging and monitoring.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/logs.jpg" alt="Logs Page"/>
+</Frame>
+
+### Metadata of each log
+We built a side panel for our users to get more details of each log. When you are in the `Metadata` tab, you can see the metadata of the log, including Speed metrics, cost, and more.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/side-panel-metadata.png" alt="Logs Side Panel"/>
+</Frame>
+
+### Request and response
+By clicking on the `Log` tab, you can see the whole conversation between the LLM and the user.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/side-panel-log.png" alt="Logs Side Panel"/>
+</Frame>
+
+## User analytics
+Keywords AI provides a Users page to help you understand your users and their behavior on your LLM applications. When you send a request to the LLM, you can pass a `customer_params` to the request. Keywords AI will use this parameter to track the user's behavior on your LLM applications.
+
+<Card title="Learn how to enable user analytics" href="/guides/user-analytics" icon="user-magnifying-glass" horizontal={true}>
+</Card>
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/user-monitoring.png" alt="Users Page"/>
+</Frame>
+
+## Prompt monitoring
+You can track each prompt's performance with a simple mini dashboard.
+
+It helps you gain better insight and control over your prompts.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/prompt-monitoring.gif" alt="Prompt Monitoring"/>
+</Frame>
+
+<Tip>
+You can learn more about prompt monitoring in our [prompt monitoring guide](/guides/prompt-monitoring).
+</Tip>
 
 {/* ## Dashboard Components */}
-
-## Graphs
-
-### LLM metrics
-LLM graphs aggregate your API calls and trace them through time, making it easy to visually keep track of your API usage.
-
-{/* ### Metric Cards
-On the top of the dashboard page, you will find these metric cards that give you a quick overview of your API usage.
-<img src="/images/platform-features/dashboard/dashboard-summary.png" alt="Dashboard Page" />
-
-Each card shows an aggregation of the metric and a small embedded chart that shows the trend of the metric over time. */}
-
-<img src="/images/platform-features/dashboard/LLM-metrics.png" alt="Dashboard Page" />
-
-{/* ### Display Metrics & Breakdown Controls
-You can control the displays of the chart in the middle control bar
-<img src="/images/platform-features/dashboard/dashboard-filter.png" alt="Dashboard Filter" />
-
-You can choose which chart to display and filter the requests in the graph by metrics.
-<img src="/images/platform-features/dashboard/dashboard-filter-metrics.png" alt="Dashboard Filter Metrics" />
-
-By default, the chart traces the total aggregation of the selected metric through time. You can also choose the breakdown type to see the distribution of the metric by different aggregations.
-
-<img src="/images/platform-features/dashboard/dashboard-breakdown-type.png" alt="Dashboard Breakdown Types" /> */}
-
-### Users
-
-User graphs provide an overview of the user information being sent to Keywords AI.
-
-You can tag each of your API calls with a customer_identifier and we will keep track of the usage of each of your users. See examples here: [User data](/features/monitoring/user-data#example)
-<img src="/images/platform-features/dashboard/User-metrics.png" alt="Dashboard Page" />
-
-### Organization metrics
-You could monitor your organization's: 
-- API usage and spending  (see how to manage your API keys [here](/features/generation/key-management))
-- Top users (see how to tag your users [here](/features/monitoring/user-data#example))
-- Top models
-
-<img src="/images/platform-features/dashboard/organization.png" />
-
-### Evaluation
-
-Evaluation graphs provide an overview of the performance of LLM output based on Keywords AI's built-in metrics and users' customized evaluation metrics.
-
-See how to turn on evaluations and create your evaluation metrics here: _[Evaluation](/features/evaluation/overview)_
-
-<img src="/images/platform-features/dashboard/Evaluation.png" alt="Dashboard Page" />
 
 {/* ## Example
 Let's take a look at an example of seeing the latency of the API requests over the month with a breakdown by models

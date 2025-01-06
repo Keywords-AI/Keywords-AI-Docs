@@ -1,25 +1,209 @@
 ---
-title: "Custom metadata"
-description: "Add custom metadata to your logs"
-icon: "plus"
+title: "Send custom properties"
+description: "Custom properties allows you to add any additional information to your logs, which can help you tag and filter logs."
 ---
+## How to send custom properties in the code
+We want to provide our users with the most flexibility to add any additional information to your logs, so we support sending custom properties in the code.
+You can add any key-value pair to the properties field for your reference. 
 
-You can add any key-value pair to this metadata field for your reference. 
+<Tabs>
+<Tab title="OpenAI Python SDK">
+Here is an example of how to send 2 custom metadata to Keywords AI in the OpenAI Python SDK.
+```python {13-18}
+from openai import OpenAI
 
-You will see your metadata in the right side bar on the Logs page in the Keywords AI platform.
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
 
-<img width="300" src="/images/api-features/metadata.jpg"/>
-<Note>If you are using OpenAI Python SDK, metadata filed should under the `extra_body` field</Note>
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "user", "content": "Tell me a long story"}
+    ],
+    extra_body={
+        "metadata": {
+            "sample_key": "sample_value",
+            "session_id": "abc789"
+        }
+    }
+)
+```
+</Tab>
+<Tab title="OpenAI TypeScript SDK">
+Here is an example of how to send 2 custom metadata to Keywords AI in the OpenAI TypeScript SDK. In OpenAI TypeScript SDK, you should add a `// @ts-expect-error` before the metadata field.
+```typescript {12-16}
+import { OpenAI } from "openai";
 
-## Example:
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
 
-```json
-{
-  "metadata": {
-    "node_id": "qaisrgPyKr4NSugZeOqRt"
-    // Add any key-value pair here
-  }
-}
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-4o-mini",
+    // @ts-expect-error
+    metadata: {
+        "sample_key": "sample_value",
+        "session_id": "abc789"
+    }
+  })
+  .asResponse();
+
+console.log(await response.json());
+```
+</Tab>
+<Tab title="Standard API">
+<CodeGroup>
+```python LLM proxy {14-17}
+import requests
+def demo_call(input, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY",
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        'metadata': {
+            "sample_key": "sample_value",
+            "session_id": "abc789"
+        }
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
 ```
 
-Contact team@keywordsai.co if you need extra parameter support for your use case.
+
+```python Async logging {16-19}
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "model": "gpt-4o-mini",
+    "prompt_messages": [
+        {
+            "role": "user",
+            "content": "Hi"
+        },
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "metadata": {
+        "sample_key": "sample_value",
+        "session_id": "abc789"
+    }
+    # other parameters
+}
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.request("POST", url, headers=headers, json=payload)
+```
+</CodeGroup>
+</Tab>
+<Tab title="Other SDKs">
+We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/own-api-keys) for more information.
+</Tab>
+</Tabs>
+
+
+## Custom properties on the dashboard
+After you send custom properties in the code, you can view them in the dashboard. Just click on the `Filter` button to filter the logs by the `Custom properties`.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/dashboard-metadata.png" alt="Filter by custom properties" />
+</Frame>
+
+## Custom properties on the Logs page
+On the Logs page, you can see the custom properties of each log in the side panel.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/logs-side-panel-metadata.png" alt="Filter by custom properties" />
+</Frame>
+
+### Filter logs by custom properties
+You can also filter logs by custom properties on the Logs page. Just click on the `Filter` button to filter the logs by the `Custom properties`.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/logs-custom-property.png" alt="Filter by custom properties" />
+</Frame>
+
+{/* Contact team@keywordsai.co if you need extra parameter support for your use case. */}
+## Update custom properties
+You can also update the custom properties of a log through the API.
+
+Here are the steps to update the custom properties of a log:
+
+<Steps>
+  <Step title="Get unique_id of the log">
+    You need first to get the `unique_id` of the log you want to update. You can get the `unique_id` from the [Logs list endpoint](/api-endpoints/async-endpoints/logs-list-endpoint). OR you can get the `unique_id` from [Logs page](https://platform.keywordsai.co/platform/requests)'s `Log ID` column.
+    
+  </Step>
+  <Step title="Send the API request">
+    Pass the `unique_id` to the `/api/request-logs/batch-update/` endpoint with the metadata and notes you want to update.
+    <CodeGroup>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/batch-update/"
+api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
+data = {
+    "logs": [
+        {   "unique_id": "xxxxxx",
+            "metadata": {
+                "metadata_key": "updated_value"
+            },
+            "note": "updated note"
+        }
+        # other logs to update
+    ]
+}
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+```typescript TypeScript
+fetch("https://api.keywordsai.co/api/request-logs/batch-update/", {
+  method: 'PATCH',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer Your_Keywords_AI_API_Key '
+  },
+    body: JSON.stringify({
+        logs: [
+            {   unique_id: "xxxxxx",
+                metadata: {
+                    metadata_key: "updated_value"
+                },
+                note: "updated note"
+            }
+            // other logs to update
+        ]
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+    </CodeGroup>
+  </Step>
+</Steps>
