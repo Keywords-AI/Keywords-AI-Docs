@@ -1,14 +1,14 @@
 ---
 title: "Load balancing"
 description: "Increase your LLM rate limits with our load balancing feature."
-icon: "chart-network"
 ---
 
-Load balancing is a feature that allows you to balance the request load across different models or deployments. You could specify weights for each model/deployment based on their rate limit and your preference.
+Load balancing is a feature that allows you to balance the request load across different deployments. You could specify weights for each deployment based on their rate limit and your preference.
 
 _See all supported params [here](/api-endpoints/integration/chat-completions)._
 
-## Load balancing between models
+
+{/* ## Load balancing between models
 You could specify the load balancing weights for different models. This is useful when you want to balance the load between different models from different providers. 
 
 
@@ -74,11 +74,15 @@ You could specify the load balancing weights for different models. This is usefu
 
 
 You could also set up fallback models to avoid errors. It will fall back to the list of models you specified in the `fallback` field once have any outages. Check out the [Fallbacks](/features/generation/fallbacks) section for more information.
-
+ */}
 
 
 
 ## Load balancing between deployments
+
+### What is a deployment?
+
+A deployment basically means a credential. If you add an OpenAI API key, you can say that you have one deployment. If you add 2 OpenAI API keys, you can say that you have 2 deployments.
 
 ### In the platform
 
@@ -198,6 +202,7 @@ model = random.choices(balancing_between, weights=weights) */}
 
 
 ## Deprecated params
+### loadbalance_models
 The `loadbalance_models` parameter is deprecated. You should use the `load_balance_group` parameter instead.
 <AccordionGroup>
 <Accordion title="Example code">
@@ -239,4 +244,7 @@ See how to add your own credentials [here](/integration/providers/providers-over
 </ParamField>
 </Accordion>
 </AccordionGroup>
+
+### load_balance_group
+The `load_balance_group` parameter is deprecated. We currently don't support load balancing between models. If you want to load balance between models, contact us at [team@keywordsai.co](mailto:support@keywordsai.co).
 

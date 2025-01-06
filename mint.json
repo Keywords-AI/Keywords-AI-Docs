@@ -15,6 +15,9 @@
   "codeBlock": {
     "mode": "auto"
   },
+  "sidebar": {
+    "items": "border"
+  },
   "$schema": "https://mintlify.com/schema.json",
   "feedback": {
     "thumbsRating": true,
@@ -52,7 +55,7 @@
 
   "favicon": "/logo.svg",
   "colors": {
-    "primary": "#282a2f",
+    "primary": "#111112",
     "light": "#7590F2",
     "dark": "#05050A",
     "background": {
@@ -126,7 +129,7 @@
           "pages": [
             "features/generation/overview",
             "features/generation/gateway",
-            "features/generation/key-management",
+            "features/generation/add-credentials",
             "features/generation/fallbacks",
             "features/generation/load-balancing",
             "features/generation/caches",
@@ -134,28 +137,28 @@
           ]
         },
         {
-          "group": "User analytics",
+          "group": "Prompt engineering",
           "pages": [
-            "features/user/user-creation",
-            "features/user/user-data"
+            "features/prompt/create-a-prompt",
+            "features/prompt/deploy-a-prompt",
+            "features/prompt/monitor-a-prompt",
+            "features/prompt/model-playground"
           ]
         },
         {
           "group": "Evaluations",
           "pages": [
-            "features/evaluation/llm-as-a-judge"
+            "features/datasets",
+            "features/prompt/testsets",
+            "features/prompt/lab"
           ]
         },
         {
-          "group": "Prompt engineering",
+          "group": "Organization management",
           "pages": [
-            "features/prompt/prompt-management",
-            "features/prompt/model-playground",
-            "features/prompt/lab",
-            "features/prompt/testsets"
+            "features/generation/key-management"
           ]
-        },
-            "features/datasets"
+        }
       ]
     },
     {
@@ -278,14 +281,7 @@
     {
       "group": "Error handling",
       "pages": [
-        "error-handling/400",
-        "error-handling/401",
-        "error-handling/402",
-        "error-handling/403",
-        "error-handling/404",
-        "error-handling/408",
-        "error-handling/429",
-        "error-handling/500"
+        "error-handling/400"
       ]
     },
     {
