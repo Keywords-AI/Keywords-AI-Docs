@@ -2,7 +2,6 @@
 title: "LLM caches"
 sidebarTitle: "Caches"
 description: "Reduce latency and save LLM costs by caching LLM prompts and responses."
-icon: "database"
 ---
 ## Why Caches?
 You may find caches useful when you want to:
@@ -14,32 +13,93 @@ You may find caches useful when you want to:
 Turn on caches by setting `cache_enabled` to `true`. We currently will cache the whole conversation, including the system message, user message and the response.
 
 See the example below, we will cache the user message "Hi, how are you?" and its response.
-```json
-{
-    "model": "gpt-3.5-turbo",
-    "messages": [
-        {
-            "role": "system",
-            "content": "Hello, how can I help you today?" // message to be cached, its response will be cached as well
-        },
-        {
-            "role": "user",
-            "content": "Hi, how are you?" // message to be cached, its response will be cached as well
-        }
+
+<Tabs>
+<Tab title="OpenAI Python SDK">
+```python {13-19}
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "user", "content": "Tell me a long story"}
     ],
-    "cache_enabled": true, // enable cache
-    "cache_ttl":600, // cache for 10 minutes, optional
-    "cache_options": { // optional
-        "cache_by_customer": true // or false
-    },
-    "customer_params": {
-        "customer_identifier": "customer_123",
-        "name": "Hendrix Liu", //optional
-        "email": "hendrix@keywordsai.co" //optional
+    extra_body={
+        "cache_enabled": true,
+        "cache_ttl": 600,
+        "cache_options": {
+            "cache_by_customer": true
+        }
     }
-}
+)
 ```
-## Cashes parameters
+</Tab>
+<Tab title="OpenAI TypeScript SDK">
+In OpenAI TypeScript SDK, you should add a `// @ts-expect-error` before the `customer_credentials` field.
+```typescript {12-19}
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-4o-mini",
+    // @ts-expect-error
+    cache_enabled: true,
+    cache_ttl: 600,
+    cache_options: {
+        cache_by_customer: true
+    }
+  })
+  .asResponse();
+
+console.log(await response.json());
+```
+</Tab>
+<Tab title="Standard API">
+```python LLM proxy {14-18}
+import requests
+def demo_call(input, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY",
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        'cache_enabled': true,
+        'cache_ttl': 600,
+        'cache_options': {
+            'cache_by_customer': true
+        }
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+</Tab>
+<Tab title="Other SDKs">
+We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/own-api-keys) for more information.
+</Tab>
+</Tabs>
+
+## Caches parameters
 
 <ParamField path="cache_enabled" type="boolean">
 Enable or disable caches.
@@ -74,3 +134,10 @@ This parameter specifies the cache options. Currently we support `cache_by_custo
 }
 ```
 </ParamField>
+
+## How to view caches
+You can view the caches on the Logs page. The model tag will be `keywordsai/cache`. You can also filter the logs by the `Cache hit` field.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/caches-logs.png" alt="Caches" />
+</Frame>

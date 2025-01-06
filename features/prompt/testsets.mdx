@@ -1,31 +1,29 @@
 ---
-title: "Testsets"
+title: "Import dynamic test cases"
 description: "Easily manage and organize test cases. Import a CSV file and edit it like a Google Sheet."
-icon: "table"
 ---
 <Note> This is a **beta** feature. Please do let us know if you encounter any issues. We'll continuously improve it.</Note>
 
 Testsets are a collection of test cases that you can use to evaluate and optimize your LLM outputs. You can import a CSV file and edit it like a Google Sheet. Testsets are useful for running prompts with various dynamic test cases.
 
-<img width="500" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/testsets.png" />
-
 ## Guide
-
-<Steps>
-<Step title="Create your test cases in a CSV file.">
+### 1. Create your test cases in a CSV file.
 Create a CSV file for a prompt with different test cases. In the CSV file, every column is a variable, so you have to name the columns with the variable names. You can also add a column for the expected output. 
 
 For example, if you have a prompt with variables `{{a}}` and `{{b}}`, your CSV file should have columns `a` and `b`.
-<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/testsets-csv.png" />
 
-</Step>
+<Frame>
+<img  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/testset-csv.png" />
+</Frame>
 
-<Step title="Edit your testset">
+### 2. Import the testset
 You can import the CSV file and edit it like a Google Sheet. You can add, delete, or edit the test cases in the testset.
-</Step>
 
-<Step title="Use testsets in Lab">
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/testset-create.png" />
+</Frame>
+
+### 3. Use testsets in Lab
+Compare prompts with different test cases and debug the prompts.
+
 You can use the testset in the [Lab](/features/prompt/lab) to evaluate the prompts with different test cases.
-</Step>
-
-</Steps>
