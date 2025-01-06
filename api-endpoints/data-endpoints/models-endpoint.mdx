@@ -4,7 +4,7 @@ api: GET https://api.keywordsai.co/api/models/public
 authMethod: "none"
 ---
 
-<ResponseField name="data" type="array">
+<ParamField name="data" type="array">
 A list of models.
 <Accordion title="Example">
 ```json
@@ -32,41 +32,41 @@ A list of models.
 </Accordion>
 
 
-</ResponseField>
+</ParamField>
 ## Model parameters
 
-<ResponseField name="model_name" type="string">
+<ParamField name="model_name" type="string">
     The name used in `model` parameter for calling the Keywords AI [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint.
-</ResponseField>
-<ResponseField name="max_context_window" type="number">
+</ParamField>
+<ParamField name="max_context_window" type="number">
     The maximum number of tokens the model can process in one API call.
-</ResponseField>
-<ResponseField name="input_cost" type="number">
+</ParamField>
+<ParamField name="input_cost" type="number">
     Cost in US dollars for 1 million input tokens.
-</ResponseField>
-<ResponseField name="output_cost" type="number">
+</ParamField>
+<ParamField name="output_cost" type="number">
     Cost in US dollars for 1 million output tokens.
-</ResponseField>
-<ResponseField name="rate_limit" type="number">
+</ParamField>
+<ParamField name="rate_limit" type="number">
     The rate limit for calling this model with Keywords AI.
-</ResponseField>
-<ResponseField name="provider" type="object">
+</ParamField>
+<ParamField name="provider" type="object">
     The provider of the model.
     <Accordion title="Properties">
-        <ResponseField name="provider_name" type="string">
+        <ParamField name="provider_name" type="string">
             The name of the provider.
-        </ResponseField>
-        <ResponseField name="provider_id" type="string">
+        </ParamField>
+        <ParamField name="provider_id" type="string">
             The ID of the provider.
-        </ResponseField>
-        <ResponseField name="moderation" type="string">
+        </ParamField>
+        <ParamField name="moderation" type="string">
             The moderation level of the provider. Possible values: `Filtered`, `Unfiltered`.
-        </ResponseField>
-        <ResponseField name="credential_fields" type="array">
+        </ParamField>
+        <ParamField name="credential_fields" type="array">
             The fields required to authenticate with the provider.
-        </ResponseField>
+        </ParamField>
     </Accordion>
-</ResponseField>
+</ParamField>
 
 <ResponseExample>
 ```json

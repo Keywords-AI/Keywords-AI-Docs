@@ -18,26 +18,26 @@ For example:
   `-` is for descending order, if not provided, it will be in ascending order.
   <AccordionGroup>
     <Accordion title="Properties">
-        <ResponseField name="id" type="string">
+        <ParamField name="id" type="string">
             Sort by the ID of each request.
-        </ResponseField>
-        <ResponseField name="cost" type="string">
+        </ParamField>
+        <ParamField name="cost" type="string">
             Sort by the cost of each request.
-        </ResponseField>
-        <ResponseField name="time_to_first_token" type="string">
+        </ParamField>
+        <ParamField name="time_to_first_token" type="string">
            TTFT - useful for Voice AI applications
-        </ResponseField>
-        <ResponseField name="latency" type="string">
+        </ParamField>
+        <ParamField name="latency" type="string">
           Generation time of each request.
-        </ResponseField>
-        <ResponseField name="prompt_tokens" type="string">
+        </ParamField>
+        <ParamField name="prompt_tokens" type="string">
           Input / prompt tokens of each request.
-        </ResponseField>
-        <ResponseField name="completion_tokens" type="string">
+        </ParamField>
+        <ParamField name="completion_tokens" type="string">
           Output / completion tokens of each request.
-        </ResponseField>
-        <ResponseField name="all_tokens" type="string">
-        </ResponseField>
+        </ParamField>
+        <ParamField name="all_tokens" type="string">
+        </ParamField>
     </Accordion>
     <Accordion title="Example">
     ```json
@@ -106,7 +106,7 @@ response = requests.post(url, headers=headers, json=data)
 <ParamField path="operator" type="string" required>
   Default is "" (equal).
   <Accordion title="Properties">
-        <ResponseField name=" " type="string">
+        <ParamField name=" " type="string">
             Equal
             <Accordion title="Example">
             ```json
@@ -118,37 +118,37 @@ response = requests.post(url, headers=headers, json=data)
             }
             ```
             </Accordion>
-        </ResponseField>
-        <ResponseField name="iexact" type="string">
+        </ParamField>
+        <ParamField name="iexact" type="string">
             case insensitive equal
-        </ResponseField>
-        <ResponseField name="lt" type="string">
+        </ParamField>
+        <ParamField name="lt" type="string">
            Less than
-        </ResponseField>
-        <ResponseField name="lte" type="string">
+        </ParamField>
+        <ParamField name="lte" type="string">
            Less than or equal
-        </ResponseField>
-        <ResponseField name="gt" type="string">
+        </ParamField>
+        <ParamField name="gt" type="string">
           Greater than
-        </ResponseField>
-        <ResponseField name="gte" type="string">
+        </ParamField>
+        <ParamField name="gte" type="string">
           Greater than or equal
-        </ResponseField>
-        <ResponseField name="contains" type="string">
-        </ResponseField>
-        <ResponseField name="endswith" type="string">
-        </ResponseField>
-        <ResponseField name="in" type="string">
+        </ParamField>
+        <ParamField name="contains" type="string">
+        </ParamField>
+        <ParamField name="endswith" type="string">
+        </ParamField>
+        <ParamField name="in" type="string">
           Can be used in arrays or text
-        </ResponseField>
-        <ResponseField name="isnull" type="string">
+        </ParamField>
+        <ParamField name="isnull" type="string">
           Check if the field is null
-        </ResponseField>
-        <ResponseField name="icontains" type="string">
+        </ParamField>
+        <ParamField name="icontains" type="string">
           Case insensitive contains
-        </ResponseField>
-        <ResponseField name="not" type="string">
-        </ResponseField>
+        </ParamField>
+        <ParamField name="not" type="string">
+        </ParamField>
     </Accordion>
 
 </ParamField>
