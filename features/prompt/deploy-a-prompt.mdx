@@ -106,11 +106,32 @@ Once you have connected the prompt to your codebase, you can deploy the prompt o
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/prompt-deploy.png" alt="Deploy prompt" />
 </Frame>
 
+### Override prompt messages in the API
+You can override the prompt messages in the API by passing the `override_params` and `override_config` field to the `prompt` field.
+You can choose to override the whole prompt messages or append a new message to the prompt messages.
+
+**Example**:
+```python {4-5}
+request_body = {
+    "prompt": {
+        "prompt_id": "xxxxxx",
+        "override_config": {"messages_override_mode": "append"}, # append or override
+        "override_params": {"messages": [{"role": "user", "content": "5"}]},
+    }
+}
+```
+
+In this example, the `override_config` specifies how the new messages should be handled:
+- When `messages_override_mode` is set to `"append"`, the new message `{"role": "user", "content": "5"}` will be added to the end of the existing prompt messages
+- When set to `"override"`, the new messages will completely replace the original prompt messages
+
 ## 4. View the logs with the prompt
 You can view the logs with the prompt by clicking a log on the [Logs page](https://platform.keywordsai.co/platform/logs) or filtering the logs with the prompt name.
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/prompt-logs.png" alt="View prompt" />
 </Frame>
+
+
 
 ## Optional parameters
 <ParamField path="echo" type="boolean" default={true}>
@@ -140,6 +161,17 @@ You can put any OpenAI chat/completions parameters here to override the prompt's
   }
 }
 ```
+</ParamField>
+
+<ParamField path="override_config" type="object">
+This parameter allows you to control how you can override the parameters in the prompt.
+<Accordion title="messages_override_mode">
+
+    `append`: append the new messages to the existing messages
+
+    `override`: override the existing messages
+
+</Accordion>
 </ParamField>
 
 <Info>Check out [all Keywords AI supported params here](/api-endpoints/integration/chat-completions#keywords-ai-parameters).</Info>
