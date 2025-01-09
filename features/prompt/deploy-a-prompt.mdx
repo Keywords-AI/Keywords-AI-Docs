@@ -38,7 +38,7 @@ response = client.chat.completions.create(
 )
 ```
 <Note>
-Since OpenAI forces you to pass the `model` and `messages` fields, you should pass the an `override` field to the `prompt` field, which will override the `model` and `messages` fields and use the prompt you created on Keywords AI.
+Since OpenAI forces you to pass the `model` and `messages` fields, you should pass the an `override` field to the `prompt` field, which will override the `model` and `messages` fields and use the prompt you created in Keywords AI.
 </Note>
 </Tab>
 <Tab title="OpenAI TypeScript SDK">
@@ -68,7 +68,7 @@ const response = await client.chat.completions
 console.log(await response.json());
 ```
 <Note>
-Since OpenAI forces you to pass the `model` and `messages` fields, you should pass the an `override` field to the `prompt` field, which will override the `model` and `messages` fields and use the prompt you created on Keywords AI.
+Since OpenAI forces you to pass the `model` and `messages` fields, you should pass the an `override` field to the `prompt` field, which will override the `model` and `messages` fields and use the prompt you created in Keywords AI.
 </Note>
 </Tab>
 <Tab title="Standard API">
@@ -93,7 +93,7 @@ def demo_call(token="YOUR_KEYWORDS_AI_API_KEY"):
 
 print(demo_call().json())
 ```
-You don't need to pass the `model` and `messages` fields, since the prompt you created on Keywords AI will be used.
+You don't need to pass the `model` and `messages` fields, since the prompt you created in Keywords AI will be used.
 </Tab>
 <Tab title="Other SDKs">
 We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/own-api-keys) for more information.
