@@ -1,53 +1,60 @@
 ---
-title: "Create a new prompt"
-description: "Learn how to create a new prompt on Keywords AI."
+title: "Migrate your prompts"
+description: "Managing prompts is a crucial part of building AI applications. Migrate your prompts to Keywords AI to manage them more effectively."
 ---
-
-In this guide, we will walk you through the process of creating a new prompt on Keywords AI and how to collaborate with your team.
+This guide will walk you through the process of migrating your existing prompts to Keywords AI's platform. By managing your prompts on Keywords AI, you'll benefit from version control, collaboration features, and enhanced monitoring capabilities.
 
 ## 1. Create a new prompt on the platform
-Once you have signed up and created an account, you can create a new prompt on the platform. Go to the [Prompts page](https://platform.keywordsai.co/platform/prompts) and click on the "Create new prompt" button. You should name your prompt and could add a description to it.
+
+To begin migrating your prompts, first create a new prompt on Keywords AI platform. Navigate to the [Prompts page](https://platform.keywordsai.co/platform/prompts) and click "Create new prompt". Give it a name that matches your existing prompt and add a description to maintain context.
 
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/create-new-prompt.png" alt="Create prompt placeholder" />
-## 2. Configure your prompt
-Once you have created a new prompt, you can configure it. Go to the `Editor` tab and you can begin to write your prompt. The right side of the screen defines your prompt. You can set parameters like `Model`, `Temperature`, `Max Tokens`, and `Top P`. You can also add function calls and fallback models to your prompt. Check out the details [here](/api-endpoints/async-endpoints/request-logging-endpoint).
+
+## 2. Configure your prompt settings
+
+Transfer your existing prompt settings to Keywords AI. In the `Editor` tab, configure the same parameters you're currently using, such as:
+- Model selection
+- Temperature
+- Max tokens
+- Top P
+
+For advanced configurations like function calls and fallback models, refer to our [Prompt engineering documentation](/features/prompt/create-a-prompt).
 
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/configure-prompt.png" alt="Create prompt placeholder" />
 
-## 3. Write the content of your prompt
-Once you have configured your prompt, you can write the content of your prompt. Click on the `+ Add message` button to add a new message to your prompt. You can change the role of the message to `user` or `assistant` by clicking on the role name.
+## 3. Migrate your prompt content
+
+Now it's time to transfer your actual prompt content. Click `+ Add message` to recreate your prompt's conversation flow. Match each message's role (`user` or `assistant`) to your existing prompt structure.
 
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/write-prompt.png" alt="Create prompt placeholder" />
 
-You can also add variables to your prompt. Variables are placeholders for dynamic content that can be used to generate prompts. Simply add double curly braces `{{variable_name}}` to your prompt and you will be able to use the variable in your prompt.
+If your current prompt uses variables, you can maintain the same functionality by using our variable syntax: `{{variable_name}}`. For example:
 
-Replace the User message with this:
 ```
 Please develop an optimized Python function to {{task_description}}, utilizing {{specific_library}}, include error handling, and write unit tests for the function.
 ```
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/prompt-variables.png" alt="Create prompt placeholder" />
 
-After did this, you can:
-1. Add a value for each variable in the `Variables` tab.
-2. Click `Run` to test your prompt.
+Test your migrated prompt by:
+1. Adding test values for your variables in the `Variables` tab
+2. Clicking `Run` to verify the output matches your original promptt.
 
-You now just finished writing your first version of the prompt.
 ## 4.Commit your first version
-You can click on the `Commit` button and write a commit message, which is helpful for you to track the changes you made to your prompt.
+After successfully migrating your prompt, commit it as your first version. Add a descriptive commit message like "Initial migration from [previous system]" to maintain a clear history of your prompt's origin.
 
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/prompt-commit.png" alt="Create prompt placeholder" />
 
-Congrats! You just created your first prompt on Keywords AI.
+Congratulations! You've successfully migrated your first prompt to Keywords AI.
 
 ## Next steps
 <CardGroup cols={2}>
-<Card title="Deploy the prompt to code" href="/features/prompt/deploy-a-prompt">
+<Card title="Deploy the migrated prompt" href="/features/prompt/deploy-a-prompt">
 </Card>
-<Card title="Monitor prompts" href="/features/prompt/monitor-a-prompt">
+<Card title="Monitor prompt performance" href="/features/prompt/monitor-a-prompt">
 </Card>
 <Card title="Collaborate with your team" href="/features/prompt/share-a-prompt">
 </Card>
-<Card title="Evaluate your prompt" href="/features/prompt/lab">
+<Card title="Evaluate prompt effectiveness" href="/features/prompt/lab">
 </Card>
 </CardGroup>
 {/* ## 5. Deploy your prompt
