@@ -1,9 +1,9 @@
 ---
-title: Create a thread
-description: Threads allow you to group chatlogs together as a single conversation thread.
+title: Chain chatlogs as a thread
+description: Learn how to use our Thread feature to organize chat logs into cohesive conversation threads.
 ---
 
-You can pass all the logs in the same conversation using the same `thread_identifier`. This approach fits conversational AI use cases better than individual logs, as the chat logs will be grouped together as an entire conversation thread, with only the most recent request displayed for each conversation.
+The Thread feature allows you to group related chat logs together by using a common `thread_identifier`. This approach is particularly useful for conversational AI applications, as it organizes chat history into a single thread.
 
 <Tabs>
 <Tab title="OpenAI Python SDK">
@@ -27,8 +27,8 @@ response = client.chat.completions.create(
 ```
 </Tab>
 <Tab title="OpenAI TypeScript SDK">
-Here is an example of how to disable logging in the OpenAI TypeScript SDK. In OpenAI TypeScript SDK, you should add a `// @ts-expect-error` before the disable_log field.
-```typescript {12}
+To implement threading in the OpenAI TypeScript SDK, add the `thread_identifier` parameter to your request. Note: You'll need to include `// @ts-expect-error` before the `thread_identifier` field to handle TypeScript type checking.
+```typescript {12-13}
 import { OpenAI } from "openai";
 
 const client = new OpenAI({
@@ -104,24 +104,25 @@ response = requests.request("POST", url, headers=headers, json=payload)
 </CodeGroup>
 </Tab>
 <Tab title="Other SDKs">
-We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/own-api-keys) for more information.
+We also support adding credentials in other SDKs or languages, please check out our _[integrations](/integration/own-api-keys)_.
 </Tab>
 </Tabs>
 
 ## View threads on the platform
-### Threads page
+### Go to Threads
 There's a Threads page on the platform where you can view all the threads you've created.
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/thread.gif" />
 </Frame>
 
-### Logs page
-You can click the `Open in Logs` button in the side panel to view the logs of the thread on the Logs page.
+### Open a Thread in Logs
+To view the detailed logs within a thread:
+1. Click the `Open in Logs` button in the side panel to access the thread's complete log history.
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/threads-to-logs.png" />
 </Frame>
 
-Once there, you can see all logs associated with the thread. Click on any individual log to view its details.
+2. Browse through all logs associated with the thread. Select any individual log entry to view its complete details.
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/threads-in-logs.png" />
 </Frame>

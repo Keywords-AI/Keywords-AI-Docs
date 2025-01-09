@@ -95,7 +95,7 @@
       "pages": [
         "get-started/overview",
         {
-          "group": "Quick start",
+          "group": "Get started",
           "pages": [
             "get-started/async-logging",
             "get-started/llm-inference",
@@ -108,36 +108,45 @@
       "group": "Guides",
       "pages": [
         {
-          "group": "LLM observability",
+          "group": "AI observability",
           "pages": [
-            "features/monitoring/analytics",
-            "features/generation/customer-identifier",
-            "features/user/user-budget",
-            "features/generation/metadata",
-            "features/monitoring/threads",
-            "features/monitoring/subscribe-alerts",
-            "features/monitoring/logging",
-            "features/generation/disable-logs",
             {
-              "group": "Observability advanced",
+              "group": "Integration",
               "pages": [
-                "features/monitoring/share-log",
+                "features/monitoring/logging-api",
+                "features/monitoring/proxy-api"
+              ]
+            },
+            {
+              "group": "Metrics",
+              "pages": [
+                "features/monitoring/analytics"
+              ]
+            },
+            {
+              "group": "Logs",
+              "pages": [
+                "features/generation/metadata",
+                "features/monitoring/threads",
+                "features/monitoring/logging",
+                "features/monitoring/share-log"
+              ]
+            },
+            {
+              "group": "User analytics",
+              "pages": [
+                "features/generation/customer-identifier",
+                "features/user/user-budget"
+              ]
+            },
+            {
+              "group": "Advanced",
+              "pages": [
+                "features/monitoring/subscribe-alerts",
+                "features/generation/disable-logs",
                 "features/monitoring/webhooks"
               ]
             }
-          ]
-        },
-        {
-          "group": "LLM proxy",
-          "pages": [
-            "features/generation/overview",
-            "features/generation/gateway",
-            "features/generation/add-credentials",
-            "features/generation/fallbacks",
-            "features/generation/load-balancing",
-            "features/generation/caches",
-            "features/generation/retries",
-            "features/generation/function-calling"
           ]
         },
         {
@@ -148,6 +157,20 @@
             "features/prompt/monitor-a-prompt",
             "features/prompt/model-playground",
             "features/prompt/share-a-prompt"
+          ]
+        },
+        {
+          "group": "AI gateway",
+          "pages": [
+            "features/generation/overview",
+            "features/generation/gateway",
+            "features/generation/add-credentials",
+            "features/generation/fallbacks",
+            "features/generation/load-balancing",
+            "features/generation/caches",
+            "features/generation/prompt-caching",
+            "features/generation/retries",
+            "features/generation/function-calling"
           ]
         },
         {

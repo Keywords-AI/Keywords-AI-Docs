@@ -1,26 +1,9 @@
 ---
-title: "Set up production monitoring"
+title: "Logging API"
 description: "Log your LLM requests and responses asynchronously"
-og:title: "AI observability"
 ---
 
-## Why you need LLM observability?
-LLM observability is the comprehensive process of monitoring, evaluating, and gaining insights into the performance and activities of Large Language Models in real-time. LLM observability is crucial for several reasons:
-
-1. **Ensuring Accuracy and Relevance**: LLMs can produce hallucinations, so observability helps detect and fix these issues.
-2. **Maintaining Performance**: Tracking response times, throughput, and error rates ensures optimal LLM performance.
-3. **Enhancing Reliability**: Monitoring helps prevent and quickly resolve downtime from provider outages, rate limits, or delayed alerts.
-4. **Optimizing Costs**: Monitoring identifies cost-effective models and leverages caching to reduce expenses.
-
-Keywords AI provides an **Async Logging API** that allows you to log your LLM requests and responses asynchronously, which offers complete observability of your LLM applications and won't disrupt your application's performance.
-
-
-## Benefits of async logging:
-- Monitor your LLM performance with **0 latency impact**.
-- Operates outside the critical path of your application, ensuring no disruptions.
-- Gain comprehensive observability of your LLM applications.
-
-## How to use Keywords AI Async Logging
+## How to use Keywords AI Logging API
 ### 1. Get your Keywords AI API key
 
 After you create an account on [Keywords AI](https://platform.keywordsai.co), you can get your API key from the [API keys page](https://platform.keywordsai.co/platform/api/api-keys).
@@ -141,15 +124,3 @@ After you integrate the async logging into your codebase and send the request su
 Check out the [Logging endpoint page](/api-endpoints/integration/request-logging-endpoint) to see all supported parameters.
 
 Parameters like: `cost`, `completion_tokens`, and `prompt_tokens` will be automatically calculated if your model is supported. Check out our [models page](https://platform.keywordsai.co/platform/models?sort_by=model_name) to see the list of supported models.
-
-## Next steps
-<CardGroup cols={2}>
-<Card title="Set up user analytics" href="/features/generation/customer-identifier">
-</Card>
-<Card title="Export your LLM data" href="/features/monitoring/logging">
-</Card>
-<Card title="Pass custom properties" href="/features/generation/metadata">
-</Card>
-<Card title="Improve LLM outputs" href="/features/prompt/model-playground">
-</Card>
-</CardGroup>
