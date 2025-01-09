@@ -1,5 +1,5 @@
 ---
-title: Async logging (recommended)
+title: Logging API
 api: POST https://api.keywordsai.co/api/request-logs/create/
 ---
 
@@ -317,12 +317,44 @@ We generally recommend altering this or temperature but not both.
 Time to first token. The time it takes for the model to generate the first token after receiving a request.
 </ResponseField>
 
+<ResponseField name="usage" type="object">
+Usage details for the LLM inference. Currently, only support Prompt Caching.
+  <AccordionGroup>
+    <Accordion title="Properties">
+      <ResponseField name="prompt_tokens_details" type="object">
+
+      <Accordion title="Properties">
+        <ResponseField name="cached_tokens" type="integer">
+        Number of tokens in the prompt.
+        </ResponseField>
+      </Accordion>
+      </ResponseField>
+      <ResponseField name="cache_creation_prompt_tokens" type="integer">
+      This parameter is only applicable for Anthropic models. It represents the number of tokens used to create the cache.
+      </ResponseField>
+      </Accordion>
+  <Accordion title="Example">
+  ```json
+  {
+    "usage": {
+        "prompt_tokens_details": {
+            "cached_tokens": 10,
+        },
+        "cache_creation_prompt_tokens": 20, // Anthropic only
+    }
+  }
+  ```
+  </Accordion>
+
+  </AccordionGroup>
+</ResponseField>
+
 <ResponseField name="warnings" type="string">
   Any warnings that occurred during the LLM inference. You could pass a warning message here. Default is an empty string.
 </ResponseField>
 
 {/* <ResponseField name="category" type="string">
-Category of the log. Default is an empty string.
+Category of the log. Def  ault is an empty string.
 </ResponseField> */}
 
 {/* <ResponseField name="cached_response" type="integer">

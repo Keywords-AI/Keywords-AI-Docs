@@ -1,43 +1,12 @@
 ---
-title: "Prototype with an AI gateway"
+title: "LLM proxy"
 description: "Keywords AI LLM proxy supports you call 250+ LLMs using the same input/output format."
 og:title: 'LLM proxy'
 ---
 
-## What is an AI gateway?
-An AI gateway is a simple “middleman” between you and Large Language Models (LLMs). It handles things like:
-
-- **Routing**: Sending requests to different models or versions
-- **Fallback models**: If the primary model is down, the proxy will route to a fallback model
-- **Load balancing**: Distributing requests across multiple models
-- **Caching**: Caching responses to improve latency and reduce costs
-
-```mermaid
-  flowchart TD;
-    A[Input]-->B[AI gateway];
-    B-->C[250+ LLMs];
-    B-->D[Model fallback];
-    B-->E[Load balancing];
-    B-->F[Prompt caching];
-    C-->Z[Optimized LLM Output];
-    D-->Z[Optimized LLM Output];
-    E-->Z[Optimized LLM Output];
-    F-->Z[Optimized LLM Output];
-```
-
-## Benefits of AI gateway:
-- Call over 250 LLMs using the same format.
-- Ensure your LLM applications become more scalable and reliable.
-- Manage LLM costs in a single place.
-- Mange API keys in a single place without exposing them.
-
-## Considerations:
-- May not be suitable for products with strict latency requirements (**50 - 150ms** added).
-- May not be ideal for those who do not want to integrate a third-party service into the core of their application.
-
 ## How to use Keywords AI AI gateway
 
-### 1. Get your Keywords AI API key
+### 1. Get your Keywords AI LLM proxy
 
 After you create an account on [Keywords AI](https://platform.keywordsai.co), you can get your API key from the [API keys page](https://platform.keywordsai.co/platform/api/api-keys).
 
@@ -276,16 +245,3 @@ The results should be printed in the console.
   "_response_ms": 653.2679999999999
 }
 ``` */}
-
-## Next steps
-Congratulations! You have integrated LLM proxy into your codebase! When you make any API call, you will see the LLM log on [the platform](https://platform.keywordsai.co/platform/).
-<CardGroup cols={2}>
-<Card title="Switch to a different model" href="/features/generation/gateway">
-</Card>
-<Card title="Reliability settings" href="/features/generation/fallbacks">
-</Card>
-<Card title="Set up observability" href="/get-started/async-logging">
-</Card>
-<Card title="Prompt engineering" href="/features/prompt/create-a-prompt">
-</Card>
-</CardGroup>

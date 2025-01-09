@@ -1,6 +1,5 @@
 ---
-title: "LLM caches"
-sidebarTitle: "Caches"
+title: "Cache LLM responses"
 description: "Reduce latency and save LLM costs by caching LLM prompts and responses."
 ---
 ## Why Caches?
@@ -141,3 +140,8 @@ You can view the caches on the Logs page. The model tag will be `keywordsai/cach
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/caches-logs.png" alt="Caches" />
 </Frame>
+
+## Regular caching vs Prompt caching
+Regular caching stores complete prompt responses. When the same prompt is received, the system returns the stored response, reducing costs but limiting response variety.
+
+Prompt caching stores the model's intermediate computation state. This allows the model to generate diverse responses while still saving computational costs, as it doesn't need to reprocess the entire prompt from scratch. View the [Prompt caching](/features/generation/prompt-caching) section for more information.
