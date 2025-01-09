@@ -577,7 +577,32 @@ You can put any OpenAI chat/completions parameters here to override the prompt's
 }
 ```
 </ParamField>
-  </Accordion>
+<ParamField path="override_config" type="object">
+This parameter allows you to control how you can override the parameters in the prompt.
+  <AccordionGroup >
+    <Accordion title="Properties">
+        <ParamField path="messages_override_mode" type="string">
+            `append`: append the new messages to the existing messages
+            
+            `override`: override the existing messages
+        </ParamField>
+    </Accordion>
+
+    <Accordion title="Example">
+ ```python {4-5}
+    request_body = {
+        "prompt": {
+            "prompt_id": "xxxxxx",
+            "override_config": {"messages_override_mode": "append"}, # append or override
+            "override_params": {"messages": [{"role": "user", "content": "5"}]},
+        }
+    }
+```
+    </Accordion>
+    
+  </AccordionGroup>
+</ParamField>
+</Accordion>
     <Accordion title="Example">
 ```json
 {
@@ -593,6 +618,8 @@ You can put any OpenAI chat/completions parameters here to override the prompt's
 ```
       </Accordion>
 </AccordionGroup>
+
+
 
 </ParamField>
 
