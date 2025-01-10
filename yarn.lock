@@ -2356,6 +2356,11 @@ fs-minipass@^2.0.0:
   dependencies:
     minipass "^3.0.0"
 
+fsevents@~2.3.2:
+  version "2.3.3"
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
+  integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
+
 function-bind@^1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz"
@@ -4038,7 +4043,7 @@ minizlib@^2.1.1:
     minipass "^3.0.0"
     yallist "^4.0.0"
 
-mintlify@^4.0.303:
+mintlify@^4.0.251:
   version "4.0.303"
   resolved "https://registry.npmjs.org/mintlify/-/mintlify-4.0.303.tgz"
   integrity sha512-zUKvJdQ+MogslR/Pmg4sw5i1yley1R3tKZzNxCK7mu9Wd050pBAvasSsMXlctSwZvMAlq/EpOHP2khYGvhTnXg==
