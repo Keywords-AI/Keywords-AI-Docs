@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "cspell": "^8.14.4",
-    "mintlify": "^4.0.131",
+    "mintlify": "^4.0.251",
     "posthog-js": "^1.157.2",
     "yarn": "^1.22.21"
   }

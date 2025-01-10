@@ -120,7 +120,8 @@
             {
               "group": "Metrics",
               "pages": [
-                "features/monitoring/analytics"
+                "features/monitoring/analytics",
+                "features/monitoring/dashboard-filter"
               ]
             },
             {
