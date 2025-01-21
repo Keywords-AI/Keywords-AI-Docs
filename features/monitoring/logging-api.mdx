@@ -124,3 +124,92 @@ After you integrate the async logging into your codebase and send the request su
 Check out the [Logging endpoint page](/api-endpoints/integration/request-logging-endpoint) to see all supported parameters.
 
 Parameters like: `cost`, `completion_tokens`, and `prompt_tokens` will be automatically calculated if your model is supported. Check out our [models page](https://platform.keywordsai.co/platform/models?sort_by=model_name) to see the list of supported models.
+
+## Example with OpenAI SDK
+The following example demonstrates how to integrate the Keywords AI Logging API with the OpenAI SDK.
+
+### Basic OpenAI Implementation
+This is a typical OpenAI SDK implementation:
+```typescript OpenAI NodeJS
+import OpenAI from "openai";
+
+const openai = new OpenAI();
+
+async function main() {
+  const completion = await openai.chat.completions.create({
+   messages: [
+      { 
+        role: "assistant", 
+        content: "You are a helpful assistant." 
+      },
+      {
+        role: "user",
+        content: "Hello!",
+      }
+    ],
+    model: "gpt-4o",
+  });
+
+  console.log(completion.choices[0]);
+}
+
+main();
+```
+### Enhanced Implementation with Logging
+Here's the same implementation with Keywords AI logging added:
+
+```typescript OpenAI NodeJS
+import OpenAI from "openai";
+
+const openai = new OpenAI();
+
+async function main() {
+  const startTime = Date.now();
+  
+  const completion = await openai.chat.completions.create({
+    messages: [
+      { 
+        role: "assistant", 
+        content: "You are a helpful assistant." 
+      },
+      {
+        role: "user",
+        content: "Hello!",
+      }
+    ],
+    model: "gpt-4o"
+  });
+
+  const endTime = Date.now();
+  const generationTime = (endTime - startTime) / 1000; // Convert to seconds
+
+  // Log to Keywords AI
+  await fetch('https://api.keywordsai.co/api/request-logs/create/', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: "gpt-4o",
+      prompt_messages: [
+        { 
+          role: "assistant", 
+          content: "You are a helpful assistant." 
+        },
+        {
+          role: "user",
+          content: "Hello!",
+        }
+      ],
+      completion_message: completion.choices[0].message,
+      generation_time: generationTime
+      // other Keywords AI parameters
+    })
+  });
+
+  console.log(completion.choices[0]);
+}
+
+main();
+```
