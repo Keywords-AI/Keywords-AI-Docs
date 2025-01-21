@@ -188,7 +188,8 @@
             "features/generation/key-management",
             "features/organization/create-team"
           ]
-        }
+        },
+        "features/monitoring/traces"
       ]
     },
     { 
