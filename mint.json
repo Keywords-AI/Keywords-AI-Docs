@@ -43,6 +43,10 @@
       "url": "integration"
     },
     {
+      "name": "Cookbooks",
+      "url": "cookbooks"
+    },
+    {
       "name": "Changelog ↗",
       "url": "https://www.keywordsai.co/changelog"
     }
@@ -95,7 +99,7 @@
       "pages": [
         "get-started/overview",
         {
-          "group": "Get started",
+          "group": "Getting started",
           "pages": [
             "get-started/async-logging",
             "get-started/llm-inference",
@@ -110,8 +114,9 @@
         {
           "group": "AI observability",
           "pages": [
+            "features/monitoring/overview",
             {
-              "group": "Integration",
+              "group": "Getting started",
               "pages": [
                 "features/monitoring/logging-api",
                 "features/monitoring/proxy-api"
@@ -221,6 +226,10 @@
         "integration/providers/perplexity",
         "integration/providers/openrouter"
       ]
+    },
+    {
+      "group": "Cookbooks",
+      "pages": ["cookbooks/anthropic-structure-output"]
     },
     {
       "group": "Analytics",

@@ -11,7 +11,7 @@ You can delete a prompt by sending a DELETE request to the prompt endpoint.
 ```python example.py
 import requests
 
-url = "https://api.keywordsai.co/prompts/<prompt_id>/"
+url = "https://api.keywordsai.co/api/prompts/<prompt_id>/"
 api_key = "YOUR_KEYWORDS_AI_API_KEY" # Replace with your actual Keywords AI API key
 headers = {
     "Authorization": f"Bearer {api_key}",
@@ -23,7 +23,7 @@ print(response.json())
 ```
 
 ```typescript example.ts
-fetch('https://api.keywordsai.co/prompts/<prompt_id>/', 
+fetch('https://api.keywordsai.co/api/prompts/<prompt_id>/', 
 {
   method: 'DELETE',
   headers: {
