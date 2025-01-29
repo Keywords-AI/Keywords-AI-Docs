@@ -20,7 +20,7 @@ After you created a prompt, you can create versions of the prompt by sending a P
 ```Python Python
 import requests
 
-url = "https://api.keywordsai.co/prompts/"
+url = "https://api.keywordsai.co/api/prompts/"
 api_key = "YOUR_KEYWORDS_AI_API_KEY" # Replace with your actual Keywords AI API key
 data = {
     "name": "Your Prompt Name",
@@ -38,7 +38,7 @@ print(response.json())
 ```TypeScript TypeScript
 // Define the function with TypeScript
 
-fetch('https://api.keywordsai.co/prompts/', {
+fetch('https://api.keywordsai.co/api/prompts/', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',

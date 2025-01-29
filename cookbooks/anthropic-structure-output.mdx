@@ -1,0 +1,63 @@
+---
+title: "How to structure LLM output with Anthropic models"
+description: ""
+---
+## What is structured output?
+Structured Outputs is a feature that ensures the model will always generate responses that adhere to your supplied JSON Schema, so you don't need to worry about the model omitting a required key, or hallucinating an invalid enum value.
+
+
+## How to use structured output with Anthropic models
+We currently only support structured output with Anthropic models only when you use OpenAI SDK. Which means to get structured output from Anthropic models, you should call anthropic models using the OpenAI SDK client to our endpoint. 
+
+## Example code
+<Tabs>
+<Tab title="OpenAI Python SDK">
+You can simply add `response_format={json_schema: {YOUR_JSON_SCHEMA}}` to your request. Under the hood, we create a function that asks Anthropic model to response in JSON format.
+```python {13}
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20240620", # any anthropic model
+    messages=[
+        {"role": "user", "content": "Tell me a long story"}
+    ],
+    response_format={json_schema: {YOUR_JSON_SCHEMA}}
+)
+```
+</Tab>
+<Tab title="OpenAI TypeScript SDK">
+Here is an example of how to use structured output with Anthropic models in the OpenAI TypeScript SDK.
+```typescript {2-3, 5-9, 20}
+import { OpenAI } from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
+import { z } from "zod";
+
+const CalendarEvent = z.object({
+  name: z.string(),
+  date: z.string(),
+  participants: z.array(z.string()),
+});
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "claude-3-5-sonnet-20240620", // any anthropic model
+    response_format: zodResponseFormat(CalendarEvent, "event")
+  })
+  .asResponse();
+
+console.log(await response.json());
+```
+</Tab>
+</Tabs>
+
