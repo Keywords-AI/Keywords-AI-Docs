@@ -119,6 +119,19 @@ Pass this parameter in if you want to log your self-host / fine-tuned model.
 
   </AccordionGroup>
 </ResponseField>
+
+<ParamField path="custom_identifier" type="string">
+You can use this parameter to send an extra custom tag with your request. This will help you to identify LLM logs faster than `metadata` parameter, because it's indexed. You can see it in Logs with name `Custom ID` field.
+
+<Accordion title="Example">
+```json
+{
+  "custom_identifier": "my_value"
+}
+```
+</Accordion>
+</ParamField>
+
 <ResponseField name="error_message" type="text">
 Error message if the LLM inference failed. Default is an empty string.
 </ResponseField>

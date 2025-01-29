@@ -1,6 +1,6 @@
 ---
 title: "Prompt version"
-api: "PATCH https://api.keywordsai.co/prompts/<prompt_id>/versions/<prompt_version_id>/"
+api: "PATCH https://api.keywordsai.co/api/prompts/<prompt_id>/versions/<prompt_version_id>/"
 ---
 
 You can update a prompt version by sending a PATCH request to the prompt version endpoint. The request should include the name of the prompt version, and the list of fallback models, load balance models, tools, and whether to deploy this version as the live version.
@@ -125,7 +125,7 @@ Specify how much to penalize new tokens based on whether they appear in the text
 ```Python Python
 import requests
 
-url = "https://api.keywordsai.co/prompts/<prompt_id>/versions/"
+url = "https://api.keywordsai.co/api/prompts/<prompt_id>/versions/"
 api_key = "YOUR_KEYWORDS_AI_API_KEY" # Replace with your actual Keywords AI API key
 data = {
 "description": "A description of the prompt version",
@@ -159,7 +159,7 @@ print(response.json())
 ```TypeScript TypeScript
 // Define the function with TypeScript
 
-fetch('hhttps://api.keywordsai.co/api/prompts/<prompt_id>/versions/', {
+fetch('https://api.keywordsai.co/api/prompts/<prompt_id>/versions/', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',

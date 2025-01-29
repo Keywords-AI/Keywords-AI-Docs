@@ -705,6 +705,18 @@ Contact team@keywordsai.co if you need extra parameter support for your use case
 </Accordion>
 </ParamField>
 
+<ParamField path="custom_identifier" type="string">
+You can use this parameter to send an extra custom tag with your request. This will help you to identify LLM logs faster than `metadata` parameter, because it's indexed. You can see it in Logs with name `Custom ID` field.
+
+<Accordion title="Example">
+```json
+{
+  "custom_identifier": "my_value"
+}
+```
+</Accordion>
+</ParamField>
+
 
 <ParamField name="customer_params" type="object">
   Pass the customer's parameters in the API call to monitor the user's data in the Keywords AI platform. See how to get insights into your users' data [here](/features/user/user-creation)
