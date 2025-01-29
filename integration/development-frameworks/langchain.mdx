@@ -13,7 +13,7 @@ llm = ChatOpenAI(
     api_key="<Your Keywords AI API Key>",
     model="gpt-3.5-turbo",
     streaming=True,
-    model_kwargs={
+    extra_body={
         "customer_identifier": "customer_11"
     }
 )
@@ -55,6 +55,6 @@ async function main() {
 main()
 ```
 </CodeGroup>
-In `model_kwargs`, you can pass in any [OpenAI parameters](/api-endpoints/proxy-endpoints/chat-completions#openai-parameters). 
+In `extra_body`, you can pass in any [OpenAI parameters](/api-endpoints/proxy-endpoints/chat-completions#openai-parameters). 
 
 To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can specify an `extra_body` object within `model_kwargs`. In the above example, `customer_identifier` is the Keywords AI parameter. These parameters will take precedence over the OpenAI parameters if they are conflicting.
