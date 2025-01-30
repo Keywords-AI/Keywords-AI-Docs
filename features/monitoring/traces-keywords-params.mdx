@@ -1,0 +1,55 @@
+---
+title: "Pass Keywords AI params"
+description: "You can pass Keywords AI params to your traces to get more insights into your LLM workflows."
+---
+
+Each trace can be enriched with Keywords AI params to better understand your AI products and workflows. Keywords AI params include:
+
+- `customer_identifier`, `customer_name`, `customer_email`
+- `metadata`
+- `custom_identifier`
+- `thread_identifier`
+- ...
+
+You can check the full list of [Keywords AI params](https://docs.keywordsai.co/api-endpoints/integration/request-logging-endpoint) in the Keywords AI API reference.
+
+## Example code
+<Tabs>
+<Tab title="Example Python code">
+This is an example of how to pass Keywords AI params to your traces in Python.
+```python {14-23}
+from keywordsai_tracing.contexts.span import keywordsai_span_attributes
+from openai import OpenAI
+from keywordsai_tracing import KeywordsAITelemetry
+from keywordsai_tracing.decorators import workflow, task
+import os
+os.environ["KEYWORDSAI_BASE_URL"] = "https://api.keywordsai.co/api"
+os.environ["KEYWORDSAI_API_KEY"] = os.getenv("KEYWORDSAI_API_KEY")
+
+k_tl = KeywordsAITelemetry()
+client = OpenAI()
+
+@workflow(name="test_dynamic_attributes")
+def test_dynamic_attributes():
+    with keywordsai_span_attributes(
+        keywordsai_params={
+            "customer_identifier": "123",
+            "customer_email": "test@test.com",
+            "customer_name": "John Doe",
+            "thread_identifier": "789",
+            "custom_identifier": "101",
+            "metadata": {"some_key": "some_value"},
+        }
+    ):
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": "Hello, world!"}],
+        )
+    return response
+
+if __name__ == "__main__":
+    test_dynamic_attributes()
+```
+</Tab>
+</Tabs>
+

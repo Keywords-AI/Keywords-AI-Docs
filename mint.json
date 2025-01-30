@@ -130,6 +130,13 @@
               ]
             },
             {
+              "group": "Traces",
+              "pages": [
+                "features/monitoring/traces",
+                "features/monitoring/traces-keywords-params"
+              ]
+            },
+            {
               "group": "Logs",
               "pages": [
                 "features/generation/metadata",
@@ -193,13 +200,13 @@
             "features/generation/key-management",
             "features/organization/create-team"
           ]
-        },
-        "features/monitoring/traces"
+        }
       ]
     },
-    { 
-    "group": "Ecosystem",
-    "pages": ["integration/own-api-keys"] },
+    {
+      "group": "Ecosystem",
+      "pages": ["integration/own-api-keys"]
+    },
     {
       "group": "LLM Frameworks",
       "pages": [
