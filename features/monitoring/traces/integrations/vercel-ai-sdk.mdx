@@ -1,0 +1,68 @@
+---
+title: "Vercel AI SDK"
+description: "Learn how to integrate KeywordsAI tracing with Vercel AI SDK to monitor and analyze your AI application performance. Step-by-step guide for setting up environment variables and creating traced workflows."
+---
+
+## Set up environment variables
+Create a `.env` file in your project root and add the following variables:
+```
+KEYWORDSAI_BASE_URL=https://api.keywordsai.co/api
+KEYWORDSAI_API_KEY=YOUR_KEYWORDSAI_API_KEY
+```
+
+## Create a workflow with Vercel AI SDK
+<CodeGroup>
+```typescript Vercel AI SDK {3, 5-10,21}
+import { CoreMessage, streamText } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
+import { KeywordsAITelemetry } from "@keywordsai/tracing";
+
+const kTl = new KeywordsAITelemetry({
+  apiKey: process.env.KEYWORDSAI_API_KEY || "",
+  baseUrl: process.env.KEYWORDSAI_BASE_URL || "",
+  appName: "test_app_name", // The name of your app
+  disableBatch: true, // Send a trace immediately when it's ready, no batching
+});
+
+async function main() {
+  const client = createOpenAI({
+    compatibility: "strict",
+  });
+
+  // Three arguments for the withWorkflow decorator:
+  // 1. DecoratorConfig
+  // 2. Function to decorate
+  // 3. Arbitrary arguments for the function
+  return kTl.withWorkflow({ name: "vercelWithTracing" }, async (kwargs) => {
+    // Your workflow name is "vercelWithTracing"
+    try {
+      const requestParamsDefault: Parameters<typeof streamText>[0] = {
+        model: client.chat(kwargs.model),
+        messages: kwargs.messages as CoreMessage[],
+        temperature: kwargs.temperature,
+      };
+      const { textStream: proxyTextStream } = streamText(
+        requestParamsDefault
+      );
+      for await (const textPart of proxyTextStream) {
+        console.log(textPart);
+      }
+      return requestParamsDefault;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }, {
+    model: "gpt-4o-mini",
+    messages: [
+      {
+        role: "user",
+        content: "Hello! How are you doing today?",
+      },
+    ],
+    temperature: 0.5,
+  });
+}
+
+main();
+```
+</CodeGroup>
