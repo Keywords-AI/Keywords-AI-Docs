@@ -132,8 +132,14 @@
             {
               "group": "Traces",
               "pages": [
-                "features/monitoring/traces",
-                "features/monitoring/traces-keywords-params"
+                "features/monitoring/traces/traces",
+                "features/monitoring/traces/traces-keywords-params",
+                {
+                  "group": "Integrations",
+                  "pages": [
+                    "features/monitoring/traces/integrations/vercel-ai-sdk"
+                  ]
+                }
               ]
             },
             {
@@ -165,6 +171,7 @@
         {
           "group": "Prompt engineering",
           "pages": [
+            "features/prompt/prompt-management",
             "features/prompt/create-a-prompt",
             "features/prompt/deploy-a-prompt",
             "features/prompt/monitor-a-prompt",

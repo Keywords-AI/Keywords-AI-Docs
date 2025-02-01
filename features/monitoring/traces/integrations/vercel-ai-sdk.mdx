@@ -1,0 +1,126 @@
+---
+title: "Vercel AI SDK"
+description: "Learn how to integrate KeywordsAI tracing with Vercel AI SDK to monitor and analyze your AI application performance. Step-by-step guide for setting up environment variables and creating traced workflows."
+---
+
+## Set up environment variables
+Create a `.env` file in your project root and add the following variables:
+```
+KEYWORDSAI_BASE_URL=https://api.keywordsai.co/api
+KEYWORDSAI_API_KEY=YOUR_KEYWORDSAI_API_KEY
+```
+
+
+## Create a task with Vercel AI SDK
+In this example, we create 2 tasks: `getUserInput` and `getLLMResponse` and annotate them with KeywordsAI tracing.
+```typescript Vercel AI SDK {3, 5-10,16-17,33-34}
+import { CoreMessage, streamText } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
+import { KeywordsAITelemetry } from "@keywordsai/tracing";
+
+const kTl = new KeywordsAITelemetry({
+  apiKey: process.env.KEYWORDSAI_API_KEY || "",
+  baseUrl: process.env.KEYWORDSAI_BASE_URL || "",
+  disableBatch: true,
+});
+
+const client = createOpenAI({
+  compatibility: "strict",
+});
+
+function getUserInput(userName: string) {
+  return kTl.withTask(
+    { name: "getUserInput" },
+    async (userName: string): Promise<CoreMessage> => {
+      return {
+        role: "user",
+        content: "Hello, my name is:  " + userName,
+      };
+    },
+    userName
+  );
+}
+
+async function getLLMResponse(
+  messages: CoreMessage[],
+  model: string,
+  temperature: number
+) {
+  const proxyTextStream = await kTl.withTask(
+    { name: "getLLMResponse" },
+    async (kwargs: { messages: CoreMessage[]; model: string; temperature: number }) => {
+      const { textStream: proxyTextStream } = streamText({
+        model: client.chat(kwargs.model),
+        messages: kwargs.messages,
+        temperature: kwargs.temperature,
+      });
+      return proxyTextStream;
+    },
+    {
+      messages: messages,
+      model: model,
+      temperature: temperature,
+    }
+  );
+  return proxyTextStream;
+}
+```
+
+## Combine tasks into a workflow
+In this example, we create a workflow `vercelWithTracing` that combines the `getUserInput` and `getLLMResponse` tasks.
+<CodeGroup>
+```typescript Vercel AI SDK {3, 5-10,25-26}
+import { CoreMessage, streamText } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
+import { KeywordsAITelemetry } from "@keywordsai/tracing";
+
+const kTl = new KeywordsAITelemetry({
+  apiKey: process.env.KEYWORDSAI_API_KEY || "",
+  baseUrl: process.env.KEYWORDSAI_BASE_URL || "",
+  disableBatch: true, // Send a trace immediately when it's ready, no batching
+});
+
+function getUserInput(userName: string) {
+  // ...
+}
+
+function getLLMResponse(messages: CoreMessage[], model: string, temperature: number) {
+  // ...
+}
+
+  async function main() {
+  // Three arguments for the withWorkflow decorator:
+  // 1. DecoratorConfig
+  // 2. Function to decorate
+  // 3. Arbitrary arguments for the function
+
+  return kTl.withWorkflow(
+    { name: "vercelWithTracing" },
+    async (kwargs) => {
+      try {
+        const textPieces: string[] = [];
+        const proxyTextStream = await getLLMResponse(
+          [await getUserInput("John")],
+          kwargs.model,
+          kwargs.temperature
+        );
+        for await (const textPart of proxyTextStream) {
+          textPieces.push(textPart);
+        }
+        return textPieces.join("");
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    },
+    {
+      model: "gpt-3.5-turbo",
+      temperature: 0.5,
+    }
+  );
+}
+
+main();
+```
+</CodeGroup>
+
+
