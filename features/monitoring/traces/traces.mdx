@@ -1,0 +1,226 @@
+---
+title: "Quickstart"
+description: "Monitor complex LLM workflows including chains, agents with tools, and advanced prompts in your AI products using Traces."
+---
+
+<Note>
+Traces is currently in **beta**. Please share any feedback or suggestions.
+</Note>
+
+
+## Create new account in Keywords AI
+1. Go to [Keywords AI](https://platform.keywordsai.co/platform/signup) and create a new account.
+2. Get your API key from the [API Keys page](https://platform.keywordsai.co/platform/api/api-keys) in Settings.
+
+## Set up Traces
+<Tabs>
+<Tab title="Python">
+
+<Steps>
+<Step title="Install the SDK">
+Install the package using your preferred package manager:
+<CodeGroup>
+```bash pip
+pip install keywordsai-tracing
+```
+```bash poetry
+poetry add keywordsai-tracing
+```
+</CodeGroup>
+</Step>
+
+<Step title="Set up Environment Variables">
+Get your API key from the [API Keys page](https://platform.keywordsai.co/platform/api/api-keys) in Settings, then configure it in your environment:
+
+```python .env
+KEYWORDSAI_BASE_URL="https://api.keywordsai.co/api"
+KEYWORDSAI_API_KEY="YOUR_KEYWORDSAI_API_KEY"
+```
+</Step>
+
+<Step title="Annotate your workflows">
+Use the `@workflow` and `@task` decorators to instrument your code:
+```python Python {6, 8}
+from keywordsai_tracing.decorators import workflow, task
+from keywordsai_tracing.main import KeywordsAITelemetry
+
+k_tl = KeywordsAITelemetry()
+
+@workflow(name="my_workflow")
+def my_workflow():
+    @task(name="my_task")
+    def my_task():
+        pass
+    my_task()
+```
+</Step>
+
+<Step title="A full example with LLM calls">
+In this example, you will see how to implement a workflow that includes LLM calls. We use OpenAI SDK as an example.
+
+```python main.py {2-3, 5, 8}
+from openai import OpenAI
+from keywordsai_tracing.decorators import workflow, task
+from keywordsai_tracing.main import KeywordsAITelemetry
+
+k_tl = KeywordsAITelemetry()
+client = OpenAI()
+
+@workflow(name="create_joke")
+def create_joke():
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": "Tell me a joke about opentelemetry"}],
+        temperature=0.5,
+        max_tokens=100,
+        frequency_penalty=0.5,
+        presence_penalty=0.5,
+    )
+    return completion.choices[0].message.content
+```
+</Step>
+
+</Steps>
+</Tab>
+
+<Tab title="JS/TS">
+<Steps>
+<Step title="Install the SDK">
+Install the package using your preferred package manager:
+```bash 
+npm install @keywordsai/tracing
+# or yarn
+
+yarn add @keywordsai/tracing
+```
+</Step>
+<Step title="Set up Environment Variables">
+Get your API key from the [API Keys page](https://platform.keywordsai.co/platform/api/api-keys) in Settings, then configure it in your environment:
+
+```bash .env
+KEYWORDSAI_BASE_URL="https://api.keywordsai.co/api"
+KEYWORDSAI_API_KEY="YOUR_KEYWORDSAI_API_KEY"
+```
+</Step>
+<Step title="Create a simple task">
+```typescript server.ts {1, 6-10, 16-17}
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+import OpenAI from 'openai';
+
+// Initialize clients
+// Make sure to set these environment variables or pass them directly
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY || "",
+    appName: 'test-app',
+    disableBatch: true  // For testing, disable batching
+});
+
+const openai = new OpenAI();
+
+// This demonstrates a simple LLM call wrapped in a task
+async function createJoke() {
+    return await keywordsAi.withTask(
+        { name: 'joke_creation' },
+        async () => {
+            const completion = await openai.chat.completions.create({
+                messages: [{ role: 'user', content: 'Tell me a joke about TypeScript' }],
+                model: 'gpt-4o-mini',
+                temperature: 0.7
+            });
+            return completion.choices[0].message.content;
+        }
+    );
+}
+```
+</Step>
+
+<Step title="Create a workflow combining tasks">
+In this example, we create a workflow `pirate_joke_workflow` that combines the `createJoke` task with a `translateJoke` task.
+```typescript server.ts {2-3, 5-6}
+async function jokeWorkflow() {
+    return await keywordsAi.withWorkflow(
+        { name: 'pirate_joke_workflow' },
+        async () => {
+            const joke = await createJoke();
+            const pirateJoke = await translateJoke(joke);
+            return pirateJoke;
+        }
+    );
+}
+```
+</Step>
+
+</Steps>
+</Tab>
+
+</Tabs>
+
+## Understanding Workflows and Tasks
+
+A workflow is a sequence of tasks that you want to monitor. Each task represents a single unit of work within that workflow.
+
+### Example
+
+Below is an example that demonstrates how to use tasks and workflows. We'll create a workflow that:
+1. Generates a joke
+2. Translates it to pirate speak
+3. Adds a signature
+
+Each operation is implemented as a separate task that can be used independently or as part of the workflow.
+
+```python Python {1,15,25}
+@task(name="joke_creation")
+def create_joke():
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": "Tell me a joke about opentelemetry"}],
+        temperature=0.5,
+        max_tokens=100,
+        frequency_penalty=0.5,
+        presence_penalty=0.5,
+        stop=["\n"],
+        logprobs=True,
+    )
+    return completion.choices[0].message.content
+
+@task(name="signature_generation")
+def generate_signature(joke: str):
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "user", "content": "add a signature to the joke:\n\n" + joke}
+        ],
+    )
+    return completion.choices[0].message.content
+
+@task(name="pirate_joke_translation")
+def translate_joke_to_pirate(joke: str):
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+                "role": "user",
+                "content": "translate the joke to pirate language:\n\n" + joke,
+            }
+        ],
+    )
+    return completion.choices[0].message.content
+```
+
+Chain these tasks together in a workflow:
+
+```python Python {1}
+@workflow(name="joke_workflow")
+def joke_workflow():
+    joke = create_joke()
+    pirate_joke = translate_joke_to_pirate(joke)
+    signature = generate_signature(pirate_joke)
+    return signature
+```
+You can then see the trace in the [Traces](https://platform.keywordsai.co/platform/traces).
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/traces/tracing-example.png" alt="Traces example" />
+</Frame>
+
+
+_Example adapted from [Traceloop](https://traceloop.com)_
