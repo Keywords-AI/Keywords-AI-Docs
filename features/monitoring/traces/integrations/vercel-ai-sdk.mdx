@@ -10,9 +10,10 @@ KEYWORDSAI_BASE_URL=https://api.keywordsai.co/api
 KEYWORDSAI_API_KEY=YOUR_KEYWORDSAI_API_KEY
 ```
 
-## Create a workflow with Vercel AI SDK
-<CodeGroup>
-```typescript Vercel AI SDK {3, 5-10,21}
+
+## Create a task with Vercel AI SDK
+In this example, we create 2 tasks: `getUserInput` and `getLLMResponse` and annotate them with KeywordsAI tracing.
+```typescript Vercel AI SDK {3, 5-10,16-17,33-34}
 import { CoreMessage, streamText } from "ai";
 import { createOpenAI } from "@ai-sdk/openai";
 import { KeywordsAITelemetry } from "@keywordsai/tracing";
@@ -20,49 +21,106 @@ import { KeywordsAITelemetry } from "@keywordsai/tracing";
 const kTl = new KeywordsAITelemetry({
   apiKey: process.env.KEYWORDSAI_API_KEY || "",
   baseUrl: process.env.KEYWORDSAI_BASE_URL || "",
-  appName: "test_app_name", // The name of your app
+  disableBatch: true,
+});
+
+const client = createOpenAI({
+  compatibility: "strict",
+});
+
+function getUserInput(userName: string) {
+  return kTl.withTask(
+    { name: "getUserInput" },
+    async (userName: string): Promise<CoreMessage> => {
+      return {
+        role: "user",
+        content: "Hello, my name is:  " + userName,
+      };
+    },
+    userName
+  );
+}
+
+async function getLLMResponse(
+  messages: CoreMessage[],
+  model: string,
+  temperature: number
+) {
+  const proxyTextStream = await kTl.withTask(
+    { name: "getLLMResponse" },
+    async (kwargs: { messages: CoreMessage[]; model: string; temperature: number }) => {
+      const { textStream: proxyTextStream } = streamText({
+        model: client.chat(kwargs.model),
+        messages: kwargs.messages,
+        temperature: kwargs.temperature,
+      });
+      return proxyTextStream;
+    },
+    {
+      messages: messages,
+      model: model,
+      temperature: temperature,
+    }
+  );
+  return proxyTextStream;
+}
+```
+
+## Combine tasks into a workflow
+In this example, we create a workflow `vercelWithTracing` that combines the `getUserInput` and `getLLMResponse` tasks.
+<CodeGroup>
+```typescript Vercel AI SDK {3, 5-10,25-26}
+import { CoreMessage, streamText } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
+import { KeywordsAITelemetry } from "@keywordsai/tracing";
+
+const kTl = new KeywordsAITelemetry({
+  apiKey: process.env.KEYWORDSAI_API_KEY || "",
+  baseUrl: process.env.KEYWORDSAI_BASE_URL || "",
   disableBatch: true, // Send a trace immediately when it's ready, no batching
 });
 
-async function main() {
-  const client = createOpenAI({
-    compatibility: "strict",
-  });
+function getUserInput(userName: string) {
+  // ...
+}
 
+function getLLMResponse(messages: CoreMessage[], model: string, temperature: number) {
+  // ...
+}
+
+  async function main() {
   // Three arguments for the withWorkflow decorator:
   // 1. DecoratorConfig
   // 2. Function to decorate
   // 3. Arbitrary arguments for the function
-  return kTl.withWorkflow({ name: "vercelWithTracing" }, async (kwargs) => {
-    // Your workflow name is "vercelWithTracing"
-    try {
-      const requestParamsDefault: Parameters<typeof streamText>[0] = {
-        model: client.chat(kwargs.model),
-        messages: kwargs.messages as CoreMessage[],
-        temperature: kwargs.temperature,
-      };
-      const { textStream: proxyTextStream } = streamText(
-        requestParamsDefault
-      );
-      for await (const textPart of proxyTextStream) {
-        console.log(textPart);
+
+  return kTl.withWorkflow(
+    { name: "vercelWithTracing" },
+    async (kwargs) => {
+      try {
+        const textPieces: string[] = [];
+        const proxyTextStream = await getLLMResponse(
+          [await getUserInput("John")],
+          kwargs.model,
+          kwargs.temperature
+        );
+        for await (const textPart of proxyTextStream) {
+          textPieces.push(textPart);
+        }
+        return textPieces.join("");
+      } catch (error) {
+        console.error("Error:", error);
       }
-      return requestParamsDefault;
-    } catch (error) {
-      console.error("Error:", error);
+    },
+    {
+      model: "gpt-3.5-turbo",
+      temperature: 0.5,
     }
-  }, {
-    model: "gpt-4o-mini",
-    messages: [
-      {
-        role: "user",
-        content: "Hello! How are you doing today?",
-      },
-    ],
-    temperature: 0.5,
-  });
+  );
 }
 
 main();
 ```
 </CodeGroup>
+
+

@@ -171,6 +171,7 @@
         {
           "group": "Prompt engineering",
           "pages": [
+            "features/prompt/prompt-management",
             "features/prompt/create-a-prompt",
             "features/prompt/deploy-a-prompt",
             "features/prompt/monitor-a-prompt",

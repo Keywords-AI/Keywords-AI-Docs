@@ -2,51 +2,41 @@
 title: "Overview"
 description: "Iterating and versioning prompts as a team."
 ---
-With our Prompts management feature, you can easily iterate and version your prompts as a team, deploy them to your codebase with one line of code, share them with your team, test them in the Playground, and more.
 
-Check out the [Prompts page](https://platform.keywordsai.co/platform/prompts) to see the prompts you have created and deployed.
+## What is Prompt Engineering?
+
+Prompt engineering is an emerging discipline focused on designing and optimizing inputs for language models (LMs) to maximize their effectiveness across various applications. It is a crucial skill for understanding and leveraging the capabilities and limitations of large language models (LLMs).
+
+
+This field serves multiple stakeholders:
+
+- Researchers use it to enhance LLMs' performance in complex tasks, including question answering and arithmetic reasoning
+
+- Developers employ it to create robust interfaces between LLMs and other tools
+
+- Safety engineers utilize it to improve LLM security and reliability
 
 
 
-## How to create a prompt
+Beyond prompt creation, prompt engineering encompasses:
 
-<Steps>
-<Step title="Create a prompt">
-Go to [Prompts page](https://platform.keywordsai.co/platform/prompts), click on the`+ New prompt` button, and fill in the required fields.
-<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/prompt-create.png" />
-</Step>
-<Step title="Write your prompt">
-You can write your prompt in the editor and use variables in your prompt by using double curly braces `{{variable_name}}`.
-<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/promptMessage.png" />
-</Step>
+- Techniques for effective LLM interaction
 
-<Step title="Configure your prompt" >
-You can configure your prompt by specify model, temperature, max_tokens, top_p, frequency_penalty, presence_penalty, and stream.
-<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/prompt-config.png" />
-</Step>
+- Methods for integrating domain knowledge
 
-<Step title="Test your prompt" >
-After you have created your prompt, you can test it in the Playground to see the outputs. Click on the `Playground` button to test your prompt.
-<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/prompt-playground.png" />
-</Step>
+- Strategies for combining LLMs with external tools
 
-<Step title="Deploy your prompt to the production" >
-After you have tested your prompt and are satisfied with the outputs, you can commit it and then deploy it to your codebase with one line of code.
-<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/deploy-prompt.gif" />
-<Note>Once you commit the prompt, you should click on the `Commit history` button and choose the previous read-only version to deploy it. </Note>
-</Step>
-</Steps>
-## Example
-```json
-{
-  "prompt": {
-     "prompt_id": "prompt_id", //paste this from the prompt management page
-     "variables": {
-       "variable_name": "variable_value"
-     },
-     "version": 1 //specify which version of the prompt you want to use
-     // "echo": true //optional parameter
-  }
-}
-```
+- Skills for optimizing model outputs
 
+<CardGroup cols={2}>
+  <Card title="Create a prompt"  href="../prompt/create-a-prompt">
+  </Card>
+  <Card title="Deploy a prompt"  href="../prompt/deploy-a-prompt">
+    </Card>
+    <Card title="Monitor a prompt"  href="../prompt/monitor-a-prompt">
+
+  </Card>
+<Card title="Test a prompt with test cases" href="../prompt/lab">
+
+  </Card>
+</CardGroup>
