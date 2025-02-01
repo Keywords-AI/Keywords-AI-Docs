@@ -133,7 +133,13 @@
               "group": "Traces",
               "pages": [
                 "features/monitoring/traces/traces",
-                "features/monitoring/traces/traces-keywords-params"
+                "features/monitoring/traces/traces-keywords-params",
+                {
+                  "group": "Integrations",
+                  "pages": [
+                    "features/monitoring/traces/integrations/vercel-ai-sdk"
+                  ]
+                }
               ]
             },
             {
