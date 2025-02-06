@@ -148,7 +148,8 @@
                 "features/generation/metadata",
                 "features/monitoring/threads",
                 "features/monitoring/logging",
-                "features/monitoring/share-log"
+                "features/monitoring/share-log",
+                "features/monitoring/log-prompt-variable"
               ]
             },
             {
