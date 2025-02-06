@@ -1,0 +1,55 @@
+---
+title: "Log prompt variables"
+description: "You can send your prompt variables to Keywords AI to log them in your logs. So you can see the prompt template and variables separately"
+---
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt-variable-logging.jpg" alt="Prompt variables in logs" />
+</Frame>
+
+## How to log prompt variables
+
+### Via LLM proxy
+If you are using the LLM proxy, you should first [set up your prompts](/features/prompt/create-a-prompt) in the code. Then we will log the LLM requests and variables automatically.
+
+**Example:**
+When I defined a prompt in Keywords AI like this:
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt-example.png" alt="Sample prompt in Keywords AI" />
+</Frame>
+
+Then deploy your prompt in the code:
+
+```json
+"model": "gpt-4o-mini",
+"prompt": {
+    "prompt_id": "09IqVI-test",
+    "variables": {"language": "Python","task_description": "Square a number", "specific_library": "math"},
+    "version": 15
+}
+```
+
+Once you send a request through the LLM proxy, you will see the prompt variables in the side panel.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt-variable-logging.jpg" alt="Prompt variables in logs" />
+</Frame>
+
+### Via Logging API
+When you make a request through the Logging API, you can send the prompt variables in the `prompt_messages` field. Just simply wrap your prompt variables in pairs of `{{}}`.
+
+Learn how to use the **Logging API [here](/features/monitoring/logging-api)**.
+
+**Example:**
+
+```json
+"prompt_messages": [
+    {
+    "content": "Please develop an optimized Python function to {{task_description}}, utilizing {{specific_library}}, include error handling, and write unit tests for the function.",
+    "role": "user"
+    }
+],
+"variables": {
+    "task_description": "Square a number",
+    "specific_library": "math"
+}
+```
