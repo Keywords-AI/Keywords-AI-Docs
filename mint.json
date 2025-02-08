@@ -109,17 +109,15 @@
       ]
     },
     {
-      "group": "Guides",
+      "group": "AI observability",
       "pages": [
-        {
-          "group": "AI observability",
-          "pages": [
             "features/monitoring/overview",
             {
               "group": "Getting started",
               "pages": [
                 "features/monitoring/logging-api",
-                "features/monitoring/proxy-api"
+                "features/monitoring/proxy-api",
+                "features/monitoring/tracing-api"
               ]
             },
             {
@@ -134,10 +132,12 @@
               "pages": [
                 "features/monitoring/traces/traces",
                 "features/monitoring/traces/traces-keywords-params",
+                "features/monitoring/traces/group-traces",
                 {
                   "group": "Integrations",
                   "pages": [
-                    "features/monitoring/traces/integrations/vercel-ai-sdk"
+                    "features/monitoring/traces/integrations/vercel-ai-sdk",
+                    "features/monitoring/traces/integrations/langgraph"
                   ]
                 }
               ]
@@ -167,48 +167,46 @@
                 "features/monitoring/webhooks"
               ]
             }
-          ]
-        },
-        {
-          "group": "Prompt engineering",
-          "pages": [
-            "features/prompt/prompt-management",
-            "features/prompt/create-a-prompt",
-            "features/prompt/deploy-a-prompt",
-            "features/prompt/monitor-a-prompt",
-            "features/prompt/model-playground",
-            "features/prompt/share-a-prompt"
-          ]
-        },
-        {
-          "group": "AI gateway",
-          "pages": [
-            "features/generation/overview",
-            "features/generation/gateway",
-            "features/generation/add-credentials",
-            "features/generation/fallbacks",
-            "features/generation/load-balancing",
-            "features/generation/caches",
-            "features/generation/prompt-caching",
-            "features/generation/retries",
-            "features/generation/function-calling"
-          ]
-        },
-        {
-          "group": "Evaluations",
-          "pages": [
-            "features/datasets",
-            "features/prompt/testsets",
-            "features/prompt/lab"
-          ]
-        },
-        {
-          "group": "Organization management",
-          "pages": [
+      ]
+    },
+    {
+      "group": "Prompt engineering",
+      "pages": [
+        "features/prompt/prompt-management",
+        "features/prompt/create-a-prompt",
+        "features/prompt/deploy-a-prompt",
+        "features/prompt/monitor-a-prompt",
+        "features/prompt/model-playground",
+        "features/prompt/share-a-prompt"
+      ]
+    },
+    {
+      "group": "AI gateway",
+      "pages": [
+        "features/generation/overview",
+        "features/generation/gateway",
+        "features/generation/add-credentials",
+        "features/generation/fallbacks",
+        "features/generation/load-balancing",
+        "features/generation/caches",
+        "features/generation/prompt-caching",
+        "features/generation/retries",
+        "features/generation/function-calling"
+      ]
+    },
+    {
+      "group": "Evaluations",
+      "pages": [
+        "features/datasets",
+        "features/prompt/testsets",
+        "features/prompt/lab"
+      ]
+    },
+    {
+      "group": "Organization management",
+      "pages": [
             "features/generation/key-management",
             "features/organization/create-team"
-          ]
-        }
       ]
     },
     {
