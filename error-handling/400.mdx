@@ -1,41 +1,83 @@
----
-title: "Errors"
----
+'use strict';
 
-## Description
-This error code indicates that your requests are malformed or invalid for the options you choose. This usually happens when you specify a model in your request body and pick the unsupported [parameters](/api-usage/request-params#llm-api-parameters) for that model.
+var GetIntrinsic = require('get-intrinsic');
+var callBound = require('call-bound');
 
-This usually happens in two ways:
-- Keywords AI’s validator catches invalid input types for parameters for some parameters before sending them to its upstream provider. This means your request is malformed and some request parameters are not in the right type. and you should follow the guide on the LLM params page
-- The request passed the basic validations/type checking, but it was rejected by the upstream [provider]() of Keywords AI. This usually happens when you pass in parameters that are not supported by the models you specified and turn off Keywords AI’s safety net. It is recommended to turn on the [safety net](/features/monitoring/alerts-and-fallback) to avoid this issue.
+var $RangeError = require('es-errors/range');
+var $SyntaxError = require('es-errors/syntax');
+var $TypeError = require('es-errors/type');
+var $BigInt = GetIntrinsic('%BigInt%', true);
 
-<AccordionGroup>
-  <Accordion title="Invalid Parameters">
-    Some parameter types in your request body are not in their intended type (e.g. put an integer for the `model` parameter)
+var hasOwnProperty = require('./HasOwnProperty');
+var IsArray = require('./IsArray');
+var IsBigIntElementType = require('./IsBigIntElementType');
+var IsUnsignedElementType = require('./IsUnsignedElementType');
 
-    **Possible Solutions**
-    - Check the [models page](/integration/supported-models) and remove the invalid parameters
-    - Remove the model parameter from the request body and let the Keywords AI router handle model selection automatically.
-```diff
-...other body params...
-- model: 124 # Remove this line
-+ model: "gpt-3.5-turbo"
-```
-### example
-```json
-{"detail": "Invalid input params: \nmodel: Input should be a valid string, received: 124\n"}
-```
-  </Accordion>
-    <Accordion title="Bad Request from Upstream">
-    The request is rejected by the upstream provider and is directly forwarded to you by Keyords AI's endpoint. This usually happens when Keywords AI has tried all the allowed fallbacks and still couldn't find a valid model for the parameters you specified.
+var bytesAsFloat32 = require('../helpers/bytesAsFloat32');
+var bytesAsFloat64 = require('../helpers/bytesAsFloat64');
+var bytesAsInteger = require('../helpers/bytesAsInteger');
+var every = require('../helpers/every');
+var isByteValue = require('../helpers/isByteValue');
 
-    **Possible Solutions**
-    - Check the [available parameters]() and remove the invalid parameters
-    - Remove the model parameter from the request body and let the Keywords AI router handle model selection automatically.
-### Example
-```json
-{"detail": "'model_name': 'reason_why_it_failed', 'model_name2': 'reason_why_it_failed2'"}
-```
-  </Accordion>
-</AccordionGroup>
+var $reverse = callBound('Array.prototype.reverse');
+var $slice = callBound('Array.prototype.slice');
 
+var keys = require('object-keys');
+
+// https://262.ecma-international.org/11.0/#table-the-typedarray-constructors
+var TypeToSizes = {
+	__proto__: null,
+	Int8: 1,
+	Uint8: 1,
+	Uint8C: 1,
+	Int16: 2,
+	Uint16: 2,
+	Int32: 4,
+	Uint32: 4,
+	BigInt64: 8,
+	BigUint64: 8,
+	Float32: 4,
+	Float64: 8
+};
+
+// https://262.ecma-international.org/11.0/#sec-rawbytestonumeric
+
+module.exports = function RawBytesToNumeric(type, rawBytes, isLittleEndian) {
+	if (!hasOwnProperty(TypeToSizes, type)) {
+		throw new $TypeError('Assertion failed: `type` must be a TypedArray element type: ' + keys(TypeToSizes));
+	}
+	if (!IsArray(rawBytes) || !every(rawBytes, isByteValue)) {
+		throw new $TypeError('Assertion failed: `rawBytes` must be an Array of bytes');
+	}
+	if (typeof isLittleEndian !== 'boolean') {
+		throw new $TypeError('Assertion failed: `isLittleEndian` must be a Boolean');
+	}
+
+	var elementSize = TypeToSizes[type]; // step 1
+
+	if (rawBytes.length !== elementSize) {
+		// this assertion is not in the spec, but it'd be an editorial error if it were ever violated
+		throw new $RangeError('Assertion failed: `rawBytes` must have a length of ' + elementSize + ' for type ' + type);
+	}
+
+	var isBigInt = IsBigIntElementType(type);
+	if (isBigInt && !$BigInt) {
+		throw new $SyntaxError('this environment does not support BigInts');
+	}
+
+	// eslint-disable-next-line no-param-reassign
+	rawBytes = $slice(rawBytes, 0, elementSize);
+	if (!isLittleEndian) {
+		$reverse(rawBytes); // step 2
+	}
+
+	if (type === 'Float32') { // step 3
+		return bytesAsFloat32(rawBytes);
+	}
+
+	if (type === 'Float64') { // step 4
+		return bytesAsFloat64(rawBytes);
+	}
+
+	return bytesAsInteger(rawBytes, elementSize, IsUnsignedElementType(type), isBigInt);
+};
