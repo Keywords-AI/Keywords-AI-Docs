@@ -21,12 +21,17 @@ Once you have configured your prompt, you can write the content of your prompt. 
 
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/write-prompt.png" alt="Create prompt placeholder" />
 
+### 4. Variables in the prompt
 You can also add variables to your prompt. Variables are placeholders for dynamic content that can be used to generate prompts. Simply add double curly braces `{{variable_name}}` to your prompt and you will be able to use the variable in your prompt.
 
 Replace the User message with this:
 ```
-Please develop an optimized Python function to {{task_description}}, utilizing {{specific_library}}, include error handling, and write unit tests for the function.
+Please develop an optimized Python function to {{task_description}}, 
+utilizing {{specific_library}},include error handling, and write unit tests for the function.
 ```
+<Note>
+The format of the variable can't be `{{task description}}`. It should be `{{task_description}}` with "_" instead of spaces.
+</Note>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/prompt-variables.png" alt="Create prompt placeholder" />
 
 After did this, you can:
@@ -34,7 +39,7 @@ After did this, you can:
 2. Click `Run` to test your prompt.
 
 You now just finished writing your first version of the prompt.
-### 4.Commit your first version
+### 5.Commit your first version
 You can click on the `Commit` button and write a commit message, which is helpful for you to track the changes you made to your prompt.
 
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/prompt-commit.png" alt="Create prompt placeholder" />

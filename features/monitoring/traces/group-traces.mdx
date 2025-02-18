@@ -4,4 +4,53 @@ description: "Group traces across different sessions by a trace group id."
 ---
 
 You can use the context decorator with the `trace_group_identifier` to group traces across different sessions.
-This is helpful for any event driven framework if you are using one.
+
+
+<Tabs>
+<Tab title="Python">
+```python Python
+from openai import OpenAI
+from keywordsai_tracing.decorators import workflow, task
+from keywordsai_tracing.main import KeywordsAITelemetry
+from anthropic import Anthropic
+from keywordsai_tracing.contexts.span import keywordsai_span_attributes
+
+client = OpenAI()
+anthropic = Anthropic()
+
+k_tl = KeywordsAITelemetry()
+
+@task(name="joke_creation")
+def create_joke():
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": "Tell me a joke about opentelemetry"}],
+        temperature=0.5,
+        stop=["\n"],
+    )
+    joke = completion.choices[0].message.content
+
+    return joke
+
+
+@workflow(name="pirate_joke_generator")
+def joke_workflow():
+    eng_joke = create_joke()
+    return eng_joke
+
+
+@workflow(name="pirate_joke_plus_audience_reactions")
+def pirate_joke_plus_audience():
+    with keywordsai_span_attributes(keywordsai_params={"trace_group_identifier": "pirate_joke_id"}): 
+        joke = joke_workflow() # This show case the basic workflow usage and compatibility with the OpenAI SDK
+    return "python"
+
+pirate_joke_plus_audience()
+```
+</Tab>
+<Tab title="JS/TS">
+
+```typescript
+```
+</Tab>
+</Tabs>

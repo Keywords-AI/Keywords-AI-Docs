@@ -108,3 +108,21 @@ const response = await client.chat.completions.create({
 </Tabs>
 
 These parameters will take precedence over the OpenAI parameters if they are conflicting.
+
+## Call Azure OpenAI with OpenAI SDK
+
+To call Azure OpenAI models, instead of using azure OpenAI's client, the easier way is to use the OpenAI client.
+
+
+```python
+from openai import AsyncOpenAI
+
+azureaclient = AsyncOpenAI(
+    api_key=KEYWORDSAI_API_KEY,
+    base_url="https://api.keywordsai.co/api"
+)
+
+response = await azureaclient.chat.completions.create(**kwargs)
+```
+
+Then You can upload your Azure credentials to Keywords AI platform to use those models. Check out our [Providers integration](https://platform.keywordsai.co/platform/api/providers).
