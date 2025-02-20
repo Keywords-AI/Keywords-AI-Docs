@@ -217,10 +217,33 @@ def joke_workflow():
     signature = generate_signature(pirate_joke)
     return signature
 ```
-You can then see the trace in the [Traces](https://platform.keywordsai.co/platform/traces).
+You can then see the trace in [Traces](https://platform.keywordsai.co/platform/traces).
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/traces/tracing-example.png" alt="Traces example" />
 </Frame>
 
 
 _Example adapted from [Traceloop](https://traceloop.com)_
+
+## Decorating Classes (Python only)
+While the examples above shows how to decorate functions, you can also decorate classes. In this case, you will also need to provide the name of the method that runs the workflow and task.
+
+```python Python
+from openai import OpenAI
+from keywordsai_tracing import KeywordsAITelemetry
+from keywordsai_tracing.decorators import workflow, task
+
+k_tl = KeywordsAITelemetry()
+client = OpenAI()
+
+@workflow(name="joke_agent", method_name="run")
+class JokeAgent:
+    @task(name="joke_creation")
+    def create_joke(self):
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": "Tell me a joke about opentelemetry"}],
+        )
+        joke = completion.choices[0].message.content
+        return joke
+```

@@ -20,12 +20,15 @@ You can choose the models you want to use your credits with. Just simply type th
 
 <img height="200" width="500"  src="/images/providers/azure_model.png" alt="Dashboard Page"/>
 </Step>
-<Step title="Map your deployment name">
-We understand that you may have a custom name for your Azure deployment. So if you want to specify a particular model in your Azure deployment, you should map it as `azure/{your deployment name}`.
-
-For example, in Azure OpenAI, you might deployed `gpt-4o` as `gpt-4o` or `gpt-4o-whatever`, so you should map it as `azure/apgt-4o` or `azure/gpt-4o-whatever`.
-</Step>
 </Steps>
+
+### Map your deployment name
+We understand that you may have a custom name for your Azure deployment. So if you want to specify a particular model to test in the UI, you should map it as `azure/{your deployment name}`.
+
+For example, in Azure OpenAI, you might deployed `gpt-4o` as the deployment name `gpt-4o` or `gpt-4o-whatever`, so you should map it as `azure/apgt-4o` or `azure/gpt-4o-whatever`.
+
+<img width="400" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/azure-mapping.png" alt="Azure deployment name" />
+
 
 ## Add it in code
 <Steps>
@@ -166,3 +169,15 @@ To find the parameters needed, you can follow these steps:
 <img src="/images/providers/azure/blurred-azure-endpoint.png"/>
 - Pick the version from the [available versions](https://learn.microsoft.com/en-us/azure/ai-services/openai/reference).
 
+
+## Supported models
+
+- `azure/gpt-35-turbo`
+- `azure/gpt-4`
+- `azure/gpt-4-1106-preview`
+- `azure/gpt-4-32k`
+- `azure/gpt-4o`
+- `azure/gpt-4o-mini`
+- `azure/gpt-4o-2024-08-06`
+- `azure/gpt-4-vision-preview`
+- `azure/o3-mini`
