@@ -301,6 +301,7 @@
           {
             "group": "Cookbooks",
             "pages": [
+              "cookbooks/what-is-keywords-ai",
               "cookbooks/anthropic-structure-output"
             ]
           }
