@@ -242,7 +242,10 @@
     },
     {
       "group": "Cookbooks",
-      "pages": ["cookbooks/anthropic-structure-output"]
+      "pages": [
+        "cookbooks/what-is-keywords-ai",
+        "cookbooks/anthropic-structure-output"
+      ]
     },
     {
       "group": "Analytics",
