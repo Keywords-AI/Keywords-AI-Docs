@@ -29,7 +29,7 @@ An Array of prompt messages. Default is an empty list.
 ```
 </ResponseField>
 
-<ResponseField name="completion_message" type="dict" required>
+<ResponseField name="completion_message" type="dict">
 Completion message in JSON format. Default is an empty dictionary.
 ```python 
 "completion_message": {
@@ -159,6 +159,10 @@ Error message if the LLM inference failed. Default is an empty string.
 
 <ResponseField name="generation_time" type="float" default={0}>
 Total generation time. Generation time = TTFT (Time To First Token) + TPOT (Time Per Output Token) * #tokens. **Do not** confuse this with `ttft`.
+
+<Note>
+The unit of generation time is seconds.
+</Note>
 </ResponseField>
 
 <ResponseField name="keywordsai_api_controls" type="object">
@@ -187,7 +191,9 @@ You can add any key-value pair to this metadata field for your reference.
 <Accordion title="Example">
 ```json
 {
-  "my_value_key": "my_value"
+  "metadata": {
+    "my_value_key": "my_value"
+  }
 }
 ```
 </Accordion>
@@ -229,6 +235,10 @@ Pass this parameter in if you want to log your self-host / fine-tuned model.
 <ResponseField name="status_code" type="integer" default={200}>
   The status code of the LLM inference. Default is 200 (ok). See supported status codes [here](/error-handling).
 
+<Accordion title="Supported status codes">
+We support all status codes  that is a valid HTTP status. 
+```200,201,204,301,304,400, 401,402,403,404,405,415,422,429,500,502,503,504``` etc.
+</Accordion>
 </ResponseField>
 
 <ParamField path="stop" type="array[string]">
@@ -328,6 +338,10 @@ We generally recommend altering this or temperature but not both.
 
 <ResponseField name="ttft" type="float" default={0.0}>
 Time to first token. The time it takes for the model to generate the first token after receiving a request.
+
+<Note>
+The unit of ttft is seconds.
+</Note>
 </ResponseField>
 
 <ResponseField name="usage" type="object">
