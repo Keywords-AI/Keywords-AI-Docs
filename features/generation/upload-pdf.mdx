@@ -1,0 +1,43 @@
+---
+title: Upload PDF
+description: Learn how to upload PDF files to Keywords AI.
+---
+
+You can upload PDF files to Keywords AI by using the LLM proxy and attaching the file to the request.
+
+## Example
+
+```python OpenAI SDK Python {6, 9-13, 23-26}
+import base64
+import requests
+from openai import OpenAI
+
+# URL of the file
+url = "https://storage.googleapis.com/cloud-samples-data/generative-ai/pdf/2403.05530.pdf"
+
+# Download the file
+response = requests.get(url)
+file_data = response.content
+
+encoded_file = base64.b64encode(file_data).decode("utf-8")
+
+from openai import OpenAI
+client = OpenAI(base_url=os.getenv("KEYWORDSAI_BASE_URL"), api_key=os.getenv("KEYWORDSAI_API_KEY"))
+response = client.chat.completions.create(
+    model="gemini/gemini-2.0-flash",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "You are a very professional document summarization specialist. Please summarize the given document."},
+                {
+                    "type": "image_url",
+                    "image_url": f"data:application/pdf;base64,{encoded_file}", # 👈 PDF
+                },
+            ],
+        }
+    ],
+)
+
+print(response.choices[0])
+```
