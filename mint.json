@@ -197,9 +197,20 @@
     {
       "group": "Evaluations",
       "pages": [
-        "features/datasets",
-        "features/prompt/testsets",
-        "features/prompt/lab"
+        {
+          "group": "Human evals",
+          "pages": [
+            "features/evaluation/human-annotation"
+          ]
+        },
+        {
+          "group": "Datasets & Experiments",
+          "pages": [
+            "features/datasets",
+            "features/prompt/testsets",
+            "features/prompt/lab"
+          ]
+        }
       ]
     },
     {
