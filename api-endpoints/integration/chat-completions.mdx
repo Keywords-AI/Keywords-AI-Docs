@@ -3,7 +3,7 @@ title: LLM Proxy
 api: POST https://api.keywordsai.co/api/chat/completions
 ---
 
-## OpenAI parameters 
+## OpenAI compatible parameters 
 To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `extra_body` parameter if you're using the OpenAI SDK.
 
 <RequestExample>
@@ -717,8 +717,19 @@ You can use this parameter to send an extra custom tag with your request. This w
 </Accordion>
 </ParamField>
 
+<ParamField path="customer_identifier" type="string">
+  Use this as a tag to identify the user associated with the API call. See the [details of customer identifier here.](/features/generation/customer-identifier)
+  <Accordion title="Example">
+```json
+{
+    //...other_params,
+    "customer_identifier": "user_123"
+}
+```
+</Accordion>
+</ParamField>
 
-<ParamField name="customer_params" type="object">
+<ParamField path="customer_params" type="object">
   Pass the customer's parameters in the API call to monitor the user's data in the Keywords AI platform. See how to get insights into your users' data [here](/features/user/user-creation)
   <Accordion title="Properties">
 <ParamField path="customer_identifier" type="string" required>
@@ -870,18 +881,12 @@ Adding this returns the summarization of the response in the response body. If s
 </ParamField>
 
 
-## Deprecated parameters
-<ParamField path="customer_identifier" type="string">
-  Use this as a tag to identify the user associated with the API call. See the [details of customer identifier here.](/features/generation/customer-identifier)
-  <Accordion title="Example">
-```json
-{
-    //...other_params,
-    "customer_identifier": "user_123"
-}
-```
-</Accordion>
+## Evals parameters
+<ParamField path="positive_feedback" type="boolean">
+  Whether the user liked the output. `True` means the user liked the output.
 </ParamField>
+
+## Deprecated parameters
 
 <ParamField path="customer_api_keys" type="object">
 You can pass in a dictionary of your customer's API keys for specific models. If the router selects a model that is in the dictionary, it will attempt to use the customer's API key for calling the model before using your [integration API key](/integration/llm-credits) or Keywords AI's default API key.
