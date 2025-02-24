@@ -1,384 +1,379 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Docs",
-  "colors": {
-    "primary": "#111112",
-    "light": "#7590F2",
-    "dark": "#05050A"
-  },
-  "favicon": "/logo.svg",
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Documentation",
-        "groups": [
-          {
-            "group": "Get started",
-            "pages": [
-              "get-started/overview",
-              {
-                "group": "Getting started",
-                "pages": [
-                  "get-started/async-logging",
-                  "get-started/llm-inference",
-                  "get-started/prompt-engineering"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "AI observability",
-            "pages": [
-              "features/monitoring/overview",
-              {
-                "group": "Getting started",
-                "pages": [
-                  "features/monitoring/logging-api",
-                  "features/monitoring/proxy-api",
-                  "features/monitoring/tracing-api"
-                ]
-              },
-              {
-                "group": "Metrics",
-                "pages": [
-                  "features/monitoring/analytics",
-                  "features/monitoring/dashboard-filter"
-                ]
-              },
-              {
-                "group": "Traces",
-                "pages": [
-                  "features/monitoring/traces/traces",
-                  "features/monitoring/traces/traces-keywords-params",
-                  "features/monitoring/traces/group-traces",
-                  {
-                    "group": "Integrations",
-                    "pages": [
-                      "features/monitoring/traces/integrations/vercel-ai-sdk",
-                      "features/monitoring/traces/integrations/langgraph"
-                    ]
-                  }
-                ]
-              },
-              {
-                "group": "Logs",
-                "pages": [
-                  "features/generation/metadata",
-                  "features/monitoring/threads",
-                  "features/monitoring/logging",
-                  "features/monitoring/share-log",
-                  "features/monitoring/log-prompt-variable"
-                ]
-              },
-              {
-                "group": "User analytics",
-                "pages": [
-                  "features/generation/customer-identifier",
-                  "features/user/user-budget"
-                ]
-              },
-              {
-                "group": "Advanced",
-                "pages": [
-                  "features/monitoring/subscribe-alerts",
-                  "features/generation/disable-logs",
-                  "features/monitoring/webhooks"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Prompt engineering",
-            "pages": [
-              "features/prompt/prompt-management",
-              "features/prompt/create-a-prompt",
-              "features/prompt/deploy-a-prompt",
-              "features/prompt/monitor-a-prompt",
-              "features/prompt/model-playground",
-              "features/prompt/share-a-prompt"
-            ]
-          },
-          {
-            "group": "AI gateway",
-            "pages": [
-              "features/generation/overview",
-              "features/generation/gateway",
-              "features/generation/add-credentials",
-              "features/generation/fallbacks",
-              "features/generation/load-balancing",
-              "features/generation/caches",
-              "features/generation/prompt-caching",
-              "features/generation/retries",
-              "features/generation/function-calling"
-            ]
-          },
-          {
-            "group": "Evaluations",
-            "pages": [
-              "features/datasets",
-              "features/prompt/testsets",
-              "features/prompt/lab"
-            ]
-          },
-          {
-            "group": "Organization management",
-            "pages": [
-              "features/generation/key-management",
-              "features/organization/create-team"
-            ]
-          },
-          {
-            "group": "Error handling",
-            "pages": [
-              "error-handling/400"
-            ]
-          },
-          {
-            "group": "Resources",
-            "pages": [
-              "resources/what-is-llm-observability-and-monitoring",
-              "features/generation/automatic-retries",
-              "features/generation/streaming",
-              {
-                "group": "Relari eval",
-                "pages": [
-                  {
-                    "group": "Retrieval",
-                    "pages": [
-                      "features/evaluation/retrieval/context-precision"
-                    ]
-                  },
-                  {
-                    "group": "Text generation",
-                    "pages": [
-                      "features/evaluation/generation/faithfulness",
-                      "features/evaluation/generation/flesch-kincaid",
-                      "features/evaluation/generation/answer-relevance"
-                    ]
-                  },
-                  {
-                    "group": "Other",
-                    "pages": [
-                      "features/evaluation/other/sentiment"
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "Integration methods",
-            "pages": [
-              "api-endpoints/integration/request-logging-endpoint",
-              "api-endpoints/integration/chat-completions"
-            ]
-          },
-          {
-            "group": "Logs",
-            "pages": [
-              "api-endpoints/async-endpoints/batch-logging-endpoint",
-              "api-endpoints/async-endpoints/logs-list-endpoint",
-              "api-endpoints/async-endpoints/logs-update-endpoint"
-            ]
-          },
-          {
-            "group": "Prompt",
-            "pages": [
-              {
-                "group": "Prompt creation",
-                "pages": [
-                  "api-endpoints/prompt-endpoints/create-prompts",
-                  "api-endpoints/prompt-endpoints/create-prompt-version"
-                ]
-              },
-              {
-                "group": "Prompt retrieval",
-                "pages": [
-                  "api-endpoints/prompt-endpoints/get-prompts",
-                  "api-endpoints/prompt-endpoints/get-prompt-versions"
-                ]
-              },
-              {
-                "group": "Prompt update",
-                "pages": [
-                  "api-endpoints/prompt-endpoints/update-prompt",
-                  "api-endpoints/prompt-endpoints/update-prompt-version"
-                ]
-              },
-              {
-                "group": "Prompt delete",
-                "pages": [
-                  "api-endpoints/prompt-endpoints/delete-prompt",
-                  "api-endpoints/prompt-endpoints/delete-prompt-version"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Multimodal integrations",
-            "pages": [
-              "api-endpoints/integration/text-to-speech",
-              "api-endpoints/integration/speech-to-text",
-              "api-endpoints/integration/embeddings"
-            ]
-          },
-          {
-            "group": "User",
-            "pages": [
-              "api-endpoints/async-endpoints/user-creation-endpoint",
-              "api-endpoints/async-endpoints/users-data-endpoint",
-              "api-endpoints/async-endpoints/user-detail-endpoint",
-              "api-endpoints/async-endpoints/user-update-endpoint"
-            ]
-          },
-          {
-            "group": "Evaluations",
-            "pages": [
-              "api-endpoints/async-endpoints/evaluations"
-            ]
-          },
-          {
-            "group": "Model",
-            "pages": [
-              "api-endpoints/data-endpoints/models-endpoint"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Integrations",
-        "groups": [
-          {
-            "group": "Ecosystem",
-            "pages": [
-              "integration/own-api-keys"
-            ]
-          },
-          {
-            "group": "LLM Frameworks",
-            "pages": [
-              "integration/development-frameworks/openai-sdk",
-              "integration/development-frameworks/anthropic",
-              "integration/development-frameworks/langchain",
-              "integration/development-frameworks/vercel",
-              "integration/development-frameworks/llama-index",
-              "integration/development-frameworks/baml",
-              "integration/development-frameworks/mem0"
-            ]
-          },
-          {
-            "group": "LLM providers",
-            "pages": [
-              "integration/providers/openai",
-              "integration/providers/anthropic",
-              "integration/providers/azure",
-              "integration/providers/vertex",
-              "integration/providers/bedrock",
-              "integration/providers/groq",
-              "integration/providers/Fireworks",
-              "integration/providers/together",
-              "integration/providers/perplexity",
-              "integration/providers/openrouter"
-            ]
-          },
-          {
-            "group": "Analytics",
-            "pages": [
-              "integration/posthog"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Cookbooks",
-        "groups": [
-          {
-            "group": "Cookbooks",
-            "pages": [
-              "cookbooks/what-is-keywords-ai",
-              "cookbooks/anthropic-structure-output"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Changelog ↗",
-        "href": "https://www.keywordsai.co/changelog"
-      }
-    ]
-  },
-  "styling": {
-    "codeblocks": "system"
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg",
-    "href": "https://www.keywordsai.co"
-  },
-  "api": {
-    "playground": {
-      "display": "interactive"
-    },
-    "mdx": {
-      "server": "https://api.keywordsai.co",
-      "auth": {
-        "method": "bearer",
-        "name": "Authorization"
-      }
-    }
-  },
-  "background": {
-    "color": {
-      "light": "#ffffff",
-      "dark": "#05050A"
-    }
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Discord",
-        "href": "https://discord.com/invite/KEanfAafQQ"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Get started",
-      "href": "https://platform.keywordsai.co/"
-    }
-  },
-  "search": {
-    "prompt": "Search..."
-  },
-  "seo": {
-    "metatags": {
-      "og:site_name": "Keywords AI | LLM monitoring platform",
-      "og:image": "/logo.svg",
-      "twitter:site": "@keywordsai"
-    },
-    "indexing": "navigable"
-  },
-  "footer": {
-    "socials": {
-      "linkedin": "https://www.linkedin.com/company/keywordsai/"
-    }
-  },
-  "integrations": {
+  "analytics": {
     "posthog": {
       "apiKey": "phc_rL8MrmFrie28wgxtDurKt9t1bwCzChaJQ7WYaj1F1gH"
     }
   },
-  "fonts": {
-    "heading": {
+  "font": {
+    "headings": {
       "family": "Inter"
     },
     "body": {
       "family": "Inter"
     }
+  },
+  "codeBlock": {
+    "mode": "auto"
+  },
+  "sidebar": {
+    "items": "border"
+  },
+  "$schema": "https://mintlify.com/schema.json",
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true
+  },
+  "name": "Docs",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg",
+    "href": "https://www.keywordsai.co"
+  },
+  "theme": "prism",
+  "primaryTab": {
+    "name": "Documentation"
+  },
+  "tabs": [
+    {
+      "name": "API reference",
+      "url": "api-endpoints"
+    },
+    {
+      "name": "Integrations",
+      "url": "integration"
+    },
+    {
+      "name": "Cookbooks",
+      "url": "cookbooks"
+    },
+    {
+      "name": "Changelog ↗",
+      "url": "https://www.keywordsai.co/changelog"
+    }
+  ],
+  "metadata": {
+    "og:site_name": "Keywords AI | LLM monitoring platform",
+    "og:image": "/logo.svg",
+    "twitter:site": "@keywordsai"
+  },
+
+  "favicon": "/logo.svg",
+  "colors": {
+    "primary": "#111112",
+    "light": "#7590F2",
+    "dark": "#05050A",
+    "background": {
+      "dark": "#05050A",
+      "light": "#ffffff"
+    },
+    "anchors": {
+      "from": "#0D9373",
+      "to": "#07C983"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Discord",
+      "url": "https://discord.com/invite/KEanfAafQQ"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get started",
+    "url": "https://platform.keywordsai.co/"
+  },
+
+  "api": {
+    "baseUrl": "https://api.keywordsai.co",
+    "auth": {
+      "method": "bearer",
+      "name": "Authorization",
+      "inputPrefix": "Bearer"
+    },
+    "playground": {
+      "mode": "show"
+    }
+  },
+  "navigation": [
+    {
+      "group": "Get started",
+      "pages": [
+        "get-started/overview",
+        {
+          "group": "Getting started",
+          "pages": [
+            "get-started/async-logging",
+            "get-started/llm-inference",
+            "get-started/prompt-engineering"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "AI observability",
+      "pages": [
+            "features/monitoring/overview",
+            {
+              "group": "Getting started",
+              "pages": [
+                "features/monitoring/logging-api",
+                "features/monitoring/proxy-api",
+                "features/monitoring/tracing-api"
+              ]
+            },
+            {
+              "group": "Metrics",
+              "pages": [
+                "features/monitoring/analytics",
+                "features/monitoring/dashboard-filter"
+              ]
+            },
+            {
+              "group": "Traces",
+              "pages": [
+                "features/monitoring/traces/traces",
+                "features/monitoring/traces/traces-keywords-params",
+                "features/monitoring/traces/group-traces",
+                {
+                  "group": "Integrations",
+                  "pages": [
+                    "features/monitoring/traces/integrations/vercel-ai-sdk",
+                    "features/monitoring/traces/integrations/langgraph"
+                  ]
+                }
+              ]
+            },
+            {
+              "group": "Logs",
+              "pages": [
+                "features/generation/metadata",
+                "features/monitoring/threads",
+                "features/monitoring/logging",
+                "features/monitoring/share-log",
+                "features/monitoring/log-prompt-variable"
+              ]
+            },
+            {
+              "group": "User analytics",
+              "pages": [
+                "features/generation/customer-identifier",
+                "features/user/user-budget"
+              ]
+            },
+            {
+              "group": "Advanced",
+              "pages": [
+                "features/monitoring/subscribe-alerts",
+                "features/generation/disable-logs",
+                "features/monitoring/webhooks"
+              ]
+            }
+      ]
+    },
+    {
+      "group": "Prompt engineering",
+      "pages": [
+        "features/prompt/prompt-management",
+        "features/prompt/create-a-prompt",
+        "features/prompt/deploy-a-prompt",
+        "features/prompt/monitor-a-prompt",
+        "features/prompt/model-playground",
+        "features/prompt/share-a-prompt"
+      ]
+    },
+    {
+      "group": "AI gateway",
+      "pages": [
+        "features/generation/overview",
+        "features/generation/gateway",
+        "features/generation/add-credentials",
+        "features/generation/fallbacks",
+        "features/generation/load-balancing",
+        "features/generation/caches",
+        "features/generation/prompt-caching",
+        "features/generation/retries",
+        "features/generation/function-calling",
+        "features/generation/upload-pdf"
+      ]
+    },
+    {
+      "group": "Evaluations",
+      "pages": [
+        {
+          "group": "Human evals",
+          "pages": [
+            "features/evaluation/human-annotation"
+          ]
+        },
+        {
+          "group": "Datasets & Experiments",
+          "pages": [
+            "features/datasets",
+            "features/prompt/testsets",
+            "features/prompt/lab"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Organization management",
+      "pages": [
+            "features/generation/key-management",
+            "features/organization/create-team"
+      ]
+    },
+    {
+      "group": "Ecosystem",
+      "pages": ["integration/own-api-keys"]
+    },
+    {
+      "group": "LLM Frameworks",
+      "pages": [
+        "integration/development-frameworks/openai-sdk",
+        "integration/development-frameworks/anthropic",
+        "integration/development-frameworks/langchain",
+        "integration/development-frameworks/vercel",
+        "integration/development-frameworks/llama-index",
+        "integration/development-frameworks/baml",
+        "integration/development-frameworks/mem0"
+      ]
+    },
+    {
+      "group": "LLM providers",
+      "pages": [
+        "integration/providers/openai",
+        "integration/providers/anthropic",
+        "integration/providers/azure",
+        "integration/providers/vertex",
+        "integration/providers/bedrock",
+        "integration/providers/groq",
+        "integration/providers/Fireworks",
+        "integration/providers/together",
+        "integration/providers/perplexity",
+        "integration/providers/openrouter"
+      ]
+    },
+    {
+      "group": "Cookbooks",
+      "pages": [
+        "cookbooks/what-is-keywords-ai",
+        "cookbooks/anthropic-structure-output"
+      ]
+    },
+    {
+      "group": "Analytics",
+      "pages": ["integration/posthog"]
+    },
+    {
+      "group": "Integration methods",
+      "pages": [
+        "api-endpoints/integration/request-logging-endpoint",
+        "api-endpoints/integration/chat-completions"
+      ]
+    },
+    {
+      "group": "Logs",
+      "pages": [
+        "api-endpoints/async-endpoints/batch-logging-endpoint",
+        "api-endpoints/async-endpoints/logs-list-endpoint",
+        "api-endpoints/async-endpoints/logs-update-endpoint"
+      ]
+    },
+    {
+      "group": "Prompt",
+      "pages": [
+        {
+          "group": "Prompt creation",
+          "pages": [
+            "api-endpoints/prompt-endpoints/create-prompts",
+            "api-endpoints/prompt-endpoints/create-prompt-version"
+          ]
+        },
+        {
+          "group": "Prompt retrieval",
+          "pages": [
+            "api-endpoints/prompt-endpoints/get-prompts",
+            "api-endpoints/prompt-endpoints/get-prompt-versions"
+          ]
+        },
+        {
+          "group": "Prompt update",
+          "pages": [
+            "api-endpoints/prompt-endpoints/update-prompt",
+            "api-endpoints/prompt-endpoints/update-prompt-version"
+          ]
+        },
+        {
+          "group": "Prompt delete",
+          "pages": [
+            "api-endpoints/prompt-endpoints/delete-prompt",
+            "api-endpoints/prompt-endpoints/delete-prompt-version"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Multimodal integrations",
+      "pages": [
+        "api-endpoints/integration/text-to-speech",
+        "api-endpoints/integration/speech-to-text",
+        "api-endpoints/integration/embeddings"
+      ]
+    },
+    {
+      "group": "User",
+      "pages": [
+        "api-endpoints/async-endpoints/user-creation-endpoint",
+        "api-endpoints/async-endpoints/users-data-endpoint",
+        "api-endpoints/async-endpoints/user-detail-endpoint",
+        "api-endpoints/async-endpoints/user-update-endpoint"
+      ]
+    },
+    {
+      "group": "Evaluations",
+      "pages": ["api-endpoints/async-endpoints/evaluations"]
+    },
+    {
+      "group": "Model",
+      "pages": ["api-endpoints/data-endpoints/models-endpoint"]
+    },
+    {
+      "group": "Error handling",
+      "pages": ["error-handling/400"]
+    },
+    {
+      "group": "Resources",
+      "pages": [
+        "resources/what-is-llm-observability-and-monitoring",
+        "features/generation/automatic-retries",
+        "features/generation/streaming",
+        {
+          "group": "Relari eval",
+          "pages": [
+            {
+              "group": "Retrieval",
+              "pages": ["features/evaluation/retrieval/context-precision"]
+            },
+            {
+              "group": "Text generation",
+              "pages": [
+                "features/evaluation/generation/faithfulness",
+                "features/evaluation/generation/flesch-kincaid",
+                "features/evaluation/generation/answer-relevance"
+              ]
+            },
+            {
+              "group": "Other",
+              "pages": ["features/evaluation/other/sentiment"]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "footerSocials": {
+    "linkedin": "https://www.linkedin.com/company/keywordsai/"
+  },
+  "search": {
+    "prompt": "Search..."
   }
 }
