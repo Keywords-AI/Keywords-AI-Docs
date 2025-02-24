@@ -198,11 +198,14 @@ You can add any key-value pair to this metadata field for your reference.
 ```
 </Accordion>
 </ResponseField>
+<ResponseField name="positive_feedback" type="boolean">
+  Whether the user liked the output. `True` means the user liked the output.
+</ResponseField>
 
-<ParamField path="presence_penalty" type="number">
+<ResponseField name="presence_penalty" type="number">
   Specify how much to penalize new tokens based on whether they appear in the
   text so far. Increases the model's likelihood of talking about new topics
-</ParamField>
+</ResponseField>
 
 <ResponseField name="prompt_tokens" type="integer">
 Number of tokens in the prompt.
