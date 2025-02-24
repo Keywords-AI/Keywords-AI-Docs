@@ -191,7 +191,8 @@
         "features/generation/caches",
         "features/generation/prompt-caching",
         "features/generation/retries",
-        "features/generation/function-calling"
+        "features/generation/function-calling",
+        "features/generation/upload-pdf"
       ]
     },
     {
