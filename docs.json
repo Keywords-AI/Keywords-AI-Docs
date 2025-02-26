@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "maple",
   "name": "Docs",
   "colors": {
     "primary": "#111112",
@@ -30,62 +30,62 @@
           {
             "group": "AI observability",
             "pages": [
-              "features/monitoring/overview",
-              {
-                "group": "Getting started",
-                "pages": [
-                  "features/monitoring/logging-api",
-                  "features/monitoring/proxy-api",
-                  "features/monitoring/tracing-api"
-                ]
-              },
-              {
-                "group": "Metrics",
-                "pages": [
-                  "features/monitoring/analytics",
-                  "features/monitoring/dashboard-filter"
-                ]
-              },
-              {
-                "group": "Traces",
-                "pages": [
-                  "features/monitoring/traces/traces",
-                  "features/monitoring/traces/traces-keywords-params",
-                  "features/monitoring/traces/group-traces",
+                  "features/monitoring/overview",
                   {
-                    "group": "Integrations",
+                    "group": "Getting started",
                     "pages": [
-                      "features/monitoring/traces/integrations/vercel-ai-sdk",
-                      "features/monitoring/traces/integrations/langgraph"
+                      "features/monitoring/logging-api",
+                      "features/monitoring/proxy-api",
+                      "features/monitoring/tracing-api"
+                    ]
+                  },
+                  {
+                    "group": "Metrics",
+                    "pages": [
+                      "features/monitoring/analytics",
+                      "features/monitoring/dashboard-filter"
+                    ]
+                  },
+                  {
+                    "group": "Traces",
+                    "pages": [
+                      "features/monitoring/traces/traces",
+                      "features/monitoring/traces/traces-keywords-params",
+                      "features/monitoring/traces/group-traces",
+                      {
+                        "group": "Integrations",
+                        "pages": [
+                          "features/monitoring/traces/integrations/vercel-ai-sdk",
+                          "features/monitoring/traces/integrations/langgraph"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "Logs",
+                    "pages": [
+                      "features/generation/metadata",
+                      "features/monitoring/threads",
+                      "features/monitoring/logging",
+                      "features/monitoring/share-log",
+                      "features/monitoring/log-prompt-variable"
+                    ]
+                  },
+                  {
+                    "group": "User analytics",
+                    "pages": [
+                      "features/generation/customer-identifier",
+                      "features/user/user-budget"
+                    ]
+                  },
+                  {
+                    "group": "Advanced",
+                    "pages": [
+                      "features/monitoring/subscribe-alerts",
+                      "features/generation/disable-logs",
+                      "features/monitoring/webhooks"
                     ]
                   }
-                ]
-              },
-              {
-                "group": "Logs",
-                "pages": [
-                  "features/generation/metadata",
-                  "features/monitoring/threads",
-                  "features/monitoring/logging",
-                  "features/monitoring/share-log",
-                  "features/monitoring/log-prompt-variable"
-                ]
-              },
-              {
-                "group": "User analytics",
-                "pages": [
-                  "features/generation/customer-identifier",
-                  "features/user/user-budget"
-                ]
-              },
-              {
-                "group": "Advanced",
-                "pages": [
-                  "features/monitoring/subscribe-alerts",
-                  "features/generation/disable-logs",
-                  "features/monitoring/webhooks"
-                ]
-              }
             ]
           },
           {
@@ -110,15 +110,27 @@
               "features/generation/caches",
               "features/generation/prompt-caching",
               "features/generation/retries",
-              "features/generation/function-calling"
+              "features/generation/function-calling",
+              "features/generation/upload-pdf"
             ]
           },
           {
             "group": "Evaluations",
             "pages": [
-              "features/datasets",
-              "features/prompt/testsets",
-              "features/prompt/lab"
+              {
+                "group": "Human evals",
+                "pages": [
+                  "features/evaluation/human-annotation"
+                ]
+              },
+              {
+                "group": "Datasets & Experiments",
+                "pages": [
+                  "features/datasets",
+                  "features/prompt/testsets",
+                  "features/prompt/lab"
+                ]
+              }
             ]
           },
           {
