@@ -1,9 +1,9 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "maple",
+  "theme": "mint",
   "name": "Docs",
   "colors": {
-    "primary": "#111112",
+    "primary": "#6483F0",
     "light": "#7590F2",
     "dark": "#05050A"
   },
@@ -30,62 +30,62 @@
           {
             "group": "AI observability",
             "pages": [
-                  "features/monitoring/overview",
+              "features/monitoring/overview",
+              {
+                "group": "Getting started",
+                "pages": [
+                  "features/monitoring/logging-api",
+                  "features/monitoring/proxy-api",
+                  "features/monitoring/tracing-api"
+                ]
+              },
+              {
+                "group": "Metrics",
+                "pages": [
+                  "features/monitoring/analytics",
+                  "features/monitoring/dashboard-filter"
+                ]
+              },
+              {
+                "group": "Traces",
+                "pages": [
+                  "features/monitoring/traces/traces",
+                  "features/monitoring/traces/traces-keywords-params",
+                  "features/monitoring/traces/group-traces",
                   {
-                    "group": "Getting started",
+                    "group": "Integrations",
                     "pages": [
-                      "features/monitoring/logging-api",
-                      "features/monitoring/proxy-api",
-                      "features/monitoring/tracing-api"
-                    ]
-                  },
-                  {
-                    "group": "Metrics",
-                    "pages": [
-                      "features/monitoring/analytics",
-                      "features/monitoring/dashboard-filter"
-                    ]
-                  },
-                  {
-                    "group": "Traces",
-                    "pages": [
-                      "features/monitoring/traces/traces",
-                      "features/monitoring/traces/traces-keywords-params",
-                      "features/monitoring/traces/group-traces",
-                      {
-                        "group": "Integrations",
-                        "pages": [
-                          "features/monitoring/traces/integrations/vercel-ai-sdk",
-                          "features/monitoring/traces/integrations/langgraph"
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "group": "Logs",
-                    "pages": [
-                      "features/generation/metadata",
-                      "features/monitoring/threads",
-                      "features/monitoring/logging",
-                      "features/monitoring/share-log",
-                      "features/monitoring/log-prompt-variable"
-                    ]
-                  },
-                  {
-                    "group": "User analytics",
-                    "pages": [
-                      "features/generation/customer-identifier",
-                      "features/user/user-budget"
-                    ]
-                  },
-                  {
-                    "group": "Advanced",
-                    "pages": [
-                      "features/monitoring/subscribe-alerts",
-                      "features/generation/disable-logs",
-                      "features/monitoring/webhooks"
+                      "features/monitoring/traces/integrations/vercel-ai-sdk",
+                      "features/monitoring/traces/integrations/langgraph"
                     ]
                   }
+                ]
+              },
+              {
+                "group": "Logs",
+                "pages": [
+                  "features/generation/metadata",
+                  "features/monitoring/threads",
+                  "features/monitoring/logging",
+                  "features/monitoring/share-log",
+                  "features/monitoring/log-prompt-variable"
+                ]
+              },
+              {
+                "group": "User analytics",
+                "pages": [
+                  "features/generation/customer-identifier",
+                  "features/user/user-budget"
+                ]
+              },
+              {
+                "group": "Advanced",
+                "pages": [
+                  "features/monitoring/subscribe-alerts",
+                  "features/generation/disable-logs",
+                  "features/monitoring/webhooks"
+                ]
+              }
             ]
           },
           {
