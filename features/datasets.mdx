@@ -1,17 +1,31 @@
 ---
-title: "Create a dataset from logs"
-description: "How to create your own golden datasets from logs."
+title: "Create a testset from logs"
 ---
 
-<video
+{/* <video
   controls
   className="w-full aspect-video"
   src="/images/platform-features/dataset/dataset_docs.mp4"
-></video>
+></video> */}
 
-## How to create a dataset
-1. You could create a dataset from the logs page by clicking the `Create dataset` button.
-2. Apply filters to the logs to create a dataset.
-3. You could also handpick logs you want to include in the dataset.
-4. Delete logs from the dataset by clicking the checkbox of the logs and clicking the `Delete` button.
-5. Export the dataset to a CSV/json file by clicking the `Export` button.
+This guide will show you how to create a dataset from logs.
+
+## Prerequisites
+You should pass variables in the API request, since we use the variables to define columns of the dataset. Learn how to [log variables here](/features/monitoring/log-prompt-variable).
+
+## Steps
+<Steps>
+<Step title="Choose the logs you want to include in the testset">
+Click a log, and if it has the Variables section, it means the log has variables and can be included in the testset.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/logs-variables.png" />
+</Frame>
+</Step>
+<Step title="Bring the log to the testset">
+Click the `+` button, and choose the testset you want to add the log to or create a new testset.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/log-to-testsets.png" />
+</Frame>
+</Step>
+</Steps>
+
