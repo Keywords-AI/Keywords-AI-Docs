@@ -97,7 +97,13 @@
               "features/prompt/deploy-a-prompt",
               "features/prompt/monitor-a-prompt",
               "features/prompt/model-playground",
-              "features/prompt/share-a-prompt"
+              "features/prompt/share-a-prompt",
+              {
+                "group": "Advanced",
+                "pages": [
+                  "features/prompt/advanced/log-custom-prompt"
+                ]
+              }
             ]
           },
           {
