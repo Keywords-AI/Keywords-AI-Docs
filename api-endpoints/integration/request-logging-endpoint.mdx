@@ -165,6 +165,10 @@ The unit of generation time is seconds.
 </Note>
 </ResponseField>
 
+<ResponseField name="is_custom_prompt" type="boolean" default={false}>
+Whether the prompt is a custom prompt. Default is `False`.
+</ResponseField>
+
 <ResponseField name="keywordsai_api_controls" type="object">
 Use this parameter to control the behavior of the Keywords AI API. Default is an empty dictionary.
 <AccordionGroup>
@@ -205,6 +209,10 @@ You can add any key-value pair to this metadata field for your reference.
 <ResponseField name="presence_penalty" type="number">
   Specify how much to penalize new tokens based on whether they appear in the
   text so far. Increases the model's likelihood of talking about new topics
+</ResponseField>
+
+<ResponseField name="prompt_id" type="string">
+ID of the prompt. If you want to log a custom prompt ID, you need to pass `is_custom_prompt` as `True`. Otherwise, use the Prompt ID in [Prompts](/features/prompt/deploy-a-prompt#1-find-the-prompt-id).
 </ResponseField>
 
 <ResponseField name="prompt_name" type="string">
