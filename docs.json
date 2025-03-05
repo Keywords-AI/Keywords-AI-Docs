@@ -107,6 +107,26 @@
             ]
           },
           {
+            "group": "Evaluations",
+            "pages": [
+              {
+                "group": "Human evals",
+                "pages": [
+                  "features/evaluation/human-evals/human-evals-setup",
+                  "features/evaluation/human-evals/human-annotation"
+                ]
+              },
+              {
+                "group": "Datasets & Experiments",
+                "pages": [
+                  "features/prompt/testsets",
+                  "features/datasets",
+                  "features/prompt/lab"
+                ]
+              }
+            ]
+          },
+          {
             "group": "AI gateway",
             "pages": [
               "features/generation/overview",
@@ -119,25 +139,6 @@
               "features/generation/retries",
               "features/generation/function-calling",
               "features/generation/upload-pdf"
-            ]
-          },
-          {
-            "group": "Evaluations",
-            "pages": [
-              {
-                "group": "Human evals",
-                "pages": [
-                  "features/evaluation/human-annotation"
-                ]
-              },
-              {
-                "group": "Datasets & Experiments",
-                "pages": [
-                  "features/prompt/testsets",
-                  "features/datasets",
-                  "features/prompt/lab"
-                ]
-              }
             ]
           },
           {
