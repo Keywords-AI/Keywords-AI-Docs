@@ -110,6 +110,12 @@
             "group": "Evaluations",
             "pages": [
               {
+                "group": "LLM evals",
+                "pages": [
+                  "features/evaluation/llm-evals/llm-evaluator"
+                ]
+              },
+              {
                 "group": "Human evals",
                 "pages": [
                   "features/evaluation/human-evals/human-evals-setup",
