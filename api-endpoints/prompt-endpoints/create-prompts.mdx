@@ -7,11 +7,11 @@ You can create a prompt by sending a POST request to the prompts endpoint. The r
 
 After you created a prompt, you can create versions of the prompt by sending a POST request to the[ prompt versions endpoint](/api-endpoints/prompt-endpoints/create-prompt-version).
 
-<ParamField path="name" type="string" required={true}>
+<ParamField body="name" type="string" required={true}>
     The name of the prompt.
 </ParamField>
 
-<ParamField path="description" type="string">
+<ParamField body="description" type="string">
     Description of the prompt
 </ParamField>
 
