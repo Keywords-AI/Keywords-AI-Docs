@@ -7,7 +7,7 @@ You can create a prompt version by sending a POST request to the prompt versions
 
 Get the `prompt_id` from the [prompts endpoint](/api-endpoints/prompt-endpoints/create-prompts).
 
-<ParamField path="messages" type="array" required={true}>
+<ParamField body="messages" type="array" required={true}>
     The list of messages for the prompt version. If you want to add a variable, you can use the following format: `{{variable_name}}`.
     <Accordion title="Example">
 ```json
@@ -20,39 +20,39 @@ Get the `prompt_id` from the [prompts endpoint](/api-endpoints/prompt-endpoints/
 ```
     </Accordion>
 </ParamField>
-<ParamField path="model" type="string" required>
+<ParamField body="model" type="string" required>
  Speciy the model you want to use in this version. 
 </ParamField>
 
-<ParamField path="description" type="string">
+<ParamField body="description" type="string">
     Description of the prompt version
 </ParamField>
 
-<ParamField path="stream" type="boolean">
+<ParamField body="stream" type="boolean">
   Whether the prompt version should be streamed or not. Default is `false`.
 </ParamField>
 
-<ParamField path="temperature" type="float">
+<ParamField body="temperature" type="float">
     The temperature of the model.
 </ParamField>
 
-<ParamField path="max_tokens" type="integer">
+<ParamField body="max_tokens" type="integer">
     The maximum number of tokens to generate.
 </ParamField>
 
-<ParamField path="top_p" type="float">
+<ParamField body="top_p" type="float">
     The nucleus sampling probability.
 </ParamField>
 
-<ParamField path="frequency_penalty" type="float">
+<ParamField body="frequency_penalty" type="float">
 Specify how much to penalize new tokens based on their existing frequency in the text so far. Decreases the model's likelihood of repeating the same line verbatim
 </ParamField>
 
-<ParamField path="presence_penalty" type="float">
-Specify how much to penalize new tokens based on whether they appear in the text so far. Increases the model’s likelihood of talking about new topics
+<ParamField body="presence_penalty" type="float">
+Specify how much to penalize new tokens based on whether they appear in the text so far. Increases the model's likelihood of talking about new topics
 </ParamField>
 
-<ParamField path="variables" type="object">
+<ParamField body="variables" type="object">
     The list of variables for the prompt version. You can use these variables in the messages.
     <Accordion title="Example">
 ```json
@@ -65,7 +65,7 @@ Specify how much to penalize new tokens based on whether they appear in the text
     </Accordion>
 </ParamField>
 
-<ParamField path="fallback_models" type="array">
+<ParamField body="fallback_models" type="array">
     The list of fallback models for the prompt version. Check out [fallback models](/features/generation/fallbacks) for more information.
     <Accordion title="Example">
 ```json
@@ -76,7 +76,7 @@ Specify how much to penalize new tokens based on whether they appear in the text
     </Accordion>
 </ParamField>
 
-<ParamField path="load_balance_models" type="array">
+<ParamField body="load_balance_models" type="array">
     The list of models to load balance the prompt version. Check out [load balancing](/features/generation/load-balancing) for more information.
     <Accordion title="Example">
 ```json
@@ -90,7 +90,7 @@ Specify how much to penalize new tokens based on whether they appear in the text
     </Accordion>
 </ParamField>
 
-<ParamField path="tools" type="array">
+<ParamField body="tools" type="array">
     The list of tools to use for the prompt version. Check out [tools](/features/generation/tools) for more information.
     <Accordion title="Example">
 ```json
@@ -119,7 +119,7 @@ Specify how much to penalize new tokens based on whether they appear in the text
     </Accordion>
 </ParamField>
 
-<ParamField path="deploy" type="boolean">
+<ParamField body="deploy" type="boolean">
    Whether to deploy this version as the live version Default is `false`.
 </ParamField>
 
@@ -230,7 +230,7 @@ fetch('https://api.keywordsai.co/api/prompts/<prompt_id>/versions/', {
 })
 .then(response => response.json())
 .then(data => console.log(data));
-```
-</RequestExample>
+```</RequestExample>
+
 
 
