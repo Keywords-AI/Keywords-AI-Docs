@@ -1,0 +1,231 @@
+---
+title: Run an LLM evaluator in code
+description:  In this guide, we will show you how to add an LLM evaluator in the code.
+---
+
+## Prerequisites
+- You have already created an LLM evaluator. Learn how to create an LLM evaluator [here](https://docs.keywordsai.co/features/evaluation/llm-evals/llm-evaluator).
+- You have already set up the Logging API or LLM proxy. Learn how to set up the Logging API [here](/features/monitoring/logging-api) or LLM proxy [here](/get-started/llm-inference).
+
+## Evaluate LLM output with Logging API
+Once you have set up the Logging API, you can evaluate the LLM output with the Logging API.
+
+### Required parameters
+To run an evaluation successfully, you need to pass the following parameters:
+
+- `completion_message`: The completion message from the LLM.
+- `eval_params`: The parameters for the evaluator.
+- `evaluators`: The parameter under the `eval_params`.
+- `evaluator_slug`: The parameter under the `evaluators`, this is the slug of the evaluator you want to run. 
+
+Learn how to create an evaluator [here](/features/evaluation/llm-evals/llm-evaluator).
+
+### Example code
+
+<CodeGroup>
+```python Python {17-20}
+{
+    "model": "openai/gpt-4o-mini",
+    "prompt_messages": [
+        {
+            "role": "system",
+            "content": "You are a helpful assistant."
+        },
+        {
+            "role": "user",
+            "content": "test"
+        }
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hello, how are you?"
+    },
+    "eval_params": {
+        "evaluators": [
+            {"evaluator_slug": "rng-test"}
+        ]
+    }
+    # ... other parameters
+}
+```
+
+```Typescript Typescript {17-21}
+{
+  model: "openai/gpt-4o-mini",
+  prompt_messages: [
+    {
+      role: "system",
+      content: "You are a helpful assistant."
+    },
+    {
+      role: "user",
+      content: "test"
+    }
+  ],
+  completion_message: {
+    role: "assistant",
+    content: "Hello, how are you?"
+  },
+  eval_params: {
+    evaluators: [
+      {evaluator_slug: "rng-test"}
+    ]
+  }
+  // ... other parameters
+}
+```
+
+</CodeGroup>
+
+### Add ideal output in the code
+`ideal_output` can be also said as the expected output. You can add it to let the evaluator know what is the expected/right output.
+
+<Note>
+You need to add `ideal_output` to the description of the evaluator in the UI. Otherwise, the evaluator will not use the `ideal_output` from the code.
+</Note>
+
+To add it in the code, you need to pass the `ideal_output` under the `eval_inputs` as shown in the example code below:
+
+```python Example {8-10}
+{
+    "eval_params": {
+        "evaluators": [
+            {
+                "evaluator_slug": "rng-test"
+            }
+        ],
+        "eval_inputs": {
+            "ideal_output": "The answer is 3"
+        }
+    }
+}
+```
+### Add multiple evaluators in the code
+You can add multiple evaluators in the code. The evaluators will be run in parallel.
+
+```python Example
+{
+    "eval_params": {
+        "evaluators": [
+            {"evaluator_slug": "rng-test"},
+            {"evaluator_slug": "factual-correctness-demo"}
+        ]
+    }
+}
+
+```
+
+### See the result
+You can go to Logs and see the result of the evaluation in the side panel.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/evals_sidepanel.png"/>
+</Frame>
+
+## Evaluate LLM output with LLM proxy
+If you have set up the LLM proxy, you can evaluate the LLM output with the LLM proxy as well.
+
+### Required parameters
+To run an evaluation successfully, you need to pass the following parameters:
+- `eval_params`: The parameters for the evaluator.
+- `evaluators`: The parameter under the `eval_params`.
+- `evaluator_slug`: The parameter under the `evaluators`, this is the slug of the evaluator you want to run. 
+
+Learn how to create an evaluator [here](/features/evaluation/llm-evals/llm-evaluator).
+### Example code
+<CodeGroup>
+```python Python {2-8}
+{
+"eval_params": {
+    "evaluators": [
+        {
+            "evaluator_slug": "semantic-similarity-demo" # create it in the UI
+        }
+    ]
+},
+"model": "gpt-4o",
+"messages": [
+    {
+        "role": "system",
+        "content": "You are a seasoned marketing copywriter working for Keywords AI. Craft a personalized outreach email that weaves dynamic details into the message naturally. The placeholders are:• James – the recipient's first name• FinEdge – the company's name• financial technology and digital banking solutions – a brief about the company's focus• Product Manager – the recipient's position  \n\n Keywords AI is an LLM observability platform for AI startups, offering observability, prompt management, and evaluations to monitor, debug, and improve AI outputs. Maintain an engaging, warm tone."
+    },
+    {
+        "role": "user",
+        "content": "Compose a professional outreach email. Start by greeting James, then mention that FinEdge is recognized for its work in financial technology and digital banking solutions. Acknowledge the recipient's role as Product Manager and describe how Keywords AI's observability and management tools can improve their AI outputs. Conclude with an invitation to connect."
+    }
+],
+}
+```
+
+```Typescript Typescript {2-8}
+{
+  eval_params: {
+    evaluators: [
+      {
+        evaluator_slug: "semantic-similarity-demo" // create it in the UI
+      }
+    ]
+  },
+  model: "gpt-4o",
+  messages: [
+    {
+      role: "system",
+      content: "You are a seasoned marketing copywriter working for Keywords AI. Craft a personalized outreach email that weaves dynamic details into the message naturally. The placeholders are:• James – the recipient's first name• FinEdge – the company's name• financial technology and digital banking solutions – a brief about the company's focus• Product Manager – the recipient's position  \n\n Keywords AI is an LLM observability platform for AI startups, offering observability, prompt management, and evaluations to monitor, debug, and improve AI outputs. Maintain an engaging, warm tone."
+    },
+    {
+      role: "user",
+      content: "Compose a professional outreach email. Start by greeting James, then mention that FinEdge is recognized for its work in financial technology and digital banking solutions. Acknowledge the recipient's role as Product Manager and describe how Keywords AI's observability and management tools can improve their AI outputs. Conclude with an invitation to connect."
+    }
+  ]
+}
+```
+</CodeGroup>
+
+### Add ideal output in the code
+`ideal_output` can be also said as the expected output. You can add it to let the evaluator know what is the expected/right output.
+
+<Note>
+You need to add `ideal_output` to the description of the evaluator in the UI. Otherwise, the evaluator will not use the `ideal_output` from the code.
+</Note>
+
+To add it in the code, you need to pass the `ideal_output` under the `eval_inputs` as shown in the example code below:
+
+```python Example {8-10}
+{
+    "eval_params": {
+        "evaluators": [
+            {
+                "evaluator_slug": "rng-test"
+            }
+        ],
+        "eval_inputs": {
+            "ideal_output": "The answer is 3"
+        }
+    }
+}
+```
+
+### Add multiple evaluators in the code
+You can add multiple evaluators in the code. The evaluators will be run in parallel.
+
+```python Example
+{
+    "eval_params": {
+        "evaluators": [
+            {"evaluator_slug": "rng-test"},
+            {"evaluator_slug": "factual-correctness-demo"}
+        ]
+    }
+}
+```
+### How to run evals in other LLM SDKs
+Evaluations parameters are similar to other Keywords AI parameters. Go to [Integrations](/integration/own-api-keys) and find the LLM SDK you want to use.
+
+For example, if you are using the OpenAI Python SDK, you can pass the evaluations parameters in `extra_body`.
+
+### See the result
+You can go to Logs and see the result of the evaluation in the side panel.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/evals_sidepanel.png"/>
+</Frame>
