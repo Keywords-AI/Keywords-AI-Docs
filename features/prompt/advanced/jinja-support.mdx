@@ -1,0 +1,75 @@
+---
+title: Jinja support in prompt management
+description:  We support Jinja templates in the prompt. This guide will show you how to use Jinja templates in the prompt.
+---
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/jinja-in-prompts.png" alt="Jinja support in prompt management" />
+</Frame>
+## Introduction
+Jinja templates are a powerful way to create dynamic prompts. You can use Jinja templates to create prompts that are tailored to the user's input.
+
+Below are examples of how to use Jinja templates in the prompt. You can also find Jinja's complete documentation [here](https://jinja.palletsprojects.com/en/stable/templates/).
+
+
+## Variables
+This is the same as the variables in the prompt. So you can just use the `{{}}` to refer to the variables.
+
+```
+Height: {{ height }}
+```
+
+## Conditionals
+You can use the `{% if %}` tag to create conditionals in the prompt.
+```
+{% if condition %}
+    {{ variable_name }}
+{% endif %}
+```
+
+
+
+## Comments
+You can use the `{# ... #}` syntax to add comments to the prompt.
+```
+{# This is a comment #}
+```
+
+## JSON Inputs
+You can use the `{{ input.variable_name }}` syntax to refer to the variables in the JSON input.
+
+For example, if you have a JSON input with the following structure: 
+```
+{
+    "name": "John",
+    "age": 30
+}
+```
+
+You can refer to the variables in the JSON input as follows:
+```
+{{ input.name }}
+```
+
+## Filters
+You can use the `|` syntax to apply filters to the variables.
+```
+{{ variable_name | filter_name }}
+```
+Check out the [Filters in Jinja templates](/cookbooks/filters-in-jinja) guide to learn more about filters.
+
+
+## Log variables via API
+You can use our API to log variables in the prompt. Check out the guide [here](/features/monitoring/log-prompt-variable).
+
+
+
+
+
+
+
+
+
+
+
+
