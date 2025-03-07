@@ -215,7 +215,7 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
 }'
 ``` */}
 
-<ParamField path="messages" type="array" required={true}>
+<ParamField body="messages" type="array" required={true}>
   List of messages to send to the endpoint in the [OpenAI style](https://platform.openai.com/docs/api-reference/chat/create#chat-create-messages), each of them following this format:
   ```json
   messages=[
@@ -226,7 +226,7 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
   ]
   ```
   <Accordion title="Properties">
-    <ParamField path="type" type="string">
+    <ParamField body="type" type="string">
       The type of response format. Options: `json_object` or `text`
     </ParamField>
   </Accordion>
@@ -239,7 +239,7 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
   "content": [
     {
         "type": "text",
-        "text": "What’s in this image?"
+        "text": "What's in this image?"
     },
     {
         "type": "image_url",
@@ -254,7 +254,7 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
  
 </ParamField>
 
-<ParamField path="model" type="string" required={true}>
+<ParamField body="model" type="string" required={true}>
   Specify which model to use. See the list of model
   [here](/integration/supported-models)
 
@@ -262,11 +262,11 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
 
 </ParamField>
 
-<ParamField path="stream" type="boolean" default={false}>
+<ParamField body="stream" type="boolean" default={false}>
   Whether to stream back partial progress token by token
 </ParamField>
 
-<ParamField path="tools" type="array[dict]">
+<ParamField body="tools" type="array[dict]">
   A list of tools the model may call. Currently, only functions are supported as a tool. Use this to provide an array of functions the model may generate JSON inputs for.
   <Accordion title="Example">
   ```json
@@ -295,7 +295,7 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
     </Accordion>
 </ParamField>
 
-<ParamField path="tool_choice" type="dict">
+<ParamField body="tool_choice" type="dict">
 Controls which (if any) tool is called by the model. `none` means the model will not call any tool and instead generates a message. `auto` means the model can pick between generating a message or calling one or more tools. required means the model must call one or more tools. 
 
 `none` is the default when no tools are present. `auto` is the default if tools are present.
@@ -309,22 +309,22 @@ Specifying a particular tool via the code below forces the model to call that to
 ```
 </ParamField>
 
-<ParamField path="frequency_penalty" type="number">
+<ParamField body="frequency_penalty" type="number">
   Specify how much to penalize new tokens based on their existing frequency in
   the text so far. Decreases the model's likelihood of repeating the same line
   verbatim
 </ParamField>
 
-<ParamField path="max_tokens" type="number">
+<ParamField body="max_tokens" type="number">
   Maximum number of tokens to generate in the response
 </ParamField>
 
-<ParamField path="temperature" type="number" default={1}>
+<ParamField body="temperature" type="number" default={1}>
   Controls randomness in the output in the range of 0-2, higher temperature will
   a more random response.
 </ParamField>
 
-<ParamField path="n" type="number" default={1}>
+<ParamField body="n" type="number" default={1}>
   How many chat completion choices are generated for each input message.
 
   <strong>Caveat!</strong> While this can help improve generation quality by picking the optimal choice, this could also lead to more token usage.
@@ -332,23 +332,23 @@ Specifying a particular tool via the code below forces the model to call that to
 
 {/* Add this to the concept page */}
 
-<ParamField path="logprobs" type="boolean" default={false}>
+<ParamField body="logprobs" type="boolean" default={false}>
   Whether to return log probabilities of the output tokens or not. If true, returns the log probabilities of each output token returned in the `content` of `message`.
 </ParamField>
 
-<ParamField path="echo" type="boolean">
+<ParamField body="echo" type="boolean">
   Echo back the prompt in addition to the completion
 </ParamField>
 
 {/* Add this to the concept page */}
 
-<ParamField path="stop" type="array[string]">
+<ParamField body="stop" type="array[string]">
   Stop sequence
 </ParamField>
 
 {/* Add this to the concept page */}
 
-<ParamField path="presence_penalty" type="number">
+<ParamField body="presence_penalty" type="number">
   Specify how much to penalize new tokens based on whether they appear in the
   text so far. Increases the model's likelihood of talking about new topics
 </ParamField>
@@ -357,11 +357,11 @@ Specifying a particular tool via the code below forces the model to call that to
 
 {/* Add this to the concept page */}
 
-<ParamField path="logit_bias" type="dict">
+<ParamField body="logit_bias" type="dict">
   Used to modify the probability of tokens appearing in the response
 </ParamField>
 
-<ParamField path="response_format" type="object">
+<ParamField body="response_format" type="object">
   An object specifying the format that the model must output. Compatible with GPT-4 Turbo and all GPT-3.5 Turbo models newer than gpt-3.5-turbo-1106.
 
 Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message the model generates is valid JSON.
@@ -369,7 +369,7 @@ Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the m
 You must have a "json" as a keyword in the prompt to use this feature.
 <AccordionGroup>
   <Accordion title="Properties">
-    <ParamField path="type" type="string" required={true}>
+    <ParamField body="type" type="string" required={true}>
       The type of response format. options: `json_object`, `text`
     </ParamField>
   </Accordion>
@@ -397,7 +397,7 @@ response_format={
   </AccordionGroup>
 </ParamField>
 
-<ParamField path="parallel_tool_calls" type="boolean">
+<ParamField body="parallel_tool_calls" type="boolean">
   Whether to enable parallel function calling during tool use.
 </ParamField>
 
@@ -405,7 +405,7 @@ response_format={
 See how to make a standard Keywords AI API call in the [Quick Start](/get-started/quick-start) guide.
 ### Generation parameters
 
-<ParamField path="load_balance_group" type="object">
+<ParamField body="load_balance_group" type="object">
   Balance the load of your requests between different models. See the [details of load balancing
   here.](/features/generation/load-balancing)
 <Note> The proxy will pick one model from the group and override the `model` parameter </Note>
@@ -452,7 +452,7 @@ See how to make a standard Keywords AI API call in the [Quick Start](/get-starte
   </Accordion>
 </ParamField>
 
-<ParamField path="fallback_models" type="array">
+<ParamField body="fallback_models" type="array">
   Specify the list of backup models (ranked by priority) to respond in case of a
   failure in the primary model. See the [details of fallback models
   here.](/features/generation/fallbacks)
@@ -470,7 +470,7 @@ See how to make a standard Keywords AI API call in the [Quick Start](/get-starte
   </Accordion>
 </ParamField>
 
-<ParamField path="customer_credentials" type="object">
+<ParamField body="customer_credentials" type="object">
 You can pass in your customer's credentials for [supported providers](/integration/own-api-keys) and use their credits when our proxy is calling models from those providers. <br/>See details [here](/integration/own-api-keys)
 <Accordion title="Example">
 ```json
@@ -484,7 +484,7 @@ You can pass in your customer's credentials for [supported providers](/integrati
 </Accordion>
 </ParamField>
 
-<ParamField path="credential_override" type="object">
+<ParamField body="credential_override" type="object">
 One-off credential overrides. Instead of using what is uploaded for each provider, this targets credentials for individual models. 
 
 Go to [provider page](/integration/own-api-keys) to see how to add your own credentials and override them for a specific model.
@@ -501,7 +501,7 @@ Go to [provider page](/integration/own-api-keys) to see how to add your own cred
 </Accordion>
 </ParamField>
 
-<ParamField path="cache_enabled" type="boolean">
+<ParamField body="cache_enabled" type="boolean">
 Enable or disable caches. Check the [details of caches here.](/features/generation/caches)
 <Accordion title="Example">
 ```json
@@ -512,7 +512,7 @@ Enable or disable caches. Check the [details of caches here.](/features/generati
 </Accordion>
 </ParamField>
 
-<ParamField path="cache_ttl" type="number">
+<ParamField body="cache_ttl" type="number">
 This parameter specifies the time-to-live (TTL) for the cache in seconds. 
 
 <Note>It's optional and the default value is 30 **days** now.</Note>
@@ -524,7 +524,7 @@ This parameter specifies the time-to-live (TTL) for the cache in seconds.
 ```
 </Accordion>
 </ParamField>
-<ParamField path="cache_options" type="boolean">
+<ParamField body="cache_options" type="boolean">
 This parameter specifies the cache options. Currently we support `cache_by_customer` option, you can set it to `true` or `false`. If `cache_by_customer` is set to `true`, the cache will be stored by the customer identifier.
 
 <Note>It's an optional parameter</Note>
@@ -537,26 +537,26 @@ This parameter specifies the cache options. Currently we support `cache_by_custo
 ```
 </ParamField>
 
-<ParamField path="prompt" type="object">
+<ParamField body="prompt" type="object">
   The prompt template to use for the completion. You can build and deploy prompts in the [Prompt](/features/prompt/prompt-management).
 <AccordionGroup>
   <Accordion title="Properties">
-    <ParamField path="prompt_id" type="string" required={true}>
+    <ParamField body="prompt_id" type="string" required={true}>
       The ID of the prompt to use. You can find this on the Prompts page.
     </ParamField>
-    <ParamField path="variables" type="object">
+    <ParamField body="variables" type="object">
       The variables to replace in the prompt template.
     </ParamField>
-    <ParamField path="version" type="number">
+    <ParamField body="version" type="number">
       The version of the prompt to use. If not specified, the latest version will be used.
     </ParamField>
-<ParamField path="echo" type="boolean" default={true}>
+<ParamField body="echo" type="boolean" default={true}>
   With echo on, the response body will have an extra field. This is an optional parameter.
 ```json
   "prompt_message" [an array of messages]
 ```
 </ParamField>
-<ParamField path="override" type="boolean" default={true}>
+<ParamField body="override" type="boolean" default={true}>
 Turn on override to use params in `override_params` instead of the params in the prompt.
 ```json
 {
@@ -566,7 +566,7 @@ Turn on override to use params in `override_params` instead of the params in the
 ```
 </ParamField>
 
-<ParamField path="override_params" type="boolean" default={true}>
+<ParamField body="override_params" type="boolean" default={true}>
 You can put any OpenAI chat/completions parameters here to override the prompt's parameters. This will only work if `override` is set to `true`.
 ```json
 {
@@ -577,11 +577,11 @@ You can put any OpenAI chat/completions parameters here to override the prompt's
 }
 ```
 </ParamField>
-<ParamField path="override_config" type="object">
+<ParamField body="override_config" type="object">
 This parameter allows you to control how you can override the parameters in the prompt.
   <AccordionGroup >
     <Accordion title="Properties">
-        <ParamField path="messages_override_mode" type="string">
+        <ParamField body="messages_override_mode" type="string">
             `append`: append the new messages to the existing messages
             
             `override`: override the existing messages
@@ -623,28 +623,28 @@ This parameter allows you to control how you can override the parameters in the 
 
 </ParamField>
 
-<ParamField name="retry_params" type="object">
+<ParamField body="retry_params" type="object">
     Enable or disable retries and set the number of retries and the time to wait before retrying. Check the [details of retries here.](/features/generation/retries)
   <Accordion title="Properties">
-    <ParamField name="retry_enabled" type="boolean" required>
+    <ParamField body="retry_enabled" type="boolean" required>
         Enable or disable retries.
     </ParamField>
-    <ParamField name="num_retries" type="number">
+    <ParamField body="num_retries" type="number">
         The number of retries to attempt.
     </ParamField>
-    <ParamField name="retry_after" type="number">
+    <ParamField body="retry_after" type="number">
         The time to wait before retrying in seconds.
     </ParamField>
   </Accordion>
 </ParamField>
 
-<ParamField path="disable_log" type="boolean" deafault={false}>
+<ParamField body="disable_log" type="boolean" deafault={false}>
   When set to true, only the request and [performance
   metrics](/performance-monitoring/monitoring-metrics) will be recorded, input
   and output messages will be omitted from the log.
 </ParamField>
 
-<ParamField path="model_name_map" type="object">
+<ParamField body="model_name_map" type="object">
 <Note>This parameter is for Azure deployment only!! </Note>
 We understand that you may have a custom name for your Azure deployment. Keywords AI is using the model's origin name which may not be able to match your deployment. You can use this parameter to map the default name to your custom name. 
     <Accordion title="Example">
@@ -660,7 +660,7 @@ We understand that you may have a custom name for your Azure deployment. Keyword
       </Accordion>
 </ParamField>
 
-<ParamField path="models" type="array">
+<ParamField body="models" type="array">
   Specify the list of models for the Keywords AI LLM router to choose between. 
   If not specified,{" "}
   <strong>all models</strong> will be used. See the list of models
@@ -672,14 +672,14 @@ When the `model` parameter is used, the router will not trigger, and this parame
 
 </ParamField>
 
-<ParamField path="exclude_providers" type="array" default={[]}>
+<ParamField body="exclude_providers" type="array" default={[]}>
   The list of providers to exclude from the LLM router's selection. All models under the provider will be excluded. See the list of providers [here](/integration/providers/providers-overview)
 
 This only excludes providers in the LLM router, if `model` parameter takes precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
 
 </ParamField>
 
-<ParamField path="exclude_models" type="array" default={[]}>
+<ParamField body="exclude_models" type="array" default={[]}>
 The list of models to exclude from the LLM router's selection. See the list of models [here](/integration/supported-models)
 
 This only excludes models in the LLM router, if `model` parameter takes precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
@@ -688,7 +688,7 @@ This only excludes models in the LLM router, if `model` parameter takes preceden
 
 ### Observability parameters
 
-<ParamField path="metadata" type="dict">
+<ParamField body="metadata" type="dict">
 You can add any key-value pair to this metadata field for your reference. Check the [details of metadata here.](/features/generation/metadata)
 
 Contact team@keywordsai.co if you need extra parameter support for your use case.
@@ -705,7 +705,7 @@ Contact team@keywordsai.co if you need extra parameter support for your use case
 </Accordion>
 </ParamField>
 
-<ParamField path="custom_identifier" type="string">
+<ParamField body="custom_identifier" type="string">
 You can use this parameter to send an extra custom tag with your request. This will help you to identify LLM logs faster than `metadata` parameter, because it's indexed. You can see it in Logs with name `Custom ID` field.
 
 <Accordion title="Example">
@@ -717,7 +717,7 @@ You can use this parameter to send an extra custom tag with your request. This w
 </Accordion>
 </ParamField>
 
-<ParamField path="customer_identifier" type="string">
+<ParamField body="customer_identifier" type="string">
   Use this as a tag to identify the user associated with the API call. See the [details of customer identifier here.](/features/generation/customer-identifier)
   <Accordion title="Example">
 ```json
@@ -729,42 +729,42 @@ You can use this parameter to send an extra custom tag with your request. This w
 </Accordion>
 </ParamField>
 
-<ParamField path="customer_params" type="object">
+<ParamField body="customer_params" type="object">
   Pass the customer's parameters in the API call to monitor the user's data in the Keywords AI platform. See how to get insights into your users' data [here](/features/user/user-creation)
   <Accordion title="Properties">
-<ParamField path="customer_identifier" type="string" required>
+<ParamField body="customer_identifier" type="string" required>
 The unique identifier for the customer. It can be any string.
 </ParamField>
 
-<ParamField path="name" type="string">
+<ParamField body="name" type="string">
 The name of the customer. It can be any string.
 </ParamField>
 
-<ParamField path="email" type="string">
+<ParamField body="email" type="string">
 The email of the customer. It shoud be a valid email.
 </ParamField>
 
-<ParamField path="period_start" type="string">
+<ParamField body="period_start" type="string">
 The start date of the period. It should be in the format `YYYY-MM-DD`.
 </ParamField>
 
-<ParamField path="period_end" type="string">
+<ParamField body="period_end" type="string">
 The start date of the period. It should be in the format `YYYY-MM-DD`.
 </ParamField>
 
-<ParamField path="budget_duration" type="string">
+<ParamField body="budget_duration" type="string">
 Choices are `yearly`, `monthly`, `weekly`, and `daily`
 </ParamField>
 
-<ParamField path="period_budget" type="float">
+<ParamField body="period_budget" type="float">
 The budget for the period. It should be a float.
 </ParamField>
 
-<ParamField path="markup_percentage" type="float">
+<ParamField body="markup_percentage" type="float">
 The markup percentage for the period. Usage report of your customers through this key will be increased by this percentge.
 </ParamField>
 
-<ParamField path="total_budget" type="float">
+<ParamField body="total_budget" type="float">
 The total budget for a user.
 </ParamField>
   </Accordion>
@@ -773,7 +773,7 @@ The total budget for a user.
 
 
 
-<ParamField path="request_breakdown" type="boolean" default={false}>
+<ParamField body="request_breakdown" type="boolean" default={false}>
 Adding this returns the summarization of the response in the response body. If streaming is on, the metrics will be streamed as the last chunk.
 
   <Accordion title="Properties">
@@ -882,13 +882,13 @@ Adding this returns the summarization of the response in the response body. If s
 
 
 ## Evals parameters
-<ParamField path="positive_feedback" type="boolean">
+<ParamField body="positive_feedback" type="boolean">
   Whether the user liked the output. `True` means the user liked the output.
 </ParamField>
 
 ## Deprecated parameters
 
-<ParamField path="customer_api_keys" type="object">
+<ParamField body="customer_api_keys" type="object">
 You can pass in a dictionary of your customer's API keys for specific models. If the router selects a model that is in the dictionary, it will attempt to use the customer's API key for calling the model before using your [integration API key](/integration/llm-credits) or Keywords AI's default API key.
 
 ```json
@@ -900,7 +900,7 @@ You can pass in a dictionary of your customer's API keys for specific models. If
 
 </ParamField>
 
-<ParamField path="loadbalance_models" type="array">
+<ParamField body="loadbalance_models" type="array">
   Balance the load of your requests between different models. See the [details of load balancing
   here.](/features/generation/load-balancing)
 <Note> This parameter will override the `model` parameter. </Note>

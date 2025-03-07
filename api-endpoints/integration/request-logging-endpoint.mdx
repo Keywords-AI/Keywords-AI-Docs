@@ -5,26 +5,27 @@ api: POST https://api.keywordsai.co/api/request-logs/create/
 
 The Async logging endpoint allows you to directly log an LLM inference to Keywords AI, instead of using Keywords AI as a proxy with the [chat completion endpoint](/api-endpoints/proxy-endpoints/chat-completions).
 
-<ParamField path="model" type="string" required>
+## Body Parameters
+<ParamField body="model" type="string" required>
 Model used for the LLM inference. Default is an empty string. See the list of model
   [here](/integration/supported-models)
 </ParamField>
 
-<ParamField path="prompt_messages" type="array" required>
+<ParamField body="prompt_messages" type="array" required>
 An Array of prompt messages. Default is an empty list. 
 
 <AccordionGroup>
 
 <Accordion title="Properties">
-<ParamField path="role" type="string" required>
+<ParamField body="role" type="string" required>
 The role of the message. Default is an empty string. Could be `system`, `developer`, `user`, `assistant`, `tool`.
 </ParamField>
 
-<ParamField path="content" type="string" required>
+<ParamField body="content" type="string" required>
 The content of the message. Default is an empty string.
 </ParamField>
 
-<ParamField path="tool_call_id" type="string">
+<ParamField body="tool_call_id" type="string">
 The tool call id. Default is an empty string.
 </ParamField>
 </Accordion>
@@ -50,7 +51,7 @@ The tool call id. Default is an empty string.
 
 </ParamField>
 
-<ParamField path="completion_message" type="dict">
+<ParamField body="completion_message" type="dict">
 Completion message in JSON format. Default is an empty dictionary.
 ```python 
 "completion_message": {
@@ -60,26 +61,26 @@ Completion message in JSON format. Default is an empty dictionary.
 ```
 </ParamField>
 
-{/* <ParamField path="tool_calls" type="array">
+{/* <ParamField body="tool_calls" type="array">
   Tools used by the inference model
 </ParamField>
 
 <Accordion>
-  <ParamField path="id" type="string">
+  <ParamField body="id" type="string">
   Tool call that this message is responding to.
   </ParamField>
 
-  <ParamField path="type" type="string">
+  <ParamField body="type" type="string">
   The type of the tool. Currently, only `function` is supported.
   </ParamField>
 
-  <ParamField path="function" type="dict">
+  <ParamField body="function" type="dict">
   </ParamField>
 
   <Accordion>
-    <ParamField path="name" type="string">
+    <ParamField body="name" type="string">
     </ParamField>
-    <ParamField path="arguements" type="string">
+    <ParamField body="arguements" type="string">
     </ParamField>
 
 ```python
@@ -92,15 +93,15 @@ Completion message in JSON format. Default is an empty dictionary.
 
 </Accordion> */}
 
-<ParamField path="cost" type="float" default={0}>
+<ParamField body="cost" type="float" default={0}>
 Cost of the inference in US dollars.
 </ParamField>
 
-<ParamField path="completion_tokens" type="integer" >
+<ParamField body="completion_tokens" type="integer" >
 Number of tokens in the completion. 
 </ParamField>
 
-<ParamField path="completion_unit_price" type="number">
+<ParamField body="completion_unit_price" type="number">
 Pass this parameter in if you want to log your self-host / fine-tuned model.
 <Accordion title="Example">
 ```json
@@ -111,18 +112,18 @@ Pass this parameter in if you want to log your self-host / fine-tuned model.
 </Accordion>
 </ParamField>
 
-<ParamField path="customer_params" type="string">
+<ParamField body="customer_params" type="string">
   Parameters related to the customer. Default is an empty dictionary.
   <AccordionGroup>
     <Accordion title="Properties">
-      <ParamField path="customer_identifier" type="string" required>
+      <ParamField body="customer_identifier" type="string" required>
         An identifier for the customer that invoked this LLM inference, helps with
         visualizing user activities. Default is an empty string.  See the [details of customer identifier here.](/features/generation/customer-identifier)
       </ParamField>
-      <ParamField path="name" type="string" >
+      <ParamField body="name" type="string" >
         Name of the customer. Default is an empty string.
       </ParamField>
-      <ParamField path="email" type="string" >
+      <ParamField body="email" type="string" >
         Email of the customer. Default is an empty string.
       </ParamField>
     </Accordion>
@@ -141,7 +142,7 @@ Pass this parameter in if you want to log your self-host / fine-tuned model.
   </AccordionGroup>
 </ParamField>
 
-<ParamField path="custom_identifier" type="string">
+<ParamField body="custom_identifier" type="string">
 Same functionality as `metadata`, but it's faster to query since it's indexed.
 
 <Accordion title="Example">
@@ -153,11 +154,11 @@ Same functionality as `metadata`, but it's faster to query since it's indexed.
 </Accordion>
 </ParamField>
 
-<ParamField path="error_message" type="text">
+<ParamField body="error_message" type="text">
 Error message if the LLM inference failed. Default is an empty string.
 </ParamField>
 
-<ParamField path="full_request" type="object">
+<ParamField body="full_request" type="object">
   The full request object. Default is an empty dictionary. This is optional and it is helpful for logging configurations such as `temperature`, `precence_penalty` etc.
   <Note>`completion_messages`, `tool_calls` will be automatically extracted from full_request</Note>
   ```json
@@ -172,13 +173,13 @@ Error message if the LLM inference failed. Default is an empty string.
 ```
 </ParamField>
 
-<ParamField path="frequency_penalty" type="number">
+<ParamField body="frequency_penalty" type="number">
   Specify how much to penalize new tokens based on their existing frequency in
   the text so far. Decreases the model's likelihood of repeating the same line
   verbatim
 </ParamField>
 
-<ParamField path="generation_time" type="float" default={0}>
+<ParamField body="generation_time" type="float" default={0}>
 Total generation time. Generation time = TTFT (Time To First Token) + TPOT (Time Per Output Token) * #tokens. **Do not** confuse this with `ttft`.
 
 <Note>
@@ -186,15 +187,15 @@ The unit of generation time is seconds.
 </Note>
 </ParamField>
 
-<ParamField path="is_custom_prompt" type="boolean" default={false}>
+<ParamField body="is_custom_prompt" type="boolean" default={false}>
 Whether the prompt is a custom prompt. Default is `False`.
 </ParamField>
 
-<ParamField path="keywordsai_api_controls" type="object">
+<ParamField body="keywordsai_api_controls" type="object">
 Use this parameter to control the behavior of the Keywords AI API. Default is an empty dictionary.
 <AccordionGroup>
   <Accordion title="Properties">
-    <ParamField path="block" type="boolean" default={true}>
+    <ParamField body="block" type="boolean" default={true}>
     If false, the server will immediately return a status of whether the logging task is initialized successfully with no log data.
     </ParamField>
   </Accordion>
@@ -211,7 +212,7 @@ Use this parameter to control the behavior of the Keywords AI API. Default is an
 </AccordionGroup>
 </ParamField>
 
-<ParamField path="metadata" type="dict">
+<ParamField body="metadata" type="dict">
 You can add any key-value pair to this metadata field for your reference. 
 <Accordion title="Example">
 ```json
@@ -223,28 +224,28 @@ You can add any key-value pair to this metadata field for your reference.
 ```
 </Accordion>
 </ParamField>
-<ParamField path="positive_feedback" type="boolean">
+<ParamField body="positive_feedback" type="boolean">
   Whether the user liked the output. `True` means the user liked the output.
 </ParamField>
 
-<ParamField path="presence_penalty" type="number">
+<ParamField body="presence_penalty" type="number">
   Specify how much to penalize new tokens based on whether they appear in the
   text so far. Increases the model's likelihood of talking about new topics
 </ParamField>
 
-<ParamField path="prompt_id" type="string">
+<ParamField body="prompt_id" type="string">
 ID of the prompt. If you want to log a custom prompt ID, you need to pass `is_custom_prompt` as `True`. Otherwise, use the Prompt ID in [Prompts](/features/prompt/deploy-a-prompt#1-find-the-prompt-id).
 </ParamField>
 
-<ParamField path="prompt_name" type="string">
+<ParamField body="prompt_name" type="string">
 Name of the prompt.
 </ParamField>
 
-<ParamField path="prompt_tokens" type="integer">
+<ParamField body="prompt_tokens" type="integer">
 Number of tokens in the prompt.
 </ParamField>
 
-<ParamField path="prompt_unit_price" type="number">
+<ParamField body="prompt_unit_price" type="number">
 Pass this parameter in if you want to log your self-host / fine-tuned model.
 <Accordion title="Example">
 ```json
@@ -255,20 +256,20 @@ Pass this parameter in if you want to log your self-host / fine-tuned model.
 </Accordion>
 </ParamField>
 
-<ParamField path="response_format" type="object">
+<ParamField body="response_format" type="object">
   The format of the response.
   <Accordion title="Properties">
-    <ParamField path="type" type="string" required>
+    <ParamField body="type" type="string" required>
     The type of the response. Currently, only `text`, `json_schema`, `json_object` are supported.
     </ParamField>
   </Accordion>
 </ParamField>
 
-<ParamField path="stream" type="boolean">
+<ParamField body="stream" type="boolean">
   Whether the LLM inference was streamed. Default is false.
 </ParamField>
 
-<ParamField path="status_code" type="integer" default={200}>
+<ParamField body="status_code" type="integer" default={200}>
   The status code of the LLM inference. Default is 200 (ok). See supported status codes [here](/error-handling).
 
 <Accordion title="Supported status codes">
@@ -277,31 +278,31 @@ We support all status codes  that is a valid HTTP status.
 </Accordion>
 </ParamField>
 
-<ParamField path="stop" type="array[string]">
+<ParamField body="stop" type="array[string]">
   Stop sequence
 </ParamField>
 
-<ParamField path="temperature" type="number" default={1}>
+<ParamField body="temperature" type="number" default={1}>
   Controls randomness in the output in the range of 0-2, higher temperature will
   a more random response.
 </ParamField>
 
-<ParamField path="tools" type="array">
+<ParamField body="tools" type="array">
   A list of tools the model may call. Currently, only functions are supported as a tool. 
   <AccordionGroup>
   <Accordion title="Properties">
 
-    <ParamField path="type" type="string" required>
+    <ParamField body="type" type="string" required>
     The type of the tool. Currently, only `function` is supported.
     </ParamField>
 
-    <ParamField path="function" type="object" required>
+    <ParamField body="function" type="object" required>
         <Accordion title="Properties">
-          <ParamField path="name" type="string" required>
+          <ParamField body="name" type="string" required>
           </ParamField>
-          <ParamField path="description" type="string">
+          <ParamField body="description" type="string">
           </ParamField>
-          <ParamField path="parameters" type="object">
+          <ParamField body="parameters" type="object">
           </ParamField>
         </Accordion>
     </ParamField>
@@ -334,20 +335,20 @@ We support all status codes  that is a valid HTTP status.
 </AccordionGroup>
 </ParamField>
 
-<ParamField path="tool_choice" type="object">
+<ParamField body="tool_choice" type="object">
 Controls which (if any) tool is called by the model. `none` means the model will not call any tool and instead generates a message. 
 <Accordion title="Properties">
 
-  <ParamField path="type" type="string" required>
+  <ParamField body="type" type="string" required>
   The type of the tool. Currently, only `function` is supported.
   </ParamField>
 
-  <ParamField path="function" type="object" required>
+  <ParamField body="function" type="object" required>
   </ParamField>
 
 <AccordionGroup>
   <Accordion title="Properties">
-    <ParamField path="name" type="string" required>
+    <ParamField body="name" type="string" required>
     </ParamField>
 
   </Accordion >
@@ -366,13 +367,13 @@ Controls which (if any) tool is called by the model. `none` means the model will
 </ParamField>
 
 
-<ParamField path="top_p" type="number" default={1}>
+<ParamField body="top_p" type="number" default={1}>
 An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
 
 We generally recommend altering this or temperature but not both.
 </ParamField>
 
-<ParamField path="ttft" type="float" default={0.0}>
+<ParamField body="ttft" type="float" default={0.0}>
 Time to first token. The time it takes for the model to generate the first token after receiving a request.
 
 <Note>
@@ -380,19 +381,19 @@ The unit of ttft is seconds.
 </Note>
 </ParamField>
 
-<ParamField path="usage" type="object">
+<ParamField body="usage" type="object">
 Usage details for the LLM inference. Currently, only support Prompt Caching.
   <AccordionGroup>
     <Accordion title="Properties">
-      <ParamField path="prompt_tokens_details" type="object">
+      <ParamField body="prompt_tokens_details" type="object">
 
       <Accordion title="Properties">
-        <ParamField path="cached_tokens" type="integer">
+        <ParamField body="cached_tokens" type="integer">
         Number of tokens in the prompt.
         </ParamField>
       </Accordion>
       </ParamField>
-      <ParamField path="cache_creation_prompt_tokens" type="integer">
+      <ParamField body="cache_creation_prompt_tokens" type="integer">
       This parameter is only applicable for Anthropic models. It represents the number of tokens used to create the cache.
       </ParamField>
       </Accordion>
@@ -412,15 +413,15 @@ Usage details for the LLM inference. Currently, only support Prompt Caching.
   </AccordionGroup>
 </ParamField>
 
-<ParamField path="warnings" type="string">
+<ParamField body="warnings" type="string">
   Any warnings that occurred during the LLM inference. You could pass a warning message here. Default is an empty string.
 </ParamField>
 
-{/* <ParamField path="category" type="string">
+{/* <ParamField body="category" type="string">
 Category of the log. Def  ault is an empty string.
 </ParamField> */}
 
-{/* <ParamField path="cached_response" type="integer">
+{/* <ParamField body="cached_response" type="integer">
   Whether the response was cached. Default is 0.
 </ParamField> */}
 
