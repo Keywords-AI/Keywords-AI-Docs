@@ -101,6 +101,7 @@
               {
                 "group": "Advanced",
                 "pages": [
+                  "features/prompt/advanced/jinja-support",
                   "features/prompt/advanced/log-custom-prompt"
                 ]
               }
@@ -323,7 +324,8 @@
             "group": "Cookbooks",
             "pages": [
               "cookbooks/what-is-keywords-ai",
-              "cookbooks/anthropic-structure-output"
+              "cookbooks/anthropic-structure-output",
+              "cookbooks/filters-in-jinja"
             ]
           }
         ]

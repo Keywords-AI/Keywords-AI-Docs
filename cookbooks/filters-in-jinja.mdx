@@ -1,0 +1,103 @@
+---
+title: "Filters in Jinja templates"
+description: Learn how to use filters in Jinja.
+---
+
+## Introduction
+Jinja templates are a powerful way to create dynamic prompts. You can use Jinja templates to create prompts that are tailored to the user's input.
+
+In this guide, we will show you how to use filters in Jinja. You can also learn how to use filters in the [prompt editor](/features/prompt/advanced/jinja-support).
+
+## Filters
+In Jinja, filters are functions that modify variables in templates. They work similarly to functions in Python but are used within Jinja templates to transform output dynamically. Filters are applied using a pipe `|` symbol.
+
+### Basic Syntax
+```
+{{ variable | filter_name }}
+```
+
+You can also chain multiple filters:
+```
+{{ variable | filter_name1 | filter_name2 }}
+```
+
+### Common Jinja Filters
+Here are some frequently used filters:
+
+**1. String Filters**
+- `lower`: Converts a string to lowercase.
+```
+{{ "HELLO" | lower }}  →  hello
+``` 
+
+- `upper`: Converts a string to uppercase.
+```
+{{ "hello" | upper }}  →  HELLO
+```
+
+- `title`: Capitalizes the first letter of each word.
+```
+{{ "hello world" | title }}  →  Hello World
+```
+
+- `capitalize`: Capitalizes the first letter of the string.
+```
+{{ "hello" | capitalize }}  →  Hello
+```
+
+- `reverse`: Reverses the string.
+```
+{{ "hello" | reverse }}  →  olleh
+```
+
+**2. List & Collection Filters**
+- `length`: Returns the number of items in a list or string.
+```
+{{ ["apple", "banana", "cherry"] | length }}  →  3
+```
+
+- `join`: Joins a list of strings into a single string.
+```
+{{ ["apple", "banana", "cherry"] | join(", ") }}  →  apple, banana, cherry
+```
+
+- `first`: Returns the first item in a list.
+```
+{{ ["apple", "banana", "cherry"] | first }}  →  apple
+``` 
+
+- `sort`: Returns the last item in a list.
+```
+{{ ["apple", "banana", "cherry"] | sort }}  →  ["apple", "banana", "cherry"]
+```
+**3. Number Filters**
+- `round`: Rounds a number to a specified number of decimal places.
+```
+{{ 3.14159 | round(2) }}  →  3.14
+```
+
+- `abs`: Returns the absolute value of a number.
+```
+{{ -5 | abs }}  →  5
+```
+
+### Custom Filters
+You can also create your own filters. You can define custom filters in Python and use them in Jinja:
+
+```
+def reverse_string(value):
+    return value[::-1]
+
+{{ "hello" | reverse_string }}  →  olleh
+```
+Then you can use it in Jinja:
+```
+{{ "hello" | reverse_string }}  →  olleh
+```
+
+
+
+
+
+
+
