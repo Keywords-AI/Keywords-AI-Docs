@@ -112,7 +112,8 @@
               {
                 "group": "LLM evals",
                 "pages": [
-                  "features/evaluation/llm-evals/llm-evaluator"
+                  "features/evaluation/llm-evals/llm-evaluator",
+                  "features/evaluation/llm-evals/run-evaluator-code"
                 ]
               },
               {
