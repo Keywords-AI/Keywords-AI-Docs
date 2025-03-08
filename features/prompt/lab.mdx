@@ -1,42 +1,68 @@
 ---
-title: "Run experiments"
+title: "Run prompt experiments"
 description: "A spreadsheet-like interface built for multi-config prompt testing"
 ---
-<Note> This is a **beta** feature. Please do let us know if you encounter any issues. We'll continuously improve it.</Note>
+
 A spreadsheet-style editor for running prompts and models across multiple test cases. Import testsets to easily test, evaluate, and optimize your LLM outputs.
 <Frame>
 <video
   controls
   className="w-full aspect-video"
-  src="https://keywordsai-static.s3.amazonaws.com/landing/changelog/lab.mp4"
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/lab%2Beval.mp4"
 ></video>
 </Frame>
-## Guide
+## Prerequisites
+- You have already created at least one prompt in Keywords AI. Learn how to create a prompt [here](/features/prompt/create-a-prompt).
+- You have added variables to your prompt. Learn how to add variables to your prompt [here](/features/prompt/create-a-prompt#4-variables-in-the-prompt).
 
+## Steps
 <Steps>
-<Step title="Create a prompt">
-You should first create a new prompt on the [Prompts page](/features/prompt/prompt-management) to use in the lab.
-</Step>
 
 <Step title="Create a testset (optional)">
-If you want to run prompts with various dynamic test cases, you can create a new testset on the [Testsets page](/features/prompt/testsets).
-</Step>
-
-<Step title="Import prompt and testset">
-Now, choose the prompt and the versions you want to test. You can also import a testset if you have one.
+Go to Testsets and create a new testset, you can either import a CSV file or create a blank testset. You can check [Testsets](/features/prompt/testsets) to know more about testsets.
 <Frame>
-<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/lab-import.gif" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/testset-create.png" />
 </Frame>
 </Step>
 
-<Step title="Evaluate prompts">
-Variables in prompts will be detected and displayed in the lab. You can edit the values and run the prompts to evaluate the outputs.
+<Step title="Create an experiment">
+Go to Experiments and create a new experiment.
 <Frame>
-<img height="200" noZoom src="https://keywordsai-static.s3.amazonaws.com/docs/lab-run.gif" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/experiment-create.png" />
 </Frame>
 
+Then you should select the prompt and the versions you want to test. 
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/experiment-select-prompt.png" />
+</Frame>
 </Step>
+
+<Step title="Add test cases">
+Then you should add test cases for your experiment. You can either add test cases manually or import a testset from Testsets.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/add-testcases.png" />
+</Frame>
+</Step>
+
+<Step title="Run the experiment">
+Now you can run the experiment. You can run a single cell by clicking the `Run` button in the each cell, or run all the cells by clicking the `Run all` button.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/run-experiments.png" />
+</Frame>
+</Step>
+
+<Step title="Run evaluations for outputs">
+After the experiment is finished, you can run evaluations for the outputs. You can check out [Run evaluations in the UI](/features/evaluation/llm-evals/run-evaluator-ui) to learn how to run evaluations.
+<Frame>
+<video
+  controls
+  className="w-full aspect-video"
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/evals-result.mp4"
+></video>
+</Frame>
+</Step>
+
 </Steps>
-
+{/* 
 ## What's next?
-After you have evaluated the prompts, you can save the results to the [Logs page](/features/generation/logs) for further analysis. If you're satisfied with the results, you can deploy the prompt to your application. Check out the [Prompts page](/features/prompt/prompt-management) for more information. 
+After you have evaluated the prompts, you can save the results to the [Logs page](/features/generation/logs) for further analysis. If you're satisfied with the results, you can deploy the prompt to your application. Check out the [Prompts page](/features/prompt/prompt-management) for more information.  */}
