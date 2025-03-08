@@ -96,8 +96,8 @@
               "features/prompt/create-a-prompt",
               "features/prompt/deploy-a-prompt",
               "features/prompt/monitor-a-prompt",
-              "features/prompt/model-playground",
               "features/prompt/share-a-prompt",
+              "features/prompt/model-playground",
               {
                 "group": "Advanced",
                 "pages": [
@@ -114,7 +114,8 @@
                 "group": "LLM evals",
                 "pages": [
                   "features/evaluation/llm-evals/llm-evaluator",
-                  "features/evaluation/llm-evals/run-evaluator-code"
+                  "features/evaluation/llm-evals/run-evaluator-code",
+                  "features/evaluation/llm-evals/run-evaluator-ui"
                 ]
               },
               {
