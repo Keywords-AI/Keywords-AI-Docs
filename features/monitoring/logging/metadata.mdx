@@ -1,10 +1,18 @@
 ---
-title: "Send custom properties"
+title: "Custom properties"
 description: "Custom properties allows you to add any additional information to your logs, which can help you tag and filter logs."
 ---
-## How to send custom properties in the code
-We want to provide our users with the most flexibility to add any additional information to your logs, so we support sending custom properties in the code.
-You can add any key-value pair to the properties field for your reference. 
+
+## What is a custom property?
+A custom property is a key-value pair that you can add to an LLM log when sending an LLM log to Keywords AI. It can help you tag and filter LLM logs.
+
+## You will love it when you want to:
+- Tag and filter LLM logs in your way.
+- Add any additional information to your logs.
+
+## How to pass custom properties
+
+You can pass custom properties to Keyworeds AI by adding a `metadata` field to the request body.
 
 <Tabs>
 <Tab title="OpenAI Python SDK">
@@ -58,33 +66,6 @@ console.log(await response.json());
 </Tab>
 <Tab title="Standard API">
 <CodeGroup>
-```python LLM proxy {14-17}
-import requests
-def demo_call(input, 
-              model="gpt-4o-mini",
-              token="YOUR_KEYWORDS_AI_API_KEY",
-              ):
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Bearer {token}',
-    }
-
-    data = {
-        'model': model,
-        'messages': [{'role': 'user', 'content': input}],
-        'metadata': {
-            "sample_key": "sample_value",
-            "session_id": "abc789"
-        }
-    }
-
-    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
-    return response
-
-messages = "Say 'Hello World'"
-print(demo_call(messages).json())
-```
-
 
 ```python Async logging {16-19}
 import requests
@@ -115,6 +96,32 @@ headers = {
 
 response = requests.request("POST", url, headers=headers, json=payload)
 ```
+```python LLM proxy {14-17}
+import requests
+def demo_call(input, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY",
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        'metadata': {
+            "sample_key": "sample_value",
+            "session_id": "abc789"
+        }
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
 </CodeGroup>
 </Tab>
 <Tab title="Other SDKs">
@@ -123,26 +130,28 @@ We also support adding credentials in other SDKs or languages, please check out 
 </Tabs>
 
 
-## Custom properties on the dashboard
-After you send custom properties in the code, you can view them in the dashboard. Just click on the `Filter` button to filter the logs by the `Custom properties`.
+## Filter dashboard metrics
+After sending custom properties in your code, you can filter dashboard metrics using these properties. Simply click the `Filter` button and select the relevant `Custom properties` to narrow down your data visualization.
 
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/dashboard-metadata.png" alt="Filter by custom properties" />
 </Frame>
 
-## Custom properties on the Logs page
-On the Logs page, you can see the custom properties of each log in the side panel.
-
-<Frame>
-<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/logs-side-panel-metadata.png" alt="Filter by custom properties" />
-</Frame>
-
-### Filter logs by custom properties
+## Filter Logs
 You can also filter logs by custom properties on the Logs page. Just click on the `Filter` button to filter the logs by the `Custom properties`.
 
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/logs-custom-property.png" alt="Filter by custom properties" />
 </Frame>
+{/* 
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/logs-side-panel-metadata.png" alt="Filter by custom properties" />
+</Frame> */}
+
+{/* ### Filter logs by custom properties
+
+
+ */}
 
 {/* Contact team@keywordsai.co if you need extra parameter support for your use case. */}
 ## Update custom properties
