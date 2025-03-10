@@ -34,21 +34,45 @@
               {
                 "group": "Getting started",
                 "pages": [
-                  "features/monitoring/logging-api",
-                  "features/monitoring/proxy-api",
-                  "features/monitoring/tracing-api"
+                  "features/monitoring/get-started/logging-api",
+                  "features/monitoring/get-started/proxy-api",
+                  "features/monitoring/get-started/tracing-api"
                 ]
               },
               {
                 "group": "Metrics",
                 "pages": [
-                  "features/monitoring/analytics",
-                  "features/monitoring/dashboard-filter"
+                  "features/monitoring/metrics/overview",
+                  "features/monitoring/metrics/dashboard-filter",
+                  "features/monitoring/metrics/export-graphs"
+                ]
+              },
+              {
+                "group": "Logs",
+                "pages": [
+                  "features/monitoring/logging/overview",
+                  "features/monitoring/logging/metadata",
+                  "features/monitoring/logging/filters",
+                  "features/monitoring/logging/search",
+                  "features/monitoring/logging/logs-export",
+                  "features/monitoring/logging/share-log",
+                  "features/monitoring/logging/log-debugging",
+                  "features/monitoring/logging/log-prompt-variable",
+                  "features/monitoring/logging/embedding",
+                  "features/monitoring/logging/disable-logs",
+                ]
+              },
+              {
+                "group": "Threads",
+                "pages": [
+                  "features/monitoring/threads/overview",
+                  "features/monitoring/threads/threads"
                 ]
               },
               {
                 "group": "Traces",
                 "pages": [
+                  "features/monitoring/traces/overview",
                   "features/monitoring/traces/traces",
                   "features/monitoring/traces/traces-keywords-params",
                   "features/monitoring/traces/group-traces",
@@ -62,19 +86,9 @@
                 ]
               },
               {
-                "group": "Logs",
-                "pages": [
-                  "features/generation/metadata",
-                  "features/monitoring/threads",
-                  "features/monitoring/logging",
-                  "features/monitoring/share-log",
-                  "features/monitoring/log-prompt-variable",
-                  "features/monitoring/logging/embedding"
-                ]
-              },
-              {
                 "group": "User analytics",
                 "pages": [
+                  "features/monitoring/users/overview",
                   "features/generation/customer-identifier",
                   "features/user/user-budget"
                 ]
@@ -83,7 +97,6 @@
                 "group": "Advanced",
                 "pages": [
                   "features/monitoring/subscribe-alerts",
-                  "features/generation/disable-logs",
                   "features/monitoring/webhooks"
                 ]
               }
@@ -92,16 +105,25 @@
           {
             "group": "Prompt engineering",
             "pages": [
-              "features/prompt/prompt-management",
-              "features/prompt/create-a-prompt",
-              "features/prompt/deploy-a-prompt",
-              "features/prompt/monitor-a-prompt",
-              "features/prompt/share-a-prompt",
+              "features/prompt/overview",
+              {
+                "group": "Prompt management",
+                "pages": [
+                  "features/prompt/prompt-management/overview",
+                  "features/prompt/prompt-management/create-a-prompt",
+                  "features/prompt/prompt-management/deploy-a-prompt",
+                  "features/prompt/prompt-management/monitor-a-prompt",
+                  "features/prompt/prompt-management/share-a-prompt",
+                  "features/prompt/prompt-management/version-control",
+                  "features/prompt/prompt-management/jinja-support",
+                  "features/prompt/prompt-management/ab-testing"
+                ]
+              },
               "features/prompt/model-playground",
               {
                 "group": "Advanced",
                 "pages": [
-                  "features/prompt/advanced/jinja-support",
+
                   "features/prompt/advanced/log-custom-prompt"
                 ]
               }
@@ -110,9 +132,11 @@
           {
             "group": "Evaluations",
             "pages": [
+              "features/evaluation/overview",
               {
                 "group": "LLM evals",
                 "pages": [
+                  "features/evaluation/llm-evals/overview",
                   "features/evaluation/llm-evals/llm-evaluator",
                   "features/evaluation/llm-evals/run-evaluator-code",
                   "features/evaluation/llm-evals/run-evaluator-ui"
@@ -121,6 +145,7 @@
               {
                 "group": "Human evals",
                 "pages": [
+                  "features/evaluation/human-evals/overview",
                   "features/evaluation/human-evals/human-evals-setup",
                   "features/evaluation/human-evals/human-annotation"
                 ]
@@ -128,9 +153,10 @@
               {
                 "group": "Datasets & Experiments",
                 "pages": [
-                  "features/prompt/testsets",
-                  "features/datasets",
-                  "features/prompt/lab"
+                  "features/evaluation/experiments/overview",
+                  "features/evaluation/experiments/upload-testsets",
+                  "features/evaluation/experiments/datasets",
+                  "features/evaluation/experiments/experiments"
                 ]
               }
             ]
@@ -141,11 +167,12 @@
               "features/generation/overview",
               "features/generation/gateway",
               "features/generation/add-credentials",
-              "features/generation/fallbacks",
               "features/generation/load-balancing",
+              "features/generation/retries",
+              "features/generation/fallbacks",
+              "features/generation/rate-limits",
               "features/generation/caches",
               "features/generation/prompt-caching",
-              "features/generation/retries",
               "features/generation/function-calling",
               "features/generation/upload-pdf"
             ]
@@ -159,9 +186,7 @@
           },
           {
             "group": "Error handling",
-            "pages": [
-              "error-handling/400"
-            ]
+            "pages": ["error-handling/400"]
           },
           {
             "group": "Resources",
@@ -174,9 +199,7 @@
                 "pages": [
                   {
                     "group": "Retrieval",
-                    "pages": [
-                      "features/evaluation/retrieval/context-precision"
-                    ]
+                    "pages": ["features/evaluation/retrieval/context-precision"]
                   },
                   {
                     "group": "Text generation",
@@ -188,9 +211,7 @@
                   },
                   {
                     "group": "Other",
-                    "pages": [
-                      "features/evaluation/other/sentiment"
-                    ]
+                    "pages": ["features/evaluation/other/sentiment"]
                   }
                 ]
               }
@@ -268,9 +289,7 @@
           },
           {
             "group": "Model",
-            "pages": [
-              "api-endpoints/data-endpoints/models-endpoint"
-            ]
+            "pages": ["api-endpoints/data-endpoints/models-endpoint"]
           }
         ]
       },
@@ -279,9 +298,7 @@
         "groups": [
           {
             "group": "Ecosystem",
-            "pages": [
-              "integration/own-api-keys"
-            ]
+            "pages": ["integration/own-api-keys"]
           },
           {
             "group": "LLM Frameworks",
@@ -312,9 +329,7 @@
           },
           {
             "group": "Analytics",
-            "pages": [
-              "integration/posthog"
-            ]
+            "pages": ["integration/posthog"]
           }
         ]
       },
