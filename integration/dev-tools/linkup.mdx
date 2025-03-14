@@ -1,28 +1,28 @@
 ---
 title: "Linkup"
-description: "Linkup is an AI dev tool that helps you connect your code with your LLM. It's a platform that allows you to connect your code with your LLM and get observability."
+description: "Linkup is an AI dev tool that helps you connect your code with your LLM. It’s a platform that allows you to connect your code with your LLM and get observability."
 ---
-
-The Linkup integration allows you to search the web and include the results in your prompts. This is useful for providing up-to-date information to your models without having to manually search and paste content.
 
 Check out the [LinkUp website](https://www.linkup.so/) for more information.
 
 ## 1. Add Linkup Parameters to Your Request
 
-Include `linkup_params` in your API payload:
+Include `linkup_params` in your request's `keywordsai_params`:
 
-```json
+```json {6-12}
 {
   "messages": [
     {"role": "system", "content": "You are a helpful assistant."},
     {"role": "user", "content": "Please summarize the information about Microsoft's 2024 revenue: {% if linkup_search_response %}{{ linkup_search_response.answer }}{% endif %}"}
   ],
-  "linkup_params": {
+  "keywordsai_params": {
+    "linkup_params": {
       "q": "What is Microsoft's 2024 revenue?",
       "depth": "deep",
       "outputType": "sourcedAnswer",
       "includeImages": false
     }
+  }
 }
 ```
 
@@ -44,7 +44,7 @@ The Linkup response will be available as a variable named `linkup_search_respons
 
 ## 3. Using with Prompts
 
-If you're using the Prompts feature, you can include the Linkup template variables in your prompt templates. When you make a request with `linkup_params`, the variables will be populated and rendered in your prompt.
+If you're using [Keywords AI Prompts](/features/prompt/overview), you can include the Linkup template variables in your prompt templates. When you make a request with `linkup_params`, the variables will be populated and rendered in your prompt.
 
 ## How It Works
 
@@ -67,8 +67,8 @@ The `linkup_params` object supports the following parameters:
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|---------|
 | `q` | string | The search query | Required |
-| `depth` | string | The depth of the search (`"shallow"` or `"deep"`) | `"deep"` |
-| `outputType` | string | The type of output (`"sourcedAnswer"` or `"raw"`) | `"sourcedAnswer"` |
+| `depth` | string | The depth of the search (`"standard"` or `"deep"`) | `"deep"` |
+| `outputType` | string | The type of output (`"searchResults"`, `"sourcedAnswer"` or `"structured"`) | `"sourcedAnswer"` |
 | `structuredOutputSchema` | string | Schema for structured output | `null` |
 | `includeImages` | boolean | Whether to include images in the response | `false` |
 
@@ -85,7 +85,7 @@ The `linkup_search_response` variable will contain:
       "url": "Source URL",
       "snippet": "Text snippet from the source"
     },
-    //...
+   // ...
   ]
 }
 ```
@@ -94,23 +94,40 @@ The `linkup_search_response` variable will contain:
 
 Here's a complete example of using the Linkup integration:
 
-```json
-{
-  "messages": [
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "Please provide information about Microsoft's 2024 revenue and cite your sources."}
-  ],
-    "linkup_params": {
-      "q": "What is Microsoft's 2024 revenue?",
-      "depth": "deep",
-      "outputType": "sourcedAnswer",
-      "includeImages": false
-    },
-  "variables": {
-    "company_name": "Microsoft"
-  },
-  "model": "openai/gpt-4"
-}
+```python Python
+import requests
+
+def demo_call(input_text, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY"):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": input_text}
+        ],
+        "linkup_params": {
+            "q": "What is Microsoft's 2024 revenue?",
+            "depth": "deep",
+            "outputType": "sourcedAnswer",
+            "includeImages": False
+        },
+        "variables": {
+            "company_name": "Microsoft"
+        },
+        "model": model
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+input_text = "Please provide information about {{ company_name }}'s 2024 revenue and cite your sources."
+response = demo_call(input_text)
+print(response.json())
 ```
 
 With a prompt template like:
