@@ -1,0 +1,151 @@
+---
+title: "Linkup"
+description: "Linkup is an AI dev tool that helps you connect your code with your LLM. It’s a platform that allows you to connect your code with your LLM and get observability."
+---
+
+Check out the [LinkUp website](https://www.linkup.so/) for more information.
+
+## 1. Add Linkup Parameters to Your Request
+
+Include `linkup_params` in your request's `keywordsai_params`:
+
+```json {6-12}
+{
+  "messages": [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Please summarize the information about Microsoft's 2024 revenue: {% if linkup_search_response %}{{ linkup_search_response.answer }}{% endif %}"}
+  ],
+  "keywordsai_params": {
+    "linkup_params": {
+      "q": "What is Microsoft's 2024 revenue?",
+      "depth": "deep",
+      "outputType": "sourcedAnswer",
+      "includeImages": false
+    }
+  }
+}
+```
+
+## 2. Use Template Variables in Your Messages
+
+The Linkup response will be available as a variable named `linkup_search_response` in your templates. You can access it using Jinja2 syntax:
+
+```
+{% if linkup_search_response %}
+  {{ linkup_search_response.answer }}
+  
+  Sources:
+  {% for source in linkup_search_response.sources %}
+    - {{ source.name }}: {{ source.url }}
+      {{ source.snippet }}
+  {% endfor %}
+{% endif %}
+```
+
+## 3. Using with Prompts
+
+If you're using [Keywords AI Prompts](/features/prompt/overview), you can include the Linkup template variables in your prompt templates. When you make a request with `linkup_params`, the variables will be populated and rendered in your prompt.
+
+## How It Works
+
+1. When a request with `linkup_params` is received, the system:
+   - Extracts the Linkup parameters from the request
+   - Calls the Linkup API to retrieve search results
+   - Adds the results to the template variables as `linkup_search_response`
+   - Renders the prompt templates with these variables
+
+2. If you're using stored prompts, the system:
+   - Loads the prompt without rendering variables
+   - Merges variables from the prompt and the request
+   - Processes Linkup parameters and adds results to variables
+   - Renders the prompt with all variables, including Linkup results
+
+## Parameters
+
+The `linkup_params` object supports the following parameters:
+
+| Parameter | Type | Description | Default |
+|-----------|------|-------------|---------|
+| `q` | string | The search query | Required |
+| `depth` | string | The depth of the search (`"standard"` or `"deep"`) | `"deep"` |
+| `outputType` | string | The type of output (`"searchResults"`, `"sourcedAnswer"` or `"structured"`) | `"sourcedAnswer"` |
+| `structuredOutputSchema` | string | Schema for structured output | `null` |
+| `includeImages` | boolean | Whether to include images in the response | `false` |
+
+## Response Structure
+
+The `linkup_search_response` variable will contain:
+
+```json
+{
+  "answer": "The answer text",
+  "sources": [
+    {
+      "name": "Source name",
+      "url": "Source URL",
+      "snippet": "Text snippet from the source"
+    },
+   // ...
+  ]
+}
+```
+
+## Example
+
+Here's a complete example of using the Linkup integration:
+
+```python Python
+import requests
+
+def demo_call(input_text, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY"):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": input_text}
+        ],
+        "linkup_params": {
+            "q": "What is Microsoft's 2024 revenue?",
+            "depth": "deep",
+            "outputType": "sourcedAnswer",
+            "includeImages": False
+        },
+        "variables": {
+            "company_name": "Microsoft"
+        },
+        "model": model
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+input_text = "Please provide information about {{ company_name }}'s 2024 revenue and cite your sources."
+response = demo_call(input_text)
+print(response.json())
+```
+
+With a prompt template like:
+
+```
+Please provide information about {{ company_name }}'s 2024 revenue and cite your sources.
+
+{% if linkup_search_response %}
+Here's what I found:
+{{ linkup_search_response.answer }}
+
+Sources:
+{% for source in linkup_search_response.sources %}
+- {{ source.name }}: {{ source.url }}
+{% endfor %}
+{% endif %}
+```
+
+## Error Handling
+
+If there's an error with the Linkup API call, it will be added to the `warnings_dict` in the response with the key `LINKUP_SEARCH_ERROR`. 
