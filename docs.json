@@ -59,7 +59,7 @@
                   "features/monitoring/logging/log-debugging",
                   "features/monitoring/logging/log-prompt-variable",
                   "features/monitoring/logging/embedding",
-                  "features/monitoring/logging/disable-logs",
+                  "features/monitoring/logging/disable-logs"
                 ]
               },
               {
@@ -325,6 +325,12 @@
               "integration/providers/together",
               "integration/providers/perplexity",
               "integration/providers/openrouter"
+            ]
+          },
+          {
+            "group": "AI dev tools",
+            "pages": [
+              "integration/dev-tools/linkup"
             ]
           },
           {
