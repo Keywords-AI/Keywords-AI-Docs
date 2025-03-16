@@ -6,7 +6,7 @@ description: "Custom properties allows you to add any additional information to 
 ## What is a custom property?
 A custom property is a key-value pair that you can add to an LLM log when sending an LLM log to Keywords AI. It can help you tag and filter LLM logs.
 
-## You will love it when you want to:
+## Why use custom properties?
 - Tag and filter LLM logs in your way.
 - Add any additional information to your logs.
 
@@ -131,8 +131,20 @@ We also support adding credentials in other SDKs or languages, please check out 
 
 
 ## Filter dashboard metrics
-After sending custom properties in your code, you can filter dashboard metrics using these properties. Simply click the `Filter` button and select the relevant `Custom properties` to narrow down your data visualization.
+To use custom properties for filtering in the dashboard, you need to index the custom properties in the platform, otherwise the custom properties will not be available for filtering.
 
+<Note>
+Filtering by custom properties in the dashboard is only available for **Team plan** and **Enterprise plan** users. 
+</Note>
+
+### Index custom properties for filtering
+Go to [Customer Properties page](https://platform.keywordsai.co/platform/api/custom-properties) and click on the `Create index` button to index custom properties you want to filter by.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/logs/index-custom-property.jpg" alt="Index custom properties" />
+</Frame>
+
+### Filters in dashboard
+After indexing the custom properties, you can filter the dashboard metrics by the custom properties.
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/dashboard-metadata.png" alt="Filter by custom properties" />
 </Frame>
