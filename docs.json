@@ -34,27 +34,48 @@
               {
                 "group": "Getting started",
                 "pages": [
-                  "features/monitoring/logging-api",
-                  "features/monitoring/proxy-api",
-                  "features/monitoring/tracing-api"
+                  "features/monitoring/get-started/logging-api",
+                  "features/monitoring/get-started/proxy-api",
+                  "features/monitoring/get-started/tracing-api"
                 ]
               },
               {
                 "group": "Metrics",
                 "pages": [
-                  "features/monitoring/analytics",
-                  "features/monitoring/dashboard-filter"
+                  "features/monitoring/metrics/overview",
+                  "features/monitoring/metrics/dashboard-filter"
+                ]
+              },
+              {
+                "group": "Logs",
+                "pages": [
+                  "features/monitoring/logging/overview",
+                  "features/monitoring/logging/metadata",
+                  "features/monitoring/logging/logs-export",
+                  "features/monitoring/logging/share-log",
+                  "features/monitoring/logging/log-prompt-variable",
+                  "features/monitoring/logging/embedding",
+                  "features/monitoring/logging/disable-logs"
+                ]
+              },
+              {
+                "group": "Threads",
+                "pages": [
+                  "features/monitoring/threads/overview",
+                  "features/monitoring/threads/threads"
                 ]
               },
               {
                 "group": "Traces",
                 "pages": [
+                  "features/monitoring/traces/overview",
                   "features/monitoring/traces/traces",
                   "features/monitoring/traces/traces-keywords-params",
                   "features/monitoring/traces/group-traces",
                   {
                     "group": "Integrations",
                     "pages": [
+                      "features/monitoring/traces/integrations/openai-agents-sdk",
                       "features/monitoring/traces/integrations/vercel-ai-sdk",
                       "features/monitoring/traces/integrations/langgraph"
                     ]
@@ -62,19 +83,9 @@
                 ]
               },
               {
-                "group": "Logs",
-                "pages": [
-                  "features/generation/metadata",
-                  "features/monitoring/threads",
-                  "features/monitoring/logging",
-                  "features/monitoring/share-log",
-                  "features/monitoring/log-prompt-variable",
-                  "features/monitoring/logging/embedding"
-                ]
-              },
-              {
                 "group": "User analytics",
                 "pages": [
+                  "features/monitoring/users/overview",
                   "features/generation/customer-identifier",
                   "features/user/user-budget"
                 ]
@@ -83,7 +94,6 @@
                 "group": "Advanced",
                 "pages": [
                   "features/monitoring/subscribe-alerts",
-                  "features/generation/disable-logs",
                   "features/monitoring/webhooks"
                 ]
               }
@@ -92,24 +102,27 @@
           {
             "group": "Prompt engineering",
             "pages": [
-              "features/prompt/prompt-management",
-              "features/prompt/create-a-prompt",
-              "features/prompt/deploy-a-prompt",
-              "features/prompt/monitor-a-prompt",
-              "features/prompt/share-a-prompt",
-              "features/prompt/model-playground",
+              "features/prompt/overview",
               {
-                "group": "Advanced",
+                "group": "Prompt management",
                 "pages": [
-                  "features/prompt/advanced/jinja-support",
-                  "features/prompt/advanced/log-custom-prompt"
+                  "features/prompt/prompt-management/overview",
+                  "features/prompt/prompt-management/monitor-a-prompt",
+                  "features/prompt/prompt-management/prompt-collaboration",
+                  "features/prompt/prompt-management/version-control",
+                  "features/prompt/prompt-management/jinja-support",
+                  "features/prompt/prompt-management/ab-testing",
+                  "features/prompt/prompt-management/deploy-a-prompt",
+                  "features/prompt/prompt-management/create-a-prompt"
                 ]
-              }
+              },
+              "features/prompt/model-playground"
             ]
           },
           {
             "group": "Evaluations",
             "pages": [
+              "features/evaluation/overview",
               {
                 "group": "LLM evals",
                 "pages": [
@@ -126,11 +139,10 @@
                 ]
               },
               {
-                "group": "Datasets & Experiments",
+                "group": "Testsets & Experiments",
                 "pages": [
-                  "features/prompt/testsets",
-                  "features/datasets",
-                  "features/prompt/lab"
+                  "features/evaluation/experiments/overview",
+                  "features/evaluation/experiments/datasets"
                 ]
               }
             ]
@@ -141,11 +153,12 @@
               "features/generation/overview",
               "features/generation/gateway",
               "features/generation/add-credentials",
-              "features/generation/fallbacks",
               "features/generation/load-balancing",
+              "features/generation/retries",
+              "features/generation/fallbacks",
+              "features/generation/rate-limits",
               "features/generation/caches",
               "features/generation/prompt-caching",
-              "features/generation/retries",
               "features/generation/function-calling",
               "features/generation/upload-pdf"
             ]
@@ -159,9 +172,7 @@
           },
           {
             "group": "Error handling",
-            "pages": [
-              "error-handling/400"
-            ]
+            "pages": ["error-handling/400"]
           },
           {
             "group": "Resources",
@@ -174,9 +185,7 @@
                 "pages": [
                   {
                     "group": "Retrieval",
-                    "pages": [
-                      "features/evaluation/retrieval/context-precision"
-                    ]
+                    "pages": ["features/evaluation/retrieval/context-precision"]
                   },
                   {
                     "group": "Text generation",
@@ -188,9 +197,7 @@
                   },
                   {
                     "group": "Other",
-                    "pages": [
-                      "features/evaluation/other/sentiment"
-                    ]
+                    "pages": ["features/evaluation/other/sentiment"]
                   }
                 ]
               }
@@ -268,8 +275,16 @@
           },
           {
             "group": "Model",
+            "pages": ["api-endpoints/data-endpoints/models-endpoint"]
+          },
+          {
+            "group": "Temporary API keys",
             "pages": [
-              "api-endpoints/data-endpoints/models-endpoint"
+              "api-endpoints/temporary-api-keys/create-temporary-key",
+              "api-endpoints/temporary-api-keys/delete-temporary-key",
+              "api-endpoints/temporary-api-keys/list-temporary-keys",
+              "api-endpoints/temporary-api-keys/retrieve-temporary-key",
+              "api-endpoints/temporary-api-keys/update-temporary-key"
             ]
           }
         ]
@@ -279,14 +294,12 @@
         "groups": [
           {
             "group": "Ecosystem",
-            "pages": [
-              "integration/own-api-keys"
-            ]
+            "pages": ["integration/own-api-keys"]
           },
           {
             "group": "LLM Frameworks",
             "pages": [
-              "integration/development-frameworks/openai-agent",
+              "integration/development-frameworks/openai-agents-sdk",
               "integration/development-frameworks/openai-sdk",
               "integration/development-frameworks/anthropic",
               "integration/development-frameworks/langchain",
@@ -313,15 +326,11 @@
           },
           {
             "group": "AI dev tools",
-            "pages": [
-              "integration/dev-tools/linkup"
-            ]
+            "pages": ["integration/dev-tools/linkup"]
           },
           {
             "group": "Analytics",
-            "pages": [
-              "integration/posthog"
-            ]
+            "pages": ["integration/posthog"]
           }
         ]
       },

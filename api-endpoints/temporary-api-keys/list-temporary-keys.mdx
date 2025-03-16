@@ -1,0 +1,30 @@
+---
+title: "List temporary API keys"
+api: "GET https://api.keywordsai.co/api/temporary-keys/"
+---
+
+You can list all temporary API keys by sending a GET request to the temporary keys endpoint.
+
+## Response
+
+```json
+{
+    "results": [
+        {
+            "id": "vcjRcdm8...",
+            "name": "Keywords AI temporary key",
+            "expiry_date": "2025-03-15T01:19:33.263343Z",
+            "max_usage": -1,
+        },
+        {
+            "id": "vcjRcdm8...",
+            "name": "Keywords AI temporary key",
+            "expiry_date": "2025-03-15T01:19:33.263343Z",
+            "max_usage": -1,
+        }
+    ],
+    "count": 0,
+    "previous": null, // pagination
+    "next": null, // pagination
+    "current_filters": {}
+}

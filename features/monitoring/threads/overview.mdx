@@ -1,0 +1,30 @@
+---
+title: "Overview"
+description: "A guide to track multi-turn conversation chat logs."
+---
+<Frame>
+<video
+  controls
+  className="w-full aspect-video"
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/threads/threads.mp4"
+></video>
+</Frame>
+
+## What is Threads?
+Threads are conversation groupings for chatlogs. You can easily track multi-turn conversations by passing in a Thread ID when logging.
+
+## You will love it when you want to:
+- Track multi-turn conversations.
+- Check the whole conversation history instead of a single log.
+
+## Quick start
+
+In your API payload, pass `thread_identifier` to group the chatlogs into a thread. Every log with the same `thread_identifier` will be grouped into the same thread.
+
+```python Python {4}
+payload = {
+    "model": "gpt-4o-mini",
+    "messages": [{"role": "user", "content": "Tell me a long story"}],
+    "thread_identifier": "thread_id"
+}
+```
