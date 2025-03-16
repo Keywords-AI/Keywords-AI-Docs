@@ -1,0 +1,200 @@
+---
+title: "Prompt logging"
+description: "Monitor a prompt in production and get detailed metrics."
+---
+## Overview
+Prompt logging gives you visibility into how your prompts perform in real-world applications. Track usage patterns, identify issues, and make data-driven improvements to your AI interactions.
+
+## Why monitor prompts?
+- **Measure performance metrics:** Track token usage, request volume, latency, and error rates to understand your prompt's efficiency.
+- **Compare version performance:** Identify your best-performing prompt variants with side-by-side metric comparisons.
+- **Analyze request distribution:** See exactly how your LLM traffic is distributed across different prompts.
+
+## Quickstart
+<Note>
+You need to first [create a prompt](/features/prompt/prompt-management/overview#quick-start) in Keywords AI, and find the **prompt ID** in Prompts.
+</Note>
+<Tabs>
+<Tab title="Logging API">
+Although you might already defined the configuration for a prompt like model, temperature, etc, you should still pass those parameters in the payload. 
+
+You don't need to pass things like token-related parameters, we'll calculate them for you, but you need to pass time-related parameters like generation time, ttft, etc.
+<CodeGroup>
+```python Python {10-15}
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "model": "claude-3-5-sonnet-20240620",
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "prompt": {
+        "prompt_id": "xxxxxx", # prompt ID in UI
+        "variables": {
+        # You can pass variables in the prompt if you defined any variables in the UI
+        },
+    },
+    "generation_time": 5.7,
+    "ttft": 3.1,
+}
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.request("POST", url, headers=headers, json=payload)
+```
+
+```typescript Typescript {13-18}
+const url = 'https://api.keywordsai.co/api/request-logs/create/';
+const headers = {
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    model: 'claude-3-5-sonnet-20240620',
+    completion_message: {
+        role: "assistant",
+        content: "Hi, how can I assist you today?"
+    },
+    prompt: {
+        prompt_id: "xxxxxx", // prompt ID in UI
+        variables: {
+            // You can pass variables in the prompt if you defined any variables in the UI
+        },
+    },
+    generation_time: 5.7,
+    ttft: 3.1,
+};
+
+fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+})
+```
+
+</CodeGroup>
+</Tab>
+<Tab title="LLM proxy">
+Read [Prompt in LLM proxy](/features/prompt/prompt-management/deploy-a-prompt) to know how to integrate prompts into your codebase, once you integrate prompts into the LLM proxy, you will have the prompt metrics and usage automatically logged.
+
+<Card title="Integrate prompts into proxy" href="/features/prompt/prompt-management/deploy-a-prompt">
+
+</Card>
+</Tab>
+
+</Tabs>
+
+<Frame>
+<video   controls className="w-full aspect-video" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/prompt-monitor.mp4"></video>
+</Frame>
+
+### Variables logging
+
+<Tabs>
+<Tab title="Logging API">
+When you make a request through the Logging API, you can send the prompt variables in the `prompt_messages` field. Just simply wrap your prompt variables in pairs of `{{}}`.
+
+Learn how to use the **Logging API [here](/features/monitoring/logging-api)**.
+
+**Example:**
+
+```json
+"prompt": {
+    "prompt_id": "xxxxxx", // prompt ID in UI
+    "variables": {"language": "Python","task_description": "Square a number", "specific_library": "math"}
+}
+```
+</Tab>
+
+<Tab title="LLM proxy">
+
+**Example:**
+
+```json
+"model": "gpt-4o-mini",
+"prompt": {
+    "prompt_id": "xxxxxx",
+    "variables": {"language": "Python","task_description": "Square a number", "specific_library": "math"}
+}
+```
+</Tab>
+</Tabs>
+
+<Accordion title="Can I log variables in logs even if I haven't created a prompt in Keywords AI?">
+Yes, you can log variables in LLM logs even if you haven't created a prompt in Keywords AI. You can pass the variables in the `variables` field.
+
+Check out the [tutorial here](/features/monitoring/logging/log-prompt-variable).
+
+</Accordion>
+
+### External prompt logging
+If you dont want to create any prompt in Keywords AI but you still want to log your prompts, you can pass your prompt ID in the `prompt_id` field, and set `is_custom_prompt` to `true` so the system knows it's a custom prompt.
+
+**Example code**
+<CodeGroup>
+```python Logging API Python{16-17}
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "model": "claude-3-5-sonnet-20240620",
+    "prompt_messages": [
+        {
+            "role": "user",
+            "content": "Hi"
+        },
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "prompt_id": "xxxxxx", # any prompt ID you want
+    "is_custom_prompt": true,
+    "generation_time": 5.7
+}
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.request("POST", url, headers=headers, json=payload)
+```
+
+```typescript Typescript {11-12}
+const url = 'https://api.keywordsai.co/api/request-logs/create/';
+const headers = {
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    model: 'claude-3-5-sonnet-20240620',
+    prompt_messages: [{role: 'user', content: 'Hi'}],
+    completion_message: {role: 'assistant', content: 'Hi, how can I assist you today?'},
+    prompt_id: 'xxxxxx',
+    is_custom_prompt: true,
+    generation_time: 5.7
+}
+
+fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+})
+```
+</CodeGroup>
+
+You can then see the prompt metrics in Dashboard and Logs.

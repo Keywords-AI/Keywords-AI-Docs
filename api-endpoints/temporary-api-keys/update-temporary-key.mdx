@@ -1,0 +1,30 @@
+---
+title: "Update temporary API key"
+api: "PATCH https://api.keywordsai.co/api/temporary-keys/{{temporary_api_key_id}}/"
+---
+
+You can update a temporary API key by sending a PUT request to the temporary keys endpoint.
+
+## Path parameters
+
+<ParamField path="temporary_api_key_id" type="string">
+  The ID of the temporary API key to update.
+</ParamField>
+
+## Body
+
+<ParamField body="name" type="string">
+  The name of the temporary API key.
+</ParamField>
+
+<ParamField body="expiry_date" type="string">
+  The expiry date of the temporary API key.
+</ParamField>
+
+<ParamField body="is_test" type="boolean">
+  Is this a test key or a prod key
+</ParamField>
+
+<ParamField body="prefix" type="string">
+  The prefix of the temporary API key.
+</ParamField>
