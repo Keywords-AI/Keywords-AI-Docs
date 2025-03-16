@@ -1,0 +1,67 @@
+---
+title: "Create temporary API key"
+api: "POST https://api.keywordsai.co/api/temporary-keys/"
+---
+
+You can create a temporary API key by sending a POST request to the temporary keys endpoint.
+
+## Body
+
+<ParamField body="name" type="string" >
+  The name of the temporary API key.
+</ParamField>
+
+<ParamField body="expiry_date" type="string" >
+    The expiry date of the temporary API key. 
+    
+    It should be ISO format string, like `2025-03-15T01:19:33.263343Z`
+</ParamField>
+
+<ParamField body="max_usage" type="integer" default={-1}>
+Number of times this key can be used for logging. -1 being default, means infinite times
+</ParamField>
+
+<ParamField body="rate_limit" type="integer" >
+Calls per minute. This is going to be overridden by the plan's rate limit. 
+
+Default is `Null`.
+</ParamField>
+
+<ParamField body="spending_limit" type="float" >
+Spending with proxy. In US dollars
+
+Default is `Null`.
+</ParamField>
+
+<ParamField body="is_test" type="boolean" >
+Is this a test key or a prod key
+
+Default is `false`.
+</ParamField>
+
+## Response
+<Warning>
+This is the only time the `api_key` will show, KEEP IT SOME WHERE SAFE
+</Warning>
+
+```json
+{
+    "id": "vcjRcdm8...",
+    "api_key": "vcjRcdm8.5hSZiXrA698O6KAiWX5CJj8Zrbp0H6gV", // This is the only time this will show, KEEP IT SOME WHERE SAFE
+    "prefix": "vcjRcdm8",
+    "created": "2025-03-16T01:19:17.074170Z",
+    "name": "Keywords AI temporary key",
+    "revoked": false,
+    "expiry_date": "2025-03-15T01:19:33.263343Z",
+    "key_usage": 0,
+    "max_usage": -1,
+    "last_used": "1970-01-01T00:00:00Z",
+    "rate_limit": null,
+    "spending_limit": null,
+    "spending_in_period": 0.0,
+    "is_test": false,
+    "is_temporary": true
+}
+```
+
+

@@ -43,8 +43,7 @@
                 "group": "Metrics",
                 "pages": [
                   "features/monitoring/metrics/overview",
-                  "features/monitoring/metrics/dashboard-filter",
-                  "features/monitoring/metrics/export-graphs"
+                  "features/monitoring/metrics/dashboard-filter"
                 ]
               },
               {
@@ -52,11 +51,8 @@
                 "pages": [
                   "features/monitoring/logging/overview",
                   "features/monitoring/logging/metadata",
-                  "features/monitoring/logging/filters",
-                  "features/monitoring/logging/search",
                   "features/monitoring/logging/logs-export",
                   "features/monitoring/logging/share-log",
-                  "features/monitoring/logging/log-debugging",
                   "features/monitoring/logging/log-prompt-variable",
                   "features/monitoring/logging/embedding",
                   "features/monitoring/logging/disable-logs"
@@ -79,6 +75,7 @@
                   {
                     "group": "Integrations",
                     "pages": [
+                      "features/monitoring/traces/integrations/openai-agents-sdk",
                       "features/monitoring/traces/integrations/vercel-ai-sdk",
                       "features/monitoring/traces/integrations/langgraph"
                     ]
@@ -110,23 +107,16 @@
                 "group": "Prompt management",
                 "pages": [
                   "features/prompt/prompt-management/overview",
-                  "features/prompt/prompt-management/create-a-prompt",
-                  "features/prompt/prompt-management/deploy-a-prompt",
                   "features/prompt/prompt-management/monitor-a-prompt",
-                  "features/prompt/prompt-management/share-a-prompt",
+                  "features/prompt/prompt-management/prompt-collaboration",
                   "features/prompt/prompt-management/version-control",
                   "features/prompt/prompt-management/jinja-support",
-                  "features/prompt/prompt-management/ab-testing"
+                  "features/prompt/prompt-management/ab-testing",
+                  "features/prompt/prompt-management/deploy-a-prompt",
+                  "features/prompt/prompt-management/create-a-prompt"
                 ]
               },
-              "features/prompt/model-playground",
-              {
-                "group": "Advanced",
-                "pages": [
-
-                  "features/prompt/advanced/log-custom-prompt"
-                ]
-              }
+              "features/prompt/model-playground"
             ]
           },
           {
@@ -136,7 +126,6 @@
               {
                 "group": "LLM evals",
                 "pages": [
-                  "features/evaluation/llm-evals/overview",
                   "features/evaluation/llm-evals/llm-evaluator",
                   "features/evaluation/llm-evals/run-evaluator-code",
                   "features/evaluation/llm-evals/run-evaluator-ui"
@@ -145,18 +134,15 @@
               {
                 "group": "Human evals",
                 "pages": [
-                  "features/evaluation/human-evals/overview",
                   "features/evaluation/human-evals/human-evals-setup",
                   "features/evaluation/human-evals/human-annotation"
                 ]
               },
               {
-                "group": "Datasets & Experiments",
+                "group": "Testsets & Experiments",
                 "pages": [
                   "features/evaluation/experiments/overview",
-                  "features/evaluation/experiments/upload-testsets",
-                  "features/evaluation/experiments/datasets",
-                  "features/evaluation/experiments/experiments"
+                  "features/evaluation/experiments/datasets"
                 ]
               }
             ]
@@ -290,6 +276,16 @@
           {
             "group": "Model",
             "pages": ["api-endpoints/data-endpoints/models-endpoint"]
+          },
+          {
+            "group": "Temporary API keys",
+            "pages": [
+              "api-endpoints/temporary-api-keys/create-temporary-key",
+              "api-endpoints/temporary-api-keys/delete-temporary-key",
+              "api-endpoints/temporary-api-keys/list-temporary-keys",
+              "api-endpoints/temporary-api-keys/retrieve-temporary-key",
+              "api-endpoints/temporary-api-keys/update-temporary-key"
+            ]
           }
         ]
       },
@@ -303,6 +299,7 @@
           {
             "group": "LLM Frameworks",
             "pages": [
+              "integration/development-frameworks/openai-agents-sdk",
               "integration/development-frameworks/openai-sdk",
               "integration/development-frameworks/anthropic",
               "integration/development-frameworks/langchain",
@@ -329,9 +326,7 @@
           },
           {
             "group": "AI dev tools",
-            "pages": [
-              "integration/dev-tools/linkup"
-            ]
+            "pages": ["integration/dev-tools/linkup"]
           },
           {
             "group": "Analytics",
