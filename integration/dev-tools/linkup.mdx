@@ -15,15 +15,13 @@ Include `linkup_params` in your request's `keywordsai_params`:
     {"role": "system", "content": "You are a helpful assistant."},
     {"role": "user", "content": "Please summarize the information about Microsoft's 2024 revenue: {% if linkup_search_response %}{{ linkup_search_response.answer }}{% endif %}"}
   ],
-  "keywordsai_params": {
-    "linkup_params": {
+  "linkup_params": {
       "q": "What is Microsoft's 2024 revenue?",
       "depth": "deep",
       "outputType": "sourcedAnswer",
       "includeImages": false
     }
   }
-}
 ```
 
 ## 2. Use Template Variables in Your Messages
