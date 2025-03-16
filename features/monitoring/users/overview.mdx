@@ -3,13 +3,137 @@ title: "Overview"
 description: "A guide to view LLM-level user analytics metrics."
 ---
 
-## Features
-<Tabs>
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/overview/users.png" />
+</Frame>
 
-<Tab title="Users">
+You can monitor individual users' activity in your AI products. Get insights into their usage patterns, preferences, and behavior, and take actions to improve the user experience.
 
-</Tab>
-
-</Tabs>
+## Why user analytics?
+- **Track user LLM usage**: Understand which users are most active and contribute to your product's success.
+- **Identify high-value users**: Understand which users are most active and contribute to your product's success.
+- **Optimize user experience**: Tailor your product to meet the specific needs and preferences of different user groups.
+- **Improve retention**: Retain high-value users by addressing their pain points and providing a seamless experience.
 
 ## Quick start
+
+You can pass a `customer_params` to the request to track the user's behavior on your LLM applications.
+<Tabs>
+<Tab title="OpenAI Python SDK">
+Here is an example of how to send a user's data with the parameter `customer_params` to Keywords AI in the OpenAI Python SDK.
+```python {13-19}
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "user", "content": "Tell me a long story"}
+    ],
+    extra_body={
+        "customer_params": {
+            "customer_identifier": "customer_1",
+            "name": "Hendrix Liu", # optional parameter 
+            "email": "hendrix@keywordsai.co" # optional parameter
+        }
+    }
+)
+```
+</Tab>
+<Tab title="OpenAI TypeScript SDK">
+Here is an example of how to send a user's data with the parameter `customer_params` to Keywords AI in the OpenAI TypeScript SDK. In OpenAI TypeScript SDK, you should add a `// @ts-expect-error` before the metadata field.
+```typescript {12-17}
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-4o-mini",
+    // @ts-expect-error
+    customer_params: {
+        "customer_identifier": "customer_1",
+        "name": "Hendrix Liu", // optional parameter
+        "email": "hendrix@keywordsai.co" // optional parameter
+    }
+  })
+  .asResponse();
+
+console.log(await response.json());
+```
+</Tab>
+<Tab title="Standard API">
+<CodeGroup>
+```python LLM proxy {14-18}
+import requests
+def demo_call(input, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY",
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        'customer_params': {
+            "customer_identifier": "customer_1",
+            "name": "Hendrix Liu", # optional parameter
+            "email": "hendrix@keywordsai.co" # optional parameter
+        }
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+
+
+```python Async logging {16-20}
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "model": "gpt-4o-mini",
+    "prompt_messages": [
+        {
+            "role": "user",
+            "content": "Hi"
+        },
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "customer_params": {
+        "customer_identifier": "customer_1",
+        "name": "Hendrix Liu", # optional parameter
+        "email": "hendrix@keywordsai.co" # optional parameter
+    }
+    # other parameters
+}
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.request("POST", url, headers=headers, json=payload)
+```
+</CodeGroup>
+</Tab>
+<Tab title="Other SDKs">
+We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/own-api-keys) for more information.
+</Tab>
+</Tabs>
