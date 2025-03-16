@@ -246,4 +246,6 @@ class JokeAgent:
         )
         joke = completion.choices[0].message.content
         return joke
+    def run(self):
+        return self.create_joke()
 ```

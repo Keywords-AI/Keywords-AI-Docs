@@ -59,19 +59,10 @@
                 ]
               },
               {
-                "group": "Threads",
-                "pages": [
-                  "features/monitoring/threads/overview",
-                  "features/monitoring/threads/threads"
-                ]
-              },
-              {
                 "group": "Traces",
                 "pages": [
                   "features/monitoring/traces/overview",
                   "features/monitoring/traces/traces",
-                  "features/monitoring/traces/traces-keywords-params",
-                  "features/monitoring/traces/group-traces",
                   {
                     "group": "Integrations",
                     "pages": [
@@ -79,7 +70,16 @@
                       "features/monitoring/traces/integrations/vercel-ai-sdk",
                       "features/monitoring/traces/integrations/langgraph"
                     ]
-                  }
+                  },
+                  "features/monitoring/traces/traces-keywords-params",
+                  "features/monitoring/traces/group-traces"
+                ]
+              },
+              {
+                "group": "Threads",
+                "pages": [
+                  "features/monitoring/threads/overview",
+                  "features/monitoring/threads/threads"
                 ]
               },
               {
@@ -87,7 +87,8 @@
                 "pages": [
                   "features/monitoring/users/overview",
                   "features/generation/customer-identifier",
-                  "features/user/user-budget"
+                  "features/user/user-budget",
+                  "features/monitoring/users/users-rate-limit"
                 ]
               },
               {
@@ -169,10 +170,6 @@
               "features/generation/key-management",
               "features/organization/create-team"
             ]
-          },
-          {
-            "group": "Error handling",
-            "pages": ["error-handling/400"]
           },
           {
             "group": "Resources",
