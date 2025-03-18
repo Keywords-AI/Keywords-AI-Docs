@@ -16,6 +16,7 @@ Include `linkup_params` in your request's `keywordsai_params`:
     {"role": "user", "content": "Please summarize the information about Microsoft's 2024 revenue: {% if linkup_search_response %}{{ linkup_search_response.answer }}{% endif %}"}
   ],
   "linkup_params": {
+      "api_key": {{"YOUR_LINKUP_API_KEY"}},
       "q": "What is Microsoft's 2024 revenue?",
       "depth": "deep",
       "outputType": "sourcedAnswer",

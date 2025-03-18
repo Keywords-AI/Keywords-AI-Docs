@@ -8,14 +8,16 @@ Load balancing is a feature that allows you to balance the request load across d
 _See all supported params [here](/api-endpoints/integration/chat-completions)._
 
 
-{/* ## Load balancing between models
+## Load balancing between models
 You could specify the load balancing weights for different models. This is useful when you want to balance the load between different models from different providers. 
 
 
 <Steps>
     <Step title="Go to the Load balancing page">
-        Go to the [Load balancing page](https://platform.keywordsai.co/platform/api/load-balance) and click on ` Create load balancing group`
-        <img src="/images/api-features/lb_group.jpg" alt="Load balancing group"/>
+        Go to the [Load balancing page](https://platform.keywordsai.co/platform/api/load-balance) and click on `Create new load balancer`
+        <Frame>
+        <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/load-balancing.jpg" alt="Load balancing group"/>
+        </Frame>
     </Step>
     <Step title="Add models">
         Click `Add model` to add models and specify the weight for each model and add your own credentials.
@@ -72,9 +74,9 @@ You could specify the load balancing weights for different models. This is usefu
 </Steps>
 
 
-
+### Fallback usage in load balancing
 You could also set up fallback models to avoid errors. It will fall back to the list of models you specified in the `fallback` field once have any outages. Check out the [Fallbacks](/features/generation/fallbacks) section for more information.
- */}
+
 
 
 
@@ -245,6 +247,6 @@ See how to add your own credentials [here](/integration/providers/providers-over
 </Accordion>
 </AccordionGroup>
 
-### load_balance_group
-The `load_balance_group` parameter is deprecated. We currently don't support load balancing between models. If you want to load balance between models, contact us at [team@keywordsai.co](mailto:support@keywordsai.co).
+{/* ### load_balance_group
+The `load_balance_group` parameter is deprecated. We currently don't support load balancing between models. If you want to load balance between models, contact us at [team@keywordsai.co](mailto:support@keywordsai.co). */}
 
