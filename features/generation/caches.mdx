@@ -1,12 +1,15 @@
 ---
-title: "Cache LLM responses"
+title: "Caches"
 description: "Reduce latency and save LLM costs by caching LLM prompts and responses."
 ---
+
+## What is caches?
+Caches are storage systems that save and reuse exact LLM requests. You can enable caches to reduce LLM costs and improve response times.
+
 ## Why Caches?
 You may find caches useful when you want to:
 - **Reduce latency**: Serve stored responses instantly, eliminating the need for repeated API calls.
 - **Save costs**: Minimize expenses by reusing cached responses instead of making redundant requests.
-- **Improve performance**: Deliver consistently high-quality outputs by serving pre-vetted, cached responses.
 
 ## How to use Caches?
 Turn on caches by setting `cache_enabled` to `true`. We currently will cache the whole conversation, including the system message, user message and the response.
@@ -128,7 +131,8 @@ This parameter specifies the cache options. Currently we support `cache_by_custo
 ```json
 {
     "cache_options": { // optional
-        "cache_by_customer": true // or false
+        "cache_by_customer": true, // or false
+        "omit_log": true // or false
     }
 }
 ```
@@ -137,11 +141,17 @@ This parameter specifies the cache options. Currently we support `cache_by_custo
 ## How to view caches
 You can view the caches on the Logs page. The model tag will be `keywordsai/cache`. You can also filter the logs by the `Cache hit` field.
 
+
+
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/caches-logs.png" alt="Caches" />
 </Frame>
 
-## Regular caching vs Prompt caching
+## Omit logs when cache hit
+You can omit the logs when cache hit by setting the `omit_logs` parameter to `true` or go to [Caches](https://platform.keywordsai.co/platform/api/caches) in Settings.
+
+So this won't generate a new LLM log when the cache is hit.
+## LLM caching vs Prompt caching
 Regular caching stores complete prompt responses. When the same prompt is received, the system returns the stored response, reducing costs but limiting response variety.
 
 Prompt caching stores the model's intermediate computation state. This allows the model to generate diverse responses while still saving computational costs, as it doesn't need to reprocess the entire prompt from scratch. View the [Prompt caching](/features/generation/prompt-caching) section for more information.
