@@ -29,6 +29,12 @@ Include `linkup_params` in your request's `keywordsai_params`:
 
 The Linkup response will be available as a variable named `linkup_search_response` in your templates. You can access it using Jinja2 syntax:
 
+<Tip>
+You can learn how to use Jinja2 syntax in the [Jinja2 documentation](/features/prompt/prompt-management/jinja-support).
+</Tip>
+
+
+
 ```
 {% if linkup_search_response %}
   {{ linkup_search_response.answer }}
