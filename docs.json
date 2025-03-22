@@ -276,7 +276,7 @@
             "pages": ["api-endpoints/data-endpoints/models-endpoint"]
           },
           {
-            "group": "Temporary API keys",
+            "group": "API keys management",
             "pages": [
               "api-endpoints/temporary-api-keys/create-temporary-key",
               "api-endpoints/temporary-api-keys/delete-temporary-key",
