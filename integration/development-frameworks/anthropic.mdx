@@ -3,7 +3,24 @@ title: Anthropic SDK
 description: "Use Anthropic SDK through Keywords AI"
 ---
 
-You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint with Anthropic SDK under two lines of code change.
+<Note>
+This section is only for **Keywords AI gateway** users.
+</Note>
+
+## Pros and Cons
+
+### Pros
+- You can use the `Thinking` feature of `Claude 3.7 Sonnet` 
+
+- 2 lines of code change to integrate
+
+### Cons
+- Can't call `prompts` related params with this integration
+        - You have to use another integration to use `prompts` related features
+- Can't use proxy params like `fallback`, `load_balancing`...
+    - Use another integration to use these features
+
+
 
 <CodeGroup>
 ```Python Python
