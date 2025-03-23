@@ -14,8 +14,8 @@ Traces is currently in **beta**. Please share any feedback or suggestions.
 
 ## Set up Traces
 <Tabs>
-<Tab title="Python">
 
+<Tab title="Python">
 <Steps>
 <Step title="Install the SDK">
 Install the package using your preferred package manager:
@@ -149,6 +149,81 @@ async function jokeWorkflow() {
 }
 ```
 </Step>
+
+</Steps>
+</Tab>
+
+<Tab title="OpenAI Agents SDK">
+The [OpenAI Agents SDK](https://github.com/openai/openai-agents-python?tab=readme-ov-file) is a lightweight yet powerful framework for building multi-agent workflows.
+
+<Steps>
+<Step title="Install the SDK">
+Install the package using your preferred package manager:
+```bash pip
+pip install openai-agents
+```
+```bash pip
+pip install keywordsai-tracing
+```
+```bash pip
+pip install "keywordsai-tracing[openai-agents]"
+```
+</Step>
+
+<Step title="Set up Keywords AI trace processor">
+Get your API key from the [API Keys page](https://platform.keywordsai.co/platform/api/api-keys) in Settings, then configure it in your environment.
+
+```python agent.py
+import os
+from agents.tracing import set_trace_processors
+from keywordsai_tracing.integrations.openai_agents_integration import KeywordsAITraceProcessor
+
+set_trace_processors(
+    [
+        KeywordsAITraceProcessor(
+            api_key=os.getenv("KEYWORDSAI_API_KEY"),
+            endpoint="https://api.keywordsai.co/api/openai/v1/traces/ingest"
+        ),
+    ]
+)
+```
+</Step> 
+
+<Step title="Call the agent">
+Now you can call the agent and it will be traced by Keywords AI automatically.
+```python agent.py {7-14}
+import asyncio
+import os
+from agents import Agent, Runner
+from agents.tracing import set_trace_processors
+from keywordsai_tracing.integrations.openai_agents_integration import KeywordsAITraceProcessor
+
+set_trace_processors(
+    [
+        KeywordsAITraceProcessor(
+            api_key=os.getenv("KEYWORDSAI_API_KEY"),
+            endpoint="https://api.keywordsai.co/api/openai/v1/traces/ingest"
+        ),
+    ]
+)
+
+async def main():
+    agent = Agent(
+        name="Assistant",
+        instructions="You only respond in haikus.",
+    )
+
+    result = await Runner.run(agent, "Tell me about recursion in programming.")
+    print(result.final_output)
+    # Function calls itself,
+    # Looping in smaller pieces,
+    # Endless by design.
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+</Step>
+
 
 </Steps>
 </Tab>
