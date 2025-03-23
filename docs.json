@@ -279,10 +279,10 @@
             "group": "API keys management",
             "pages": [
               "api-endpoints/temporary-api-keys/create-temporary-key",
-              "api-endpoints/temporary-api-keys/delete-temporary-key",
               "api-endpoints/temporary-api-keys/list-temporary-keys",
               "api-endpoints/temporary-api-keys/retrieve-temporary-key",
-              "api-endpoints/temporary-api-keys/update-temporary-key"
+              "api-endpoints/temporary-api-keys/update-temporary-key",
+              "api-endpoints/temporary-api-keys/delete-temporary-key"
             ]
           }
         ]

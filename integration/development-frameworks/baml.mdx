@@ -7,7 +7,7 @@ description: "BAML is a domain-specific language to write and test LLM functions
 ## Install extension
 Install [BAML](https://github.com/BoundaryML/baml) extension in VS code. create a `.baml` file (e.g., test.baml) and get started!
 <Frame>
-<img  width="500"  src="/images/providers/baml.jpg" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/baml-extension.png" />
 </Frame>
 
 ## Integration methods
@@ -15,9 +15,9 @@ There are 2 ways to integrate Keywords AI with BAML and allow you send Keywords 
 1. Send Keywords AI params through header.
 2. End at low level and send params to Keywords AI through the client.
 
-### 1. Send Keywords AI params through header
+### Send Keywords AI params through header
 
-#### Step 1: Set up a BAML Client Registry
+**Set up a BAML Client Registry and Keywords AI Integration**
 
 First, you need to set up a [client registry](https://docs.boundaryml.com/ref/baml_client/client-registry) in BAML. This registry manages your LLM clients.
 
@@ -43,9 +43,7 @@ async def run():
     res = await b.ExtractResume("...", { "client_registry": cr })
 ```
 
-#### Step 2: Configure Keywords AI Integration
-
-Next, you'll modify the client registry to connect to Keywords AI, enabling observability and analytics. Learn how to create a Keywords AI API key [here](https://docs.keywordsai.co/get-started/llm-inference#create-an-api-key).
+Next, you'll modify the client registry to connect to Keywords AI, enabling observability and analytics. Learn how to create a Keywords AI API key [here](https://docs.keywordsai.co/get-started/llm-inference#1-get-your-keywords-ai-api-key).
 
 ```python Python
 from baml_client.sync_client import b
@@ -108,7 +106,9 @@ With this setup, your BAML function calls will be routed through Keywords AI, al
 - Analyze performance and usage patterns
 - Associate custom identifiers with your LLM calls
 
-### Initialize a Keywords AI client
+### Using Keywords AI client in BAML
+
+**Initialize a Keywords AI client in BAML**
 
 
 Initialize a Keywords AI client in BAML by switching the base URL and adding the KEYWORDSAI_API_KEY in the environmental variable. Learn how to create a Keywords AI API key [here](https://docs.keywordsai.co/get-started/llm-inference#create-an-api-key).   
@@ -126,7 +126,56 @@ client<llm> KeywordsAI {
 }
 ```
 
-## Use the client and get LLM observability
+**Define the function in baml_src/resume.baml**
+
+```Typescript BAML
+// Create a function to extract the resume from a string.
+function ExtractResume(resume: string) -> Resume {
+  // Specify a client as provider/model-name
+  // you can use custom LLM params with a custom client name from clients.baml like "client CustomHaiku"
+  client "KeywordsAIClient" // Set OPENAI_API_KEY to use this client.
+  prompt #"
+    Extract from this content:
+    {{ resume }}
+
+    {{ ctx.output_format }}
+  "#
+}
+```
+
+Then, you can use the function in your BAML file.
+
+```Python BAML
+
+import requests
+
+# requests is not async so for simplicity we'll use the sync client.
+from baml_client.sync_client import b
+
+
+def run():
+    # Get the HTTP request object.
+    req = b.request.ExtractResume("John Doe | Software Engineer | BSc in CS")
+
+    extended_body = {
+        **req.body.json(),
+        "custom_identifier": "123",
+    }
+    # Send the HTTP request.
+    response = requests.post(url=req.url, headers=req.headers, json=extended_body)
+
+    # Parse the LLM response.
+    parsed = b.parse.ExtractResume(response.json()["choices"][0]["message"]["content"])
+
+    # Fully parsed Resume type.
+    print(parsed)
+
+
+if __name__ == "__main__":
+    response = run("test")
+```
+
+{/* ## Use the client and get LLM observability
 This is an official example from BAML
 ```json BAML
 // This is a BAML file, which extends the Jinja2 templating language to write LLM functions.
@@ -193,7 +242,7 @@ test StarbucksTextReceiptTest {
     "#
   }
 }
-```
+``` */}
 
 ## Test & monitor
 After you have the code, `cmd+shift+p` > BAML: Open in Playground and run your tests. You can also monitor your LLM performance in the Keywords AI dashboard. Sign up here: `https://www.keywordsai.co`
