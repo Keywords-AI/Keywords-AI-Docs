@@ -298,7 +298,13 @@
             "group": "LLM Frameworks",
             "pages": [
               "integration/development-frameworks/openai-agents-sdk",
-              "integration/development-frameworks/openai-sdk",
+              {
+                "group": "OpenAI SDK",
+                "pages": [
+                  "integration/development-frameworks/openai-sdk",
+                  "integration/development-frameworks/openai-responses"
+                ]
+              },
               "integration/development-frameworks/anthropic",
               "integration/development-frameworks/langchain",
               "integration/development-frameworks/vercel",
@@ -316,6 +322,7 @@
               "integration/providers/vertex",
               "integration/providers/bedrock",
               "integration/providers/groq",
+              "integration/providers/assemblyai",
               "integration/providers/Fireworks",
               "integration/providers/together",
               "integration/providers/perplexity",
