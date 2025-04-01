@@ -1,0 +1,318 @@
+---
+title: Responses API
+description: A guide to integrating the OpenAI Responses API with Keywords AI.
+---
+
+<Note> This integration is only for **Keywords AI LLM proxy** user. If you only want to log LLM calls and responses, you can use the [Logging API](/api-endpoints/integration/request-logging-endpoint) to log LLM calls. </Note>
+
+<Warning>
+
+This integration works exclusively with **OpenAI models** and cannot be used with models from other providers.
+
+</Warning>
+
+[Responses API](https://platform.openai.com/docs/api-reference/responses) is OpenAI's most advanced interface for generating model responses. Supports text and image inputs, and text outputs. Create stateful interactions with the model, using the output of previous responses as input. 
+
+Extend the model's capabilities with built-in tools for file search, web search, computer use, and more. Allow the model access to external systems and data using function calling.
+
+This guide will show you how to integrate the Responses API with Keywords AI so you can log LLM calls from Responses API.
+
+## Quickstart
+
+### Prerequisites
+To use Keywords AI gateway, you need to:
+
+1. Create an API key in [Keywords AI platform](https://platform.keywordsai.co/platform/api/api-keys).
+2. Add your OpenAI API key in [Providers](https://platform.keywordsai.co/platform/api/providers) to call models from OpenAI.
+
+### Create a model response / Text input example
+You can use Keywords AI gateway and get observability by changing the base url and adding a custom header.
+<CodeGroup>
+```python Python {6-7, 10-15, 17-19, 25}
+from openai import OpenAI
+from base64 import b64encode
+import json
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/chat/completions",
+    api_key="Your_Keywords_AI_API_Key",
+)
+
+keywordsai_params = {
+    "metadata": {
+        "paid_user": "true",
+    }
+    # Other keywordsai params
+}
+
+keywordsai_params_header = {
+    "X-Data-Keywordsai-Params": b64encode(json.dumps(keywordsai_params).encode()).decode(),
+}
+
+def test_text_input():
+    response = client.responses.create(
+    model="gpt-4o",
+    input="Tell me a three sentence bedtime story about a unicorn.",
+    extra_headers=keywordsai_params_header,
+    )
+
+    print(response)
+
+if __name__ == "__main__":
+    test_text_input()
+```
+</CodeGroup>
+
+### File Search example
+<CodeGroup>
+```python Python
+from openai import OpenAI
+from base64 import b64encode
+import json
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/chat/completions",
+    api_key="Your_Keywords_AI_API_Key",
+)
+
+keywordsai_params = {
+    "metadata": {
+        "paid_user": "true",
+    }
+    # Other keywordsai params
+}
+
+
+keywordsai_params_header = {
+    "X-Data-Keywordsai-Params": b64encode(json.dumps(keywordsai_params).encode()).decode(),
+}
+
+def test_file_search():
+    response = client.responses.create(
+        model="gpt-4o",
+        tools=[
+            {
+                "type": "file_search",
+                "vector_store_ids": ["vs_67d3bdd0c8888191adfa890a9e829480"],
+                "max_num_results": 20,
+            }
+        ],
+        input="What are the attributes of an ancient brown dragon?",
+        extra_headers=keywordsai_params_header,
+    )
+
+
+if __name__ == "__main__":
+    test_file_search()
+```
+</CodeGroup>
+
+### Reasoning example
+<CodeGroup>
+```python Python
+from openai import OpenAI
+from base64 import b64encode
+import json
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/chat/completions",
+    api_key="Your_Keywords_AI_API_Key",
+)
+keywordsai_params = {
+    "metadata": {
+        "paid_user": "true",
+    }
+    # Other keywordsai params
+}
+
+keywordsai_params_header = {
+    "X-Data-Keywordsai-Params": b64encode(json.dumps(keywordsai_params).encode()).decode(),
+}
+def test_file_search():
+  response = client.responses.create(
+    model="o3-mini",
+    input="How much wood would a woodchuck chuck?",
+    reasoning={
+        "effort": "high"
+    },
+    extra_headers=keywordsai_params_header,
+  )
+
+  print(response)
+
+
+if __name__ == "__main__":
+    test_file_search()
+```
+</CodeGroup>
+
+### Streaming example
+<CodeGroup>
+```python Python
+from openai import OpenAI
+from base64 import b64encode
+import json
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/chat/completions",
+    api_key="Your_Keywords_AI_API_Key",
+)
+
+keywordsai_params = {
+    "metadata": {
+        "paid_user": "true",
+    }
+    # Other keywordsai params
+}
+
+keywordsai_params_header = {
+    "X-Data-Keywordsai-Params": b64encode(json.dumps(keywordsai_params).encode()).decode(),
+}
+
+def test_file_search():
+    response = client.responses.create(
+        model="gpt-4o",
+        instructions="You are a helpful assistant.",
+        input="Hello!",
+        stream=True,
+        extra_headers=keywordsai_params_header,
+    )
+
+    for chunk in response:
+        print(chunk)
+
+
+if __name__ == "__main__":
+    test_file_search()
+```
+</CodeGroup>
+
+### Functions example
+<CodeGroup>
+```python Python
+from openai import OpenAI
+from base64 import b64encode
+import json
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/chat/completions",
+    api_key="Your_Keywords_AI_API_Key",
+)
+
+keywordsai_params = {
+    "metadata": {
+        "paid_user": "true",
+    }
+    # Other keywordsai params
+}
+
+keywordsai_params_header = {
+    "X-Data-Keywordsai-Params": b64encode(json.dumps(keywordsai_params).encode()).decode(),
+}
+
+def test_file_search():
+  tools = [
+        {
+            "type": "function",
+            "name": "get_current_weather",
+            "description": "Get the current weather in a given location",
+            "parameters": {
+            "type": "object",
+            "properties": {
+              "location": {
+                  "type": "string",
+                  "description": "The city and state, e.g. San Francisco, CA",
+              },
+              "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
+            },
+            "required": ["location", "unit"],
+        }
+        }
+    ]
+
+  response = client.responses.create(
+        model="gpt-4o",
+        tools=tools,
+        input="What is the weather like in Boston today?",
+        tool_choice="auto",
+        extra_headers=keywordsai_params_header,
+    )
+
+  print(response)
+
+
+if __name__ == "__main__":
+    test_file_search()
+```
+</CodeGroup>
+
+### Web Search example
+<CodeGroup>
+```python Python
+from openai import OpenAI
+from base64 import b64encode
+import json
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/chat/completions",
+    api_key="Your_Keywords_AI_API_Key",
+)   
+
+keywordsai_params = {
+    "metadata": {
+        "paid_user": "true",
+    }
+    # Other keywordsai params
+}
+
+keywordsai_params_header = {
+    "X-Data-Keywordsai-Params": b64encode(json.dumps(keywordsai_params).encode()).decode(),
+}
+
+def test_web_search():
+
+    response = client.responses.create(
+        model="o3-mini",
+        input="How much wood would a woodchuck chuck?",
+        reasoning={
+            "effort": "high"
+        },
+        extra_headers=keywordsai_params_header,
+    )
+
+    print(response.model_dump())
+
+if __name__ == "__main__":
+    test_web_search()
+```
+</CodeGroup>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
