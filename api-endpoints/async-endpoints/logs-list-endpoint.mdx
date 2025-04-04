@@ -1,42 +1,43 @@
 ---
 title: Log list
-api: GET https://api.keywordsai.co/api/request-logs/
+api: POST https://api.keywordsai.co/api/request-logs/
 ---
 
 The Logs List endpoint allows you to get the past logs with specified filters.
 
 
-## GET params
+## Query params
 You can add these params to the **URL params**.
 For example:
 ```
 "https://api.keywordsai.co/api/request-logs/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
 ```
 
-<ParamField path="sort_by" type="string" required>
+<ParamField query="sort_by" type="string" required>
   The field to sort by. Default is `-id` (same as sort by `-timestamp`, but with better performance).
   `-` is for descending order, if not provided, it will be in ascending order.
   <AccordionGroup>
     <Accordion title="Properties">
-        <ParamField name="id" type="string">
+        <ParamField body="id" type="string">
             Sort by the ID of each request.
         </ParamField>
-        <ParamField name="cost" type="string">
+        <ParamField body="cost" type="string">
             Sort by the cost of each request.
         </ParamField>
-        <ParamField name="time_to_first_token" type="string">
+        <ParamField body="time_to_first_token" type="string">
            TTFT - useful for Voice AI applications
         </ParamField>
-        <ParamField name="latency" type="string">
+        <ParamField body="latency" type="string">
           Generation time of each request.
         </ParamField>
-        <ParamField name="prompt_tokens" type="string">
+        <ParamField body="prompt_tokens" type="string">
           Input / prompt tokens of each request.
         </ParamField>
-        <ParamField name="completion_tokens" type="string">
+        <ParamField body="completion_tokens" type="string">
           Output / completion tokens of each request.
         </ParamField>
-        <ParamField name="all_tokens" type="string">
+        <ParamField body="all_tokens" type="string">
+          Total tokens of each request.
         </ParamField>
     </Accordion>
     <Accordion title="Example">
@@ -48,26 +49,26 @@ For example:
     </Accordion>
 </AccordionGroup>
 </ParamField>
-<ParamField path="all_envs" type="string" default="false">
+<ParamField query="all_envs" type="string" default="false">
   Whether to include logs from all environments. `is_test` parameter will override this parameter.
   Options: `true`, `false`.
 </ParamField>
 
-<ParamField path="is_test" type="string" default="false">
+<ParamField query="is_test" type="string" default="false">
   Whether the log is a test call or not. This parameter will override the `all_envs` parameter.
   Options: `true`, `false`.
 </ParamField>
 
-<ParamField path="fetch_filters" type="string" default="false">
+<ParamField query="fetch_filters" type="string" default="false">
   Whether to retrieve the available filtering options. Enabling this could slow down the response time.
   Options: `true`, `false`.
 </ParamField>
 
-<ParamField path="page_size" type="number" default={100}>
+<ParamField query="page_size" type="number" default={100}>
   The number of logs to return per page. Maximum is 1000.
 </ParamField>
 
-<ParamField path="page" type="number" default={1}>
+<ParamField query="page" type="number" default={1}>
   The page number of the current logs.
 </ParamField>
 
@@ -89,7 +90,7 @@ data = {
 response = requests.post(url, headers=headers, json=data)
 ```
 
-<ParamField path="filters" type="object" default={{}}>
+<ParamField body="filters" type="object" default={{}}>
   The filters be applied to the logs. For available options in the response body, use the `fetch_filters` parameter.
 <Accordion title="Example">
   ```json
@@ -103,10 +104,10 @@ response = requests.post(url, headers=headers, json=data)
   </Accordion>
 </ParamField>
 
-<ParamField path="operator" type="string" required>
+<ParamField body="operator" type="string" required>
   Default is "" (equal).
   <Accordion title="Properties">
-        <ParamField name=" " type="string">
+        <ParamField body=" " type="string">
             Equal
             <Accordion title="Example">
             ```json
@@ -119,35 +120,35 @@ response = requests.post(url, headers=headers, json=data)
             ```
             </Accordion>
         </ParamField>
-        <ParamField name="iexact" type="string">
+        <ParamField body="iexact" type="string">
             case insensitive equal
         </ParamField>
-        <ParamField name="lt" type="string">
+        <ParamField body="lt" type="string">
            Less than
         </ParamField>
-        <ParamField name="lte" type="string">
+        <ParamField body="lte" type="string">
            Less than or equal
         </ParamField>
-        <ParamField name="gt" type="string">
+        <ParamField body="gt" type="string">
           Greater than
         </ParamField>
-        <ParamField name="gte" type="string">
+        <ParamField body="gte" type="string">
           Greater than or equal
         </ParamField>
-        <ParamField name="contains" type="string">
+        <ParamField body="contains" type="string">
         </ParamField>
-        <ParamField name="endswith" type="string">
+        <ParamField body="endswith" type="string">
         </ParamField>
-        <ParamField name="in" type="string">
+        <ParamField body="in" type="string">
           Can be used in arrays or text
         </ParamField>
-        <ParamField name="isnull" type="string">
+        <ParamField body="isnull" type="string">
           Check if the field is null
         </ParamField>
-        <ParamField name="icontains" type="string">
+        <ParamField body="icontains" type="string">
           Case insensitive contains
         </ParamField>
-        <ParamField name="not" type="string">
+        <ParamField body="not" type="string">
         </ParamField>
     </Accordion>
 
