@@ -72,7 +72,8 @@
                     ]
                   },
                   "features/monitoring/traces/traces-keywords-params",
-                  "features/monitoring/traces/group-traces"
+                  "features/monitoring/traces/group-traces",
+                  "features/monitoring/traces/views"
                 ]
               },
               {
@@ -307,7 +308,13 @@
               },
               "integration/development-frameworks/anthropic",
               "integration/development-frameworks/langchain",
-              "integration/development-frameworks/vercel",
+              {
+                "group": "Vercel AI SDK",
+                "pages": [
+                  "integration/development-frameworks/vercel",
+                  "integration/development-frameworks/vercel-tracing"
+                ]
+              },
               "integration/development-frameworks/llama-index",
               "integration/development-frameworks/baml",
               "integration/development-frameworks/mem0"
