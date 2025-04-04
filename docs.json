@@ -223,6 +223,12 @@
             ]
           },
           {
+            "group": "Threads",
+            "pages": [
+              "api-endpoints/async-endpoints/thread-list-endpoint"
+            ]
+          },
+          {
             "group": "Prompt",
             "pages": [
               {
