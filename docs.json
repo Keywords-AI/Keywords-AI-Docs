@@ -321,9 +321,9 @@
                   "integration/development-frameworks/vercel-tracing"
                 ]
               },
+              "integration/development-frameworks/mem0",
               "integration/development-frameworks/llama-index",
-              "integration/development-frameworks/baml",
-              "integration/development-frameworks/mem0"
+              "integration/development-frameworks/baml"
             ]
           },
           {
