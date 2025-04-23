@@ -547,9 +547,9 @@ This parameter specifies the cache options. Currently we support `cache_by_custo
     <ParamField body="variables" type="object">
       The variables to replace in the prompt template.
     </ParamField>
-    <ParamField body="version" type="number">
+    {/* <ParamField body="version" type="number">
       The version of the prompt to use. If not specified, the latest version will be used.
-    </ParamField>
+    </ParamField> */}
 <ParamField body="echo" type="boolean" default={true}>
   With echo on, the response body will have an extra field. This is an optional parameter.
 ```json
@@ -611,7 +611,6 @@ This parameter allows you to control how you can override the parameters in the 
       "variables": {
         "variable_name": "variable_value"
       },
-      "version": 1
       // "echo": true //optional parameter
     }
 }
