@@ -229,17 +229,14 @@
             ]
           },
           {
-            "group": "Prompt",
+            "group": "Prompts",
             "pages": [
-              {
-                "group": "Prompts",
-                "pages": [
                   "api-endpoints/prompt-endpoints/create-prompts",
                   "api-endpoints/prompt-endpoints/get-prompts",
                   "api-endpoints/prompt-endpoints/update-prompt",
                   "api-endpoints/prompt-endpoints/delete-prompt"
                 ]
-              },
+            },
               {
                 "group": "Prompt versions",
                 "pages": [
@@ -248,9 +245,7 @@
                   "api-endpoints/prompt-endpoints/update-prompt-version",
                   "api-endpoints/prompt-endpoints/delete-prompt-version"
                 ]
-              }
-            ]
-          },
+              },
           {
             "group": "Multimodal integrations",
             "pages": [
