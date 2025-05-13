@@ -53,6 +53,7 @@
                   "features/monitoring/logging/metadata",
                   "features/monitoring/logging/logs-export",
                   "features/monitoring/logging/share-log",
+                  "features/monitoring/logging/group-logs",
                   "features/monitoring/logging/log-prompt-variable",
                   "features/monitoring/logging/embedding",
                   "features/monitoring/logging/disable-logs"
