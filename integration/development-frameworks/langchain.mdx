@@ -2,7 +2,8 @@
 title: LangChain SDK
 description: "Use LangChain with Keywords AI"
 ---
-
+<Tabs>
+<Tab title=" LangChain OpenAI">
 You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint with LangChain's `ChatOpenAI` LLM under two lines of code change.
 <CodeGroup>
 ```Python Python
@@ -58,3 +59,11 @@ main()
 In `extra_body`, you can pass in any [OpenAI parameters](/api-endpoints/proxy-endpoints/chat-completions#openai-parameters). 
 
 To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can specify an `extra_body` object within `model_kwargs`. In the above example, `customer_identifier` is the Keywords AI parameter. These parameters will take precedence over the OpenAI parameters if they are conflicting.
+</Tab>
+
+{/* <Tab title="LangChain Anthropic">
+You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint with LangChain's `ChatAnthropic` LLM under two lines of code change.
+
+
+</Tab> */}
+</Tabs>
