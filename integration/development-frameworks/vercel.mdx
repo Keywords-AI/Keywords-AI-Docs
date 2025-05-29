@@ -5,9 +5,11 @@ og:title: 'LLM logging with Vercel AI SDK'
 ---
 
 You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint with Vercel AI SDK under two lines of code change.
-## Example
+<Tabs>
+<Tab title="OpenAI">
+Here's an example of how to use the Vercel AI SDK with OpenAI:
 <CodeGroup>
-```TypeScript OpenAI
+```TypeScript OpenAI.tsx
 import { createOpenAI, OpenAIProvider } from '@ai-sdk/openai'
 import { streamText, streamObject } from 'ai'
 
@@ -45,18 +47,22 @@ async function main() {
 
 main()
 ```
-
-```TypeScript Anthropic
+</CodeGroup>
+</Tab>
+<Tab title="Anthropic">
+Here's an example of how to use the Vercel AI SDK with Anthropic:
+<CodeGroup>
+```TypeScript Anthropic.tsx
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { streamText, convertToCoreMessages } from 'ai';
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
-const anthropic = createAnthropic({
-    baseURL: "https://api.keywordsai.co/api/anthropic/v1",
-    apiKey: "Keywords AI API Key",
-   });
+export const anthropic: AnthropicProvider = createAnthropic({
+  baseURL: "https://api.keywordsai.co/api/anthropic/v1",
+  apiKey: process.env.KEYWORDS_AI_API_KEY,
+});
    
 
 export async function POST(req: Request) {
@@ -71,7 +77,41 @@ export async function POST(req: Request) {
 }
 ```
 </CodeGroup>
+</Tab>
 
+<Tab title="Google Gemini">
+Here's an example of how to use the Vercel AI SDK with Google Gemini:
+```TypeScript Google Gemini.tsx
+import {
+  createGoogleGenerativeAI,
+  GoogleGenerativeAIProviderOptions,
+} from "@ai-sdk/google";
+import { generateText, streamText } from "ai";
+
+
+const url = `https://api.keywordsai.co/api/google/`;
+
+const google = createGoogleGenerativeAI({
+  // custom settings
+  baseURL: url,
+  apiKey: process.env.KEYWORDSAI_API_KEY,
+  
+});
+
+const { text } = await generateText({
+  model: google("gemini-2.0-flash"),
+  providerOptions: {
+    google: {
+      responseModalities: ["TEXT", "IMAGE"],
+    } satisfies GoogleGenerativeAIProviderOptions,
+  },
+  prompt: "Hello, how are you?",
+  temperature: 0.5,
+});
+```
+</Tab>
+
+</Tabs>
 
 {/* ## Vercel AI SDK Core Functions:
 

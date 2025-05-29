@@ -261,10 +261,50 @@ Pass this parameter in if you want to log your self-host / fine-tuned model.
 </ParamField>
 
 <ParamField body="response_format" type="object">
-  The format of the response.
-  <Accordion title="Properties">
-    <ParamField body="type" type="string" required>
-    The type of the response. Currently, only `text`, `json_schema`, `json_object` are supported.
+  Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs which ensures the model will match your supplied JSON schema.
+
+  Setting to `{ "type": "json_object" }` enables the older JSON mode, which ensures the message the model generates is valid JSON. Using json_schema is preferred for models that support it.
+  <Accordion title="Possible types">
+    <ParamField body="Text" type="Object">
+      Default response format. Used to generate text responses.
+      <Accordion title="Properties">
+        <ParamField body="type" type="string" required>
+    The type of response format being defined. Always `text`.
+        </ParamField>
+      </Accordion>
+    </ParamField>
+    <ParamField body="JSON Schema" type="Object">
+      JSON Schema response format. Used to generate structured JSON responses.
+      <Accordion title="Properties">
+        <ParamField body="type" type="string" required>
+        The type of response format being defined. Always `json_schema`.
+        </ParamField>
+        <ParamField body="json_schema" type="object" required>
+          Structured Outputs configuration options, including a JSON Schema.
+          <Accordion title="Properties">
+            <ParamField body="name" type="string" required>
+              The name of the response format. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64.
+            </ParamField>
+            <ParamField body="description" type="string" >
+            A description of what the response format is for, used by the model to determine how to respond in the format.
+            </ParamField>
+            <ParamField body="strict" type="boolean" required>
+            Whether to enable strict schema adherence when generating the output. If set to true, the model will always follow the exact schema defined in the `schema` field. Only a subset of JSON Schema is supported when `strict` is `true`.
+            </ParamField>
+            <ParamField body="schema" type="object" required>
+            The schema for the response format, described as a JSON Schema object.
+            </ParamField>
+          </Accordion>
+        </ParamField>
+      </Accordion>
+    </ParamField>
+    <ParamField body="JSON Object" type="Object">
+      JSON object response format. An older method of generating JSON responses. Using json_schema is recommended for models that support it. Note that the model will not generate JSON without a system or user message instructing it to do so.
+      <Accordion title="Properties">
+        <ParamField body="type" type="string" required>
+    The type of response format being defined. Always `json_object`.
+        </ParamField>
+      </Accordion>
     </ParamField>
   </Accordion>
 </ParamField>
