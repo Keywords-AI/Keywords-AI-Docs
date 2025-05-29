@@ -92,6 +92,8 @@ response = requests.post(url, headers=headers, json=data)
 
 <ParamField body="filters" type="object" default={{}}>
   The filters be applied to the logs. For available options in the response body, use the `fetch_filters` parameter.
+
+<Note>If you want to filter your custom properties, you should add `metadata__`+ your custom property name. For example, if you want to filter your custom property `my_custom_property`, you should add `metadata__my_custom_property` to the filters.</Note>
 <Accordion title="Example">
   ```json
     {
@@ -101,6 +103,7 @@ response = requests.post(url, headers=headers, json=data)
       },
     }
 ```
+
   </Accordion>
 </ParamField>
 
