@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "maple",
   "name": "Docs",
   "colors": {
     "primary": "#6483F0",
@@ -8,6 +8,14 @@
     "dark": "#05050A"
   },
   "favicon": "/logo.svg",
+  "contextual": {
+      "options": [
+        "copy",
+        "view",
+        "chatgpt",
+        "claude"
+      ]
+    },
   "navigation": {
     "tabs": [
       {
@@ -17,14 +25,7 @@
             "group": "Get started",
             "pages": [
               "get-started/overview",
-              {
-                "group": "Getting started",
-                "pages": [
-                  "get-started/async-logging",
-                  "get-started/llm-inference",
-                  "get-started/prompt-engineering"
-                ]
-              }
+                  "get-started/llm-inference"
             ]
           },
           {
