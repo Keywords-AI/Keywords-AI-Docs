@@ -25,7 +25,7 @@
             "group": "Get started",
             "pages": [
               "get-started/overview",
-              "get-started/llm-inference"
+                  "get-started/llm-inference"
             ]
           },
           {
@@ -128,14 +128,6 @@
             "pages": [
               "features/evaluation/overview",
               {
-                "group": "Experiments",
-                "pages": [
-                  "features/evaluation/experiments/overview",
-                  "features/evaluation/experiments/experiments",
-                  "features/evaluation/experiments/datasets"
-                ]
-              },
-              {
                 "group": "LLM evals",
                 "pages": [
                   "features/evaluation/llm-evals/llm-evaluator",
@@ -148,6 +140,13 @@
                 "pages": [
                   "features/evaluation/human-evals/human-evals-setup",
                   "features/evaluation/human-evals/human-annotation"
+                ]
+              },
+              {
+                "group": "Testsets & Experiments",
+                "pages": [
+                  "features/evaluation/experiments/overview",
+                  "features/evaluation/experiments/datasets"
                 ]
               }
             ]
@@ -292,6 +291,7 @@
           {
             "group": "LLM Frameworks",
             "pages": [
+<<<<<<< HEAD
               {
                 "group": "OpenAI Agents SDK",
                 "pages": [
@@ -299,6 +299,9 @@
                   "integration/development-frameworks/openai-agents-sdk-js"
                 ]
               },
+=======
+              "integration/development-frameworks/openai-agents-sdk",
+>>>>>>> 56f1b52d777e9f8f10ba4f9cc81608f7c82b8c6b
               {
                 "group": "OpenAI SDK",
                 "pages": [
@@ -329,7 +332,6 @@
               "integration/providers/azure",
               "integration/providers/vertex",
               "integration/providers/bedrock",
-              "integration/providers/nebius",
               "integration/providers/groq",
               "integration/providers/assemblyai",
               "integration/providers/Fireworks",
