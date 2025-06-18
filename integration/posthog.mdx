@@ -1,0 +1,33 @@
+---
+title: "PostHog"
+description: "PostHog is an open-source product analytics platform, you can monitor your product traffic and user sessions with PostHog. Now you can connect PostHog with Keywords AI to monitor your LLM performance and get observability."
+---
+
+<Steps>
+
+<Step title="Create your PostHog account">
+Go to [PostHog](https://posthog.com/) and create an account. Go to your [PostHog project settings](https://us.posthog.com/settings/project) and get your PostHog API key and host.
+</Step>
+
+<Step title="Add 1 parameter to your request body">
+```json
+{
+// other parameters
+"posthog_integration": {
+        "posthog_api_key":"USER_POSTHOG_API_KEY",
+        "posthog_base_url":"USER_POSTHOG_ENDPOINT" // usually https://eu.posthog.com or https://us.posthog.com
+    }
+}
+
+```
+</Step>
+
+<Step title="Use Keywords AI template to create a dashboard">
+You can use the [official Keywords AI template in PostHog](https://us.posthog.com/shared/p1AymhS7EEm97nZOGA8nWmsdshhzYA) to create a dashboard to monitor your LLM performance.
+
+<img  width="700"  src="/images/posthog.png" />
+
+</Step>
+
+</Steps>
+

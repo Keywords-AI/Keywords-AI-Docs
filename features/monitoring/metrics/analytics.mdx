@@ -1,0 +1,151 @@
+---
+title: Dashboard
+description: A guide to customize your metrics dashboard in Keywords AI for complete LLM application observability.
+---
+
+## What is the usage dashboard?
+The usage dashboard is a comprehensive dashboard that provides a detailed overview of your LLM usage and spending. It allows you to monitor your LLM usage and spending in real-time, and to customize the metrics and breakdowns to suit your needs.
+
+## It's useful for you if:
+- You want to monitor your LLM usage and spending in real-time
+- You want to customize the metrics and breakdowns to suit your needs
+- You want to understand your users and their behavior on your LLM applications
+- You want to track each prompt's performance
+
+
+## How to build a custom dashboard
+
+### Display options
+You can customize which metrics appear on your dashboard by clicking the `Edit graph` button in the top right corner.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/edit-dashboard.png" alt="Dashboard Edit Graph"/>
+</Frame>
+
+A window will appear with various graph options to choose from.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/choose-graphs.png" alt="Dashboard Edit Graph"/>
+</Frame>
+
+### Available Metrics
+Keywords AI provides over 20 metrics covering LLM usage and user behavior. Here's what you can monitor:
+
+**Performance Metrics**
+- Number of requests
+- Number of errors
+- Generation time (Latency)
+- TTFT (Time to First Token)
+- Speed (tokens per second)
+- Max tokens per minute (TPM)
+
+**Token Usage**
+- Prompt tokens
+- Output tokens
+- Total tokens
+- Total cost
+
+**User Analytics**
+- Total users
+- Active users
+- Average cost per user
+
+**Resource Distribution**
+- Top models
+- Top API keys
+- Top users
+- Top deployments
+
+{/* ## Prerequisites
+To use Keywords AI observability features, you should have integrated our [LLM proxy](/get-started/llm-inference.mdx) or [async logging API](/get-started/async-logging.mdx) into your codebase. After that, you can use Keywords AI to get complete observability for your apps.
+
+## Usage dashboard
+Keywords AI provides a comprehensive dashboard to monitor your LLM usage and spending. Once you have integrated our [LLM proxy](/get-started/llm-inference.mdx) or [async logging API](/get-started/async-logging.mdx) into your application, you can see the usage and spending of your LLM applications.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/dashboard.png" alt="Dashboard Page"/>
+</Frame>
+
+## Logs
+In the logs page, you can check details of each LLM request and response. The logs contain useful information including the request, response, model used, and costs — making it helpful for debugging and monitoring.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/logs.jpg" alt="Logs Page"/>
+</Frame>
+
+### Metadata of each log
+We built a side panel for our users to get more details of each log. When you are in the `Metadata` tab, you can see the metadata of the log, including Speed metrics, cost, and more.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/side-panel-metadata.png" alt="Logs Side Panel"/>
+</Frame>
+
+### Request and response
+By clicking on the `Log` tab, you can see the whole conversation between the LLM and the user.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/side-panel-log.png" alt="Logs Side Panel"/>
+</Frame>
+
+## User analytics
+Keywords AI provides a Users page to help you understand your users and their behavior on your LLM applications. When you send a request to the LLM, you can pass a `customer_params` to the request. Keywords AI will use this parameter to track the user's behavior on your LLM applications.
+
+<Card title="Learn how to enable user analytics" href="/guides/user-analytics" icon="user-magnifying-glass" horizontal={true}>
+</Card>
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/user-monitoring.png" alt="Users Page"/>
+</Frame>
+
+## Prompt monitoring
+You can track each prompt's performance with a simple mini dashboard.
+
+It helps you gain better insight and control over your prompts.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/prompt-monitoring.gif" alt="Prompt Monitoring"/>
+</Frame>
+
+<Tip>
+You can learn more about prompt monitoring in our [prompt monitoring guide](/guides/prompt-monitoring).
+</Tip>
+
+{/* ## Dashboard Components */}
+
+{/* ## Example
+Let's take a look at an example of seeing the latency of the API requests over the month with a breakdown by models
+
+1. Select the `Latency` metric
+<img src="/images/platform-features/dashboard/latency.png" alt="Dashboard Select Latency" />
+2. Select the display timeline type to `Month`.
+<img src="/images/platform-features/dashboard/month-timeline.png" alt="Dashboard Select Latency" />
+3. Select the breakdown type to `Model`.
+<img src="/images/platform-features/dashboard/breakdown-model.png" alt="Dashboard Select Latency" />
+
+Let's see the result:
+<img src="/images/platform-features/dashboard/latency-breakdown-model.png" alt="Dashboard Select Latency" />
+
+Looks pretty good!
+
+4. You can open the side panel to see the summary of the breakdown by clicking the icon on the right of the control bar:
+<img src="/images/platform-features/dashboard/highlight-side-panel.png" alt="Dashboard Select Latency" />
+Click open the side panel:
+<img src="/images/platform-features/dashboard/side-panel.png" alt="Dashboard Select Latency" />
+
+Great! You can try different combinations of metrics and breakdown types to learn more about your API usage. */}
+
+{/* ## Advanced Usage
+You can use a combination of hotkeys to your advantage to quickly navigate through the dashboard page.
+| Action| Shortcut |
+|---|---|
+| Show timeline options | `t` |
+| Show display options | `d` |
+
+You can quickly pick an option with the following key bindings:
+| Dropdown | Options & Shortcut |
+|---|---|
+| Timeline | `1`:Day `2`: Week `3`: Month `4`:Year|
+| Metric | `1`: Request `2`: Errors `3`: Latency `4`: TTFT `5`: Prompt tokens `6`: Output tokens `7`: All tokens `8`: Total cost|
+| Type | `1`: Total `2`: Average|
+| Breakdown | `1`:None, `2`: Model, `3`: API key| */}
+

@@ -1,0 +1,102 @@
+---
+title: "Group traces"
+description: "Group traces across different sessions by a trace group id."
+---
+
+Use `trace_group_identifier` to group related traces and workflows together, even if they run in different sessions or systems.
+
+Here's an example of grouped workflows:👇
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/traces/trace-group.png" alt="Group traces" />
+</Frame>
+
+
+
+## Quickstart
+
+Add the same `trace_group_identifier` to multiple workflows to group them together.
+
+
+<Tabs>
+<Tab title="Python">
+```python Python {17-20, 26-29}
+from keywordsai_tracing.decorators import workflow, task
+from keywordsai_tracing.main import KeywordsAITelemetry
+from keywordsai_tracing.contexts.span import keywordsai_span_attributes
+
+k_tl = KeywordsAITelemetry()
+
+@task(name="joke_creation")
+def create_joke():
+    # This is the joke creation task
+
+@workflow(name="pirate_joke_generator")
+def joke_workflow():
+    # This is the joke creation workflow
+
+@workflow(name="pirate_joke_plus_audience_reactions")
+def pirate_joke_plus_audience():
+    with keywordsai_span_attributes(
+        keywordsai_params={
+            "trace_group_identifier": "pirate_joke_id"
+        }): 
+        joke = joke_workflow() # This show case the basic workflow usage and compatibility with the OpenAI SDK
+    return "python"
+
+@workflow(name="pirate_joke_plus_audience_reactions")
+def another_workflow():    
+  with keywordsai_span_attributes(
+        keywordsai_params={
+            "trace_group_identifier": "pirate_joke_id" # same trace group identifier as the previous workflow
+        }):
+        # This is the another workflow
+    return "python"
+```
+</Tab>
+<Tab title="JS/TS">
+
+```typescript TypeScript {11-18, 27-34}
+import { KeywordsAITelemetry } from "@keywordsai/tracing";
+
+const keywordsAI = new KeywordsAITelemetry({
+    // any config
+});
+
+async function testTask() {// any task or workflow
+}
+
+async function testWorkflow() {
+  return await keywordsAI.withWorkflow({ name: "test" }, async () => {
+    keywordsAI.withKeywordsAISpanAttributes(
+      async () => {
+        testTask();
+      },
+      {
+        trace_group_identifier: "some_trace_group_identifier",
+      }
+    );
+    return "test workflow";
+  });
+}
+
+testWorkflow();
+
+async function another_testWorkflow() {
+  return await keywordsAI.withWorkflow({ name: "test_another_workflow" }, async () => {
+    keywordsAI.withKeywordsAISpanAttributes(
+      async () => {
+     // any task or workflow
+      },
+      {
+        trace_group_identifier: "some_trace_group_identifier", // same trace group identifier as the previous workflow
+      }
+    );
+    return "test workflow no.2";
+  });
+}
+
+another_testWorkflow();
+
+```
+</Tab>
+</Tabs>

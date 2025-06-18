@@ -1,0 +1,43 @@
+---
+title: "Retries"
+description: "When an LLM call fails, our system detects the error and retries the request to prevent failovers."
+---
+
+There are 2 ways to enable Retries and set the number of retries and the time to wait before retrying:
+## Add it from the UI
+Go to the [Retries page](https://platform.keywordsai.co/platform/api/retries) and enable retries and set the number of retries and the initial retry time.
+<Frame>
+<img height="200" width="500"  src="/images/api-features/retries.png" alt="Retries Page"/>
+</Frame>
+
+
+## Add it in code
+You can also add the retry parameters in the request body to enable retries and set the number of retries and the time to wait before retrying.
+```json 
+{
+// ...some other Keywords AI params...
+    "retry_params": {
+        "num_retries": 3,
+        "retry_after": 0.1,  // seconds, minimum time to wait before retry.
+        "retry_enabled": true
+    }
+}
+```
+
+## Supported parameters
+
+<ResponseField name="retry_params" type="object">
+    Enable or disable retries and set the number of retries and the time to wait before retrying.
+  <Accordion title="Properties">
+    <ResponseField name="retry_enabled" type="boolean" required>
+        Enable or disable retries.
+    </ResponseField>
+    <ResponseField name="num_retries" type="number">
+        The number of retries to attempt.
+    </ResponseField>
+    <ResponseField name="retry_after" type="number">
+        The time to wait before retrying in seconds.
+    </ResponseField>
+  </Accordion>
+</ResponseField>
+

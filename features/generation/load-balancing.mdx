@@ -1,0 +1,252 @@
+---
+title: "Load balancing"
+description: "Increase your LLM rate limits with our load balancing feature."
+---
+
+Load balancing is a feature that allows you to balance the request load across different deployments. You could specify weights for each deployment based on their rate limit and your preference.
+
+_See all supported params [here](/api-endpoints/integration/chat-completions)._
+
+
+## Load balancing between models
+You could specify the load balancing weights for different models. This is useful when you want to balance the load between different models from different providers. 
+
+
+<Steps>
+    <Step title="Go to the Load balancing page">
+        Go to the [Load balancing page](https://platform.keywordsai.co/platform/api/load-balance) and click on `Create new load balancer`
+        <Frame>
+        <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/load-balancing.jpg" alt="Load balancing group"/>
+        </Frame>
+    </Step>
+    <Step title="Add models">
+        Click `Add model` to add models and specify the weight for each model and add your own credentials.
+    </Step>
+        <Step title="Copy group ID to your codebase">
+        After you have added the models, copy the group ID (**the blue text**) to your codebase and use it in your requests.
+
+<Note> **The `model` parameter will overwrite the `load_balance_group`!**  </Note>
+```json
+{
+// you don't need to specify the model parameter, otherwise, the model parameter will overwrite the load balance group
+    "messages": [
+        {
+            "role": "user",
+            "content": "Hi, how are you?"
+        }
+    ],
+    "load_balance_group": {
+        "group_id":"THE_GROUP_ID" // from Load balancing page
+    }
+}
+```
+    </Step>
+
+    <Step title="Add load balancing group in code (Optional)">
+    You could also add the load balancing group in your codebase directly. 
+
+    The `models` field will overwrite the `load_balance_group` you specified in the UI.
+    <Accordion title="Example code">
+```json
+{
+  "load_balance_group": {
+      "group_id":"THE_GROUP_ID", // from Load balancing page
+      "models": [
+        {
+          "model": "azure/gpt-35-turbo",
+          "weight": 1
+        },
+        {
+          "model": "azure/gpt-4",
+          "credentials": { // add your own credentials if you want to use your own Azure credentials or custom model name
+              "api_base": "Your own Azure api_base",
+              "api_version": "Your own Azure api_version",
+              "api_key": "Your own Azure api_key"
+          },
+          "weight": 1
+        } 
+      ]
+  }
+}
+```
+    </Accordion>
+    </Step>
+</Steps>
+
+
+### Fallback usage in load balancing
+You could also set up fallback models to avoid errors. It will fall back to the list of models you specified in the `fallback` field once have any outages. Check out the [Fallbacks](/features/generation/fallbacks) section for more information.
+
+
+
+
+## Load balancing between deployments
+
+### What is a deployment?
+
+A deployment basically means a credential. If you add an OpenAI API key, you can say that you have one deployment. If you add 2 OpenAI API keys, you can say that you have 2 deployments.
+
+### In the platform
+
+You could go to the platform and add multiple deployments for the same provider. You could specify the load balancing weights for each deployment, which could be helpful when you want to enhance rate limits for a single provider.
+
+<video
+  controls
+  className="w-full aspect-video"
+  src="/images/api-features/webhooks/loadbalancing.mp4"
+></video>
+
+### In the codebase
+
+You could also load balance between deployments in your codebase. You can add different deployments in the `customer_credentials` field and specify the weight for each deployment.
+
+**Example:**
+
+```json
+{
+  "customer_credentials": [
+    {
+        "credentials": {
+            "openai": {
+                "api_key": "YOUR_OPENAI_API_KEY",
+            }
+        },
+        "weight": 1.0 // The weight of the deployment
+    },
+    {
+        "credentials": {
+            "openai": {
+                "api_key": "YOUR_OPENAI_API_KEY", // Another deployment
+            }
+        },
+        "weight": 1.0 // The weight of the deployment
+    },
+  ],
+}
+```
+In this example, requests to OpenAI models will be evenly distributed between the two deployments based on their specified weights.
+
+### Specify available models
+
+You could also specify the available models for load balancing. This is useful when you want to specify the models you want to load balance. For example, if you only want to use `gpt-3.5-turbo` in an OpenAI deployment, you could specify it in the `available_models` field or do it in the platform.
+
+Learn more about how to specify available models in the platform [here](/integration/providers/azure).
+
+Example code:
+```json
+{
+  "customer_credentials": [
+    {
+        "credentials": {
+            "openai": {
+                "api_key": "YOUR_OPENAI_API_KEY",
+            }
+        },
+        "weight": 1.0, // The weight of the deployment
+        "available_models": ["gpt-3.5-turbo"],
+        "exclude_models": ["gpt-4"] // Exclude gpt-4 from this deployment
+    },
+    {
+        "credentials": {
+            "openai": {
+                "api_key": "YOUR_OPENAI_API_KEY", // Another deployment
+            }
+        },
+        "weight": 1.0, // The weight of the deployment
+    },
+  ],
+}
+```
+
+In this example, requests to OpenAI models will be distributed between the two deployments, with the first deployment only handling gpt-3.5-turbo requests and explicitly excluding gpt-4, while the second deployment can handle requests for any OpenAI model.
+
+Based on the deployment weights and model configurations:
+- GPT-3.5-turbo requests are evenly split (50/50) between both deployments
+- GPT-4 requests are routed exclusively to the second deployment since it's excluded from the first
+- All other model requests are distributed evenly between deployments according to their weights
+
+{/* ## How load balancing works
+Under the hood, here is the pseudo-code of how the load balancing works:
+
+```python
+# Received model in the request
+model_name = "requested_model_from_request"
+# Load the model's param and its respective providers
+model: dict = keywords_ai_model_data[model_name] # A slice from our data
+
+fallback_models = model["load_balancing_fallbacks"]
+
+balancing_between = []
+for fallback in fallback_models:
+    fallback_param = pack_fallback_list_object(fallback)
+    """
+    A fallback_param looks something like this:
+    {
+        "model_name": "model_that_needs_a_fallback",
+        "fallback_name": "model_to_fallback_to",
+        "rate_limit": 1000,
+        "latency": This is live data from the provider based on daily ping
+    }
+    """
+    balancing_between.append(fallback_param)
+
+# ...Omit code until generation...
+# Randomly pick a provider based on the latency and rate_limit distribution
+model = pick_model_to_use(balancing_between)
+keywords_generation(module, **other_kwargs)
+
+```
+
+
+distribution = [rate_limit_1, rate_limit_2, rate_limit_3] / sum_of_rate_limits <br/>
+weights = add_latency_weight_to_distribution(distribution, [latency_1, latency_2, latency_3])<br/>
+model = random.choices(balancing_between, weights=weights) */} 
+
+
+## Deprecated params
+### loadbalance_models
+The `loadbalance_models` parameter is deprecated. You should use the `load_balance_group` parameter instead.
+<AccordionGroup>
+<Accordion title="Example code">
+```json
+{
+    // ...other parameters...
+    "loadbalance_models": [
+        {
+            "model": "claude-3-5-sonnet-20240620",
+            "weight": 34,
+            "credentials": { // Your own Anthropic API key, optional for team plan and above
+                "api_key": "Your own Anthropic API key"
+            }
+        },
+        {
+            "model": "azure/gpt-35-turbo",
+            "weight": 34,
+            "credentials": { // Your own Azure credentials, optional for team plan and above
+                "api_base": "Your own Azure api_base",
+                "api_version": "Your own Azure api_version",
+                "api_key": "Your own Azure api_key"
+            }
+        }
+    ]
+}
+```
+
+</Accordion>
+<Accordion title="Depracted params">
+<ParamField path="model" type="string" required>
+  Specify which model to balance load. See the list of models [here](/integration/supported-models). 
+</ParamField>
+<ParamField path="weight" type="integer" required>
+    Specify the weight of the model (has to be a positive integer). The higher the weight, the more requests will be sent to the model.
+</ParamField>
+<ParamField path="credentials" type="list" >
+This is required for all free plan users. For team plan and above, this is optional. <br/>
+See how to add your own credentials [here](/integration/providers/providers-overview).
+</ParamField>
+</Accordion>
+</AccordionGroup>
+
+{/* ### load_balance_group
+The `load_balance_group` parameter is deprecated. We currently don't support load balancing between models. If you want to load balance between models, contact us at [team@keywordsai.co](mailto:support@keywordsai.co). */}
+

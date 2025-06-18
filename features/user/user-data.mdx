@@ -1,0 +1,99 @@
+---
+title: User data
+description: The users page helps you keep track of your users. You can tag each of your API calls and we will keep track of the usage of each of your users.
+icon: "users"
+---
+
+The users page helps you keep track of your users. You can tag each of your API calls with a [customer_identifier](/features/generation/customer-identifier)
+and we will keep track of the usage of each of your users.
+
+
+We keep track of each user's behavior with the following metrics:
+- **Last active time:** When the user last made an API call
+- **Active for:** How long the user has been active in days
+- **Requests:** The number of API calls the user has made
+- **Tokens:** The number of tokens the user has used
+- **Cost:** The total cost of the user's API calls
+
+After making an API call with `customer_identifier`, specified, you can see the aggregated data of each users:
+
+<img src="/images/users-page/Users.png" alt="Users Page data" />
+
+## Sample code
+<Info>
+**Prerequisite**: You have made your first [API call](/get-started/quick-start)
+</Info>
+
+1. Add the `customer_identifier` to your API call
+```diff
+{
+    ...other_params,
++  "customer_identifier": "user_123"
+}
+```
+2. Call the function with the `customer_identifier` specified
+<CodeGroup>
+```python Python
+import requests
+
+def  keywords_ai_generate( 
+                messages, 
+                api_key=None,
+                **kwargs
+                ):
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Api-Key {api_key}',
+    }
+    data = {
+        "messages": messages,
+        **kwargs
+    }
+        
+    response = requests.post(
+        'https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+response = keywords_ai_generate(
+    messages=[{"role":"user", "content":"Hi"}], 
+                     model="gpt-3.5-turbo", 
+                     api_key="En5XoPkf.kSE2edr33UCjttnqhCzlN5tz5niosedg",
+                     # Add the customer_identifier
+                    customer_identifier="customer_1"
+              )
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Api-Key a4EUZEcl.RmrDVwbTI8yOFZNuKwSwYnrdCc03Qn6Z'
+  },
+    body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [{role: 'user', content: "Say 'Hello World'"}]
+        // Add the customer_identifier
+        customer_identifier: "customer_1"
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+</CodeGroup>
+
+3. Go to the [users page](https://keywordsai.co/platform/users) and you will see the user's data being logged
+
+## Edit user profile
+You could also add or edit your user's name or email by clicking on the user's name/email in the right sidebar.
+<img width="300" src="/images/users-page/user-edit.png"/>
+Check out to [User creation & update](/features/user/user-creation) for more actions you can take on the user's data.
+
+## Filter user on Logs page
+You could filter the logs by the user's name or email by clicking on the filter icon on the right sidebar.
+<img width="300" src="/images/users-page/filter.png"/>
+
+## User observability
+Go to our [dashboard](/features/monitoring/analytics#users) to see your user data in a more detailed view. You can see the user's data in the user's graph section.

@@ -1,0 +1,147 @@
+---
+title: "Experiments"
+description: "A spreadsheet-like interface built for multi-config prompt testing"
+---
+
+A spreadsheet-style editor for running prompts and models across multiple test cases. Import testsets to easily test, evaluate, and optimize your LLM outputs.
+{/* <Frame>
+<video
+  controls
+  className="w-full aspect-video"
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/lab%2Beval.mp4"
+></video>
+</Frame> */}
+## Prerequisites
+- You have already created at least one prompt in Keywords AI. Learn how to create a prompt [here](/features/prompt/create-a-prompt).
+- You have added variables to your prompt. Learn how to add variables to your prompt [here](/features/prompt/create-a-prompt#4-variables-in-the-prompt).
+
+## Setup
+
+### 1. Create a prompt with variables
+
+Use `{{variable}}` to define variables in your prompt. Configure your prompts in the side panel. Commit the prompt version.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-prompt-light.jpg" className="block dark:hidden" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-prompt-dark.jpg" className="hidden dark:block" />
+</Frame>
+
+### 2. Create a testset
+You have 2 ways to create a testset:
+
+<AccordionGroup>
+<Accordion title="Import a CSV file">
+You can import your testcases from a CSV file. Every column in the CSV file will be a variable in your prompt.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-csv.jpg" />
+</Frame>
+
+Click `Import from CSV` to import your testset.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-testsets-light.jpg" className="block dark:hidden" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-testsets-dark.jpg" className="hidden dark:block" />
+</Frame>
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-testsets-details-light.jpg" className="block dark:hidden" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-testsets-details-dark.jpg" className="hidden dark:block" />
+</Frame>
+
+<Note>
+You can create a column in the CSV file named `ideal_output` to specify the ideal output for each testcase.
+</Note>
+</Accordion>
+<Accordion title="Create a blank testset">
+1. Click `Create empty` to create a blank testset.
+2. Add testcases by clicking the `+ Add row` button in the testset.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-testsets-light.jpg" className="block dark:hidden" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-testsets-dark.jpg" className="hidden dark:block" />
+</Frame>
+</Accordion>
+</AccordionGroup>
+### 3. Create an experiment
+Create an experiment by clicking the `+ NEW experiment` button in the Experiments page and select the prompt and the versions you want to test.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-create-light.jpg" className="block dark:hidden" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-create-dark.jpg" className="hidden dark:block" />
+</Frame>
+
+Then you can add testcases for your experiment. You can either add testcases manually or import a testset from Testsets.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-import-testset-light.jpg" className="block dark:hidden" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-import-testset-dark.jpg" className="hidden dark:block" />
+</Frame>
+
+### 4. Compare the results
+After the experiment is finished, you can compare the results by scrolling down to the bottom of the page. You can easily find which prompt version has the best performance.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-runs-results-light.jpg" className="block dark:hidden" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-runs-results-dark.jpg" className="hidden dark:block" />
+</Frame>
+
+### 5. Use LLM to evaluate the results
+You can also use LLM to evaluate the results. Check out [LLM-as-judge](/features/evaluation/llm-evals/llm-evaluator) to learn how to create LLM evaluators.
+
+After you have created your LLM evaluators, you can run them to evaluate the results.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-evals-light.jpg" className="block dark:hidden" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-evals-dark.jpg" className="hidden dark:block" />
+</Frame>
+
+
+{/* <Steps>
+1. Go to Experiments and create a new experiment.
+2. Select the prompt and the versions you want to test.
+3. Add testcases for your experiment. You can either add testcases manually or import a testset from Testsets.
+
+
+<Step title="Create a testset (optional)">
+Go to Testsets and create a new testset, you can either import a CSV file or create a blank testset. You can check [Testsets](/features/prompt/testsets) to know more about testsets.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/testset-create.png" />
+</Frame>
+</Step>
+
+<Step title="Create an experiment">
+Go to Experiments and create a new experiment.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/experiment-create.png" />
+</Frame>
+
+Then you should select the prompt and the versions you want to test. 
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/experiment-select-prompt.png" />
+</Frame>
+</Step>
+
+<Step title="Add test cases">
+Then you should add test cases for your experiment. You can either add test cases manually or import a testset from Testsets.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/add-testcases.png" />
+</Frame>
+</Step>
+
+<Step title="Run the experiment">
+Now you can run the experiment. You can run a single cell by clicking the `Run` button in the each cell, or run all the cells by clicking the `Run all` button.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/run-experiments.png" />
+</Frame>
+</Step>
+
+<Step title="Run evaluations for outputs">
+After the experiment is finished, you can run evaluations for the outputs. You can check out [Run evaluations in the UI](/features/evaluation/llm-evals/run-evaluator-ui) to learn how to run evaluations.
+<Frame>
+<video
+  controls
+  className="w-full aspect-video"
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/evals-result.mp4"
+></video>
+</Frame>
+</Step>
+
+</Steps> */}
+{/* 
+## What's next?
+After you have evaluated the prompts, you can save the results to the [Logs page](/features/generation/logs) for further analysis. If you're satisfied with the results, you can deploy the prompt to your application. Check out the [Prompts page](/features/prompt/prompt-management) for more information.  */}

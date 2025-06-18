@@ -1,0 +1,69 @@
+---
+title: Embedding logging
+description: Learn how to log embedding models.
+---
+
+In Keywords AI, you can log outputs of embedding models. This is useful for a variety of use cases, such as semantic search, clustering, and more.
+
+
+You can use the same API endpoint to log embedding models.
+```
+https://api.keywordsai.co/api/request-logs/create/
+```
+
+**Here is an example of how to log an embedding model.**
+
+<CodeGroup>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+payload = {
+    "latency": 0.323887338,
+    "embedding": [
+        -0.006929283495992422,
+        -0.005336422007530928,
+        -4.547132266452536e-05,
+        -0.024047505110502243
+    ],
+    "log_type": "embedding",
+    "model": "text-embedding-3-small",
+    "input": "something to embed"
+}
+response = requests.request("POST", url, headers=headers, json=payload)
+```
+```typescript Typescript
+const url = 'https://api.keywordsai.co/api/request-logs/create/';
+const headers = {
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    latency: 0.323887338,
+    embedding: [
+        -0.006929283495992422,
+        -0.005336422007530928,
+        -4.547132266452536e-05,
+        -0.024047505110502243
+    ],
+    log_type: 'embedding',
+    model: 'text-embedding-3-small',
+    input: 'something to embed'
+};
+
+fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+})
+```
+</CodeGroup>

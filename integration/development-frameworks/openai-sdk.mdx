@@ -1,0 +1,159 @@
+---
+title: Chat completions
+description: Learn how to use OpenAI SDK with Keywords AI LLM proxy.
+---
+
+<Note> This integration is only for **Keywords AI LLM proxy** user. If you only want to log LLM calls and responses, you can use the [Logging API](/api-endpoints/integration/request-logging-endpoint) to log LLM calls. </Note>
+
+Keywords AI provides a robust and flexible LLM proxy with 250+ LLMs. You can use Keywords AI with OpenAI SDK by just passing the `base_url` and `api_key` to the OpenAI SDK.
+
+## Integration examples
+
+<Tabs>
+
+<Tab title="Python">
+```python {4-5}
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key=YOUR_KEYWORDSAI_API_KEY,
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role":"user", "content":"Tell me a long story"}],
+)
+```
+</Tab>
+<Tab title="TypeScript">
+```typescript {4-5}
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: process.env.KEYWORDS_AI_API_KEY,
+});
+
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-4o-mini",
+  })
+  .asResponse();
+
+console.log(await response.json());
+```
+</Tab>
+
+<Tab title="Go">
+```go Go
+package main
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/openai/openai-go"
+	"github.com/openai/openai-go/option"
+)
+
+func main() {
+	client := openai.NewClient(
+    options.WithBaseURL("https://api.keywordsai.co/api"),
+		option.WithAPIKey("KEYWORDSAI_API_KEY"), // defaults to os.LookupEnv("OPENAI_API_KEY")
+	)
+	chatCompletion, err := client.Chat.Completions.New(context.TODO(), openai.ChatCompletionNewParams{
+		Messages: openai.F([]openai.ChatCompletionMessageParamUnion{
+			 openai.UserMessage("Say this is a test"),
+		}),
+		Model: openai.F(openai.ChatModelGPT4o),
+	})
+	if err != nil {
+		panic(err.Error())
+	}
+	println(chatCompletion.Choices[0].Message.Content)
+}
+```
+</Tab>
+</Tabs>
+
+## Supported parameters
+### OpenAI parameters
+We support all the [OpenAI parameters](/api-endpoints/integration/chat-completions#openai-parameters). You can pass them directly in the request body.
+<Tabs>
+<Tab title="Python">
+You can pass Keywords AI parameters in the `extra_body` parameter.
+
+```python {4}
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Tell me a story"}],
+    stream=True,
+)
+```
+</Tab>
+
+<Tab title="TypeScript">
+For TypeScript, you should add a `// @ts-expect-error` to the parameter.
+
+```typescript {4}
+const response = await client.chat.completions.create({
+    messages: [{ role: "user", content: "Tell me a story" }],
+    model: "gpt-4o-mini",
+    stream: true,
+})
+```
+</Tab>
+</Tabs>
+
+
+### Keywords AI parameters
+[Keywords AI parameters](/api-endpoints/integration/chat-completions#keywords-ai-parameters) can be passed differently depending on your programming language:
+
+<Tabs>
+<Tab title="Python">
+You can pass Keywords AI parameters in the `extra_body` parameter.
+
+```python {4}
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Tell me a story"}],
+    extra_body={"customer_identifier": "test_user_1"}
+)
+```
+</Tab>
+
+<Tab title="TypeScript">
+For TypeScript, you should add a `// @ts-expect-error` to the parameter.
+
+```typescript {4-5}
+const response = await client.chat.completions.create({
+    messages: [{ role: "user", content: "Tell me a story" }],
+    model: "gpt-4o-mini",
+    // @ts-expect-error
+    customer_identifier: "test_user_1",
+})
+```
+</Tab>
+</Tabs>
+
+These parameters will take precedence over the OpenAI parameters if they are conflicting.
+
+## Call Azure OpenAI with OpenAI SDK
+
+To call Azure OpenAI models, instead of using azure OpenAI's client, the easier way is to use the OpenAI client.
+
+
+```python
+from openai import AsyncOpenAI
+
+azureaclient = AsyncOpenAI(
+    api_key=KEYWORDSAI_API_KEY,
+    base_url="https://api.keywordsai.co/api"
+)
+
+response = await azureaclient.chat.completions.create(**kwargs)
+```
+
+Then You can upload your Azure credentials to Keywords AI platform to use those models. Check out our [Providers integration](https://platform.keywordsai.co/platform/api/providers).

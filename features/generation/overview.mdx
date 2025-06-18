@@ -1,0 +1,26 @@
+---
+title: Overview
+description: Keywords AI LLM proxy supports you call 250+ LLMs using the same input/output format.
+---
+```mermaid
+  flowchart TD;
+    A[Input]-->B[LLM proxy];
+    B-->C[250+ LLMs];
+    B-->D[Model fallback];
+    B-->E[Load balancing];
+    B-->F[Prompt caching];
+    C-->Z[Optimized LLM Output];
+    D-->Z[Optimized LLM Output];
+    E-->Z[Optimized LLM Output];
+    F-->Z[Optimized LLM Output];
+```
+
+## Benefits of LLM proxy:
+- Call over 250 LLMs using the same format.
+- Ensure your LLM applications become more scalable and reliable.
+- Manage LLM costs in a single place.
+- Mange API keys in a single place without exposing them.
+
+## Considerations:
+- May not be suitable for products with strict latency requirements (**50 - 150ms** added).
+- May not be ideal for those who do not want to integrate a third-party service into the core of their application.

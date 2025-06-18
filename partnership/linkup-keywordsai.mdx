@@ -1,0 +1,121 @@
+---
+title: "Keywords AI"
+description: "How to use Keywords AI with Linkup to call 300+ LLMs and get LLM observability"
+noindex: true
+---
+
+[Keywords AI](https://www.keywordsai.co) is an LLM engineering platform that allows you to do monitoring, prompt management, and LLM evals.
+
+This tutorial will show you how to set up Linkup in the Keywords AI API payload to monitor LLM performance and usage. 
+
+## Setting Up Your Environment
+### 1. Get API Keys:
+<Note>
+You should get API keys from [Keywords AI](https://docs.keywordsai.co/get-started/overview) and Linkup.
+</Note>
+
+### 2. Set up AI gateway:
+The Keywords AI gateway allows you to call 300+ LLMs seamlessly and get observability synchronously.
+
+<CodeGroup>
+```python Python
+import requests
+def demo_call(input, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY"
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+
+```Typescript Typescript
+fetch('https://api.keywordsai.co/api/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY'
+  },
+    body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [{role: 'user', content: "Say 'Hello World'"}]
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+</CodeGroup>
+
+### 3. Add Linkup parameters to your request:
+**Example**
+```python Python {16-24}
+import requests
+
+def demo_call(input_text, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY"):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": input_text}
+        ],
+        "linkup_params": {
+                  "api_key": {{"YOUR_LINKUP_API_KEY"}},
+            "q": "What is Microsoft's 2024 revenue?",
+            "depth": "deep",
+            "outputType": "sourcedAnswer",
+            "includeImages": False
+        },
+        "variables": {
+            "company_name": "Microsoft"
+        },
+        "model": model
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+input_text = "Please provide information about {{ company_name }}'s 2024 revenue and cite your sources."
+response = demo_call(input_text)
+print(response.json())
+```
+
+with a prompt template:
+```python
+Please provide information about {{ company_name }}'s 2024 revenue and cite your sources.
+
+{% if linkup_search_response %}
+Here's what I found:
+{{ linkup_search_response.answer }}
+
+Sources:
+{% for source in linkup_search_response.sources %}
+- {{ source.name }}: {{ source.url }}
+{% endfor %}
+{% endif %}
+
+```
+
+
+
+### 4. Monitor LLM performance and usage
+After you set up the environment and run the request, you can see LLM logs in Keywords AI.
+<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/marketing/logs.png" alt="LLM logging" />
+

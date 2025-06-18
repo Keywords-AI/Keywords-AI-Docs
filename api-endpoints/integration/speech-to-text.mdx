@@ -1,0 +1,316 @@
+---
+title: Speech to text
+api: POST https://api.keywordsai.co/api/audio/transcription
+mode: wide
+---
+
+You could use Keywords AI's unified LLM API to call Speech-to-text model to turn audio into text.
+
+Keywords AI now supports `whisper-1` from OpenAI.
+
+
+## Integration steps:
+
+<Steps>
+<Step title="Get your OpenAI API key" >
+Go to [OpenAI API plaform](https://platform.openai.com/api-keys) to get your OpenAI API key.
+</Step>
+<Step title="Add OpenAI's API key in Providers" >
+You should add your OpenAI's API key on [Keywords AI credentials page](https://platform.keywordsai.co/platform/api/providers).
+<img height="200" width="500"  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg"/>
+</Step>
+
+<Step title="Call your speech-to-text model">
+<CodeGroup>
+```Python OpenAI Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+audio_file= open("/path/to/file/audio.mp3", "rb")
+
+response = client.audio.transcriptions.create(
+    model="whisper-1",
+    file=audio_file,
+    extra_body={"customer_identifier": "customer_11"}  # All Keywords AI parameters are supported
+)
+``` 
+
+```TypeScript OpenAI TypeScript
+import OpenAI from "openai";
+import fs from "fs";
+
+const openai = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api/",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const transcription = await openai.audio.transcriptions.create({
+  model: "whisper-1",
+  file: fs.createReadStream("/path/to/file/audio.mp3"),
+  extra_body: { customer_identifier: "customer_11" } // All Keywords AI parameters are supported
+});
+
+```
+```python Python
+import requests
+def demo_call(input, 
+              model="whisper-1",
+              token="YOUR_KEYWORDS_AI_API_KEY",
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'file': input,
+        'customer_identifier': "customer_11"
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/audio/transcription', headers=headers, json=data)
+    return response
+
+audio_file= open("/path/to/file/audio.mp3", "rb")
+print(demo_call(audio_file).json())
+```
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/audio/transcription', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY'
+  },
+    body: JSON.stringify({
+        model: 'whisper-1',
+        file: fs.createReadStream("/path/to/file/audio.mp3"),
+        customer_identifier: "customer_11"
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+</CodeGroup>
+</Step>
+
+</Steps>
+## OpenAI parameters 
+<ParamField path="file" type="file" required>
+The audio file object (not file name) translate, in one of these formats: flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm.
+</ParamField>
+<ParamField path="model" type="string" required>
+ID of the model to use. Only `whisper-1` is currently available.
+</ParamField>
+<ParamField path="language" type="string">
+The language of the input audio. Supplying the input language in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy and latency.
+</ParamField>
+<ParamField path="prompt" type="string">
+An optional text to guide the model's style or continue a previous audio segment. The [prompt](https://platform.openai.com/docs/guides/speech-to-text/prompting) should match the audio language.
+</ParamField>
+<ParamField path="response_format" type="string" default={"json"}>
+The format of the transcript output, in one of these options: `json`, `text`, `srt`, `verbose_json`, or `vtt`.
+</ParamField>
+<ParamField path="temperature" type="number" default={0}>
+The format of the transcript output, in one of these options: `json`, `text`, `srt`, `verbose_json`, or `vtt`.
+</ParamField>
+<ParamField path="timestamp_granularities" type="array" default={"segment"}>
+The timestamp granularities to populate for this transcription. response_format must be set verbose_json to use timestamp granularities. Either or both of these options are supported: `word`, or `segment`. Note: There is no additional latency for segment timestamps, but generating word timestamps incurs additional latency.
+</ParamField>
+
+
+## Keywords AI parameters
+See how to make a standard Keywords AI API call in the [Quick Start](/get-started/quick-start) guide.
+### Generation parameters
+
+<ParamField path="customer_credentials" type="object">
+You can pass in your customer's credentials for [supported providers](/integration/providers/providers-overview) and use their credits when our proxy is calling models from those providers. <br/>See details [here](/integration/own-api-keys)
+<Accordion title="Example">
+```json
+"customer_credentials": {
+
+  "openai": {
+    "api_key": "YOUR_OPENAI_API_KEY",
+  }
+}
+```
+</Accordion>
+</ParamField>
+
+
+<ParamField path="disable_log" type="boolean" deafault={false}>
+  When set to true, only the request and [performance
+  metrics](/performance-monitoring/monitoring-metrics) will be recorded, input
+  and output messages will be omitted from the log.
+</ParamField>
+
+### Observability parameters
+
+<ParamField path="metadata" type="dict">
+You can add any key-value pair to this metadata field for your reference. Check the [details of metadata here.](/features/generation/metadata)
+
+Contact team@keywordsai.co if you need extra parameter support for your use case.
+
+<Accordion title="Example">
+```json
+{
+  "my_value_key": "my_value"
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField path="customer_identifier" type="string">
+  Use this as a tag to identify the user associated with the API call. See the [details of customer identifier here.](/features/generation/customer-identifier)
+  <Accordion title="Example">
+```json
+{
+    //...other_params,
+    "customer_identifier": "user_123"
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField path="customer_email" type="string">
+  This is the email address of the user associated with the API call. You can add your corresponding user's email address to the request.
+  
+  You could also edit customer's emails on the platform. Check the [details of user editing here.](/features/user/user-creation)
+    <Accordion title="Example">
+```json
+{
+    //...other_params,
+    "customer_email": "hendrix@keywordsai.co"
+}
+```
+</Accordion>
+</ParamField>
+<ParamField path="thread_identifier" type="string">
+  See logs as a conversation log thread. Pass all logs with the same `thread_identifier` to see them in the same thread.
+    <Accordion title="Example">
+```json
+{
+    //...other_params,
+    "thread_identifier": "test_thread"
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField path="request_breakdown" type="boolean" default={false}>
+Adding this returns the summarization of the response in the response body. If streaming is on, the metrics will be streamed as the last chunk.
+
+  <Accordion title="Properties">
+    <CodeGroup>
+```json Regular Response
+{
+  "id": "chatcmpl-7476cf3f-fcc9-4902-a548-a12489856d8a",
+  //... main part of the response body ...
+  "request_breakdown": {
+    "prompt_tokens": 6,
+    "completion_tokens": 9,
+    "cost": 4.8e-5,
+    "prompt_messages": [
+      {
+        "role": "user",
+        "content": "How are you doing today?"
+      }
+    ],
+    "completion_message": {
+      "content": " I'm doing well, thanks for asking!",
+      "role": "assistant"
+    },
+    "model": "claude-2",
+    "cached": false,
+    "timestamp": "2024-02-20T01:23:39.329729Z",
+    "status_code": 200,
+    "stream": false,
+    "latency": 1.8415491580963135,
+    "scores": {},
+    "category": "Questions",
+    "metadata": {},
+    "routing_time": 0.18612787732854486,
+    "full_request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "How are you doing today?"
+        }
+      ],
+      "model": "claude-2",
+      "logprobs": true
+    },
+    "sentiment_score": 0
+  }
+}
+```
+```json Streaming Response
+//... other chunks ...
+// The following is the last chunk
+{
+  "id": "request_breakdown",
+  "choices": [
+    {
+      "delta": { "content": null, "role": "assistant" },
+      "finish_reason": "stop",
+      "request_breakdown": {
+        "prompt_tokens": 6,
+        "completion_tokens": 9,
+        "cost": 4.8e-5, //  In usd
+        "prompt_messages": [
+          {
+            "role": "user",
+            "content": "How are you doing today?"
+          }
+        ],
+        "completion_message": {
+          "content": " I'm doing well, thanks for asking!",
+          "role": "assistant"
+        },
+        "model": "claude-2",
+        "cached": false,
+        "timestamp": "2024-02-20T01:23:39.329729Z",
+        "status_code": 200,
+        "stream": false,
+        "latency": 1.8415491580963135, // in seconds
+        "scores": {},
+        "category": "Questions",
+        "metadata": {},
+        "routing_time": 0.18612787732854486, // in seconds
+        "full_request": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "How are you doing today?"
+            }
+          ],
+          "model": "claude-2",
+          "logprobs": true
+        },
+        "sentiment_score": 0
+      },
+      "index": 0,
+      "message": { "content": null, "role": "assistant" }
+    }
+  ],
+  "created": 1706100589,
+  "model": "extra_parameter",
+  "object": "chat.completion.chunk",
+  "system_fingerprint": null,
+  "usage": {}
+}
+```
+    </CodeGroup>
+  </Accordion>
+</ParamField>
+
+
+
+
+
+<RequestExample>
+</RequestExample>

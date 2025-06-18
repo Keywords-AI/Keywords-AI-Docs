@@ -1,0 +1,246 @@
+---
+title: "Prompt caching"
+description: "Prompt caching is a feature that allows you to cache the results of a prompt so that it can be reused later."
+---
+<Note>
+You can only enable prompt caching if you are using **LLM proxy for Anthropic models**.
+</Note>
+## How to use prompt caching
+You can either use the `prompt_caching` feature through the LLM proxy or log those LLM requests that are cached, which will give you a better observability.
+
+<Tabs>
+{/* Although prompt caching is only available for Anthropic models, you can still use Frameworks like OpenAI SDK or other SDKs to enable prompt caching. */}
+<Tab title="Anthropic Python SDK">
+```python {18}
+import anthropic
+
+client = anthropic.Anthropic(
+    base_url="https://api.keywordsai.co/api/anthropic/",
+    api_key="Your_Keywords_AI_API_Key",
+)
+
+message = client.messages.create(
+    model="claude-3-opus-20240229",
+    system=[
+      {
+        "type": "text",
+        "text": "You are an AI assistant tasked with analyzing literary works. Your goal is to provide insightful commentary on themes, characters, and writing style.\n",
+      },
+      {
+        "type": "text",
+        "text": "<the entire contents of 'Pride and Prejudice'>",
+        "cache_control": {"type": "ephemeral"}
+      }
+    ],
+    messages=[{"role": "user", "content": "Analyze the major themes in 'Pride and Prejudice'."}]
+)
+
+print(message.content)
+
+```
+</Tab>
+<Tab title="Anthropic TypeScript SDK">
+
+```typescript {17}
+import Anthropic from "@anthropic-ai/sdk";
+
+const anthropic = new Anthropic({
+  baseUrl: "https://api.keywordsai.co/api/anthropic/",  
+  apiKey: 'YOUR_KEYWORDS_AI_API_KEY',
+});
+
+const msg = await anthropic.messages.create({
+model: "claude-3-5-sonnet-20240620",
+system: [
+      {
+        "type": "text",
+        "text": "You are an AI assistant tasked with analyzing literary works. Your goal is to provide insightful commentary on themes, characters, and writing style.\n",
+      },
+      {
+        "type": "text",
+        "text": "<the entire contents of 'Pride and Prejudice'>",
+        "cache_control": {"type": "ephemeral"}
+      }
+    ],
+messages: [
+    {
+    "role": "user",
+    "content": [
+        {
+        "type": "text",
+        "text": "Why is the ocean salty?"
+        }
+    ]
+    }
+]
+});
+console.log(msg);
+```
+</Tab>
+<Tab title="Proxy API">
+```python {24}
+import requests
+def demo_call(input, 
+              model="claude-3-5-sonnet-20240620",
+              token="YOUR_KEYWORDS_AI_API_KEY",
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [
+        {
+            "role": "system",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "You are an AI assistant tasked with analyzing legal documents.",
+                },
+                {
+                    "type": "text",
+                    "text": "Here is the full text of a complex legal agreement" * 400,
+                    "cache_control": {"type": "ephemeral"}, # Add this to enable cache control
+                },
+            ],
+        },
+        {
+            "role": "user",
+            "content": input,
+        },
+    ]
+
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "what are the key terms and conditions in this agreement?'"
+print(demo_call(messages).json())
+```
+</Tab>
+<Tab title="Logging API">
+
+If you want to log the LLM requests that are cached, you can use the Logging API.
+```python {52-57}
+import requests
+import os
+
+API_KEY = os.getenv("KEYWORDSAI_API_KEY_TEST")
+BASE_URL = os.getenv("KEYWORDSAI_BASE_URL", "http://localhost:8000/api")
+url = f"{BASE_URL}/request-logs/create"
+headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+payload = {
+    "model": "claude-3-5-sonnet-20240620",
+    "prompt_messages": [
+        {"role": "user", "content": "Hi"},
+        {
+            "role": "assistant",
+            "content": None,
+            "tool_calls": [
+                {
+                    "id": "xxxx",
+                    "type": "function",
+                    "function": {
+                        "name": "get_current_weather",  # Function name
+                        "arguments": '{\n"location": "Boston, MA"\n}',  # Function arguments
+                    },
+                }
+            ]
+        } # optional
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?",
+    },
+    "tool_choice": {"type": "function", "function": {"name": "get_current_weather"}},
+    "tools": [
+        {
+            "type": "function",
+            "function": {
+                "name": "get_current_weather",
+                "description": "Get the current weather in a given location",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. San Francisco, CA",
+                        },
+                        "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
+                    },
+                    "required": ["location"],
+                },
+            },
+        }
+    ],
+    "usage": {
+        "prompt_tokens_details": {
+            "cached_tokens": 10,
+        },
+        "cache_creation_prompt_tokens": 20,
+    }
+}
+
+def test_async_logging():
+    try:
+        print(headers, url)
+        response = requests.post(url, headers=headers, json=payload)
+        assert response.status_code == 201, response.text
+    except Exception as e:
+        assert False, e
+```
+</Tab>
+</Tabs>
+
+## How does prompt caching work?
+All information is from [Anthropic's documentation](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching).
+
+When you send a request with prompt caching enabled:
+
+1. The system checks if a prompt prefix, up to a specified cache breakpoint, is already cached from a recent query.
+2. If found, it uses the cached version, reducing processing time and costs.
+3. Otherwise, it processes the full prompt and caches the prefix once the response begins.
+
+This is especially useful for:
+
+- Prompts with many examples
+- Large amounts of context or background information
+- Repetitive tasks with consistent instructions
+- Long multi-turn conversations
+
+The cache has a 5-minute lifetime, refreshed each time the cached content is used.
+
+
+## Prompt caching pricing for Anthropic models
+
+| Model | Base Input Tokens | Cache Writes | Cache Hits | Output Tokens |
+|-------|------------------|--------------|------------|---------------|
+| Claude 3.5 Sonnet | $3 / MTok | $3.75 / MTok | $0.30 / MTok | $15 / MTok |
+| Claude 3.5 Haiku | $1 / MTok | $1.25 / MTok | $0.10 / MTok | $5 / MTok |
+| Claude 3 Haiku | $0.25 / MTok | $0.30 / MTok | $0.03 / MTok | $1.25 / MTok |
+| Claude 3 Opus | $15 / MTok | $18.75 / MTok | $1.50 / MTok | $75 / MTok |
+
+Note:
+
+- Cache write tokens are 25% more expensive than base input tokens
+- Cache read tokens are 90% cheaper than base input tokens
+- Regular input and output tokens are priced at standard rates
+
+## Supported models
+Prompt caching is currently supported on:
+
+- Claude 3.5 Sonnet
+- Claude 3.5 Haiku
+- Claude 3 Haiku
+- Claude 3 Opus
+
+## Cache Limitations
+The minimum cacheable prompt length is:
+
+- 1024 tokens for Claude 3.5 Sonnet and Claude 3 Opus
+- 2048 tokens for Claude 3.5 Haiku and Claude 3 Haiku
+
+Shorter prompts cannot be cached, even if marked with cache_control. Any requests to cache fewer than this number of tokens will be processed without caching.

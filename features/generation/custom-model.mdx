@@ -1,0 +1,44 @@
+---
+title: "Custom model"
+description: "Create custom model names and call them with the AI gateway"
+---
+
+## What is a custom model?
+Custom models are models that are not natively supported by Keywords AI. You can add your own model definitions to track costs and usage.
+
+## Why use a custom model?
+Custom models allow you to create multiple aliases for the same underlying model. This is particularly useful when configuring fallback systems where you want to use the same model with different priorities or for different purposes. By creating distinct names for the same model, you can track usage separately and call each instance independently.
+
+## How to create a custom model
+<Steps>
+<Step title="Go to Models page">
+Go to [Models page](https://platform.keywordsai.co/platform/api/models) and click on the `Custom` button.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/custom-models.jpg" alt="Create model" />
+</Frame>
+</Step>
+
+<Step title="Create a custom model">
+Choose a base model and add your custom model name.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/add-custom-model.jpg" alt="Create model" />
+</Frame>
+</Step>
+
+<Step title="Example">
+You can add multiple model names for the same model just like the example below. There are 3 custom models for the same base model `gpt-4o`, but you can call them independently and add 2 of them to the fallback list.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/custom-models-example.jpg" alt="Create model" />
+</Frame>
+</Step>
+
+</Steps>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,936 @@
+---
+title: LLM Proxy
+api: POST https://api.keywordsai.co/api/chat/completions
+---
+
+## OpenAI compatible parameters 
+To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `extra_body` parameter if you're using the OpenAI SDK.
+
+<RequestExample>
+
+{/* ```Python OpenAI Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[{"role":"user", "content":"Tell me a long story"}],
+    stream=True,
+    extra_body={"metadata": {"session_id": "session_11"}}
+)
+```
+
+```TypeScript OpenAI TypeScript
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: process.env.KEYWORDS_AI_API_KEY,
+});
+
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-3.5-turbo",
+    // @ts-expect-error
+    metadata: {"session_id": "session_11"}
+  })
+  .asResponse();
+
+console.log(await response.json());
+
+``` */}
+```python Python
+import requests
+def demo_call(input, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY"
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+
+```TypeScript TypeScript
+fetch('https://api.keywordsai.co/api/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY'
+  },
+    body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [{role: 'user', content: "Say 'Hello World'"}]
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+```bash Bash
+curl -X POST "https://api.keywordsai.co/chat/completions" 
+-H "Content-Type: application/json" 
+-H "Authorization: Bearer Your_KeywordsAI_API_Key" 
+-d "{
+  "model": "gpt-4o-mini",
+  "messages": [{"role": "user", "content": "Hello"}],
+}"
+```
+
+```PHP PHP
+<?php
+  $ch = curl_init();
+    
+  curl_setopt($ch, CURLOPT_URL, "https://api.keywordsai.co/chat/completions");
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    "Content-Type: application/json",
+    "Authorization: Bearer Your_KeywordsAI_API_Key",
+  ));
+  curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(array(
+    "model" => "gpt-4o-mini",
+    "messages" => array(["role" => "user", "content" => "Hello"]),
+  )));
+    
+  $response = curl_exec($ch);
+  curl_close($ch);
+?>
+```
+
+```Go Go
+package main
+import (
+  "bytes"
+  "net/http"
+)
+    
+func main() {
+  url := "https://api.keywordsai.co/chat/completions"
+  method := "POST"
+    
+  payload := []byte(`{
+    "model" : "gpt-4o-mini",
+    "messages": [{"role": "user", "content": "Hello"}],
+  }`)
+    
+  client := &http.Client{}
+  req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+    
+  if err != nil {
+    panic(err)
+  }
+    
+  req.Header.Add("Content-Type", "application/json")
+  req.Header.Add("Authorization", "Bearer Your_KeywordsAI_API_Key")
+    
+  res, err := client.Do(req)
+  defer res.Body.Close()
+}
+```
+
+</RequestExample>
+
+
+
+{/* ```python Python
+import requests
+import os
+
+response = keywords_ai_generate(**params)
+
+def  keywords_ai_generate(
+                messages,
+                api_key=os.getenv("KEYWORDS_AI_API_KEY"),
+                url="https://api.keywordsai.co/api/chat/completions",
+                **kwargs
+                ):
+    print("Calling: ",url)
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {api_key}',
+    }
+    data = {
+        "messages": messages,
+        **kwargs
+    }
+
+    response = requests.post(url=url, headers=headers, json=data)
+    return response
+
+params ={"messages": [{"role": "user", "content": "Hello"}], 
+         "model": "gpt-3.5-turbo", 
+         "stream": False, 
+         "max_tokens": 100
+         }
+
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+fetch('https://api.keywordsai.co/api/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer {YOUR_KEYWORDSAI_API_KEY}'
+  }
+    body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [{role: 'user', content: "Say 'Hello World'"}]
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/chat/completions" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
+-d '{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hello"
+    }
+  ],
+  "model": "gpt-3.5-turbo",
+  "stream": false,
+  "max_tokens": 100
+}'
+``` */}
+
+<ParamField body="messages" type="array" required={true}>
+  List of messages to send to the endpoint in the [OpenAI style](https://platform.openai.com/docs/api-reference/chat/create#chat-create-messages), each of them following this format:
+  ```json
+  messages=[
+    {"role": "system", // Available choices are user, system or assistant
+     "content": "You are a helpful assistant."
+    },
+    {"role": "user", "content": "Hello!"}
+  ]
+  ```
+  <Accordion title="Properties">
+    <ParamField body="type" type="string">
+      The type of response format. Options: `json_object` or `text`
+    </ParamField>
+  </Accordion>
+
+  <strong>Image processing:</strong> If you want to use the image processing feature, you need to use the following format to upload the image.
+  <Accordion title="Example">
+```json
+{
+  "role": "user",
+  "content": [
+    {
+        "type": "text",
+        "text": "What's in this image?"
+    },
+    {
+        "type": "image_url",
+        "image_url": {
+        "url": "https://as1.ftcdn.net/v2/jpg/01/34/53/74/1000_F_134537443_VendrqyXIWyHrZgxdIsfyKUost734JDP.jpg"
+        }
+    }
+  ]
+}
+```
+</Accordion>
+ 
+</ParamField>
+
+<ParamField body="model" type="string" required={true}>
+  Specify which model to use. See the list of model
+  [here](/integration/supported-models)
+
+<Note> This parameter will be overridden by the `loadbalance_models` parameter.</Note>
+
+</ParamField>
+
+<ParamField body="stream" type="boolean" default={false}>
+  Whether to stream back partial progress token by token
+</ParamField>
+
+<ParamField body="tools" type="array[dict]">
+  A list of tools the model may call. Currently, only functions are supported as a tool. Use this to provide an array of functions the model may generate JSON inputs for.
+  <Accordion title="Example">
+  ```json
+  {
+      "type": "function",
+      "function": {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a given location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The city and state, e.g. San Francisco, CA"
+            },
+            "unit": {
+              "type": "string",
+              "enum": ["celsius", "fahrenheit"]
+            }
+          },
+          "required": ["location"]
+        }
+      }
+    }
+```
+    </Accordion>
+</ParamField>
+
+<ParamField body="tool_choice" type="dict">
+Controls which (if any) tool is called by the model. `none` means the model will not call any tool and instead generates a message. `auto` means the model can pick between generating a message or calling one or more tools. required means the model must call one or more tools. 
+
+`none` is the default when no tools are present. `auto` is the default if tools are present.
+
+Specifying a particular tool via the code below forces the model to call that tool.
+  ```json
+  {
+    "type": "function",
+    "function": {"name": "name_of_the_function"},
+  }
+```
+</ParamField>
+
+<ParamField body="frequency_penalty" type="number">
+  Specify how much to penalize new tokens based on their existing frequency in
+  the text so far. Decreases the model's likelihood of repeating the same line
+  verbatim
+</ParamField>
+
+<ParamField body="max_tokens" type="number">
+  Maximum number of tokens to generate in the response
+</ParamField>
+
+<ParamField body="temperature" type="number" default={1}>
+  Controls randomness in the output in the range of 0-2, higher temperature will
+  a more random response.
+</ParamField>
+
+<ParamField body="n" type="number" default={1}>
+  How many chat completion choices are generated for each input message.
+
+  <strong>Caveat!</strong> While this can help improve generation quality by picking the optimal choice, this could also lead to more token usage.
+</ParamField>
+
+{/* Add this to the concept page */}
+
+<ParamField body="logprobs" type="boolean" default={false}>
+  Whether to return log probabilities of the output tokens or not. If true, returns the log probabilities of each output token returned in the `content` of `message`.
+</ParamField>
+
+<ParamField body="echo" type="boolean">
+  Echo back the prompt in addition to the completion
+</ParamField>
+
+{/* Add this to the concept page */}
+
+<ParamField body="stop" type="array[string]">
+  Stop sequence
+</ParamField>
+
+{/* Add this to the concept page */}
+
+<ParamField body="presence_penalty" type="number">
+  Specify how much to penalize new tokens based on whether they appear in the
+  text so far. Increases the model's likelihood of talking about new topics
+</ParamField>
+
+{/* Add this to the concept page */}
+
+{/* Add this to the concept page */}
+
+<ParamField body="logit_bias" type="dict">
+  Used to modify the probability of tokens appearing in the response
+</ParamField>
+
+<ParamField body="response_format" type="object">
+  An object specifying the format that the model must output. Compatible with GPT-4 Turbo and all GPT-3.5 Turbo models newer than gpt-3.5-turbo-1106.
+
+Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message the model generates is valid JSON.
+
+You must have a "json" as a keyword in the prompt to use this feature.
+<AccordionGroup>
+  <Accordion title="Properties">
+    <ParamField body="type" type="string" required={true}>
+      The type of response format. options: `json_object`, `text`
+    </ParamField>
+  </Accordion>
+    <Accordion title="Vertex AI example">
+    If you are using Vertex AI and want to use JSON mode, you should specify a `response_schema` in the `response_format` parameter. Check the [details of response schema here.](https://json-schema.org/understanding-json-schema/reference/string)
+```python Example.py
+response_schema = {
+    "type": "array", # or "string", "number", "object", "boolean"....
+    "items": { # items only for array type
+        "type": "object", 
+        "properties": {  # properties only for object type
+          "number": { "type": "number" },
+          "street_name": { "type": "string" },
+          "street_type": { "enum": ["Street", "Avenue", "Boulevard"] }
+        } 
+    },
+}
+
+response_format={
+        "type": "json_object",
+        "response_schema": response_schema,
+    },
+```
+  </Accordion>
+  </AccordionGroup>
+</ParamField>
+
+<ParamField body="parallel_tool_calls" type="boolean">
+  Whether to enable parallel function calling during tool use.
+</ParamField>
+
+## Keywords AI parameters
+See how to make a standard Keywords AI API call in the [Quick Start](/get-started/quick-start) guide.
+### Generation parameters
+
+<ParamField body="load_balance_group" type="object">
+  Balance the load of your requests between different models. See the [details of load balancing
+  here.](/features/generation/load-balancing)
+<Note> The proxy will pick one model from the group and override the `model` parameter </Note>
+  <Accordion title="Example">
+```json
+{
+// you don't need to specify the model parameter, otherwise, the model parameter will overwrite the load balance group
+    "messages": [
+        {
+            "role": "user",
+            "content": "Hi, how are you?"
+        }
+    ],
+    "load_balance_group": {
+        "group_id":"THE_GROUP_ID" // from Load balancing page
+    }
+}
+```
+  </Accordion>
+    <Accordion title="Example code with adding credentials">
+        The `models` field will overwrite the `load_balance_group` you specified in the UI.
+```json
+{
+  "load_balance_group": {
+      "group_id":"THE_GROUP_ID", // from Load balancing page
+      "models": [
+        {
+          "model": "azure/gpt-35-turbo",
+          "weight": 1
+        },
+        {
+          "model": "azure/gpt-4",
+          "credentials": { // add your own credentials if you want to use your own Azure credentials or custom model name
+              "api_base": "Your own Azure api_base",
+              "api_version": "Your own Azure api_version",
+              "api_key": "Your own Azure api_key"
+          },
+          "weight": 1
+        } 
+      ]
+  }
+}
+```
+  </Accordion>
+</ParamField>
+
+<ParamField body="fallback_models" type="array">
+  Specify the list of backup models (ranked by priority) to respond in case of a
+  failure in the primary model. See the [details of fallback models
+  here.](/features/generation/fallbacks)
+    <Accordion title="Example">
+  ```json
+{
+  // ...other parameters...
+    "fallback_models": [
+      "gemini/gemini-pro",
+      "mistral/mistral-small",
+      "gpt-4o"
+    ]
+}
+```
+  </Accordion>
+</ParamField>
+
+<ParamField body="customer_credentials" type="object">
+You can pass in your customer's credentials for [supported providers](/integration/own-api-keys) and use their credits when our proxy is calling models from those providers. <br/>See details [here](/integration/own-api-keys)
+<Accordion title="Example">
+```json
+"customer_credentials": {
+
+  "openai": {
+    "api_key": "YOUR_OPENAI_API_KEY",
+  }
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="credential_override" type="object">
+One-off credential overrides. Instead of using what is uploaded for each provider, this targets credentials for individual models. 
+
+Go to [provider page](/integration/own-api-keys) to see how to add your own credentials and override them for a specific model.
+  <Accordion title="Example">
+```json
+"credential_override": {
+    "azure/gpt-4o":{ // override for a specific model.
+      "api_key": "your-api-key",
+      "api_base": "your-api-base-url",
+      "api_version": "your-api-version",
+    }
+  }
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="cache_enabled" type="boolean">
+Enable or disable caches. Check the [details of caches here.](/features/generation/caches)
+<Accordion title="Example">
+```json
+{
+    "cache_enabled": true
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="cache_ttl" type="number">
+This parameter specifies the time-to-live (TTL) for the cache in seconds. 
+
+<Note>It's optional and the default value is 30 **days** now.</Note>
+<Accordion title="Example">
+```json
+{
+    "cache_ttl": 3600 // in seconds
+}
+```
+</Accordion>
+</ParamField>
+<ParamField body="cache_options" type="boolean">
+This parameter specifies the cache options. Currently we support `cache_by_customer` option, you can set it to `true` or `false`. If `cache_by_customer` is set to `true`, the cache will be stored by the customer identifier.
+
+<Note>It's an optional parameter</Note>
+```json
+{
+    "cache_options": { // optional
+        "cache_by_customer": true // or false
+    }
+}
+```
+</ParamField>
+
+<ParamField body="prompt" type="object">
+  The prompt template to use for the completion. You can build and deploy prompts in the [Prompt](/features/prompt/prompt-management).
+<AccordionGroup>
+  <Accordion title="Properties">
+    <ParamField body="prompt_id" type="string" required={true}>
+      The ID of the prompt to use. You can find this on the Prompts page.
+    </ParamField>
+    <ParamField body="variables" type="object">
+      The variables to replace in the prompt template.
+    </ParamField>
+    {/* <ParamField body="version" type="number">
+      The version of the prompt to use. If not specified, the latest version will be used.
+    </ParamField> */}
+<ParamField body="echo" type="boolean" default={true}>
+  With echo on, the response body will have an extra field. This is an optional parameter.
+```json
+  "prompt_message" [an array of messages]
+```
+</ParamField>
+<ParamField body="override" type="boolean" default={true}>
+Turn on override to use params in `override_params` instead of the params in the prompt.
+```json
+{
+  "override": true,
+}
+
+```
+</ParamField>
+
+<ParamField body="override_params" type="boolean" default={true}>
+You can put any OpenAI chat/completions parameters here to override the prompt's parameters. This will only work if `override` is set to `true`.
+```json
+{
+  "override_params": {
+    "temperature": 0.5,
+    "max_tokens": 100
+  }
+}
+```
+</ParamField>
+<ParamField body="override_config" type="object">
+This parameter allows you to control how you can override the parameters in the prompt.
+  <AccordionGroup >
+    <Accordion title="Properties">
+        <ParamField body="messages_override_mode" type="string">
+            `append`: append the new messages to the existing messages
+            
+            `override`: override the existing messages
+        </ParamField>
+    </Accordion>
+
+    <Accordion title="Example">
+ ```python {4-5}
+    request_body = {
+        "prompt": {
+            "prompt_id": "xxxxxx",
+            "override_config": {"messages_override_mode": "append"}, # append or override
+            "override_params": {"messages": [{"role": "user", "content": "5"}]},
+        }
+    }
+```
+    </Accordion>
+    
+  </AccordionGroup>
+</ParamField>
+</Accordion>
+    <Accordion title="Example">
+```json
+{
+"prompt": {
+      "prompt_id": "prompt_id", //paste this from the prompt management page
+      "variables": {
+        "variable_name": "variable_value"
+      },
+      // "echo": true //optional parameter
+    }
+}
+```
+      </Accordion>
+</AccordionGroup>
+
+
+
+</ParamField>
+
+<ParamField body="retry_params" type="object">
+    Enable or disable retries and set the number of retries and the time to wait before retrying. Check the [details of retries here.](/features/generation/retries)
+  <Accordion title="Properties">
+    <ParamField body="retry_enabled" type="boolean" required>
+        Enable or disable retries.
+    </ParamField>
+    <ParamField body="num_retries" type="number">
+        The number of retries to attempt.
+    </ParamField>
+    <ParamField body="retry_after" type="number">
+        The time to wait before retrying in seconds.
+    </ParamField>
+  </Accordion>
+</ParamField>
+
+<ParamField body="disable_log" type="boolean" deafault={false}>
+  When set to true, only the request and [performance
+  metrics](/performance-monitoring/monitoring-metrics) will be recorded, input
+  and output messages will be omitted from the log.
+</ParamField>
+
+<ParamField body="model_name_map" type="object">
+<Note>This parameter is for Azure deployment only!! </Note>
+We understand that you may have a custom name for your Azure deployment. Keywords AI is using the model's origin name which may not be able to match your deployment. You can use this parameter to map the default name to your custom name. 
+    <Accordion title="Example">
+```json
+{
+    "model": "azure/gpt-4o",
+    "model_name_map": {
+      "original_model_name": "azure/your_custom_model_name"
+      // e.g, "azure/gpt-4o": "azure/{your gpt-4o's deployment name}"
+    }
+}
+```
+      </Accordion>
+</ParamField>
+
+<ParamField body="models" type="array">
+  Specify the list of models for the Keywords AI LLM router to choose between. 
+  If not specified,{" "}
+  <strong>all models</strong> will be used. See the list of models
+  [here](/integration/supported-models)
+
+If only one model is specified, it will be treated as if the `model` parameter is used and the router will not trigger.
+
+When the `model` parameter is used, the router will not trigger, and this parameter behaves as `fallback_models`.
+
+</ParamField>
+
+<ParamField body="exclude_providers" type="array" default={[]}>
+  The list of providers to exclude from the LLM router's selection. All models under the provider will be excluded. See the list of providers [here](/integration/providers/providers-overview)
+
+This only excludes providers in the LLM router, if `model` parameter takes precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
+
+</ParamField>
+
+<ParamField body="exclude_models" type="array" default={[]}>
+The list of models to exclude from the LLM router's selection. See the list of models [here](/integration/supported-models)
+
+This only excludes models in the LLM router, if `model` parameter takes precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
+
+</ParamField>
+
+### Observability parameters
+
+<ParamField body="metadata" type="dict">
+You can add any key-value pair to this metadata field for your reference. Check the [details of metadata here.](/features/generation/metadata)
+
+Contact team@keywordsai.co if you need extra parameter support for your use case.
+
+<Accordion title="Example">
+```json
+{
+  "metadata": {
+    "my_key": "my_value"
+    // Add any key-value pair here
+  }
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="custom_identifier" type="string">
+You can use this parameter to send an extra custom tag with your request. This will help you to identify LLM logs faster than `metadata` parameter, because it's indexed. You can see it in Logs with name `Custom ID` field.
+
+<Accordion title="Example">
+```json
+{
+  "custom_identifier": "my_value"
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="customer_identifier" type="string">
+  Use this as a tag to identify the user associated with the API call. See the [details of customer identifier here.](/features/generation/customer-identifier)
+  <Accordion title="Example">
+```json
+{
+    //...other_params,
+    "customer_identifier": "user_123"
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="customer_params" type="object">
+  Pass the customer's parameters in the API call to monitor the user's data in the Keywords AI platform. See how to get insights into your users' data [here](/features/user/user-creation)
+  <Accordion title="Properties">
+<ParamField body="customer_identifier" type="string" required>
+The unique identifier for the customer. It can be any string.
+</ParamField>
+
+<ParamField body="group_identifier" type="string">
+Group identifier. Use group identifier to group logs together.
+</ParamField>
+
+<ParamField body="name" type="string">
+The name of the customer. It can be any string.
+</ParamField>
+
+<ParamField body="email" type="string">
+The email of the customer. It shoud be a valid email.
+</ParamField>
+
+<ParamField body="period_start" type="string">
+The start date of the period. It should be in the format `YYYY-MM-DD`.
+</ParamField>
+
+<ParamField body="period_end" type="string">
+The start date of the period. It should be in the format `YYYY-MM-DD`.
+</ParamField>
+
+<ParamField body="budget_duration" type="string">
+Choices are `yearly`, `monthly`, `weekly`, and `daily`
+</ParamField>
+
+<ParamField body="period_budget" type="float">
+The budget for the period. It should be a float.
+</ParamField>
+
+<ParamField body="markup_percentage" type="float">
+The markup percentage for the period. Usage report of your customers through this key will be increased by this percentge.
+</ParamField>
+
+<ParamField body="total_budget" type="float">
+The total budget for a user.
+</ParamField>
+  </Accordion>
+</ParamField>
+
+
+
+
+<ParamField body="request_breakdown" type="boolean" default={false}>
+Adding this returns the summarization of the response in the response body. If streaming is on, the metrics will be streamed as the last chunk.
+
+  <Accordion title="Properties">
+    <CodeGroup>
+    ```json Regular Response
+{
+  "id": "chatcmpl-7476cf3f-fcc9-4902-a548-a12489856d8a",
+  //... main part of the response body ...
+  "request_breakdown": {
+    "prompt_tokens": 6,
+    "completion_tokens": 9,
+    "cost": 4.8e-5,
+    "prompt_messages": [
+      {
+        "role": "user",
+        "content": "How are you doing today?"
+      }
+    ],
+    "completion_message": {
+      "content": " I'm doing well, thanks for asking!",
+      "role": "assistant"
+    },
+    "model": "claude-2",
+    "cached": false,
+    "timestamp": "2024-02-20T01:23:39.329729Z",
+    "status_code": 200,
+    "stream": false,
+    "latency": 1.8415491580963135,
+    "scores": {},
+    "category": "Questions",
+    "metadata": {},
+    "routing_time": 0.18612787732854486,
+    "full_request": {
+      "messages": [
+        {
+          "role": "user",
+          "content": "How are you doing today?"
+        }
+      ],
+      "model": "claude-2",
+      "logprobs": true
+    },
+    "sentiment_score": 0
+  }
+}
+```
+```json Streaming Response
+//... other chunks ...
+// The following is the last chunk
+{
+  "id": "request_breakdown",
+  "choices": [
+    {
+      "delta": { "content": null, "role": "assistant" },
+      "finish_reason": "stop",
+      "request_breakdown": {
+        "prompt_tokens": 6,
+        "completion_tokens": 9,
+        "cost": 4.8e-5, //  In usd
+        "prompt_messages": [
+          {
+            "role": "user",
+            "content": "How are you doing today?"
+          }
+        ],
+        "completion_message": {
+          "content": " I'm doing well, thanks for asking!",
+          "role": "assistant"
+        },
+        "model": "claude-2",
+        "cached": false,
+        "timestamp": "2024-02-20T01:23:39.329729Z",
+        "status_code": 200,
+        "stream": false,
+        "latency": 1.8415491580963135, // in seconds
+        "scores": {},
+        "category": "Questions",
+        "metadata": {},
+        "routing_time": 0.18612787732854486, // in seconds
+        "full_request": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "How are you doing today?"
+            }
+          ],
+          "model": "claude-2",
+          "logprobs": true
+        },
+        "sentiment_score": 0
+      },
+      "index": 0,
+      "message": { "content": null, "role": "assistant" }
+    }
+  ],
+  "created": 1706100589,
+  "model": "extra_parameter",
+  "object": "chat.completion.chunk",
+  "system_fingerprint": null,
+  "usage": {}
+}
+```
+    </CodeGroup>
+  </Accordion>
+</ParamField>
+
+
+## Evals parameters
+<ParamField body="positive_feedback" type="boolean">
+  Whether the user liked the output. `True` means the user liked the output.
+</ParamField>
+
+## Deprecated parameters
+
+<ParamField body="customer_api_keys" type="object">
+You can pass in a dictionary of your customer's API keys for specific models. If the router selects a model that is in the dictionary, it will attempt to use the customer's API key for calling the model before using your [integration API key](/integration/llm-credits) or Keywords AI's default API key.
+
+```json
+{
+  "gpt-3.5-turbo": "your_customer_api_key",
+  "gpt-4": "your_customer_api_key"
+}
+```
+
+</ParamField>
+
+<ParamField body="loadbalance_models" type="array">
+  Balance the load of your requests between different models. See the [details of load balancing
+  here.](/features/generation/load-balancing)
+<Note> This parameter will override the `model` parameter. </Note>
+  <Accordion title="Example">
+  ```json
+  {
+    // ...other parameters...
+    "loadbalance_models": [
+        {
+            "model": "claude-3-5-sonnet-20240620",
+            "weight": 34,
+            "credentials": { // Your own Anthropic API key, optional for team plan and above
+                "api_key": "Your own Anthropic API key"
+            }
+        },
+        {
+            "model": "azure/gpt-35-turbo",
+            "weight": 34,
+            "credentials": { // Your own Azure credentials, optional for team plan and above
+                "api_base": "Your own Azure api_base",
+                "api_version": "Your own Azure api_version",
+                "api_key": "Your own Azure api_key"
+            }
+        }
+    ]
+}
+```
+  </Accordion>
+</ParamField>
+

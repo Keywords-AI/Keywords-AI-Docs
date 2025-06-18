@@ -1,0 +1,83 @@
+---
+title: "Pass Keywords AI params"
+description: "You can pass Keywords AI params to your traces to get more insights into your LLM workflows."
+---
+<Note>
+You can only pass Keywords AI params to traces with Keywords AI tracing SDK. External integrations like **OpenAI Agents SDK** are not supported yet.
+</Note>
+
+Each trace can be enriched with Keywords AI params to better understand your AI products and workflows. Keywords AI params include:
+
+- `customer_identifier`, `customer_name`, `customer_email`
+- `metadata`
+- `custom_identifier`
+- `thread_identifier`
+- ...
+
+You can check the full list of [Keywords AI params](https://docs.keywordsai.co/api-endpoints/integration/request-logging-endpoint) in the Keywords AI API reference.
+
+## Example code
+<Tabs>
+<Tab title="Example Python code">
+This is how to add Keywords AI params to your workflow traces:
+
+<Note>
+It's the same way to add Keywords AI params to a workflow or a task.
+</Note>
+
+```python agent.py {4-11}
+@workflow(name="my_workflow")
+def my_workflow():
+    # Add Keywords AI params to the current trace
+    with keywordsai_span_attributes(
+        keywordsai_params={
+            "customer_params": {
+                "customer_identifier": "123",
+            },
+            "metadata": {"some_key": "some_value"},
+        }
+    ):
+        # Your LLM calls or other operations here
+        client = OpenAI()
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": "Hello, world!"}],
+        )
+    return response
+```
+</Tab>
+
+<Tab title="Example JS/TS code">
+This is how to add Keywords AI params to your workflow traces:
+
+<Note>
+It's the same way to add Keywords AI params to a workflow or a task.
+</Note>
+
+Once you integrate the Keywords AI tracing SDK in your project, and annotate the workflows and tasks, you can easily add Keywords AI params in your traces.
+
+Here's an example of how to add Keywords AI params to a workflow:
+
+```typescript agent.tsx {4, 8-13}
+async function testWorkflow() {
+  return await keywordsAI.withWorkflow({ name: "test" }, 
+  async () => {
+    keywordsAI.withKeywordsAISpanAttributes(
+      async () => {
+        testTask();
+      },
+      {
+        customer_params: {
+          customer_identifier: "123",
+        },
+        metadata: { some_key: "some_value" },
+      }
+    );
+    return "test workflow";
+  });
+}
+
+```
+</Tab>
+</Tabs>
+

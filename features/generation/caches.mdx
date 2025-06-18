@@ -1,0 +1,157 @@
+---
+title: "Caches"
+description: "Reduce latency and save LLM costs by caching LLM prompts and responses."
+---
+
+## What is caches?
+Caches are storage systems that save and reuse exact LLM requests. You can enable caches to reduce LLM costs and improve response times.
+
+## Why Caches?
+You may find caches useful when you want to:
+- **Reduce latency**: Serve stored responses instantly, eliminating the need for repeated API calls.
+- **Save costs**: Minimize expenses by reusing cached responses instead of making redundant requests.
+
+## How to use Caches?
+Turn on caches by setting `cache_enabled` to `true`. We currently will cache the whole conversation, including the system message, user message and the response.
+
+See the example below, we will cache the user message "Hi, how are you?" and its response.
+
+<Tabs>
+<Tab title="OpenAI Python SDK">
+```python {13-19}
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "user", "content": "Tell me a long story"}
+    ],
+    extra_body={
+        "cache_enabled": True,
+        "cache_ttl": 600,
+        "cache_options": {
+            "cache_by_customer": True
+        }
+    }
+)
+```
+</Tab>
+<Tab title="OpenAI TypeScript SDK">
+In OpenAI TypeScript SDK, you should add a `// @ts-expect-error` before the `customer_credentials` field.
+```typescript {12-19}
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-4o-mini",
+    // @ts-expect-error
+    cache_enabled: true,
+    cache_ttl: 600,
+    cache_options: {
+        cache_by_customer: true
+    }
+  })
+  .asResponse();
+
+console.log(await response.json());
+```
+</Tab>
+<Tab title="Standard API">
+```python LLM proxy {14-18}
+import requests
+def demo_call(input, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY",
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        'cache_enabled': True,
+        'cache_ttl': 600,
+        'cache_options': {
+            'cache_by_customer': True
+        }
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+</Tab>
+<Tab title="Other SDKs">
+We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/own-api-keys) for more information.
+</Tab>
+</Tabs>
+
+## Caches parameters
+
+<ParamField path="cache_enabled" type="boolean">
+Enable or disable caches.
+
+```json
+{
+    "cache_enabled": true
+}
+```
+</ParamField>
+
+<ParamField path="cache_ttl" type="number">
+This parameter specifies the time-to-live (TTL) for the cache in seconds. 
+
+<Note>It's optional and the default value is 30 **days** now.</Note>
+```json
+{
+    "cache_ttl": 3600 // in seconds
+}
+```
+</ParamField>
+
+<ParamField path="cache_options" type="boolean">
+This parameter specifies the cache options. Currently we support `cache_by_customer` option, you can set it to `true` or `false`. If `cache_by_customer` is set to `true`, the cache will be stored by the customer identifier.
+
+<Note>It's an optional parameter</Note>
+```json
+{
+    "cache_options": { // optional
+        "cache_by_customer": true, // or false
+        "omit_log": true // or false
+    }
+}
+```
+</ParamField>
+
+## How to view caches
+You can view the caches on the Logs page. The model tag will be `keywordsai/cache`. You can also filter the logs by the `Cache hit` field.
+
+
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/caches-logs.png" alt="Caches" />
+</Frame>
+
+## Omit logs when cache hit
+You can omit the logs when cache hit by setting the `omit_logs` parameter to `true` or go to [Caches](https://platform.keywordsai.co/platform/api/caches) in Settings.
+
+So this won't generate a new LLM log when the cache is hit.
+## LLM caching vs Prompt caching
+Regular caching stores complete prompt responses. When the same prompt is received, the system returns the stored response, reducing costs but limiting response variety.
+
+Prompt caching stores the model's intermediate computation state. This allows the model to generate diverse responses while still saving computational costs, as it doesn't need to reprocess the entire prompt from scratch. View the [Prompt caching](/features/generation/prompt-caching) section for more information.
