@@ -329,6 +329,7 @@
               "integration/providers/azure",
               "integration/providers/vertex",
               "integration/providers/bedrock",
+              "integration/providers/nebius",
               "integration/providers/groq",
               "integration/providers/assemblyai",
               "integration/providers/Fireworks",
