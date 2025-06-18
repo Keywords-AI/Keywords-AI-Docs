@@ -1,0 +1,38 @@
+---
+title: "Nebius AI"
+---
+
+<Note> This section is only for **Keywords AI LLM proxy** user.</Note>
+
+To use Keywords AI LLM proxy, you need to add your own credentials to call models from each provider. Here's how you can add your [Nebius AI](https://nebius.com/) credentials on Keywords AI platform.
+
+## Add API keys from the UI
+
+<Steps>
+<Step title="Go to the Providers page">
+The [Providers page](https://platform.keywordsai.co/platform/api/providers) allows you to add your own credentials for each provider. Currently, over 20+ providers are supported.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg" alt="Providers Page"/>
+</Frame>
+</Step>
+<Step title="Add your Nebius AI API key.">
+
+<img width="600"  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers-nebius-dark.jpg"  className="hidden dark:block" alt="Keywords AI Credentials Page"/>
+<img width="600"  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers-nebius-light.jpg"  className="block dark:hidden" alt="Keywords AI Credentials Page"/>
+</Step>
+<Step title="Call Nebius AI models">
+You can now call Nebius AI models on Keywords AI platform.
+
+Go to [Models page](https://platform.keywordsai.co/platform/api/models) and select `Nebius AI` from the provider dropdown.
+
+<img width="600"  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/models-nebius-dark.jpg"  className="hidden dark:block" alt="Keywords AI Credentials Page"/>
+<img width="600"  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/models-nebius-light.jpg"  className="block dark:hidden" alt="Keywords AI Credentials Page"/>
+
+Then add the correct Nebius AI model ID in the `Model` field.
+```python Example
+"model": "nebius/deepseek-ai/DeepSeek-R1"
+```
+
+Check out [LLM proxy](/get-started/llm-inference#ai-gateway) to know more about how to use the models.
+</Step>
+</Steps>
