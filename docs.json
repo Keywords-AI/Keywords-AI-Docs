@@ -328,6 +328,7 @@
               "integration/providers/anthropic",
               "integration/providers/azure",
               "integration/providers/vertex",
+              "integration/providers/gemini",
               "integration/providers/bedrock",
               "integration/providers/nebius",
               "integration/providers/groq",
