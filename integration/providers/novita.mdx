@@ -1,0 +1,38 @@
+---
+title: "Novita AI"
+---
+
+<Note> This section is only for **Keywords AI LLM proxy** user.</Note>
+
+To use Keywords AI LLM proxy, you need to add your own credentials to call models from each provider. Here's how you can add your [Novita AI](https://novita.ai/) credentials on Keywords AI platform.
+
+## Add API keys from the UI
+
+<Steps>
+<Step title="Go to the Providers page">
+The [Providers page](https://platform.keywordsai.co/platform/api/providers) allows you to add your own credentials for each provider. Currently, over 20+ providers are supported.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg" alt="Providers Page"/>
+</Frame>
+</Step>
+<Step title="Add your Novita AI API key.">
+
+<img width="600"  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/providers/novita-dark.jpg"  className="hidden dark:block" alt="Keywords AI Credentials Page"/>
+<img width="600"  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/providers/novita-light.jpg"  className="block dark:hidden" alt="Keywords AI Credentials Page"/>
+</Step>
+<Step title="Call Novita AI models">
+You can now call Novita AI models on Keywords AI platform.
+
+Go to [Models page](https://platform.keywordsai.co/platform/api/models) and select `Novita AI` from the provider dropdown.
+
+<img width="600"  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/models-novita-dark.jpg"  className="hidden dark:block" alt="Keywords AI Credentials Page"/>
+<img width="600"  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/llm-proxy/models-novita-light.jpg"  className="block dark:hidden" alt="Keywords AI Credentials Page"/>
+
+Then add the correct Novita AI model ID in the `Model` field.
+```python Example
+"model": "novita/deepseek-ai/DeepSeek-R1"
+```
+
+Check out [LLM proxy](/get-started/llm-inference#ai-gateway) to know more about how to use the models.
+</Step>
+</Steps>
