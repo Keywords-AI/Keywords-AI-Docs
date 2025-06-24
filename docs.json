@@ -331,6 +331,7 @@
               "integration/providers/gemini",
               "integration/providers/bedrock",
               "integration/providers/nebius",
+              "integration/providers/novita",
               "integration/providers/groq",
               "integration/providers/assemblyai",
               "integration/providers/Fireworks",
