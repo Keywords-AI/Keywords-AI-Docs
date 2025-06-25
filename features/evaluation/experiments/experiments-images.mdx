@@ -1,5 +1,103 @@
 ---
 title: "Run experiments with images"
-description: "A guide to run experiments with images"
+description: "A comprehensive guide to creating and running experiments with image-based datasets"
 ---
 
+<Frame>
+<video
+  controls
+  className="w-full aspect-video"
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-image.mp4"
+></video>
+</Frame>
+
+Keywords AI now supports running experiments with image-based datasets, enabling you to test and evaluate your visual prompts with comprehensive data analysis. This feature allows you to assess how your models perform across different image inputs and compare results systematically.
+
+<Steps>
+<Step title="Create a dataset with images">
+
+Before running experiments, you need to create a dataset that includes image data. You can accomplish this through two methods:
+
+<AccordionGroup>
+<Accordion title="Upload a CSV file with image references">
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-hotel-images-testset-light.jpg" className="block dark:hidden" alt="Create dataset from CSV file"/>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-hotel-images-testset-dark.jpg" className="hidden dark:block" alt="Create dataset from CSV file"/>
+</Frame>
+
+When preparing your CSV file:
+
+1. **Column naming**: Ensure that column headers in your CSV file match exactly with the variable names defined in your prompt template.
+2. **Image references**: Include URLs or file paths to your images in the designated image column.
+3. **Data consistency**: Verify that all image references are accessible and properly formatted.
+
+After preparing your CSV file:
+
+1. Upload the CSV file to create your dataset
+2. Configure the image column by changing its data type to `Image`
+3. Validate that all images are properly recognized and displayed
+
+<Frame>
+<video
+  controls
+  className="w-full aspect-video"
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/testsets-upload-csv-images.mp4"
+></video>
+</Frame>
+</Accordion>
+
+<Accordion title="Create a dataset directly in Testsets">
+
+Alternatively, you can build your dataset directly within the Testsets interface:
+
+1. **Create test cases**: Add individual test cases with your desired input data
+2. **Configure image columns**: Click on the column header for any image-containing column and change its type to `Image`
+3. **Add image data**: Input image URLs or upload images directly through the interface
+4. **Customize as needed**: Adjust test cases, add additional columns, or modify existing data
+
+<Frame>
+<video
+  controls
+  className="w-full aspect-video"
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/testsets-create-images.mp4"
+></video>
+</Frame>
+
+</Accordion>
+</AccordionGroup>
+
+</Step>
+
+<Step title="Configure your experiment with the testset">
+
+Once your image dataset is ready, you'll need to set up your experiment:
+
+1. **Prepare your prompt**: Build and refine your prompt template in the Prompts section
+2. **Import prompt versions**: Add the relevant prompt versions to your experiment for comparison
+3. **Upload the testset**: Attach your image-enabled testset to the experiment
+
+<Note>
+**Important**: Ensure that all variable names in your prompt template correspond exactly to the column headers in your testset. Mismatched variable names will prevent the experiment from running correctly.
+</Note>
+
+This step establishes the connection between your prompt logic and the test data, enabling the system to process each image-text combination systematically.
+
+</Step>
+
+<Step title="Run the experiment">
+
+With your dataset and prompts configured, you're ready to run the experiment:
+
+1. **Launch experiment**: Click the `Run Experiment` button to begin processing
+2. **Monitor progress**: Track the experiment's progress through the interface
+3. **Analyze results**: Review the outputs, compare prompt versions, and analyze performance metrics
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-with-images-light.jpg" className="block dark:hidden" alt="Running experiments with images"/>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiments-with-images-dark.jpg" className="hidden dark:block" alt="Running experiments with images"/>
+</Frame>
+
+The experiment will process each image in your dataset against your prompt variations, providing comprehensive results for analysis and comparison.
+
+</Step>
+</Steps>
