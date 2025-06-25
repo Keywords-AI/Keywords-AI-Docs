@@ -132,7 +132,8 @@
                 "pages": [
                   "features/evaluation/experiments/overview",
                   "features/evaluation/experiments/experiments",
-                  "features/evaluation/experiments/datasets"
+                  "features/evaluation/experiments/datasets",
+                  "features/evaluation/experiments/experiments-images"
                 ]
               },
               {
