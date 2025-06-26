@@ -3,9 +3,213 @@ title: Agent tracing
 description: Learn how to integrate KeywordsAI tracing with Vercel AI SDK to monitor and analyze your AI application performance. Step-by-step guide for setting up environment variables and creating traced workflows.
 og:title: 'Agent tracing with Vercel AI SDK'
 ---
+This tutorial shows how to set up Keywords AI tracing with [Next.js](https://nextjs.org/) and the [Vercel AI SDK](https://ai-sdk.dev/) to monitor and trace your AI-powered applications.
 
 
-## Prerequisites
+## Start with the pre-built example
+
+We have built a pre-built example for you to get started quickly. You can find the example [here](https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/vercel_ai_next_openai).
+
+Get up and running quickly with our pre-configured example:
+
+```bash
+npx create-next-app --example https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/vercel_ai_next_openai my-keywordsai-app
+```
+
+```bash
+yarn create next-app --example https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/vercel_ai_next_openai my-keywordsai-app
+```
+```bash
+pnpm create next-app --example https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/vercel_ai_next_openai my-keywordsai-app
+```
+
+Then:
+
+1. Add your API keys to `.env.local` (see Step 3 below)
+2. Run `yarn dev` to start the development server
+3. Start chatting and check your [KeywordsAI dashboard](https://platform.keywordsai.co/platform/dashboard)
+
+
+## Start from scratch
+
+You can also follow the Step-by-Step Tutorial to build your own application.
+
+If you want to understand the setup process or add KeywordsAI tracing to an existing project, follow the tutorial below.
+
+Execute `create-next-app` with npm, Yarn, or pnpm to bootstrap the base example:
+
+```bash
+npx create-next-app --example https://github.com/vercel/ai/tree/main/examples/next-openai next-openai-app
+```
+
+```bash
+yarn create next-app --example https://github.com/vercel/ai/tree/main/examples/next-openai next-openai-app
+```
+
+```bash
+pnpm create next-app --example https://github.com/vercel/ai/tree/main/examples/next-openai next-openai-app
+```
+
+To run the base example locally you need to:
+
+1. Sign up at [OpenAI's Developer Platform](https://platform.openai.com/signup).
+2. Go to [OpenAI's dashboard](https://platform.openai.com/dashboard) and create an API KEY.
+3. If you choose to use external files for attachments, then create a [Vercel Blob Store](https://vercel.com/docs/storage/blobs).
+4. Set the required environment variable as the token value as shown the example env file but in a new file called `.env.local`
+5. Run `pnpm install` to install the required dependencies.
+6. Run `pnpm dev` to launch the development server.
+
+
+## KeywordsAI Telemetry Setup
+
+Now let's add KeywordsAI tracing to monitor your AI application's performance and usage.
+
+### Step 1: Install KeywordsAI Exporter
+
+Install the KeywordsAI exporter package:
+
+```bash
+npm install @keywordsai/exporter-vercel
+```
+
+```bash
+yarn add @keywordsai/exporter-vercel
+```
+
+```bash
+bun add @keywordsai/exporter-vercel
+```
+
+```bash
+pnpm add @keywordsai/exporter-vercel
+```
+
+### Step 2: Set up OpenTelemetry Instrumentation
+
+Next.js supports OpenTelemetry instrumentation out of the box. Following the Next.js OpenTelemetry guide, create an instrumentation.ts file in your project root:
+
+Install vercel's opentelemetry instrumentation:
+```bash
+yarn add @vercel/otel
+```
+
+Create instrumentation.ts in the root (where package.json lives) of your project
+
+```typescript instrumentation.ts
+import { registerOTel } from "@vercel/otel";
+import { KeywordsAIExporter } from "@keywordsai/exporter-vercel";
+
+export function register() {
+  registerOTel({
+    serviceName: "next-app",
+    traceExporter: new KeywordsAIExporter({ // <---- Use Keywords AI exporter as the custom exporter
+      apiKey: process.env.KEYWORDSAI_API_KEY,
+      baseUrl: process.env.KEYWORDSAI_BASE_URL,
+      debug: true
+    }),
+  });
+}
+```
+
+
+### Step 3: Configure Environment Variables
+Add your KeywordsAI credentials to your `.env.local` file:
+
+```bash .env.local
+# OpenAI API Key (existing)
+OPENAI_API_KEY=your_openai_api_key_here
+
+# KeywordsAI Configuration
+KEYWORDSAI_API_KEY=your_keywordsai_api_key_here
+KEYWORDSAI_BASE_URL=https://api.keywordsai.co  # Optional: defaults to KeywordsAI API
+```
+
+### Step 4: Enable Telemetry in API Routes
+In your API route files (e.g., `app/api/chat/route.ts`), enable telemetry by adding the `experimental_telemetry` option to your AI SDK functions:
+
+```typescript app/api/chat/route.ts
+// app/api/chat/route.ts
+import { openai } from '@ai-sdk/openai';
+import { streamText } from 'ai';
+
+export const maxDuration = 30;
+
+export async function POST(req: Request) {
+  const { messages, id } = await req.json();
+
+  console.log('chat id', id);
+
+  const result = streamText({
+    model: openai('gpt-4o'),
+    messages,
+    async onFinish({ text, toolCalls, toolResults, usage, finishReason }) {
+      // implement your own logic here, e.g. for storing messages
+      // or recording token usage
+    },
+    experimental_telemetry: {
+      isEnabled: true,  // <---- Enable telemetry tracking
+    },
+  });
+
+  return result.toDataStreamResponse();
+}
+```
+
+### Step 5: Test Your Setup
+1. Start your development server:
+
+```bash
+pnpm dev
+```
+
+```bash
+yarn dev
+```
+
+There might be broken dependencies in the @vercel/otel package, simply install them if you see them:
+
+```bash
+yarn add @opentelementry/api-logs
+```
+
+If this fails, make sure you are use the right version of package manager
+
+```json package.json
+"packageManager" : "yarn@4.9.2"
+```
+And try again
+
+2. Make some chat requests through your application
+
+3. Check your KeywordsAI application:
+- Go to Signals -> Traces
+- Check the log that is traced
+
+## What Gets Traced
+With this setup, KeywordsAI will automatically capture:
+
+- **AI Model Calls**: All calls to OpenAI models through the AI SDK
+- **Request/Response Data**: Input messages and generated responses
+- **Token Usage**: Input and output token counts for cost tracking
+- **Performance Metrics**: Latency and throughput data
+- **Error Tracking**: Failed requests and error details
+- **Custom Metadata**: Any additional context you want to track
+
+## Learn More
+To learn more about the technologies used in this tutorial:
+
+- [AI SDK docs](https://ai-sdk.dev/) - comprehensive AI SDK documentation
+- [Next.js OpenTelemetry Guide](https://nextjs.org/docs/app/guides/open-telemetry) - official Next.js telemetry documentation
+- [Vercel AI Playground](https://ai-sdk.dev/playground) - test AI models interactively
+- [OpenAI Documentation](https://platform.openai.com/docs/api-reference) - learn about OpenAI features and API
+- [Next.js Documentation](https://nextjs.org/docs/app) - learn about Next.js features and API
+
+
+
+
+
+
+{/* ## Prerequisites
 - Vercel AI SDK
 - [KeywordsAI API key](https://platform.keywordsai.co/platform/api/api-keys)
 
@@ -100,127 +304,7 @@ const result = await streamText({
 });
 ```
 </Step> 
-</Steps>
+</Steps> */}
 
-
-{/* ## Set up environment variables
-Create a `.env` file in your project root and add the following variables:
-```
-KEYWORDSAI_BASE_URL=https://api.keywordsai.co/api
-KEYWORDSAI_API_KEY=YOUR_KEYWORDSAI_API_KEY
-```
-
-
-## Create a task with Vercel AI SDK
-In this example, we create 2 tasks: `getUserInput` and `getLLMResponse` and annotate them with KeywordsAI tracing.
-```typescript Vercel AI SDK {3, 5-10,16-17,33-34}
-import { CoreMessage, streamText } from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
-import { KeywordsAITelemetry } from "@keywordsai/tracing";
-
-const kTl = new KeywordsAITelemetry({
-  apiKey: process.env.KEYWORDSAI_API_KEY || "",
-  baseUrl: process.env.KEYWORDSAI_BASE_URL || "",
-  disableBatch: true,
-});
-
-const client = createOpenAI({
-  compatibility: "strict",
-});
-
-function getUserInput(userName: string) {
-  return kTl.withTask(
-    { name: "getUserInput" },
-    async (userName: string): Promise<CoreMessage> => {
-      return {
-        role: "user",
-        content: "Hello, my name is:  " + userName,
-      };
-    },
-    userName
-  );
-}
-
-async function getLLMResponse(
-  messages: CoreMessage[],
-  model: string,
-  temperature: number
-) {
-  const proxyTextStream = await kTl.withTask(
-    { name: "getLLMResponse" },
-    async (kwargs: { messages: CoreMessage[]; model: string; temperature: number }) => {
-      const { textStream: proxyTextStream } = streamText({
-        model: client.chat(kwargs.model),
-        messages: kwargs.messages,
-        temperature: kwargs.temperature,
-      });
-      return proxyTextStream;
-    },
-    {
-      messages: messages,
-      model: model,
-      temperature: temperature,
-    }
-  );
-  return proxyTextStream;
-}
-```
-
-## Combine tasks into a workflow
-In this example, we create a workflow `vercelWithTracing` that combines the `getUserInput` and `getLLMResponse` tasks.
-<CodeGroup>
-```typescript Vercel AI SDK {3, 5-10,25-26}
-import { CoreMessage, streamText } from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
-import { KeywordsAITelemetry } from "@keywordsai/tracing";
-
-const kTl = new KeywordsAITelemetry({
-  apiKey: process.env.KEYWORDSAI_API_KEY || "",
-  baseUrl: process.env.KEYWORDSAI_BASE_URL || "",
-  disableBatch: true, // Send a trace immediately when it's ready, no batching
-});
-
-function getUserInput(userName: string) {
-  // ...
-}
-
-function getLLMResponse(messages: CoreMessage[], model: string, temperature: number) {
-  // ...
-}
-
-  async function main() {
-  // Three arguments for the withWorkflow decorator:
-  // 1. DecoratorConfig
-  // 2. Function to decorate
-  // 3. Arbitrary arguments for the function
-
-  return kTl.withWorkflow(
-    { name: "vercelWithTracing" },
-    async (kwargs) => {
-      try {
-        const textPieces: string[] = [];
-        const proxyTextStream = await getLLMResponse(
-          [await getUserInput("John")],
-          kwargs.model,
-          kwargs.temperature
-        );
-        for await (const textPart of proxyTextStream) {
-          textPieces.push(textPart);
-        }
-        return textPieces.join("");
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    },
-    {
-      model: "gpt-3.5-turbo",
-      temperature: 0.5,
-    }
-  );
-}
-
-main();
-```
-</CodeGroup> */}
 
 
