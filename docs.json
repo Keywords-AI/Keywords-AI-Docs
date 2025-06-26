@@ -316,6 +316,7 @@
                   "integration/development-frameworks/vercel-tracing"
                 ]
               },
+              "integration/development-frameworks/mastra",
               "integration/development-frameworks/mem0",
               "integration/development-frameworks/google-gemini",
               "integration/development-frameworks/llama-index",
