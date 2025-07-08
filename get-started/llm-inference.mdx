@@ -14,7 +14,16 @@ Keywords AI offers 2 easy ways to leverage the platform: the async LLM logging A
   </Card>
 </Columns>
 
-<Tip>Want to learn more about the **difference** between the two? [Check out the tutorial video here](https://www.youtube.com/watch?v=QGrUM_H3q_k).</Tip>
+## Choose Your Integration: Logging, Gateway, or Tracing?
+<iframe
+  className="w-full aspect-video rounded-xl"
+  src="https://www.youtube.com/embed/QGrUM_H3q_k"
+  title="LLM logging vs AI gateway vs Agent tracing"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen={true}
+></iframe>
+
+{/* <Tip>Want to learn more about the **difference** between the two? [Check out the tutorial video here](https://www.youtube.com/watch?v=QGrUM_H3q_k).</Tip> */}
 ## LLM logging
 Keywords AI provides an **Async Logging API** that allows you to log your LLM requests and responses asynchronously, which offers complete observability of your LLM applications and won't disrupt your application's performance.
 
@@ -182,6 +191,47 @@ Go to the [Providers page](https://platform.keywordsai.co/platform/api/providers
 Keywords AI offers various integration options, including: mainstream LLM frameworks and REST APIs.
 
 <Tabs>
+<Tab title="OpenAI SDK">
+If you are using OpenAI SDK, it's pretty straightforward to integrate AI gateway into your codebase.
+* set the `base_url` to `https://api.keywordsai.co/api`
+* set the `api_key` to your Keywords AI API key
+Go to this page to learn details of OpenAI SDK Integration.
+
+<CodeGroup>
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role":"user", "content":"Tell me a long story"}],
+)
+```
+```TypeScript TypeScript
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: "YOUR_KEYWORDS_AI_API_KEY",
+});
+
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-4o-mini",
+  })
+  .asResponse();
+
+console.log(await response.json());
+```
+</CodeGroup>
+
+</Tab>
+
 <Tab title="Standard API call">
 If you are not using any LLM frameworks, you can use the standard API call to connect 250+ LLMs.
 <CodeGroup>
@@ -285,48 +335,6 @@ func main() {
 }
 ```
 </CodeGroup>
-</Tab>
-<Tab title="OpenAI SDK">
-If you are using OpenAI SDK, it's pretty straightforward to integrate AI gateway into your codebase.
-* set the `base_url` to `https://api.keywordsai.co/api`
-* set the `api_key` to your Keywords AI API key
-Go to this page to learn details of OpenAI SDK Integration.
-
-<CodeGroup>
-```python Python
-from openai import OpenAI
-
-client = OpenAI(
-    base_url="https://api.keywordsai.co/api/",
-    api_key="YOUR_KEYWORDSAI_API_KEY",
-)
-
-response = client.chat.completions.create(
-    model="gpt-4o-mini",
-    messages=[{"role":"user", "content":"Tell me a long story"}],
-)
-```
-```TypeScript TypeScript
-import { OpenAI } from "openai";
-
-const client = new OpenAI({
-  baseURL: "https://api.keywordsai.co/api",
-  apiKey: "YOUR_KEYWORDS_AI_API_KEY",
-});
-
-const response = await client.chat.completions
-  .create({
-    messages: [{ role: "user", content: "Say this is a test" }],
-    model: "gpt-4o-mini",
-  })
-  .asResponse();
-
-console.log(await response.json());
-```
-</CodeGroup>
-
-<Card title="OpenAI SDK Integration" href="/integration/development-frameworks/openai-sdk">
-</Card>
 </Tab>
 <Tab title="Other LLM frameworks">
 We also support other LLM frameworks, pick the one you are using and follow the instructions.

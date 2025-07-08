@@ -3,9 +3,11 @@ title: Chat completions
 description: Learn how to use OpenAI SDK with Keywords AI LLM proxy.
 ---
 
-<Note> This integration is only for **Keywords AI LLM proxy** user. If you only want to log LLM calls and responses, you can use the [Logging API](/api-endpoints/integration/request-logging-endpoint) to log LLM calls. </Note>
+<Note> This integration is for the [Keywords AI gateway](/features/generation/overview). If you only need to log LLM calls and responses, use the [Logging API](/api-endpoints/integration/request-logging-endpoint). </Note>
 
 Keywords AI provides a robust and flexible LLM proxy with 250+ LLMs. You can use Keywords AI with OpenAI SDK by just passing the `base_url` and `api_key` to the OpenAI SDK.
+
+With this integration, your LLM request will go through the Keywords AI gateway, and the requests will be **automatically logged to Keywords AI**.
 
 ## Integration examples
 

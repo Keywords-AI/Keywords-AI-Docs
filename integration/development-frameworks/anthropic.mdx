@@ -3,27 +3,25 @@ title: Anthropic SDK
 description: "Use Anthropic SDK through Keywords AI"
 ---
 
-<Note>
-This section is only for **Keywords AI gateway** users.
-</Note>
+<Note> This integration is for the [Keywords AI gateway](/features/generation/overview). If you only need to log LLM calls and responses, use the [Logging API](/api-endpoints/integration/request-logging-endpoint). </Note>
+
+This is only a pass-through integration. So with this integration, some features are not available.
 
 ## Pros and Cons
 
 ### Pros
-- You can use the `Thinking` feature of `Claude 3.7 Sonnet` 
-
-- 2 lines of code change to integrate
+- **Easy Setup**: Only 2 lines of code to integrate.
+- **Use Claude's `Thinking` Feature**: You can use the `Thinking` feature from `Claude 3.7 Sonnet` or Claude 4 models.
 
 ### Cons
-- Can't call `prompts` related params with this integration
-        - You have to use another integration to use `prompts` related features
-- Can't use proxy params like `fallback`, `load_balancing`...
-    - Use another integration to use these features
+- **No Direct Prompt Access**: You can't fetch prompts stored in Keywords AI directly. You'll need to use the [Prompts API](/api-endpoints/prompt-endpoints/create-prompts) instead.
+- **Limited Gateway Features**: You can't use features like [fallbacks](/features/generation/fallbacks) or [load balancing](/features/generation/load-balancing). 
 
 
+## Integration examples
 
 <CodeGroup>
-```Python Python
+```python Python
 import anthropic
 
 client = anthropic.Anthropic(
@@ -81,6 +79,7 @@ console.log(msg);
 ```
 </CodeGroup>
 
+## Keywords AI parameters
 
 To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `metadata` parameter. In the above example, `customer_identifier` is a Keywords AI parameter. These parameters will take precedence over the Anthropic parameters if they are conflicting.
 

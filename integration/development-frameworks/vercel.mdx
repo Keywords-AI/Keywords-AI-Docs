@@ -4,9 +4,32 @@ description: Log LLM requests with Keywords AI gateway
 og:title: 'Vercel AI SDK with Keywords AI'
 ---
 
+With this integration, your LLM requests will go through **the Keywords AI gateway**, and the requests will be **automatically logged to Keywords AI**. 
 
 
-You can use the [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint with Vercel AI SDK under two lines of code change.
+## 1. Get Keywords AI API key
+
+After you create an account on [Keywords AI](https://platform.keywordsai.co), you can get your API key from the [API keys page](https://platform.keywordsai.co/platform/api/api-keys).
+
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/api-keys.png" alt="Create API key placeholder" />
+
+
+## 2. Add provider credentials
+You have to add your own credentials to activate AI gateway otherwise your LLM calls will cause errors. We will use your credentials to call LLMs on your behalf.
+
+We **won't use your credentials** for any other purposes and no extra charges will be applied.
+
+Go to the [Providers page](https://platform.keywordsai.co/platform/api/providers) to add your credentials. 
+<Frame>
+<img className="block dark:hidden" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg" alt="Providers page"/>
+<img className="hidden dark:block" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers-dark.jpg" alt="Providers page"/>
+</Frame>
+
+<Tip>Learn how to add credentials to a specific provider [here](/integration/own-api-keys).</Tip>
+
+
+## 3. Integrate Keywords AI gateway
+
 <Tabs>
 <Tab title="OpenAI">
 Here's an example of how to use the Vercel AI SDK with OpenAI:
@@ -129,7 +152,7 @@ Generates text and tool calls. This function is ideal for non-interactive use ca
     Generates a typed, structured object that matches a [Zod](https://zod.dev/) schema. You can use this function to force the language model to return structured data, e.g. for information extraction, synthetic data generation, or classification tasks.
 </ParamField> */}
 
-## Add Keywords AI parameters
+## 4. Add Keywords AI parameters
 
 Adding Keywords AI parameters to the Vercel AI SDK is different than other frameworks. Here is an example of how to do it:
 
