@@ -48,7 +48,7 @@
                 ]
               },
               {
-                "group": "Logs",
+                "group": "Logging",
                 "pages": [
                   "features/monitoring/logging/overview",
                   "features/monitoring/logging/metadata",
@@ -62,7 +62,7 @@
                 ]
               },
               {
-                "group": "Traces",
+                "group": "Tracing",
                 "pages": [
                   "features/monitoring/traces/overview",
                   "features/monitoring/traces/traces",
@@ -115,9 +115,10 @@
                   "features/prompt/prompt-management/monitor-a-prompt",
                   "features/prompt/prompt-management/prompt-collaboration",
                   "features/prompt/prompt-management/version-control",
+                  "features/prompt/prompt-management/deploy-a-prompt",
+                  "features/prompt/prompt-management/streaming",
                   "features/prompt/prompt-management/jinja-support",
                   "features/prompt/prompt-management/ab-testing",
-                  "features/prompt/prompt-management/deploy-a-prompt",
                   "features/prompt/prompt-management/create-a-prompt"
                 ]
               },
