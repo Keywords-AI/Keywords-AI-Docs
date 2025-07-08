@@ -167,6 +167,7 @@
               "features/generation/caches",
               "features/generation/prompt-caching",
               "features/generation/function-calling",
+              "features/generation/image-upload",
               "features/generation/custom-model",
               "features/generation/upload-pdf"
             ]
