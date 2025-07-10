@@ -227,7 +227,7 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
   ```
   <Accordion title="Properties">
     <ParamField body="type" type="string">
-      The type of response format. Options: `json_object` or `text`
+      The type of response format. Options: `json_object`, `json_schema` or `text`
     </ParamField>
   </Accordion>
 
@@ -366,14 +366,16 @@ Specifying a particular tool via the code below forces the model to call that to
 
 Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message the model generates is valid JSON.
 
+If you want to specify your own output structure, use `{ "type": "json_schema", "json_schema": {...your shema}}`. For more reference, please check OpenAI's guide on [structured output](https://platform.openai.com/docs/guides/structured-outputs?api-mode=responses)
+
 You must have a "json" as a keyword in the prompt to use this feature.
 <AccordionGroup>
   <Accordion title="Properties">
     <ParamField body="type" type="string" required={true}>
-      The type of response format. options: `json_object`, `text`
+      The type of response format. options: `json_object`, `json_schema` and `text`
     </ParamField>
   </Accordion>
-    <Accordion title="Vertex AI example">
+    <Accordion title="Vertex AI example (special case)">
     If you are using Vertex AI and want to use JSON mode, you should specify a `response_schema` in the `response_format` parameter. Check the [details of response schema here.](https://json-schema.org/understanding-json-schema/reference/string)
 ```python Example.py
 response_schema = {
