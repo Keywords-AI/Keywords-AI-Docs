@@ -159,3 +159,30 @@ response = await azureaclient.chat.completions.create(**kwargs)
 ```
 
 Then You can upload your Azure credentials to Keywords AI platform to use those models. Check out our [Providers integration](https://platform.keywordsai.co/platform/api/providers).
+
+## Anthropic thinking support
+In Keywords AI gateway, you can use enable thinking for Claude models. Here is an example of how to use it with OpenAI SDK.
+
+```python {8-10}
+from openai import OpenAI
+import os
+
+oai_params = {
+    "model": "anthropic/claude-3-7-sonnet-20250219",
+    "messages": [{"role": "user", "content": "What is the capital of France?"}],
+}
+thinking_params = {
+    "thinking": {"type": "enabled", "budget_tokens": 1024},
+}
+
+def test_anthropic_thinking():
+    client = OpenAI(
+        base_url=os.getenv("KEYWORDSAI_BASE_URL"),
+        api_key=os.getenv("KEYWORDSAI_API_KEY_TEST"),
+    )
+    response = client.chat.completions.create(**oai_params, extra_body=thinking_params)
+    assert "thinking_blocks" in response.choices[0].message.model_dump()
+
+if __name__ == "__main__":
+    test_anthropic_thinking()
+```

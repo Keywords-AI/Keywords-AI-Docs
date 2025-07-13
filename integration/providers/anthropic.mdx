@@ -35,6 +35,37 @@ Add `customer_credentials` parameter in your [request body](/api-endpoints/integ
 }
 ```
 
+## Extended thinking
+We support extended thinking for Anthropic models. You can enable it by adding `thinking` parameter to your request body.
+
+Keywords AI supports Anthropic's extended thinking feature, which allows models to show their reasoning process before providing a final answer.
+
+For Anthropic SDK, you can just enable thinking following the [Anthropic documentation](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking).
+
+```python {8-10} OpenAI SDK
+from openai import OpenAI
+import os
+
+oai_params = {
+    "model": "anthropic/claude-3-7-sonnet-20250219",
+    "messages": [{"role": "user", "content": "What is the capital of France?"}],
+}
+thinking_params = {
+    "thinking": {"type": "enabled", "budget_tokens": 1024},
+}
+
+def test_anthropic_thinking():
+    client = OpenAI(
+        base_url=os.getenv("KEYWORDSAI_BASE_URL"),
+        api_key=os.getenv("KEYWORDSAI_API_KEY_TEST"),
+    )
+    response = client.chat.completions.create(**oai_params, extra_body=thinking_params)
+    assert "thinking_blocks" in response.choices[0].message.model_dump()
+
+if __name__ == "__main__":
+    test_anthropic_thinking()
+```
+
 ## Override credentials for a particular model. (Optional)
 One-off credential overrides. Instead of using what is uploaded for each provider, this targets credentials for individual models.
 ```json
@@ -104,3 +135,4 @@ print(demo_call(messages).json())
 ```
 </CodeGroup>
 </Accordion>
+

@@ -78,8 +78,8 @@ One-off credential overrides. Instead of using what is uploaded for each provide
 2. Confirm that your models are available in the region specified by your credentials.
 <Warning>Credentials validation is not supported. Failure to comply with these requirements will result in errors!</Warning>
 
-### How to get your Vertex AI credentials
-1. Run `gcloud init` to initialize the gcloud CLI.
+## How to get your Vertex AI credentials
+{/* 1. Run `gcloud init` to initialize the gcloud CLI.
 2. Run `gcloud info` to get the path of your credential. You will see a line like <br/>`User Config Directory: [/home/USERNAME/.config/gcloud]`
 3. You will find a file named `application_default_credentials.json` in the path you got from the previous step. This file contains your credentials.
 4. Load this json file into the `vertex_ai_credentials` field in the request body.
@@ -90,6 +90,66 @@ For example:
 with open("./credentials/google/application_default_credentials.json", "r") as f:
     credentials = json.load(f)
 ```
+## Full request example */}
+
+### Using GOOGLE_APPLICATION_CREDENTIALS
+Here's the code for storing your service account credentials as GOOGLE_APPLICATION_CREDENTIALS environment variable:
+
+```python
+import os 
+import tempfile
+
+def load_vertex_ai_credentials():
+  # Define the path to the vertex_key.json file
+  print("loading vertex ai credentials")
+  filepath = os.path.dirname(os.path.abspath(__file__))
+  vertex_key_path = filepath + "/vertex_key.json"
+
+  # Read the existing content of the file or create an empty dictionary
+  try:
+      with open(vertex_key_path, "r") as file:
+          # Read the file content
+          print("Read vertexai file path")
+          content = file.read()
+
+          # If the file is empty or not valid JSON, create an empty dictionary
+          if not content or not content.strip():
+              service_account_key_data = {}
+          else:
+              # Attempt to load the existing JSON content
+              file.seek(0)
+              service_account_key_data = json.load(file)
+  except FileNotFoundError:
+      # If the file doesn't exist, create an empty dictionary
+      service_account_key_data = {}
+
+  # Create a temporary file
+  with tempfile.NamedTemporaryFile(mode="w+", delete=False) as temp_file:
+      # Write the updated content to the temporary file
+      json.dump(service_account_key_data, temp_file, indent=2)
+
+  # Export the temporary file as GOOGLE_APPLICATION_CREDENTIALS
+  os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.path.abspath(temp_file.name)
+```
+
+### Using GCP Service Account
+1. Figure out the Service Account bound to the Google Cloud Run service
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/vertex-ai/deployment-1.jpg" alt="Service Account"/>
+
+2. Get the FULL EMAIL address of the corresponding Service Account
+
+3. Next, go to IAM & Admin > Manage Resources , select your top-level project that houses your Google Cloud Run Service
+
+Click `Add Principal`.
+
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/vertex-ai/add-principle.jpg" alt="Service Account"/>
+
+4. Specify the Service Account as the principal and Vertex AI User as the role
+
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/vertex-ai/edit-access.jpg" alt="Service Account"/>
+
+
+
 ## Full request example
 <Accordion title="Example">
 <CodeGroup>

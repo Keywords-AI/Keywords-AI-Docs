@@ -13,10 +13,29 @@ Go to [Providers page](https://platform.keywordsai.co/platform/api/providers)
 </Frame>
 </Step>
 <Step title="Add your Gemini credentials.">
-
-<img height="200" width="300"  src="/images/providers/gemini.png" alt="Dashboard Page"/>
+<Frame>
+<img className="block dark:hidden" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers-gemini-light.jpg" alt="Dashboard Page"/>
+<img className="hidden dark:block" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers-gemini-dark.jpg" alt="Dashboard Page"/>
+</Frame>
 </Step>
 
 </Steps>
 
-## Add it in code
+## Grounding with Google Search
+
+You can enable grounding with Google Search for Gemini/Vertex AI models by adding `googleSearch` parameter to your request body.
+
+```python {9-11}
+params = {
+    "messages": [
+        {
+            "role": "user",
+            "content": "what is the amazon stock price right now"
+        }
+    ],
+    "model": "gemini/gemini-2.0-flash",
+    "tools": [
+        {"googleSearch": {}} # Add this tool to enable google search. Only works for gemini/ and vertex_ai/ models
+    ]
+}  
+```
