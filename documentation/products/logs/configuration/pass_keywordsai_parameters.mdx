@@ -1,0 +1,214 @@
+---
+title: "Pass Keywords AI parameters"
+description: "Complete guide to passing Keywords AI parameters using the 3-layer approach: required fields, telemetry, and metadata"
+---
+
+This guide shows you how to pass Keywords AI parameters using the structured 3-layer approach for comprehensive LLM logging and monitoring.
+
+---
+
+## Understanding the 3-Layer Structure
+
+Keywords AI parameters are organized into three distinct layers, each serving a specific purpose in your LLM observability stack:
+
+- **Layer 1: Required fields** - Essential data for basic logging
+- **Layer 2: Telemetry** - Performance and cost metrics  
+- **Layer 3: Metadata** - Custom tracking and identification
+
+---
+
+## Layer 1: Required fields
+
+These are the essential parameters needed for basic LLM request logging.
+
+### Core required fields
+
+| Parameter | Type | Description | Required |
+|-----------|------|-------------|----------|
+| `model` | string | The LLM model used | ✅ |
+| `prompt_messages` | array | Input messages to the model | ✅ |
+| `completion_message` | object | Model's response message | ✅ |
+
+### Basic implementation
+
+```python
+import requests
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    # --- Layer 1: Required fields ---
+    "model": "claude-3-5-sonnet-20240620",  # model name
+    "prompt_messages": [                    # prompt messages
+        {
+            "role": "user",
+            "content": "Hi"
+        },
+    ],
+    "completion_message": {                 # completion message
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    }
+}
+```
+
+### Message structure
+
+**Prompt Messages Format:**
+```python
+"prompt_messages": [
+    {
+        "role": "system",
+        "content": "You are a helpful assistant."
+    },
+    {
+        "role": "user", 
+        "content": "What is machine learning?"
+    }
+]
+```
+
+**Completion Message Format:**
+```python
+"completion_message": {
+    "role": "assistant",
+    "content": "Machine learning is a subset of artificial intelligence..."
+}
+```
+
+---
+
+## Layer 2: Telemetry
+
+Performance metrics and cost tracking for monitoring LLM efficiency.
+
+### Telemetry parameters
+
+| Parameter | Type | Description | Unit |
+|-----------|------|-------------|------|
+| `prompt_tokens` | integer | Number of tokens in prompt | tokens |
+| `completion_tokens` | integer | Number of tokens in completion | tokens |
+| `cost` | float | Cost of the request | USD |
+| `latency` | float | Total request latency | seconds |
+| `ttft` | float | Time to first token | seconds |
+| `generation_time` | float | Time to generate response | seconds |
+
+### Implementation with telemetry
+
+```python
+payload = {
+    # Layer 1: Required fields (from above)
+    "model": "claude-3-5-sonnet-20240620",
+    "prompt_messages": [
+        {"role": "user", "content": "Hi"}
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    
+    # --- Layer 2: Telemetry ---
+    "prompt_tokens": 5,        # prompt tokens
+    "completion_tokens": 5,    # completion tokens  
+    "cost": 0.000005,         # cost in USD
+    "latency": 0.2,           # total latency in seconds
+    "ttft": 2,                # time to first token in seconds
+    "generation_time": 0.2,   # generation time in seconds
+}
+```
+
+---
+
+## Layer 3: Metadata
+
+Custom tracking and identification parameters for advanced analytics and filtering.
+
+### Metadata parameters
+
+| Parameter | Type | Description | Purpose |
+|-----------|------|-------------|---------|
+| `metadata` | object | General metadata | Custom properties |
+| `customer_params` | object | Customer information | User tracking |
+| `group_identifier` | string | Group/organization ID | Group analytics |
+| `thread_identifier` | string | Conversation thread ID | Thread tracking |
+| `custom_identifier` | string | Custom tracking ID | Custom analytics |
+
+### Complete implementation
+
+```python
+import requests
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    # --- Layer 1: Required fields ---
+    "model": "claude-3-5-sonnet-20240620",  # model name
+    "prompt_messages": [                    # prompt messages
+        {
+            "role": "user",
+            "content": "Hi"
+        },
+    ],
+    "completion_message": {                 # completion message
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    
+    # --- Layer 2: Telemetry ---
+    "prompt_tokens": 5,        # prompt tokens
+    "completion_tokens": 5,    # completion tokens
+    "cost": 0.000005,         # cost
+    "latency": 0.2,           # latency
+    "ttft": 2,                # time to first token
+    "generation_time": 0.2,   # time to generate the response
+    
+    # --- Layer 3: Metadata ---
+    "metadata": {             # general metadata
+        "language": "en",
+        "environment": "production",
+        "version": "v1.0.0",
+        "feature": "chat_support"
+    },
+    "customer_params": {      # customer params
+        "customer_identifier": "1234567890",
+        "name": "John Doe",
+        "email": "john.doe@example.com",
+        "tier": "premium",
+        "signup_date": "2024-01-15"
+    },
+    "group_identifier": "group-001",      # group identifier
+    "thread_identifier": "thread-001",   # thread identifier
+    "custom_identifier": "custom-001"    # custom identifier
+}
+
+# Get API key from environment variable
+api_key = os.getenv("KEYWORDSAI_API_KEY")
+if not api_key:
+    raise ValueError("KEYWORDSAI_API_KEY environment variable is required")
+
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, headers=headers, json=payload)
+
+# Print result
+print("Status Code:", response.status_code)
+try:
+    print("Response:", response.json())
+except Exception as e:
+    print("Raw Response Text:", response.text)
+```
+
+---
+## Need help?
+[Join our discord](https://discord.gg/n6ZPqGP6) — we'll help you pick the best fit.

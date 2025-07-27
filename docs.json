@@ -9,13 +9,13 @@
   },
   "favicon": "/logo.svg",
   "contextual": {
-      "options": [
-        "copy",
-        "view",
-        "chatgpt",
-        "claude"
-      ]
-    },
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude"
+    ]
+  },
   "navigation": {
     "tabs": [
       {
@@ -29,184 +29,289 @@
             ]
           },
           {
-            "group": "AI observability",
+            "group": "Products",
             "pages": [
-              "features/monitoring/overview",
               {
-                "group": "Getting started",
+                "group": "Dashboard",
                 "pages": [
-                  "features/monitoring/get-started/logging-api",
-                  "features/monitoring/get-started/proxy-api",
-                  "features/monitoring/get-started/tracing-api"
+                  "documentation/products/dashboard/quickstart",
+                  "documentation/products/dashboard/filter"
                 ]
               },
               {
-                "group": "Metrics",
+                "group": "Logs",
                 "pages": [
-                  "features/monitoring/metrics/overview",
-                  "features/monitoring/metrics/dashboard-filter"
-                ]
-              },
-              {
-                "group": "Logging",
-                "pages": [
-                  "features/monitoring/logging/overview",
-                  "features/monitoring/logging/metadata",
-                  "features/monitoring/logging/logs-export",
-                  "features/monitoring/logging/share-log",
-                  "features/monitoring/logging/group-logs",
-                  "features/monitoring/logging/log-prompt-variable",
-                  "features/monitoring/logging/save-log-as-prompt",
-                  "features/monitoring/logging/embedding",
-                  "features/monitoring/logging/disable-logs"
-                ]
-              },
-              {
-                "group": "Tracing",
-                "pages": [
-                  "features/monitoring/traces/overview",
-                  "features/monitoring/traces/traces",
+                  "documentation/products/logs/quickstart",
                   {
-                    "group": "Integrations",
+                    "group": "Configuration",
                     "pages": [
-                      "features/monitoring/traces/integrations/openai-agents-sdk",
-                      "features/monitoring/traces/integrations/vercel-ai-sdk",
-                      "features/monitoring/traces/integrations/langgraph"
+                      "documentation/products/logs/configuration/pass_keywordsai_parameters",
+                      "documentation/products/logs/configuration/group logs",
+                      "documentation/products/logs/configuration/threads",
+                      "documentation/products/logs/configuration/custom_properties"
                     ]
                   },
-                  "features/monitoring/traces/traces-keywords-params",
-                  "features/monitoring/traces/group-traces",
-                  "features/monitoring/traces/views"
+                  "documentation/products/logs/embedding_logging",
+                  "documentation/products/logs/log_variables",
+                  "documentation/products/logs/custom_model",
+                  "documentation/products/logs/filters",
+                  "documentation/products/logs/sharing",
+                  "documentation/products/logs/export_logs",
+                  "documentation/products/logs/save_log_to_prompt"
                 ]
               },
               {
-                "group": "Threads",
+                "group": "Traces",
                 "pages": [
-                  "features/monitoring/threads/overview",
-                  "features/monitoring/threads/threads"
+                  "documentation/products/traces/quickstart",
+                  {
+                    "group": "Configuration",
+                    "pages": [
+                      "documentation/products/traces/configuration/pass_keywordsai_parameters",
+                      "documentation/products/traces/configuration/group_traces",
+                      "documentation/products/traces/configuration/customer_identifier"
+                    ]
+                  },
+                  "documentation/products/traces/decorators",
+                  "documentation/products/traces/filters"
                 ]
               },
-              {
-                "group": "User analytics",
-                "pages": [
-                  "features/monitoring/users/overview",
-                  "features/generation/customer-identifier",
-                  "features/user/user-budget",
-                  "features/monitoring/users/users-rate-limit"
-                ]
-              },
-              {
-                "group": "Advanced",
-                "pages": [
-                  "features/monitoring/subscribe-alerts",
-                  "features/monitoring/webhooks"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Prompt engineering",
-            "pages": [
-              "features/prompt/overview",
               {
                 "group": "Prompt management",
                 "pages": [
-                  "features/prompt/prompt-management/overview",
-                  "features/prompt/prompt-management/monitor-a-prompt",
-                  "features/prompt/prompt-management/prompt-collaboration",
-                  "features/prompt/prompt-management/version-control",
-                  "features/prompt/prompt-management/deploy-a-prompt",
-                  "features/prompt/prompt-management/streaming",
-                  "features/prompt/prompt-management/jinja-support",
-                  "features/prompt/prompt-management/ab-testing",
-                  "features/prompt/prompt-management/create-a-prompt"
-                ]
-              },
-              "features/prompt/model-playground"
-            ]
-          },
-          {
-            "group": "Evaluations",
-            "pages": [
-              "features/evaluation/overview",
-              {
-                "group": "Experiments",
-                "pages": [
-                  "features/evaluation/experiments/overview",
-                  "features/evaluation/experiments/experiments",
-                  "features/evaluation/experiments/datasets",
-                  "features/evaluation/experiments/experiments-images"
-                ]
-              },
-              {
-                "group": "LLM evals",
-                "pages": [
-                  "features/evaluation/llm-evals/llm-evaluator",
-                  "features/evaluation/llm-evals/run-evaluator-code",
-                  "features/evaluation/llm-evals/run-evaluator-ui"
+                  "documentation/products/prompt_management/quickstart",
+                  "documentation/products/prompt_management/model_playground",
+                  {
+                    "group": "Creating prompts",
+                    "pages": [
+                      "documentation/products/prompt_management/creating_prompts/create_prompt",
+                      "documentation/products/prompt_management/creating_prompts/json_schema",
+                      "documentation/products/prompt_management/creating_prompts/streaming",
+                      "documentation/products/prompt_management/creating_prompts/jinja_support",
+                      "documentation/products/prompt_management/creating_prompts/manage_prompt_api"
+                    ]
+                  },
+                  {
+                    "group": "Management & collaboration",
+                    "pages": [
+                      "documentation/products/prompt_management/management_collaboration/version_control",
+                      "documentation/products/prompt_management/management_collaboration/team_collaboration"
+                    ]
+                  },
+                  {
+                    "group": "Use prompt in code",
+                    "pages": [
+                      "documentation/products/prompt_management/use_prompt_in_code/use_prompt_in_llms",
+                      "documentation/products/prompt_management/use_prompt_in_code/prompt_logging"
+                    ]
+                  }
                 ]
               },
               {
-                "group": "Human evals",
+                "group": "Evaluations",
                 "pages": [
-                  "features/evaluation/human-evals/human-evals-setup",
-                  "features/evaluation/human-evals/human-annotation"
+                  "documentation/products/evaluation/overview",
+                  {
+                    "group": "Experiments",
+                    "pages": [
+                      "documentation/products/evaluation/experiments/overview",
+                      "documentation/products/evaluation/experiments/experiments",
+                      "documentation/products/evaluation/experiments/datasets",
+                      "documentation/products/evaluation/experiments/experiments-images",
+                      "documentation/products/evaluation/experiments/upload-testsets"
+                    ]
+                  },
+                  {
+                    "group": "LLM evals",
+                    "pages": [
+                      "documentation/products/evaluation/llm-evals/llm-evaluator",
+                      "documentation/products/evaluation/llm-evals/run-evaluator-code",
+                      "documentation/products/evaluation/llm-evals/run-evaluator-ui"
+                    ]
+                  },
+                  {
+                    "group": "Human evals",
+                    "pages": [
+                      "documentation/products/evaluation/human-evals/human-evals-setup",
+                      "documentation/products/evaluation/human-evals/human-annotation"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Gateway",
+                "pages": [
+                  "documentation/products/gateway/quickstart",
+                  {
+                    "group": "Configuration",
+                    "pages": [
+                      "documentation/products/gateway/configuration/models"
+                    ]
+                  },
+                  {
+                    "group": "Traffic Management",
+                    "pages": [
+                      "documentation/products/gateway/traffic_management/load-balancing",
+                      "documentation/products/gateway/traffic_management/retries",
+                      "documentation/products/gateway/traffic_management/fallbacks",
+                      "documentation/products/gateway/traffic_management/rate_limit"
+                    ]
+                  },
+                  {
+                    "group": "Performance & Optimization",
+                    "pages": [
+                      "documentation/products/gateway/performance_optimization/caches",
+                      "documentation/products/gateway/performance_optimization/prompt-caching"
+                    ]
+                  },
+                  {
+                    "group": "Monitoring & Analysis",
+                    "pages": [
+                      "documentation/products/gateway/monitoring_analysis/disable_logging"
+                    ]
+                  },
+                  {
+                    "group": "Advanced Features",
+                    "pages": [
+                      "documentation/products/gateway/advanced_features/function_calling",
+                      "documentation/products/gateway/advanced_features/upload_pdf",
+                      "documentation/products/gateway/advanced_features/upload_image"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Users",
+                "pages": [
+                  "documentation/products/users/quickstart",
+                  "documentation/products/users/user_rate_limit",
+                  "documentation/products/users/user-budget",
+                  "documentation/products/users/customer-identifier"
+                ]
+              },
+              {
+                "group": "Notifications",
+                "pages": [
+                  "documentation/products/notifications/subscribe_alerts",
+                  "documentation/products/notifications/webhooks"
                 ]
               }
             ]
           },
           {
-            "group": "AI gateway",
+            "group": "Admin",
             "pages": [
-              "features/generation/overview",
-              "features/generation/gateway",
-              "features/generation/add-credentials",
-              "features/generation/load-balancing",
-              "features/generation/retries",
-              "features/generation/fallbacks",
-              "features/generation/rate-limits",
-              "features/generation/caches",
-              "features/generation/prompt-caching",
-              "features/generation/function-calling",
-              "features/generation/image-upload",
-              "features/generation/custom-model",
-              "features/generation/upload-pdf"
-            ]
-          },
-          {
-            "group": "Organization management",
-            "pages": [
-              "features/generation/key-management",
-              "features/organization/create-team"
+              "documentation/admin/keywords_api_keys",
+              "documentation/admin/llm_provider_keys",
+              {
+                "group": "Team management",
+                "pages": [
+                  "documentation/admin/team_management/create_a_new_team"
+                ]
+              }
             ]
           },
           {
             "group": "Resources",
             "pages": [
-              "resources/what-is-llm-observability-and-monitoring",
-              "features/generation/automatic-retries",
-              "features/generation/streaming",
+              "documentation/resources/what-is-llm-observability-and-monitoring",
+              "documentation/resources/automatic-retries",
+              "documentation/resources/streaming",
               {
                 "group": "Relari eval",
                 "pages": [
                   {
                     "group": "Retrieval",
-                    "pages": ["features/evaluation/retrieval/context-precision"]
+                    "pages": [
+                      "documentation/resources/relari_eval/retrieval/context-precision"
+                    ]
                   },
                   {
                     "group": "Text generation",
                     "pages": [
-                      "features/evaluation/generation/faithfulness",
-                      "features/evaluation/generation/flesch-kincaid",
-                      "features/evaluation/generation/answer-relevance"
+                      "documentation/resources/relari_eval/generation/faithfulness",
+                      "documentation/resources/relari_eval/generation/flesch-kincaid",
+                      "documentation/resources/relari_eval/generation/answer-relevance"
                     ]
                   },
                   {
                     "group": "Other",
-                    "pages": ["features/evaluation/other/sentiment"]
+                    "pages": [
+                      "documentation/resources/relari_eval/other/sentiment"
+                    ]
                   }
                 ]
               }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Integrations",
+        "groups": [
+          {
+            "group": "Ecosystem",
+            "pages": [
+              "integration/overview"
+            ]
+          },
+          {
+            "group": "Tracing integration",
+            "pages": [
+              {
+                "group": "OpenAI Agents SDK",
+                "pages": [
+                  "integration/development-frameworks/tracing/openai-agents-sdk",
+                  "integration/development-frameworks/tracing/openai-agents-sdk-js"
+                ]
+              },
+              "integration/development-frameworks/tracing/vercel-tracing",
+              "integration/development-frameworks/tracing/mastra"
+            ]
+          },
+          {
+            "group": "Gateway integration",
+            "pages": [
+              {
+                "group": "OpenAI SDK",
+                "pages": [
+                  "integration/development-frameworks/llm_framework/openai/openai-sdk",
+                  "integration/development-frameworks/llm_framework/openai/openai-responses"
+                ]
+              },
+              "integration/development-frameworks/llm_framework/anthropic",
+              "integration/development-frameworks/llm_framework/langchain",
+              "integration/development-frameworks/llm_framework/vercel",
+              "integration/development-frameworks/llm_framework/llama-index",
+              "integration/development-frameworks/llm_framework/google_genai"
+            ]
+          },
+          {
+            "group": "LLM providers",
+            "pages": [
+              "integration/providers/openai",
+              "integration/providers/anthropic",
+              "integration/providers/openrouter",
+              "integration/providers/groq",
+              "integration/providers/fireworks",
+              "integration/providers/together",
+              "integration/providers/perplexity",
+              "integration/providers/azure",
+              "integration/providers/vertex",
+              "integration/providers/gemini",
+              "integration/providers/bedrock",
+              "integration/providers/nebius",
+              "integration/providers/novita"
+            ]
+          },
+          {
+            "group": "Others",
+            "pages": [
+              "integration/providers/assemblyai",
+              "integration/dev-tools/linkup",
+              "integration/development-frameworks/mem0",
+              "integration/development-frameworks/baml",
+              "integration/analytics/posthog"
             ]
           }
         ]
@@ -237,23 +342,23 @@
             ]
           },
           {
-            "group": "Prompts",
+            "group": "Prompts ",
             "pages": [
-                  "api-endpoints/prompt-endpoints/create-prompts",
-                  "api-endpoints/prompt-endpoints/get-prompts",
-                  "api-endpoints/prompt-endpoints/update-prompt",
-                  "api-endpoints/prompt-endpoints/delete-prompt"
-                ]
-            },
-              {
-                "group": "Prompt versions",
-                "pages": [
-                  "api-endpoints/prompt-endpoints/create-prompt-version",
-                  "api-endpoints/prompt-endpoints/get-prompt-versions",
-                  "api-endpoints/prompt-endpoints/update-prompt-version",
-                  "api-endpoints/prompt-endpoints/delete-prompt-version"
-                ]
-              },
+              "api-endpoints/prompt-endpoints/create-prompts",
+              "api-endpoints/prompt-endpoints/get-prompts",
+              "api-endpoints/prompt-endpoints/update-prompt",
+              "api-endpoints/prompt-endpoints/delete-prompt"
+            ]
+          },
+          {
+            "group": "Prompt versions",
+            "pages": [
+              "api-endpoints/prompt-endpoints/create-prompt-version",
+              "api-endpoints/prompt-endpoints/get-prompt-versions",
+              "api-endpoints/prompt-endpoints/update-prompt-version",
+              "api-endpoints/prompt-endpoints/delete-prompt-version"
+            ]
+          },
           {
             "group": "Multimodal integrations",
             "pages": [
@@ -273,7 +378,9 @@
           },
           {
             "group": "Model",
-            "pages": ["api-endpoints/data-endpoints/models-endpoint"]
+            "pages": [
+              "api-endpoints/data-endpoints/models-endpoint"
+            ]
           },
           {
             "group": "API keys management",
@@ -284,74 +391,6 @@
               "api-endpoints/temporary-api-keys/update-temporary-key",
               "api-endpoints/temporary-api-keys/delete-temporary-key"
             ]
-          }
-        ]
-      },
-      {
-        "tab": "Integrations",
-        "groups": [
-          {
-            "group": "Ecosystem",
-            "pages": ["integration/own-api-keys"]
-          },
-          {
-            "group": "LLM Frameworks",
-            "pages": [
-              {
-                "group": "OpenAI Agents SDK",
-                "pages": [
-                  "integration/development-frameworks/openai-agents-sdk",
-                  "integration/development-frameworks/openai-agents-sdk-js"
-                ]
-              },
-              {
-                "group": "OpenAI SDK",
-                "pages": [
-                  "integration/development-frameworks/openai-sdk",
-                  "integration/development-frameworks/openai-responses"
-                ]
-              },
-              "integration/development-frameworks/anthropic",
-              "integration/development-frameworks/langchain",
-              {
-                "group": "Vercel AI SDK",
-                "pages": [
-                  "integration/development-frameworks/vercel",
-                  "integration/development-frameworks/vercel-tracing"
-                ]
-              },
-              "integration/development-frameworks/mastra",
-              "integration/development-frameworks/mem0",
-              "integration/development-frameworks/llama-index",
-              "integration/development-frameworks/baml"
-            ]
-          },
-          {
-            "group": "LLM providers",
-            "pages": [
-              "integration/providers/openai",
-              "integration/providers/anthropic",
-              "integration/providers/azure",
-              "integration/providers/vertex",
-              "integration/providers/gemini",
-              "integration/providers/bedrock",
-              "integration/providers/nebius",
-              "integration/providers/novita",
-              "integration/providers/groq",
-              "integration/providers/assemblyai",
-              "integration/providers/Fireworks",
-              "integration/providers/together",
-              "integration/providers/perplexity",
-              "integration/providers/openrouter"
-            ]
-          },
-          {
-            "group": "AI dev tools",
-            "pages": ["integration/dev-tools/linkup"]
-          },
-          {
-            "group": "Analytics",
-            "pages": ["integration/posthog"]
           }
         ]
       },
@@ -409,7 +448,7 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Get started",
+      "label": "platform",
       "href": "https://platform.keywordsai.co/"
     }
   },

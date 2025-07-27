@@ -2,7 +2,26 @@
 title: "Together AI"
 description: "Use your own Together AI credits through Keywords AI"
 ---
+## Together AI models compatibility
 
+**✅ Supported Frameworks:**
+- [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+- [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+- [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+- [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+- [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+- [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+- [Keywords native (Otel)]('/documentation/gateway/get_started)
+
+**❌ Unsupported Frameworks:**
+- [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+- [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+
+## Add Together AI API keys
+There are 2 ways to add your Together AI credentials to your requests:
+### Via UI
+
+### Via Code
 Add `customer_credentials` parameter in your [request body](/api-endpoints/integration/chat-completions) to use your own Together AI credits.
 
 ```json
