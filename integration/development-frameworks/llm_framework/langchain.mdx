@@ -1,0 +1,234 @@
+---
+title: LangChain SDK
+description: "Use LangChain with Keywords AI"
+---
+
+<Note> This integration is for the **Keywords AI gateway**. </Note>
+
+## Overview
+
+LangChain provides a powerful framework for building applications with language models. You can seamlessly integrate Keywords AI with LangChain's `ChatOpenAI` LLM with minimal code changes.
+
+## Quickstart
+
+### Step 1: Install LangChain
+
+<CodeGroup>
+```bash Python
+pip install langchain-openai
+```
+
+```bash TypeScript
+npm install @langchain/openai langchain
+```
+</CodeGroup>
+
+### Step 2: Initialize LangChain with Keywords AI
+
+<CodeGroup>
+```python Python
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="<Your Keywords AI API Key>",
+    model="gpt-3.5-turbo",
+    streaming=True,
+)
+```
+
+```typescript TypeScript
+import { ChatOpenAI } from "@langchain/openai";
+
+const llm = new ChatOpenAI({
+    configuration: {
+        baseURL: "https://api.keywordsai.co/api/",
+    },
+    openAIApiKey: "<Your Keywords AI API Key>",
+    modelName: "gpt-3.5-turbo",
+    streaming: true,
+});
+```
+</CodeGroup>
+
+### Step 3: Make Your First Request
+
+<CodeGroup>
+```python Python
+response = llm.invoke("Hello, world!")
+print(response)
+```
+
+```typescript TypeScript
+const response = await llm.invoke("Hello, world!");
+console.log(response);
+```
+</CodeGroup>
+
+## Switch models
+
+<CodeGroup>
+```python Python
+# OpenAI GPT models
+model = "gpt-4o"
+# model = "claude-3-5-sonnet-20241022"
+# model = "gemini-1.5-pro"
+
+llm = ChatOpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="<Your Keywords AI API Key>",
+    model=model,
+)
+```
+
+```typescript TypeScript
+// OpenAI GPT models
+let model = "gpt-4o";
+// model = "claude-3-5-sonnet-20241022";
+// model = "gemini-1.5-pro";
+
+const llm = new ChatOpenAI({
+    configuration: {
+        baseURL: "https://api.keywordsai.co/api/",
+    },
+    openAIApiKey: "<Your Keywords AI API Key>",
+    modelName: model,
+});
+```
+</CodeGroup>
+
+<Note>
+See the [full model list](https://platform.keywordsai.co/platform/models) for all available models.
+</Note>
+
+## Supported parameters
+
+### OpenAI parameters
+
+We support all the [OpenAI parameters](/api-endpoints/integration/chat-completions#openai-parameters). You can pass them directly in the LangChain configuration.
+
+<CodeGroup>
+```python Python
+llm = ChatOpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="<Your Keywords AI API Key>",
+    model="gpt-4o-mini",
+    temperature=0.7,          # Control randomness
+    max_tokens=1000,          # Limit response length
+    streaming=True,           # Enable streaming
+)
+```
+
+```typescript TypeScript
+const llm = new ChatOpenAI({
+    configuration: {
+        baseURL: "https://api.keywordsai.co/api/",
+    },
+    openAIApiKey: "<Your Keywords AI API Key>",
+    modelName: "gpt-4o-mini",
+    temperature: 0.7,         // Control randomness
+    maxTokens: 1000,          // Limit response length
+    streaming: true,          // Enable streaming
+});
+```
+</CodeGroup>
+
+### Keywords AI Parameters
+
+[Keywords AI parameters](/api-endpoints/integration/chat-completions#keywords-ai-parameters) can be passed using `extra_body` for better handling and customization.
+
+<CodeGroup>
+```python Python
+llm = ChatOpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="<Your Keywords AI API Key>",
+    model="gpt-4o-mini",
+    extra_body={
+        "customer_identifier": "user_123",           # Track specific users
+        "fallback_models": ["gpt-3.5-turbo"],       # Automatic fallbacks
+        "metadata": {"session_id": "abc123"},        # Custom metadata
+        "thread_identifier": "conversation_456",     # Group related messages
+        "group_identifier": "team_alpha",           # Organize by groups
+    }
+)
+```
+
+```typescript TypeScript
+const llm = new ChatOpenAI({
+    configuration: {
+        baseURL: "https://api.keywordsai.co/api/",
+    },
+    openAIApiKey: "<Your Keywords AI API Key>",
+    modelName: "gpt-4o-mini",
+    modelKwargs: {
+        extra_body: {
+            customer_identifier: "user_123",           // Track specific users
+            fallback_models: ["gpt-3.5-turbo"],       // Automatic fallbacks
+            metadata: { session_id: "abc123" },        // Custom metadata
+            thread_identifier: "conversation_456",     // Group related messages
+            group_identifier: "team_alpha",           // Organize by groups
+        }
+    }
+});
+```
+</CodeGroup>
+
+## Advanced Usage (optional)
+
+### Using with Chains (TODO)
+
+<CodeGroup>
+```python Python
+from langchain.chains import ConversationChain
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="<Your Keywords AI API Key>",
+    model="gpt-4o-mini",
+)
+
+chain = ConversationChain(llm=llm)
+response = chain.run("Tell me about artificial intelligence")
+print(response)
+```
+
+```typescript TypeScript
+import { ConversationChain } from "langchain/chains";
+import { ChatOpenAI } from "@langchain/openai";
+
+const llm = new ChatOpenAI({
+    configuration: {
+        baseURL: "https://api.keywordsai.co/api/",
+    },
+    openAIApiKey: "<Your Keywords AI API Key>",
+    modelName: "gpt-4o-mini",
+});
+
+const chain = new ConversationChain({ llm });
+
+async function main() {
+    const response = await chain.call({
+        input: "Tell me about artificial intelligence"
+    });
+    console.log(response);
+}
+
+main();
+```
+</CodeGroup>
+
+<Card title="View your analytics" href="https://platform.keywordsai.co/platform/dashboard">
+  Access your Keywords AI dashboard to see detailed analytics
+</Card>
+
+## Next Steps
+
+<CardGroup cols={2}>
+<Card title="Advanced settings" href="/features/monitoring/user-analytics">
+  Track user behavior and patterns
+</Card>
+<Card title="Prompt Management" href="/features/prompt/prompt-management/overview">
+  Manage and version your prompts
+</Card>
+</CardGroup>

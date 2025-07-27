@@ -1,0 +1,41 @@
+---
+title: "Overview"
+description: "A guide to view LLM-level user analytics metrics."
+---
+---
+## How does user analytics work?
+On Keywords AI, we built a [Users page](https://platform.keywordsai.co/platform/users) to help you understand your users and their behavior on your LLM applications. With our user analytics feature, you can;
+- Track user LLM usage
+- Set user budget
+- Filter logs by user identifier
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/overview/users.png" />
+</Frame>
+
+You can monitor individual users' activity in your AI products. Get insights into their usage patterns, preferences, and behavior, and take actions to improve the user experience.
+
+## Enable user analytics in the code
+You can pass a `customer_params` to the request to track the user's behavior on your LLM applications.
+
+
+## See user data on the platform
+After you send the user's data to Keywords AI, there are 3 places you can see the user's data on the platform.
+### 1. [Users page](https://platform.keywordsai.co/platform/users)
+You will see each user's detail information and their LLM usage on the Users page and the side panel.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/users-page.png" alt="Users Page"/>
+</Frame>
+### 2. [Dashboard page](https://platform.keywordsai.co/platform/dashboard)
+There are several charts on the Dashboard page to help you understand your users' behavior, including;
+- Top users
+- Daily active users count
+- LLM cost by user
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/dashboard-users.png" alt="Users Page"/>
+</Frame>
+### 3. [Logs page](https://platform.keywordsai.co/platform/requests)
+For each LLM log, you can see the corresponding user's data in the side panel. You can also filter logs by choosing a User Identifier.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/logs-users.png" alt="Users Page"/>
+</Frame>

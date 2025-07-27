@@ -1,0 +1,186 @@
+---
+title: "Set budget for users"
+description: ""
+---
+
+<Note>Only Keywords AI users who are using the **LLM proxy** can set budget for their users. See how to [set up LLM proxy](/features/generation/llm-proxy) for more information.</Note>
+
+
+<Tabs>
+<Tab title="OpenAI Python SDK">
+Here is an example of how to send a user's data with the parameter `customer_params` to Keywords AI in the OpenAI Python SDK.
+```python {16-18}
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "user", "content": "Tell me a long story"}
+    ],
+    extra_body={
+        "customer_params": {
+            "customer_identifier": "customer_1",
+            "budget_duration": "yearly",
+            "period_budget": 1000,
+            "total_budget": 10000 
+        }
+    }
+)
+```
+</Tab>
+<Tab title="OpenAI TypeScript SDK">
+Here is an example of how to send a user's data with the parameter `customer_params` to Keywords AI in the OpenAI TypeScript SDK. In OpenAI TypeScript SDK, you should add a `// @ts-expect-error` before the metadata field.
+```typescript {15-17}
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-4o-mini",
+    // @ts-expect-error
+    customer_params: {
+        "customer_identifier": "customer_1",
+        "budget_duration": "yearly",
+        "period_budget": 1000,
+        "total_budget": 10000 
+    }
+  })
+  .asResponse();
+
+console.log(await response.json());
+```
+</Tab>
+<Tab title="Standard API">
+<CodeGroup>
+```python LLM proxy {16-18}
+import requests
+def demo_call(input, 
+              model="gpt-4o-mini",
+              token="YOUR_KEYWORDS_AI_API_KEY",
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        'customer_params': {
+            "customer_identifier": "customer_1",
+            "budget_duration": "yearly",
+            "period_budget": 1000,
+            "total_budget": 10000 
+        }
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+
+
+```python Async logging {18-20}
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "model": "gpt-4o-mini",
+    "prompt_messages": [
+        {
+            "role": "user",
+            "content": "Hi"
+        },
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Hi, how can I assist you today?"
+    },
+    "customer_params": {
+        "customer_identifier": "customer_1",
+        "budget_duration": "yearly",
+        "period_budget": 1000,
+        "total_budget": 10000 
+    }
+    # other parameters
+}
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.request("POST", url, headers=headers, json=payload)
+```
+</CodeGroup>
+</Tab>
+<Tab title="Other SDKs">
+We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/own-api-keys) for more information.
+</Tab>
+</Tabs>
+
+<Tip>
+You can also use `period_start` and `period_end` to set the budget period. In this case, you don't need to set the `budget_duration`.
+</Tip>
+## Parameters
+
+<ParamField path="period_start" type="string">
+The start date of the period. It should be in the format `YYYY-MM-DD`.
+</ParamField>
+
+<ParamField path="period_end" type="string">
+The start date of the period. It should be in the format `YYYY-MM-DD`.
+</ParamField>
+
+<ParamField path="budget_duration" type="string">
+Choices are `yearly`, `monthly`, `weekly`, and `daily`
+</ParamField>
+
+<ParamField path="period_budget" type="float">
+The budget for the period. It should be a float.
+</ParamField>
+
+<ParamField path="markup_percentage" type="float">
+The markup percentage for the period. Usage report of your customers through this key will be increased by this percentge.
+</ParamField>
+
+<ParamField path="total_budget" type="float">
+The total budget for a user.
+</ParamField>
+
+{/* ## Define budget period
+- Set the budget period. If not provided, the `period_start` will be set to the current date and the `period_end` will be set based on the `period_start` + `budget_duration`.
+```json
+{
+    "period_start": "2024-03-09",
+    "period_end": "2024-04-09"
+}
+```
+
+-  You could also set `budget_duration` to the user. In this case, you don't need to set the `period_start` and `period_end`, where `period_start` will be set to the current date and the `period_end` will be set based on the `period_start` + `budget_duration`.
+```json
+{
+    "budget_duration": "monthly" // "yearly", "monthly", "weekly", "daily
+}
+```
+## Define budget limit
+- Set the `period_budget` to the user. This will set the limit on the user's budget for the period.
+```json
+{
+    "period_budget": 30 //$30
+}
+``` */}
+
+## Other ways to set budget
+You can also set the budget to a specific user by calling the [User Update endpoint](/api-endpoints/async-endpoints/user-update-endpoint) or the [User Creation endpoint](/api-endpoints/async-endpoints/user-creation-endpoint) for the new users.

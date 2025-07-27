@@ -1,0 +1,167 @@
+---
+title: "Python"
+description: "Build multi-agent workflows with the OpenAI Agents SDK and Keywords AI."
+---
+<Note>This integration is only for **Agent tracing**. If you are looking for the OpenAI integration with the AI gateway, please see the [OpenAI integration](/integration/development-frameworks/llm_framework/openai/openai-sdk).</Note>
+
+<Check>[Give us a star](https://github.com/Keywords-AI/keywordsai) on GitHub!</Check>
+
+The [OpenAI Agents SDK](https://github.com/openai/openai-agents-python?tab=readme-ov-file) is a lightweight yet powerful framework for building multi-agent workflows.
+
+<Frame caption="Keywords AI agent tracing with OpenAI Agents SDK.">
+<img width="100%" className="block dark:hidden" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/agents-sdk-tracing-light.jpg" />
+<img width="100%" className="hidden dark:block" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/agents-sdk-tracing-dark.jpg" />
+
+
+</Frame>
+
+## Core concepts:
+1. [Agents](https://openai.github.io/openai-agents-python/agents): LLMs configured with instructions, tools, guardrails, and handoffs
+2. [Handoffs](https://openai.github.io/openai-agents-python/handoffs/): Allow agents to transfer control to other agents for specific tasks
+3. [Guardrails](https://openai.github.io/openai-agents-python/guardrails/): Configurable safety checks for input and output validation
+4. [Tracing](https://openai.github.io/openai-agents-python/tracing/): Built-in tracking of agent runs, allowing you to view, debug and optimize your workflows
+
+## Quickstart
+
+When install OpenAI Agents SDK and [Keywords AI tracing SDK](https://github.com/Keywords-AI/keywordsai), implement `KeywordsProcessor` in your code to send traces from the OpenAI Agents SDK to Keywords AI.
+
+### Prerequisites
+
+```bash
+pip install openai-agents
+```
+
+```bash
+pip install keywordsai-tracing
+```
+
+```bash
+pip install "keywordsai-tracing[openai-agents]"
+```
+
+**Please use the specific endpoint for the OpenAI Agents SDK.**
+
+```bash
+https://api.keywordsai.co/api/openai/v1/traces/ingest
+```
+
+<Note>If you are on the enterprise platform, please use the enterprise endpoint plus the suffix.</Note>
+
+### Hello World example
+
+```python Python
+import asyncio
+import os
+from agents import Agent, Runner
+from agents.tracing import set_trace_processors
+from keywordsai_tracing.integrations.openai_agents_integration import KeywordsAITraceProcessor
+
+set_trace_processors(
+    [
+        KeywordsAITraceProcessor(
+            api_key=os.getenv("KEYWORDSAI_API_KEY"),
+            endpoint="https://api.keywordsai.co/api/openai/v1/traces/ingest"
+        ),
+    ]
+)
+
+async def main():
+    agent = Agent(
+        name="Assistant",
+        instructions="You only respond in haikus.",
+    )
+
+    result = await Runner.run(agent, "Tell me about recursion in programming.")
+    print(result.final_output)
+    # Function calls itself,
+    # Looping in smaller pieces,
+    # Endless by design.
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+### Handoffs example
+
+```python Python
+from agents import Agent, Runner
+import asyncio
+from keywordsai_tracing.integrations.openai_agents_integration import KeywordsAITraceProcessor
+from agents.tracing import set_trace_processors
+import os
+
+set_trace_processors(
+    [
+        KeywordsAITraceProcessor(
+            api_key=os.getenv("KEYWORDSAI_API_KEY"),
+            endpoint="https://api.keywordsai.co/api/openai/v1/traces/ingest",
+        ),
+    ]
+)
+
+spanish_agent = Agent(
+    name="Spanish agent",
+    instructions="You only speak Spanish.",
+)
+
+english_agent = Agent(
+    name="English agent",
+    instructions="You only speak English",
+)
+
+triage_agent = Agent(
+    name="Triage agent",
+    instructions="Handoff to the appropriate agent based on the language of the request.",
+    handoffs=[spanish_agent, english_agent],
+)
+
+
+async def main():
+    result = await Runner.run(triage_agent, input="Hola, ¿cómo estás?")
+    print(result.final_output)
+    # ¡Hola! Estoy bien, gracias por preguntar. ¿Y tú, cómo estás?
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+### Functions example
+
+```python Python
+import asyncio
+
+from agents import Agent, Runner, function_tool
+from keywordsai_tracing.integrations.openai_agents_integration import KeywordsAITraceProcessor
+from agents.tracing import set_trace_processors
+import os
+
+set_trace_processors(
+    [
+        KeywordsAITraceProcessor(
+            os.getenv("KEYWORDSAI_API_KEY"),
+            endpoint="https://api.keywordsai.co/api/openai/v1/traces/ingest",
+        ),
+    ]
+)
+
+
+@function_tool
+def get_weather(city: str) -> str:
+    return f"The weather in {city} is sunny."
+
+
+agent = Agent(
+    name="Hello world",
+    instructions="You are a helpful agent.",
+    tools=[get_weather],
+)
+
+
+async def main():
+    result = await Runner.run(agent, input="What's the weather in Tokyo?")
+    print(result.final_output)
+    # The weather in Tokyo is sunny.
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
