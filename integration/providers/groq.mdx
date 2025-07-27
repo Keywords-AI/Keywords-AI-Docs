@@ -1,0 +1,118 @@
+---
+title: "Groq"
+description: "Use your own Groq credits through Keywords AI"
+---
+## OpenRouter models compatibility
+
+**✅ Supported Frameworks:**
+- [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+- [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+- [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+- [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+- [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+- [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+- [Keywords native (Otel)]('/documentation/gateway/get_started)
+
+**❌ Unsupported Frameworks:**
+- [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+- [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+
+## Add OpenRouter API keys
+There are 2 ways to add your OpenRouter credentials to your requests:
+### Via UI
+<Steps>
+<Step title="Go to the Providers page">
+Go to [Providers page](https://platform.keywordsai.co/platform/api/providers)
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg" alt="Providers Page"/>
+</Frame>
+</Step>
+<Step title="Add your Groq credentials.">
+
+<img height="200" width="300"  src="/images/providers/groq.png" alt="Dashboard Page"/>
+</Step>
+</Steps>
+
+## Via code
+- Add `customer_credentials` parameter in your [request body](/api-endpoints/integration/chat-completions) to use your own Groq credits.
+
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "groq": {
+      "api_key": "YOUR_GROQ_API_KEY",
+    }
+  }
+}
+```
+
+## Override credentials for a particular model. (Optional)
+One-off credential overrides. Instead of using what is uploaded for each provider, this targets credentials for individual models.
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "groq": {
+      "api_key": "YOUR_GROQ_API_KEY"
+    }
+  },
+  "credential_override": {
+    "groq/llama-3.1-8b-versatile":{ // override for a specific model.
+      "api_key": "ANOTHER_GROQ_API_KEY"
+    }
+  }
+}
+```
+
+## Full request example
+<Accordion title="Example">
+<CodeGroup>
+```python openai_example.py
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role":"user", "content":"Tell me a long story"}],
+    extra_body={"customer_credentials": {
+                  "groq": {
+                      "api_key": "YOUR_GROQ_API_KEY",
+                  }
+                }
+              }
+)
+```
+```python api_example.py
+import requests
+def demo_call(input, 
+              model="gpt-4o",
+              token="YOUR_KEYWORDS_AI_API_KEY"
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        'customer_credentials': {
+            'groq': {
+                'api_key': "YOUR_GROQ_API_KEY",
+            }
+        }
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+</CodeGroup>
+</Accordion>

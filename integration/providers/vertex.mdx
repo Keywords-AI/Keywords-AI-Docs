@@ -1,0 +1,172 @@
+---
+title: "Google Vertex AI"
+description: "Use your own Vertex AI credits through Keywords AI"
+---
+
+## Google Vertex AI models compatibility
+
+**✅ Supported Frameworks:**
+- [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+- [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+- [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+- [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+- [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+- [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+- [Keywords native (Otel)]('/documentation/gateway/get_started)
+
+**❌ Unsupported Frameworks:**
+- [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+- [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+
+## Add Google Vertex AI API keys
+There are 2 ways to add your Google Vertex AI credentials to your requests:
+### Via UI
+Google credentials are little bit tricky. You can follow this video to get your credentials:
+
+<iframe
+  className="w-full aspect-video rounded-xl"
+  src="https://www.youtube.com/embed/B2AJJXqkViY?si=nC5ehOAghW3XBIyJ"
+  title="Google Vertex AI credentials"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen={true}
+></iframe>
+
+<Steps>
+<Step title="Go to the Providers page">
+Go to [Providers page](https://platform.keywordsai.co/platform/api/providers)
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg" alt="Providers Page"/>
+</Frame>
+</Step>
+<Step title="Add your Vertex AI credentials.">
+
+<img height="200" width="300"  src="/images/providers/vertex.png" alt="Dashboard Page"/>
+</Step>
+<Step title="(Optional) Choose models you want to use credits">
+You can choose the models you want to use your credits with. Just simply type the model ID from the [Models page](https://platform.keywordsai.co/platform/models) and copy the model id and paste it in the Available models. Press `Enter` to add the model. 
+
+**Leave it empty to apply your credentials for all Vertex AI models.**
+
+<img height="200" width="500"  src="/images/providers/vertex_model.png" alt="Dashboard Page"/>
+</Step>
+</Steps>
+
+## Via Code
+Add `customer_credentials` parameter in your [request body](/api-endpoints/integration/chat-completions) to use your own Vertex AI credits.
+
+{/* To find the parameters needed, you can follow these steps:
+- Visit your [Azure Portal](https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI).
+- You will see your deployments via the above link, choose the deployment you want to use.
+<img src="/images/providers/azure/blurred-azure-portal.png"/>
+- Click on the "Endpoints" link to get the API base URL.
+- Click on the "Manage Keys" link to get the API key.
+<img src="/images/providers/azure/blurred-azure-endpoint.png"/>
+- Pick the version from the [available versions](https://learn.microsoft.com/en-us/azure/ai-services/openai/reference). */}
+
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "google_vertex_ai": {
+      "vertex_ai_project": "your-project",
+      "vertex_ai_location": "your-location",
+      "vertex_ai_credentials": credentials // a JSON object, you could also pass an entire JSON object here
+    }
+  }
+}
+```
+
+## Override credentials for a particular model. (Optional)
+One-off credential overrides. Instead of using what is uploaded for each provider, this targets credentials for individual models.
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "google_vertex_ai": {
+      "vertex_ai_project": "your-project",
+      "vertex_ai_location": "your-location",
+      "vertex_ai_credentials": credentials // a JSON object, you could also pass an entire JSON object here
+    }
+  },
+  "credential_override": {
+    "vertex_ai_beta/gemini-1.0-pro-001":{ // override for a specific model.
+      "vertex_ai_project": "your-project",
+      "vertex_ai_location": "your-location",
+      "vertex_ai_credentials": another_credentials // a JSON object, you could also pass an entire JSON object here
+    }
+  }
+}
+```
+
+## Requirements
+1. Ensure your **deployment name** matches those listed on our [Models page](https://platform.keywordsai.co/platform/models).
+2. Confirm that your models are available in the region specified by your credentials.
+<Warning>Credentials validation is not supported. Failure to comply with these requirements will result in errors!</Warning>
+
+### How to get your Vertex AI credentials
+1. Run `gcloud init` to initialize the gcloud CLI.
+2. Run `gcloud info` to get the path of your credential. You will see a line like <br/>`User Config Directory: [/home/USERNAME/.config/gcloud]`
+3. You will find a file named `application_default_credentials.json` in the path you got from the previous step. This file contains your credentials.
+4. Load this json file into the `vertex_ai_credentials` field in the request body.
+
+For example:
+
+```python
+with open("./credentials/google/application_default_credentials.json", "r") as f:
+    credentials = json.load(f)
+```
+## Full request example
+<Accordion title="Example">
+<CodeGroup>
+```python openai_example.py
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role":"user", "content":"Tell me a long story"}],
+    extra_body={"customer_credentials": {
+                  "google_vertex_ai": {
+                                "vertex_ai_project": "your-project",
+                                "vertex_ai_location": "your-location",
+                                "vertex_ai_credentials": credentials # a JSON object, you could also pass an entire JSON object here
+                  }
+                }
+              }
+)
+```
+```python api_example.py
+import requests
+def demo_call(input, 
+              model="gpt-4o",
+              token="YOUR_KEYWORDS_AI_API_KEY"
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        'customer_credentials': {
+            'google_vertex_ai': {
+                            "vertex_ai_project": "your-project",
+                            "vertex_ai_location": "your-location",
+                            "vertex_ai_credentials": credentials # a JSON object, you could also pass an entire JSON object here
+            }
+        }
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+</CodeGroup>
+</Accordion>

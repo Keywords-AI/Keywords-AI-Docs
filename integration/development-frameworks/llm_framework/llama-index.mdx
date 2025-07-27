@@ -1,0 +1,115 @@
+---
+title: LlamaIndex SDK
+description: "Use LlamaIndex through Keywords AI"
+---
+<Note> This integration is for the **Keywords AI gateway**. </Note>
+
+## Overview
+
+LlamaIndex provides a powerful framework for building LLM applications with data. You can seamlessly integrate Keywords AI with LlamaIndex's `OpenAI` LLM with minimal code changes.
+
+## Quickstart
+
+### Step 1: Install LlamaIndex
+
+<CodeGroup>
+```bash Python
+pip install llama-index-llms-openai
+```
+</CodeGroup>
+
+### Step 2: Initialize LlamaIndex with Keywords AI
+
+<CodeGroup>
+```python Python
+from llama_index.llms.openai import OpenAI
+
+llm = OpenAI(
+    api_base="https://api.keywordsai.co/api/",
+    api_key="<Your Keywords AI API Key>",
+    model="gpt-3.5-turbo"
+)
+```
+</CodeGroup>
+
+### Step 3: Make Your First Request
+
+<CodeGroup>
+```python Python
+response = llm.complete("Hello, world!")
+print(response)
+```
+</CodeGroup>
+
+## Switch models
+
+<CodeGroup>
+```python Python
+# OpenAI GPT models
+model = "gpt-4o"
+# model = "claude-3-5-sonnet-20241022"
+# model = "gemini-1.5-pro"
+
+llm = OpenAI(
+    api_base="https://api.keywordsai.co/api/",
+    api_key="<Your Keywords AI API Key>",
+    model=model
+)
+```
+</CodeGroup>
+
+<Note>
+See the [full model list](https://platform.keywordsai.co/platform/models) for all available models.
+</Note>
+
+## Supported parameters
+
+### OpenAI parameters
+
+We support all the [OpenAI parameters](/api-endpoints/integration/chat-completions#openai-parameters). You can pass them directly in the LlamaIndex configuration.
+
+<CodeGroup>
+```python Python
+llm = OpenAI(
+    api_base="https://api.keywordsai.co/api/",
+    api_key="<Your Keywords AI API Key>",
+    model="gpt-4o-mini",
+    temperature=0.7,          # Control randomness
+    max_tokens=1000,          # Limit response length
+)
+```
+</CodeGroup>
+
+### Keywords AI Parameters
+
+[Keywords AI parameters](/api-endpoints/integration/chat-completions#keywords-ai-parameters) can be passed using `extra_body` for better handling and customization.
+
+<CodeGroup>
+```python Python
+response = llm.complete(
+    "Tell me a story",
+    extra_body={
+        "customer_identifier": "user_123",           # Track specific users
+        "fallback_models": ["gpt-3.5-turbo"],       # Automatic fallbacks
+        "metadata": {"session_id": "abc123"},        # Custom metadata
+        "thread_identifier": "conversation_456",     # Group related messages
+        "group_identifier": "team_alpha",           # Organize by groups
+    }
+)
+```
+</CodeGroup>
+
+<Card title="View your analytics" href="https://platform.keywordsai.co/platform/dashboard">
+  Access your Keywords AI dashboard to see detailed analytics
+</Card>
+
+## Next Steps
+
+<CardGroup cols={2}>
+<Card title="Advanced settings" href="/features/monitoring/user-analytics">
+  Track user behavior and patterns
+</Card>
+<Card title="Prompt Management" href="/features/prompt/prompt-management/overview">
+  Manage and version your prompts
+</Card>
+</CardGroup>
