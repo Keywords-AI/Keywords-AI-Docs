@@ -3,8 +3,33 @@ title: "Google Vertex AI"
 description: "Use your own Vertex AI credits through Keywords AI"
 ---
 
-There are 2 ways to add your Vertex AI credentials to your requests:
-## Add it from the UI
+## Google Vertex AI models compatibility
+
+**✅ Supported Frameworks:**
+- [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+- [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+- [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+- [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+- [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+- [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+- [Keywords native (Otel)]('/documentation/gateway/get_started)
+
+**❌ Unsupported Frameworks:**
+- [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+- [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+
+## Add Google Vertex AI API keys
+There are 2 ways to add your Google Vertex AI credentials to your requests:
+### Via UI
+Google credentials are little bit tricky. You can follow this video to get your credentials:
+
+<iframe
+  className="w-full aspect-video rounded-xl"
+  src="https://www.youtube.com/embed/B2AJJXqkViY?si=nC5ehOAghW3XBIyJ"
+  title="Google Vertex AI credentials"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen={true}
+></iframe>
 
 <Steps>
 <Step title="Go to the Providers page">
@@ -26,7 +51,7 @@ You can choose the models you want to use your credits with. Just simply type th
 </Step>
 </Steps>
 
-## Add it in code
+## Via Code
 Add `customer_credentials` parameter in your [request body](/api-endpoints/integration/chat-completions) to use your own Vertex AI credits.
 
 {/* To find the parameters needed, you can follow these steps:

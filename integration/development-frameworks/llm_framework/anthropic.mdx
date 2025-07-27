@@ -1,0 +1,87 @@
+---
+title: Anthropic SDK
+description: "Use Anthropic SDK through Keywords AI"
+---
+
+<Note> This integration is for the **Keywords AI gateway**. </Note>
+<Warning>
+This is only a pass-through integration. So with this integration, some features are not available.
+</Warning>
+
+## Pros and Cons
+
+### Pros
+- **Easy Setup**: Only 2 lines of code to integrate.
+- **Use Claude's `Thinking` Feature**: You can use the `Thinking` feature from `Claude 3.7 Sonnet` or Claude 4 models.
+
+### Cons
+- **No Direct Prompt Access**: You can't fetch prompts stored in Keywords AI directly. You'll need to use the [Prompts API](/api-endpoints/prompt-endpoints/create-prompts) instead.
+- **Limited Gateway Features**: You can't use features like [fallbacks](/features/generation/fallbacks) or [load balancing](/features/generation/load-balancing). 
+
+
+## Integration examples
+
+<CodeGroup>
+```python Python
+import anthropic
+
+client = anthropic.Anthropic(
+    base_url="https://api.keywordsai.co/api/anthropic/",
+    api_key="Your_Keywords_AI_API_Key",
+)
+
+message = client.messages.create(
+    model="claude-3-opus-20240229",
+    max_tokens=1000,
+    system="Respond only in Yoda-speak.",
+    messages=[
+        {"role": "user", "content": "How are you today?"}
+    ]
+    metadata={
+        "keywordsai_params": {
+            "customer_identifier": "something" # You need to wrap the customer_identifier into the "keywordsai_params" key
+        }
+    },
+)
+
+print(message.content)
+```
+```TypeScript TypeScript
+import Anthropic from "@anthropic-ai/sdk";
+
+const anthropic = new Anthropic({
+  baseUrl: "https://api.keywordsai.co/api/anthropic/",  
+  apiKey: 'YOUR_KEYWORDS_AI_API_KEY',
+});
+
+const msg = await anthropic.messages.create({
+model: "claude-3-5-sonnet-20240620",
+max_tokens: 1000,
+temperature: 0,
+system: "Respond only with short poems.",
+messages: [
+    {
+    "role": "user",
+    "content": [
+        {
+        "type": "text",
+        "text": "Why is the ocean salty?"
+        }
+    ]
+    }
+],
+metadata: {
+    "keywordsai_params": {
+        "customer_identifier": "something"
+    }
+}
+});
+console.log(msg);
+```
+</CodeGroup>
+
+## Keywords AI parameters
+
+To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `metadata` parameter. In the above example, `customer_identifier` is a Keywords AI parameter. These parameters will take precedence over the Anthropic parameters if they are conflicting.
+
+

@@ -2,8 +2,24 @@
 title: "Azure OpenAI"
 description: "Use your own Azure OpenAI credits through Keywords AI"
 ---
+## Azure OpenAI models compatibility
+
+**✅ Supported Frameworks:**
+- [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+- [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+- [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+- [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+- [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+- [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+- [Keywords native (Otel)]('/documentation/gateway/get_started)
+
+**❌ Unsupported Frameworks:**
+- [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+- [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+
+## Add Azure OpenAI API keys
 There are 2 ways to add your Azure OpenAI credentials to your requests:
-## Add it from the UI
+### Via UI
 <Steps>
 <Step title="Go to the Providers page">
 Go to [Providers page](https://platform.keywordsai.co/platform/api/providers)
@@ -32,7 +48,7 @@ For example, in Azure OpenAI, you might deployed `gpt-4o` as the deployment name
 <img width="400" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/azure-mapping.png" alt="Azure deployment name" />
 
 
-## Add it in code
+### Via Code
 <Steps>
 
 <Step title="Map your deployment name"> 

@@ -2,9 +2,24 @@
 title: "Groq"
 description: "Use your own Groq credits through Keywords AI"
 ---
+## OpenRouter models compatibility
 
-There are 2 ways to add your Groq credentials to your requests:
-## Add it from the UI 
+**✅ Supported Frameworks:**
+- [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+- [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+- [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+- [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+- [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+- [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+- [Keywords native (Otel)]('/documentation/gateway/get_started)
+
+**❌ Unsupported Frameworks:**
+- [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+- [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+
+## Add OpenRouter API keys
+There are 2 ways to add your OpenRouter credentials to your requests:
+### Via UI
 <Steps>
 <Step title="Go to the Providers page">
 Go to [Providers page](https://platform.keywordsai.co/platform/api/providers)
@@ -18,7 +33,7 @@ Go to [Providers page](https://platform.keywordsai.co/platform/api/providers)
 </Step>
 </Steps>
 
-## Add it in code
+## Via code
 - Add `customer_credentials` parameter in your [request body](/api-endpoints/integration/chat-completions) to use your own Groq credits.
 
 ```json

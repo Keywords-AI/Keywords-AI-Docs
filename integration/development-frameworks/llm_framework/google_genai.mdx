@@ -1,0 +1,138 @@
+---
+title: Google GenAI
+description: "Use LangChain with Keywords AI"
+---
+
+<Note> This integration is for the **Keywords AI gateway**. </Note>
+import { Steps } from 'nextra/components'
+
+## 1. Overview
+
+Keywords AI is compatible with the official Google GenAI SDK, enabling you to use Google's models through our gateway.
+
+This guide will walk you through setting up the Google GenAI SDK to work with Keywords AI.
+
+## 2. Quickstart
+
+<Steps>
+
+### Step 1: Install the SDK
+
+First, install the official Google GenAI SDK for TypeScript/JavaScript.
+
+<CodeGroup>
+```bash npm
+npm install @google/generative-ai
+```
+```bash yarn
+yarn add @google/generative-ai
+```
+```bash pnpm
+pnpm add @google/generative-ai
+```
+</CodeGroup>
+
+### Step 2: Initialize the client
+
+Next, initialize the `GoogleGenAI` client, making sure to set the `apiKey` to your Keywords AI key and the `baseUrl` within `httpOptions` to the Keywords AI endpoint for Google.
+
+<CodeGroup>
+
+```typescript TypeScript
+import { GoogleGenAI } from "@google/genai";
+
+const genAI = new GoogleGenAI({
+  apiKey: process.env.KEYWORDSAI_API_KEY, // Your Keywords AI API key
+  httpOptions: {
+    baseUrl: "https://api.keywordsai.co/api/google",
+  },
+});
+```
+
+</CodeGroup>
+
+<Note>
+  The `baseUrl` can be either `https://api.keywordsai.co/api/google` or `https://endpoint.keywordsai.co/api/google`.
+</Note>
+
+</Steps>
+
+## 3. Make Your First Request
+
+Now you can use the `genAI` instance to make requests to Google's models.
+
+<CodeGroup>
+
+```typescript TypeScript
+import { GoogleGenAI } from "@google/genai";
+
+const genAI = new GoogleGenAI({
+  apiKey: process.env.KEYWORDSAI_API_KEY, // Your Keywords AI API key
+  httpOptions: {
+    baseUrl: "https://api.keywordsai.co/api/google",
+  },
+});
+
+async function run() {
+  const result = await genAI.models.generateContent({
+    model: "gemini-1.5-flash",
+    contents: [{ role: "user", parts: [{ text: "Hello, world!" }] }]
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+</CodeGroup>
+
+## 4. Switch models
+
+To switch between different Google models, simply change the `model` parameter in your request.
+
+<CodeGroup>
+
+```typescript TypeScript
+const result = await genAI.models.generateContent({
+  model: "gemini-1.5-pro-latest", // Switched to a different model
+  contents: [{ role: "user", parts: [{ text: "Tell me a joke." }] }]
+});
+```
+
+</CodeGroup>
+
+## 5. Supported parameters
+
+Keywords AI supports passing through native Google GenAI parameters and adding our own for enhanced functionality.
+
+### Keywords AI parameters
+
+To pass Keywords AI-specific parameters, you need to include them in the `extra_body` of your request. This is not natively supported by the Google GenAI SDK, so you may need to make a custom request or use a different library that allows modifying the request body.
+
+### Google GenAI parameters
+
+All standard Google GenAI parameters are supported and can be passed directly in the `generateContent` call.
+
+<CodeGroup>
+
+```typescript TypeScript
+const result = await genAI.models.generateContent({
+  model: "gemini-1.5-flash",
+  contents: [{ role: "user", parts: [{ text: "What is the capital of France?" }] }],
+  // Google GenAI parameters
+  generationConfig: {
+    temperature: 0.9,
+    topK: 1,
+    topP: 1,
+    maxOutputTokens: 2048,
+  },
+});
+```
+
+</CodeGroup>
+
+## 6. Next Steps
+
+- Explore our guide on [Supported Models](/integration/supported-models) to see all available Google models.
+- Learn about advanced Keywords AI features like [retries, fallbacks, and caching](/documentation/gateway/retries).

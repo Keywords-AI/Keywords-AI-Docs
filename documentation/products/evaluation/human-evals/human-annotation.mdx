@@ -1,0 +1,109 @@
+---
+title: "Send human evals via API"
+description: "A guide on how to send human feedback to the API."
+---
+
+
+
+{/* ## Use human annotation in the UI */}
+## Pass user feedback to the API
+
+You can pass user feedback to the API as a `positive_feedback` field in the request.
+
+<Tabs>
+<Tab title="Logging API">
+If you are using the Logging API, you can pass the `positive_feedback` field in the request to record if the user liked the output.
+
+`positive_feedback` is a boolean field that indicates if the user liked the output.
+
+<CodeGroup>
+```python Python
+payload = {
+    "model": "gpt-4o",
+    # ...
+    "positive_feedback": True, # means the user liked the output
+}
+```
+</CodeGroup>
+</Tab>
+<Tab title="LLM gateway">
+If you are using the LLM gateway, you can pass the `positive_feedback` field in the request to record if the user liked the output.
+
+`positive_feedback` is a boolean field that indicates if the user liked the output. If you're using other LLM provider SDKs, see [the integration docs here](/integration/own-api-keys).
+
+<CodeGroup>
+```python Python
+{ 
+"model": "gpt-4o",
+# ...
+"positive_feedback": True, # means the user liked the output
+}
+```
+
+```typescript TypeScript
+{
+model: "gpt-4o",
+// ...
+positive_feedback: true, // means the user liked the output
+}
+```
+</CodeGroup>
+</Tab>
+
+<Tab title="Update an existing log">
+In most cases, you will want to update an existing log with the `positive_feedback` field. In this case, you can use the Update Log API.
+```
+https://api.keywordsai.co/api/request-logs/batch-update/
+```
+
+Here's the example that updates the `positive_feedback` field for a log with id `xxxxxx`. P.S. You can find the log id in the `unique_id` field in the response of the [Get logs](/api-endpoints/async-endpoints/logs-list-endpoint) or get it directly from the Logs in the UI.
+
+<CodeGroup>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/batch-update/"
+api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
+data = {
+    "logs": [
+        {   "unique_id": "xxxxxx",
+            "positive_feedback": True
+            # other fields to update
+        }
+        # other logs to update
+    ]
+}
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```typescript TypeScript
+fetch("https://api.keywordsai.co/api/request-logs/batch-update/", {
+  method: 'PATCH',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer Your_Keywords_AI_API_Key '
+  },
+    body: JSON.stringify({
+        logs: [
+            {   unique_id: "xxxxxx",
+                positive_feedback: true
+                // other fields to update
+            }
+            // other logs to update
+        ]
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+</CodeGroup>
+</Tab>
+</Tabs>
+
+After you pass the `positive_feedback` field, you can see it in the side panel of the Logs.
