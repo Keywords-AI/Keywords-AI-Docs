@@ -42,18 +42,13 @@
                 "group": "Logs",
                 "pages": [
                   "documentation/products/logs/quickstart",
-                  {
-                    "group": "Configuration",
-                    "pages": [
-                      "documentation/products/logs/configuration/pass_keywordsai_parameters",
-                      "documentation/products/logs/configuration/group logs",
-                      "documentation/products/logs/configuration/threads",
-                      "documentation/products/logs/configuration/custom_properties"
-                    ]
-                  },
-                  "documentation/products/logs/embedding_logging",
-                  "documentation/products/logs/log_variables",
+                  "documentation/products/logs/configuration/pass_keywordsai_parameters",
+                  "documentation/products/logs/configuration/group_logs",
+                  "documentation/products/logs/configuration/threads",
+                  "documentation/products/logs/configuration/custom_properties",
                   "documentation/products/logs/custom_model",
+                  "documentation/products/logs/log_variables",
+                  "documentation/products/logs/embedding_logging",
                   "documentation/products/logs/filters",
                   "documentation/products/logs/sharing",
                   "documentation/products/logs/export_logs",
@@ -64,15 +59,10 @@
                 "group": "Traces",
                 "pages": [
                   "documentation/products/traces/quickstart",
-                  {
-                    "group": "Configuration",
-                    "pages": [
-                      "documentation/products/traces/configuration/pass_keywordsai_parameters",
-                      "documentation/products/traces/configuration/group_traces",
-                      "documentation/products/traces/configuration/customer_identifier"
-                    ]
-                  },
                   "documentation/products/traces/decorators",
+                  "documentation/products/traces/configuration/pass_keywordsai_parameters",
+                  "documentation/products/traces/configuration/group_traces",
+                  "documentation/products/traces/configuration/customer_identifier",
                   "documentation/products/traces/filters"
                 ]
               },
@@ -82,7 +72,7 @@
                   "documentation/products/prompt_management/quickstart",
                   "documentation/products/prompt_management/model_playground",
                   {
-                    "group": "Creating prompts",
+                    "group": "Create prompts",
                     "pages": [
                       "documentation/products/prompt_management/creating_prompts/create_prompt",
                       "documentation/products/prompt_management/creating_prompts/json_schema",
@@ -91,20 +81,15 @@
                       "documentation/products/prompt_management/creating_prompts/manage_prompt_api"
                     ]
                   },
-                  {
-                    "group": "Management & collaboration",
-                    "pages": [
-                      "documentation/products/prompt_management/management_collaboration/version_control",
-                      "documentation/products/prompt_management/management_collaboration/team_collaboration"
-                    ]
-                  },
+                  "documentation/products/prompt_management/management_collaboration/version_control",
                   {
                     "group": "Use prompt in code",
                     "pages": [
                       "documentation/products/prompt_management/use_prompt_in_code/use_prompt_in_llms",
                       "documentation/products/prompt_management/use_prompt_in_code/prompt_logging"
                     ]
-                  }
+                  },
+                  "documentation/products/prompt_management/management_collaboration/team_collaboration"
                 ]
               },
               {
@@ -142,42 +127,22 @@
                 "group": "Gateway",
                 "pages": [
                   "documentation/products/gateway/quickstart",
+                  "documentation/products/gateway/configuration/models",
+                  "documentation/products/gateway/traffic_management/load-balancing",
+                  "documentation/products/gateway/traffic_management/retries",
+                  "documentation/products/gateway/traffic_management/fallbacks",
+                  "documentation/products/gateway/traffic_management/rate_limit",
                   {
-                    "group": "Configuration",
-                    "pages": [
-                      "documentation/products/gateway/configuration/models"
-                    ]
-                  },
-                  {
-                    "group": "Traffic Management",
-                    "pages": [
-                      "documentation/products/gateway/traffic_management/load-balancing",
-                      "documentation/products/gateway/traffic_management/retries",
-                      "documentation/products/gateway/traffic_management/fallbacks",
-                      "documentation/products/gateway/traffic_management/rate_limit"
-                    ]
-                  },
-                  {
-                    "group": "Performance & Optimization",
+                    "group": "Caches",
                     "pages": [
                       "documentation/products/gateway/performance_optimization/caches",
                       "documentation/products/gateway/performance_optimization/prompt-caching"
                     ]
                   },
-                  {
-                    "group": "Monitoring & Analysis",
-                    "pages": [
-                      "documentation/products/gateway/monitoring_analysis/disable_logging"
-                    ]
-                  },
-                  {
-                    "group": "Advanced Features",
-                    "pages": [
-                      "documentation/products/gateway/advanced_features/function_calling",
-                      "documentation/products/gateway/advanced_features/upload_pdf",
-                      "documentation/products/gateway/advanced_features/upload_image"
-                    ]
-                  }
+                  "documentation/products/gateway/advanced_features/function_calling",
+                  "documentation/products/gateway/advanced_features/upload_pdf",
+                  "documentation/products/gateway/advanced_features/upload_image",
+                  "documentation/products/gateway/monitoring_analysis/disable_logging"
                 ]
               },
               {
