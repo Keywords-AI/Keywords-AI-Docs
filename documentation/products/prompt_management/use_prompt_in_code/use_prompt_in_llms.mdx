@@ -5,16 +5,6 @@ description: "Deploy a prompt to your codebase and understand override modes."
 
 After you create a prompt, you can deploy it to your codebase and call it through the API. Keywords AI provides two powerful override modes to give you complete control over your prompts.
 
-## Understanding Override Modes
-
-Keywords AI supports two types of overrides that work in different directions:
-
-### 1. Prompt Overrides OpenAI Parameters
-Your saved prompt configuration takes precedence over API request parameters. This is useful when you want your prompt template to control the conversation flow.
-
-### 2. Code Overrides Prompt Configuration  
-Your API request parameters override the saved prompt settings. This gives you runtime flexibility to modify prompts dynamically.
-
 ## 1. Find the Prompt ID
 You should first find the Prompt ID of the prompt you want to deploy. You can find the Prompt ID in the Overview panel on the [Prompts page](https://platform.keywordsai.co/platform/prompts).
 <Frame>
@@ -108,9 +98,7 @@ We also support adding credentials in other SDKs or languages, please check out 
 </Tab>
 </Tabs>
 
-## 3. Override prompt configuration at runtime
-
-**Mode 2: Code Overrides Prompt Configuration**
+## 3. Override prompt configuration (optional)
 
 You can dynamically override your saved prompt settings using `override_params` and `override_config`. This gives you runtime flexibility while keeping your base prompt template intact.
 
@@ -155,19 +143,12 @@ request_body = {
         "override_params": {
             "temperature": 0.8,      # Override temperature
             "max_tokens": 150,       # Override token limit
-            "model": "gpt-4"         # Override model
+            "model": "gpt-4o"         # Override model
         }
     }
 }
 ```
-
-## 4. Deploy the prompt
-Once you have connected the prompt to your codebase, you can deploy the prompt on the platform. You can deploy the prompt by clicking on the `Deploy` button on the [Prompts page](https://platform.keywordsai.co/platform/prompts).
-<Frame>
-<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/prompt-deploy.png" alt="Deploy prompt" />
-</Frame>
-
-## 5. View the logs with the prompt
+## 4. View the logs with the prompt
 You can view the logs with the prompt by clicking a log on the [Logs page](https://platform.keywordsai.co/platform/logs) or filtering the logs with the prompt name.
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/prompt-logs.png" alt="View prompt" />
@@ -231,35 +212,6 @@ You can view the logs with the prompt by clicking a log on the [Logs page](https
 </ParamField>
 
 <Info>Check out [all Keywords AI supported params here](/api-endpoints/integration/chat-completions#keywords-ai-parameters).</Info>
-
-## Override Mode Examples
-
-### Example 1: Prompt Controls Everything
-```python
-# Your API request
-{
-    "model": "gpt-3.5-turbo",           # This will be ignored
-    "messages": [...],                  # This will be ignored  
-    "prompt": {
-        "prompt_id": "042f5f",
-        "override": true                # Prompt settings take precedence
-    }
-}
-```
-
-### Example 2: Dynamic Runtime Control
-```python
-# Your saved prompt has: model="gpt-3.5-turbo", temperature=0.7
-{
-    "prompt": {
-        "prompt_id": "042f5f",
-        "override_params": {
-            "model": "gpt-4",           # Override to use GPT-4
-            "temperature": 0.9          # Override temperature
-        }
-    }
-}
-```
 
 ## Troubleshooting
 
