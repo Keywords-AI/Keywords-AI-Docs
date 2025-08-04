@@ -183,9 +183,6 @@
               "documentation/resources/automatic-retries",
               "documentation/resources/streaming",
               {
-                "group": "Relari eval",
-                "pages": [
-                  {
                     "group": "Retrieval",
                     "pages": [
                       "documentation/resources/relari_eval/retrieval/context-precision"
@@ -205,8 +202,14 @@
                       "documentation/resources/relari_eval/other/sentiment"
                     ]
                   }
-                ]
-              }
+            ]
+          },
+          {
+            "group": "Cookbooks",
+            "pages": [
+              "cookbooks/what-is-keywords-ai",
+              "cookbooks/anthropic-structure-output",
+              "cookbooks/filters-in-jinja"
             ]
           }
         ]
@@ -355,19 +358,6 @@
               "api-endpoints/temporary-api-keys/retrieve-temporary-key",
               "api-endpoints/temporary-api-keys/update-temporary-key",
               "api-endpoints/temporary-api-keys/delete-temporary-key"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Cookbooks",
-        "groups": [
-          {
-            "group": "Cookbooks",
-            "pages": [
-              "cookbooks/what-is-keywords-ai",
-              "cookbooks/anthropic-structure-output",
-              "cookbooks/filters-in-jinja"
             ]
           }
         ]
