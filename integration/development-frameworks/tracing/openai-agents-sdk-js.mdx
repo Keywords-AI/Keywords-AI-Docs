@@ -2,55 +2,55 @@
 title: "TS/JS"
 description: "Build multi-agent workflows with the OpenAI Agents SDK and Keywords AI."
 ---
+
 <Note>This integration is only for **Agent tracing**. If you are looking for the OpenAI integration with the AI gateway, please see the [OpenAI integration](/integration/development-frameworks/llm_framework/openai/openai-sdk).</Note>
 
 <Check>[Give us a star](https://github.com/Keywords-AI/keywordsai) on GitHub!</Check>
 
-The [OpenAI Agents SDK](https://github.com/openai/openai-agents-js) is a lightweight yet powerful framework for building multi-agent workflows.
+The [OpenAI Agents SDK](https://github.com/openai/openai-agents-js) is a lightweight yet powerful framework for building multi-agent workflows in JavaScript/TypeScript.
 
 <Frame caption="Keywords AI agent tracing with OpenAI Agents SDK.">
 <img width="100%" className="block dark:hidden" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/agents-sdk-tracing-light.jpg" />
 <img width="100%" className="hidden dark:block" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/agents-sdk-tracing-dark.jpg" />
-
-
 </Frame>
 
-## Core concepts:
-1. [Agents](https://openai.github.io/openai-agents-python/agents): LLMs configured with instructions, tools, guardrails, and handoffs
-2. [Handoffs](https://openai.github.io/openai-agents-python/handoffs/): Allow agents to transfer control to other agents for specific tasks
-3. [Guardrails](https://openai.github.io/openai-agents-python/guardrails/): Configurable safety checks for input and output validation
-4. [Tracing](https://openai.github.io/openai-agents-python/tracing/): Built-in tracking of agent runs, allowing you to view, debug and optimize your workflows
+- **Agents**: LLMs configured with instructions, tools, and guardrails
+- **Handoffs**: Transfer control between specialized agents
+- **Guardrails**: Safety checks for input and output validation
+- **Tracing**: Built-in tracking of agent runs for debugging and optimization
 
-## Quickstart
-
-When install OpenAI Agents SDK and [Keywords AI tracing SDK](https://github.com/Keywords-AI/keywordsai), implement `KeywordsProcessor` in your code to send traces from the OpenAI Agents SDK to Keywords AI.
-
+## Getting started
 ### Prerequisites
+
+Install the required dependencies:
 
 ```bash
 npm install @openai/agents
 ```
 
 ```bash
-yarn add @keywordsai/exporter-openai-agents
+npm install @keywordsai/exporter-openai-agents
 ```
+
+For function calling examples, also install:
 
 ```bash
-yarn install
+npm install zod
 ```
 
-**Please use the specific endpoint for the OpenAI Agents SDK.**
+Set up your environment variables in a `.env` file:
 
-``` bash .env
-KEYWORDSAI_API_KEY= "YOUR_KEYWORDSAI_API_KEY"
+```bash .env
+OPENAI_API_KEY=YOUR_OPENAI_API_KEY
+KEYWORDSAI_API_KEY=YOUR_KEYWORDSAI_API_KEY
 KEYWORDSAI_BASE_URL=https://api.keywordsai.co/api
 ```
 
 <Note>If you are on the enterprise platform, please use the enterprise endpoint plus the suffix.</Note>
 
-### Hello World example 
+### Hello world
 
-```typescript hello-world.tsx {4-8}
+```typescript helloworld.ts
 import { Agent, BatchTraceProcessor, run, setTraceProcessors, withTrace } from '@openai/agents';
 import { KeywordsAIOpenAIAgentsTracingExporter } from '@keywordsai/exporter-openai-agents';
 
@@ -70,8 +70,210 @@ async function main() {
     return run(agent, 'Tell me about recursion in programming.');
   });
   console.log(result.finalOutput);
-
 }
 
 main().catch(console.error);
 ```
+
+Run the example:
+
+```bash
+npx tsx helloworld.ts
+```
+
+### Full example
+
+Here's a more comprehensive example with multiple agents:
+
+```typescript full-example.ts
+import { Agent, BatchTraceProcessor, run, setTraceProcessors, withTrace } from '@openai/agents';
+import { KeywordsAIOpenAIAgentsTracingExporter } from '@keywordsai/exporter-openai-agents';
+
+setTraceProcessors([
+  new BatchTraceProcessor(
+    new KeywordsAIOpenAIAgentsTracingExporter(),
+  ),
+]);
+
+const agent = new Agent({
+  model: "gpt-4o-mini",
+  name: "Apple Agent",
+  instructions: "You are a helpful assistant who knows about apples.",
+});
+
+const secondAgent = new Agent({
+  model: "gpt-4o-mini",
+  name: "Banana Agent",
+  instructions: "You are a helpful assistant who knows about bananas.",
+});
+
+async function main() {
+  await withTrace("My Trace", async () => {
+    const response = await run(agent, "Hello, what fruit do you like?");
+    console.log(response.finalOutput);
+    
+    const secondResponse = await run(secondAgent, "Hello, what fruit do you like?");
+    console.log(secondResponse.finalOutput);
+  });
+}
+
+main().catch(console.error);
+```
+
+Run the example:
+
+```bash
+npx tsx full-example.ts
+```
+
+## Advanced features
+
+
+### Metadata support
+
+You can add custom metadata (properties) to your traces for better tracking and debugging:
+
+```typescript metadata-example.ts
+import { Agent, BatchTraceProcessor, run, setTraceProcessors, withTrace } from '@openai/agents';
+import { KeywordsAIOpenAIAgentsTracingExporter } from '@keywordsai/exporter-openai-agents';
+
+setTraceProcessors([
+  new BatchTraceProcessor(
+    new KeywordsAIOpenAIAgentsTracingExporter(),
+  ),
+]);
+
+const agent = new Agent({
+  model: "gpt-4o-mini",
+  name: "Apple Agent",
+  instructions: "You are a helpful assistant who knows about apples.",
+});
+
+const secondAgent = new Agent({
+  model: "gpt-4o-mini",
+  name: "Banana Agent",
+  instructions: "You are a helpful assistant who knows about bananas.",
+});
+
+async function main() {
+  await withTrace("My Trace", async () => {
+    const response = await run(agent, "Hello, what fruit do you like?");
+    console.log(response.finalOutput);
+    const secondResponse = await run(secondAgent, "Hello, what fruit do you like?");
+    console.log(secondResponse.finalOutput);
+  }, {
+    metadata: {
+      foo: "bar",
+    }
+  });
+}
+
+main().catch(console.error);
+```
+
+Run the example:
+
+```bash
+npx tsx metadata-example.ts
+```
+
+### Function Calling
+
+Agents can use tools to perform specific tasks. Here's an example with a weather tool:
+
+```typescript function_call.ts
+import { Agent, BatchTraceProcessor, run, setTraceProcessors, tool, withTrace } from '@openai/agents';
+import { KeywordsAIOpenAIAgentsTracingExporter } from '@keywordsai/exporter-openai-agents';
+import { z } from 'zod';
+
+setTraceProcessors([
+  new BatchTraceProcessor(
+    new KeywordsAIOpenAIAgentsTracingExporter(),
+  ),
+]);
+
+const getWeather = tool({
+  name: 'get_weather',
+  description: 'Get the weather for a city.',
+  parameters: z.object({ city: z.string() }),
+  execute: async ({ city }): Promise<{ city: string; temperatureRange: string; conditions: string }> => {
+    return {
+      city,
+      temperatureRange: '14-20C',
+      conditions: 'Sunny with wind.',
+    };
+  },
+});
+
+const agent = new Agent({
+  name: "Hello world",
+  instructions: "You are a helpful agent.",
+  tools: [getWeather],
+});
+
+async function main() {
+  const result = await withTrace("What's the weather in Tokyo?", async () => {
+    return run(agent, "What's the weather in Tokyo?");
+  });
+  console.log(result.finalOutput);
+}
+
+main().catch(console.error);
+```
+
+Run the example:
+
+```bash
+npx tsx function_call.ts
+```
+
+### Agent Handoffs
+
+Agents can hand off conversations to other specialized agents based on context:
+
+```typescript handoff.ts
+import { Agent, BatchTraceProcessor, run, setTraceProcessors, withTrace } from '@openai/agents';
+import { KeywordsAIOpenAIAgentsTracingExporter } from '@keywordsai/exporter-openai-agents';
+
+setTraceProcessors([
+  new BatchTraceProcessor(
+    new KeywordsAIOpenAIAgentsTracingExporter(),
+  ),
+]);
+
+const spanish_agent = new Agent({
+  name: "Spanish agent",
+  instructions: "You only speak Spanish.",
+});
+
+const english_agent = new Agent({
+  name: "English agent",
+  instructions: "You only speak English",
+});
+
+const triage_agent = new Agent({
+  name: "Triage agent",
+  instructions: "Handoff to the appropriate agent based on the language of the request.",
+  handoffs: [spanish_agent, english_agent],
+});
+
+async function main() {
+  const result = await withTrace("Handoff Example", async () => {
+    return run(triage_agent, "Hola, ¿cómo estás?");
+  });
+  console.log(result.finalOutput);
+}
+
+main().catch(console.error);
+```
+
+Run the example:
+
+```bash
+npx tsx handoff.ts
+```
+The resulting trace root span will have the custom properties visible in the Keywords AI platform:
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/openai-agents-metadata.png" alt="OpenAI Agents SDK metadata support" />
+</Frame>
