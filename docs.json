@@ -148,10 +148,9 @@
               {
                 "group": "Users",
                 "pages": [
-                  "documentation/products/users/quickstart",
+                  "documentation/products/users/customer-identifier",
                   "documentation/products/users/user_rate_limit",
-                  "documentation/products/users/user-budget",
-                  "documentation/products/users/customer-identifier"
+                  "documentation/products/users/user-budget"
                 ]
               },
               {
