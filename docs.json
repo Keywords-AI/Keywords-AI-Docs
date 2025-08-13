@@ -272,11 +272,17 @@
             ]
           },
           {
+            "group": "Memory",
+            "pages": [
+              "integration/development-frameworks/mem0",
+              "integration/others/cognee"
+            ]
+          },
+          {
             "group": "Others",
             "pages": [
               "integration/providers/assemblyai",
               "integration/dev-tools/linkup",
-              "integration/development-frameworks/mem0",
               "integration/development-frameworks/baml",
               "integration/analytics/posthog"
             ]

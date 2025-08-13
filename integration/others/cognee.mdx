@@ -1,0 +1,211 @@
+---
+title: "Cognee"
+description: "LLM observability for AI memory with Keywords AI and Cognee"
+---
+
+## Cognee integration
+
+[Cognee](https://www.cognee.ai/) is an open-source memory engine with a semantic graph at its core that provides observability for AI agents and semantic workflows. When integrated with Keywords AI, it offers comprehensive tracing and monitoring capabilities for complex AI systems.
+
+### Original resources
+<CardGroup cols={2}>
+  <Card
+    title="Cognee Documentation"
+    icon="book-open"
+    href="https://docs.cognee.ai/integrations/keywordsai-integration"
+  >
+    Official integration guide for Keywords AI with Cognee
+  </Card>
+  <Card
+    title="Cognee Blog"
+    icon="newspaper"
+    href="https://www.cognee.ai/blog/deep-dives/observability-for-semantic-workflows"
+  >
+    Deep dive into observability for semantic workflows
+  </Card>
+</CardGroup>
+
+
+### Key features
+
+- **Single Decorator Observability**: Use `@observe` to trace tasks and workflows
+- **Pluggable Backends**: Choose your monitoring tool via config or environment variables
+- **Zero Vendor Lock-in**: The interface remains the same regardless of the telemetry provider
+- **Real-time Traces**: Get logs and metrics across LLM calls and agent runs
+- **Semantic 7Graph Integration**: Built-in support for knowledge graph operations
+
+## Installation
+
+Install the Keywords AI integration for Cognee:
+
+```bash
+pip install cognee-community-observability-keywordsai
+```
+
+## Configuration
+
+Set up your environment variables:
+
+```bash
+# Required for Keywords AI setup
+export MONITORING_TOOL=keywordsai
+export KEYWORDSAI_API_KEY=<your_KeywordsAI_key>
+
+# Required for cognee (if your pipeline calls LLMs)
+export LLM_API_KEY=<your_OpenAI_key>
+```
+
+## Quick Start
+
+### Prerequisites
+
+- Python 3.10+
+- Keywords AI API key ([Get yours here](https://keywordsai.co))
+- LLM API key (e.g., OpenAI)
+- A clean virtual environment
+
+### Basic Usage
+
+```python
+# 1) Import to patch Cognee
+import cognee_community_observability_keywordsai  # noqa: F401
+
+# 2) Use Cognee's abstraction
+from cognee.modules.observability.get_observe import get_observe
+observe = get_observe()  # returns Keywords AI decorator when MONITORING_TOOL=keywordsai
+
+# 3) Decorate a task
+@observe
+def ingest_files(data: list[dict]):
+    # Your task logic here
+    pass
+
+# 4) Decorate a workflow
+@observe(workflow=True)
+async def main():
+    # Your workflow logic here
+    pass
+```
+
+### Complete Example
+
+```python
+import asyncio
+import cognee_community_observability_keywordsai  # noqa: F401
+from cognee.modules.observability.get_observe import get_observe
+
+observe = get_observe()
+
+@observe
+def process_documents(documents: list[str]):
+    """Process a list of documents and extract semantic information."""
+    processed = []
+    for doc in documents:
+        # Simulate document processing
+        processed.append(f"Processed: {doc}")
+    return processed
+
+@observe
+def create_knowledge_graph(processed_docs: list[str]):
+    """Create knowledge graph nodes from processed documents."""
+    nodes = []
+    for doc in processed_docs:
+        # Simulate knowledge graph creation
+        nodes.append({"id": len(nodes), "content": doc})
+    return nodes
+
+@observe(workflow=True)
+async def semantic_workflow():
+    """Main workflow that processes documents and creates knowledge graph."""
+    documents = ["Document 1", "Document 2", "Document 3"]
+    
+    # Process documents
+    processed = process_documents(documents)
+    
+    # Create knowledge graph
+    knowledge_graph = create_knowledge_graph(processed)
+    
+    return knowledge_graph
+
+if __name__ == "__main__":
+    result = asyncio.run(semantic_workflow())
+    print(f"Created knowledge graph with {len(result)} nodes")
+```
+
+## How It Works
+
+### Unified Abstraction
+
+Cognee exposes a single surface for observability: `@observe`. This decorator works with:
+
+- **Tasks**: Decorate with `@observe`
+- **Workflows**: Decorate with `@observe(workflow=True)`
+
+### Backend Integration
+
+The Keywords AI integration:
+
+1. **Patches** Cognee's `get_observe()` at import time
+2. **Maps** `@observe` to Keywords AI's `task()` decorator
+3. **Maps** `@observe(workflow=True)` to Keywords AI's `workflow()` decorator
+4. **Initializes** telemetry via `KeywordsAITelemetry()` once on import
+
+### Monitoring Dashboard
+
+Once configured, you can:
+
+1. Run your Cognee workflows with the `@observe` decorators
+2. Open your [Keywords AI dashboard](https://keywordsai.co)
+3. Inspect spans across tasks and workflows
+4. Monitor token usage, latency, and error rates
+5. Debug issues with detailed trace information
+
+## Advanced Configuration
+
+### Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `MONITORING_TOOL` | Set to `keywordsai` | Yes |
+| `KEYWORDSAI_API_KEY` | Your Keywords AI API key | Yes |
+| `LLM_API_KEY` | Your LLM provider API key | Optional |
+
+### Custom Span Names
+
+You can customize span names by providing additional parameters:
+
+```python
+@observe(name="custom_task_name")
+def my_task():
+    pass
+
+@observe(workflow=True, name="custom_workflow_name")
+async def my_workflow():
+    pass
+```
+
+## Community Integration
+
+The Keywords AI integration is part of the `cognee-community` extension hub, which provides:
+
+- **Independent Evolution**: Adapters iterate at their own pace
+- **Slim Installs**: Pull in only what you need
+- **Seamless Interoperability**: Small registration shim wires into Cognee's abstraction
+- **Predictable Layout**: Consistent provider patterns under `packages/*`
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Missing API Key**: Ensure `KEYWORDSAI_API_KEY` is set
+2. **Wrong Monitoring Tool**: Verify `MONITORING_TOOL=keywordsai`
+3. **Import Order**: Import the integration package before using `get_observe()`
+
+### Debug Mode
+
+Enable debug logging to troubleshoot issues:
+
+```python
+import logging
+logging.basicConfig(level=logging.DEBUG)
+```
