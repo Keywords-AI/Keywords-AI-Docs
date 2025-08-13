@@ -1,0 +1,143 @@
+---
+title: "Get Evaluation Report"
+description: "Retrieve the results and report of a completed evaluation"
+---
+
+## Overview
+
+The `get_evaluation_report` method allows you to retrieve the detailed results and report of a completed evaluation. This provides insights into model performance and data quality metrics.
+
+## Method Signature
+
+### Synchronous
+```python
+def get_evaluation_report(
+    evaluation_id: str
+) -> Dict[str, Any]
+```
+
+### Asynchronous
+```python
+async def get_evaluation_report(
+    evaluation_id: str
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `evaluation_id` | `str` | Yes | The unique identifier of the evaluation |
+
+## Returns
+
+Returns a dictionary containing the evaluation report with metrics, scores, and detailed results.
+
+## Examples
+
+### Basic Usage
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Get evaluation report
+report = client.datasets.get_evaluation_report(
+    evaluation_id="eval_123"
+)
+
+print(f"Evaluation Status: {report['status']}")
+print(f"Overall Score: {report['overall_score']}")
+print(f"Metrics: {report['metrics']}")
+```
+
+### Detailed Report Analysis
+```python
+# Get and analyze detailed report
+report = client.datasets.get_evaluation_report(evaluation_id="eval_123")
+
+if report['status'] == 'completed':
+    print(f"Evaluation completed successfully")
+    print(f"Dataset: {report['dataset_id']}")
+    print(f"Evaluators used: {len(report['evaluator_results'])}")
+    
+    # Print individual evaluator results
+    for evaluator_id, result in report['evaluator_results'].items():
+        print(f"\n{evaluator_id}:")
+        print(f"  Score: {result['score']}")
+        print(f"  Details: {result['details']}")
+else:
+    print(f"Evaluation status: {report['status']}")
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def get_report_example():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    report = await client.datasets.get_evaluation_report(
+        evaluation_id="eval_123"
+    )
+    
+    print(f"Report retrieved for evaluation {report['evaluation_id']}")
+    return report
+
+asyncio.run(get_report_example())
+```
+
+### Export Report Data
+```python
+import json
+
+# Get report and export to file
+report = client.datasets.get_evaluation_report(evaluation_id="eval_123")
+
+# Save report to JSON file
+with open(f"evaluation_report_{report['evaluation_id']}.json", 'w') as f:
+    json.dump(report, f, indent=2)
+
+print(f"Report exported to file")
+```
+
+## Error Handling
+
+```python
+try:
+    report = client.datasets.get_evaluation_report(
+        evaluation_id="eval_123"
+    )
+    
+    if report['status'] == 'failed':
+        print(f"Evaluation failed: {report.get('error_message', 'Unknown error')}")
+    elif report['status'] == 'running':
+        print("Evaluation is still in progress")
+    else:
+        print(f"Report retrieved successfully")
+        
+except Exception as e:
+    print(f"Error retrieving evaluation report: {e}")
+```
+
+## Report Structure
+
+A typical evaluation report contains:
+
+- `evaluation_id`: Unique identifier
+- `status`: Current status (running, completed, failed)
+- `dataset_id`: ID of the evaluated dataset
+- `overall_score`: Aggregate score across all evaluators
+- `metrics`: Summary metrics and statistics
+- `evaluator_results`: Detailed results for each evaluator
+- `created_at`: Evaluation start time
+- `completed_at`: Evaluation completion time
+
+## Common Use Cases
+
+- Monitoring model performance over time
+- Generating quality reports for stakeholders
+- Comparing different model versions
+- Identifying areas for improvement
+- Compliance and audit reporting

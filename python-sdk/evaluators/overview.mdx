@@ -1,0 +1,350 @@
+---
+title: "Evaluators Overview"
+description: "Comprehensive guide to the Keywords AI Evaluators API for automated evaluation and quality assessment"
+---
+
+## Introduction
+
+The Evaluators API provides powerful tools for automated evaluation and quality assessment of AI responses. Create custom evaluators, run evaluations on datasets, and get detailed scoring and feedback to improve your AI applications.
+
+## Key Features
+
+### Automated Evaluation
+- Create custom evaluation criteria and scoring systems
+- Run evaluations on individual responses or entire datasets
+- Support for multiple evaluation types (accuracy, relevance, safety, etc.)
+- Batch evaluation capabilities for efficiency
+
+### Flexible Scoring
+- Numeric scoring (0-10, 0-100, custom ranges)
+- Binary pass/fail evaluations
+- Multi-dimensional scoring across different criteria
+- Weighted scoring for complex evaluation scenarios
+
+### Quality Assessment
+- Content quality evaluation
+- Factual accuracy checking
+- Bias and safety assessment
+- Response relevance scoring
+- Custom business logic evaluation
+
+### Integration Ready
+- Easy integration with existing workflows
+- Real-time evaluation capabilities
+- Batch processing for large datasets
+- Comprehensive reporting and analytics
+
+## Quick Start
+
+```python
+from keywordsai import KeywordsAI
+
+# Initialize client
+client = KeywordsAI(api_key="your-api-key")
+
+# Create a simple evaluator
+evaluator = client.evaluators.create(
+    name="Response Quality",
+    description="Evaluates response quality and relevance",
+    criteria=[
+        {
+            "name": "relevance",
+            "description": "How relevant is the response to the question?",
+            "scale": {"min": 1, "max": 10}
+        },
+        {
+            "name": "accuracy",
+            "description": "How accurate is the information provided?",
+            "scale": {"min": 1, "max": 10}
+        }
+    ]
+)
+
+# Run evaluation
+result = client.evaluators.evaluate(
+    evaluator_id=evaluator['id'],
+    input_text="What is the capital of France?",
+    response_text="The capital of France is Paris.",
+    context="Geography question about European capitals"
+)
+
+print(f"Overall score: {result['overall_score']}")
+print(f"Relevance: {result['criteria_scores']['relevance']}")
+print(f"Accuracy: {result['criteria_scores']['accuracy']}")
+```
+
+## Available Methods
+
+### Synchronous Methods
+```python
+# Evaluator Management
+client.evaluators.create(...)          # Create new evaluator
+client.evaluators.list(...)            # List evaluators
+client.evaluators.get(evaluator_id)    # Get evaluator details
+client.evaluators.update(...)          # Update evaluator
+client.evaluators.delete(evaluator_id) # Delete evaluator
+
+# Evaluation Operations
+client.evaluators.evaluate(...)        # Run single evaluation
+client.evaluators.batch_evaluate(...)  # Run batch evaluation
+client.evaluators.get_evaluation(...)  # Get evaluation results
+client.evaluators.list_evaluations(...) # List evaluation history
+```
+
+### Asynchronous Methods
+```python
+# All methods have async equivalents
+await client.evaluators.create(...)
+await client.evaluators.evaluate(...)
+await client.evaluators.batch_evaluate(...)
+# ... and so on
+```
+
+## Evaluator Types
+
+### Content Quality Evaluators
+```python
+# Evaluate response quality
+quality_evaluator = client.evaluators.create(
+    name="Content Quality",
+    type="quality",
+    criteria=[
+        {"name": "clarity", "scale": {"min": 1, "max": 10}},
+        {"name": "completeness", "scale": {"min": 1, "max": 10}},
+        {"name": "helpfulness", "scale": {"min": 1, "max": 10}}
+    ]
+)
+```
+
+### Factual Accuracy Evaluators
+```python
+# Check factual accuracy
+accuracy_evaluator = client.evaluators.create(
+    name="Fact Checker",
+    type="accuracy",
+    criteria=[
+        {"name": "factual_correctness", "type": "binary"},
+        {"name": "source_reliability", "scale": {"min": 1, "max": 5}}
+    ]
+)
+```
+
+### Safety and Bias Evaluators
+```python
+# Evaluate safety and bias
+safety_evaluator = client.evaluators.create(
+    name="Safety Check",
+    type="safety",
+    criteria=[
+        {"name": "harmful_content", "type": "binary"},
+        {"name": "bias_level", "scale": {"min": 1, "max": 5}},
+        {"name": "appropriateness", "type": "binary"}
+    ]
+)
+```
+
+### Custom Business Logic Evaluators
+```python
+# Custom evaluation logic
+custom_evaluator = client.evaluators.create(
+    name="Customer Service Quality",
+    type="custom",
+    criteria=[
+        {"name": "empathy", "scale": {"min": 1, "max": 10}},
+        {"name": "solution_provided", "type": "binary"},
+        {"name": "professional_tone", "scale": {"min": 1, "max": 10}}
+    ],
+    custom_logic={
+        "empathy_keywords": ["understand", "sorry", "help"],
+        "solution_indicators": ["try", "can", "will", "here's how"]
+    }
+)
+```
+
+## Evaluation Workflow
+
+### 1. Create Evaluator
+```python
+evaluator = client.evaluators.create(
+    name="Response Evaluator",
+    description="Evaluates AI response quality",
+    criteria=[...]
+)
+```
+
+### 2. Run Evaluation
+```python
+# Single evaluation
+result = client.evaluators.evaluate(
+    evaluator_id=evaluator['id'],
+    input_text="User question",
+    response_text="AI response"
+)
+
+# Batch evaluation
+results = client.evaluators.batch_evaluate(
+    evaluator_id=evaluator['id'],
+    evaluations=[
+        {"input_text": "Q1", "response_text": "A1"},
+        {"input_text": "Q2", "response_text": "A2"}
+    ]
+)
+```
+
+### 3. Analyze Results
+```python
+# Get detailed results
+evaluation = client.evaluators.get_evaluation(result['evaluation_id'])
+
+print(f"Overall Score: {evaluation['overall_score']}")
+print(f"Individual Scores: {evaluation['criteria_scores']}")
+print(f"Feedback: {evaluation['feedback']}")
+```
+
+## Scoring Systems
+
+### Numeric Scoring
+```python
+# 1-10 scale
+{"name": "quality", "scale": {"min": 1, "max": 10}}
+
+# 0-100 percentage
+{"name": "accuracy", "scale": {"min": 0, "max": 100}}
+
+# Custom range
+{"name": "relevance", "scale": {"min": 0, "max": 5}}
+```
+
+### Binary Scoring
+```python
+# Pass/Fail
+{"name": "safety_check", "type": "binary"}
+
+# Yes/No
+{"name": "contains_answer", "type": "binary"}
+```
+
+### Weighted Scoring
+```python
+evaluator = client.evaluators.create(
+    name="Weighted Evaluator",
+    criteria=[
+        {"name": "accuracy", "scale": {"min": 1, "max": 10}, "weight": 0.5},
+        {"name": "clarity", "scale": {"min": 1, "max": 10}, "weight": 0.3},
+        {"name": "completeness", "scale": {"min": 1, "max": 10}, "weight": 0.2}
+    ],
+    scoring_method="weighted_average"
+)
+```
+
+## Integration Examples
+
+### Real-time Evaluation
+```python
+# Evaluate responses in real-time
+def evaluate_response(user_input, ai_response):
+    result = client.evaluators.evaluate(
+        evaluator_id="eval_123",
+        input_text=user_input,
+        response_text=ai_response
+    )
+    
+    if result['overall_score'] < 7:
+        # Trigger improvement workflow
+        return regenerate_response(user_input)
+    
+    return ai_response
+```
+
+### Dataset Evaluation
+```python
+# Evaluate entire datasets
+dataset_results = client.evaluators.batch_evaluate(
+    evaluator_id="eval_123",
+    dataset_id="dataset_456"
+)
+
+print(f"Average score: {dataset_results['average_score']}")
+print(f"Pass rate: {dataset_results['pass_rate']}")
+```
+
+### A/B Testing Integration
+```python
+# Compare model performance
+model_a_results = client.evaluators.batch_evaluate(
+    evaluator_id="eval_123",
+    model_responses=model_a_responses
+)
+
+model_b_results = client.evaluators.batch_evaluate(
+    evaluator_id="eval_123",
+    model_responses=model_b_responses
+)
+
+print(f"Model A average: {model_a_results['average_score']}")
+print(f"Model B average: {model_b_results['average_score']}")
+```
+
+## Best Practices
+
+### Evaluator Design
+- Define clear, specific evaluation criteria
+- Use appropriate scoring scales for each criterion
+- Include both objective and subjective measures
+- Test evaluators with sample data before production use
+- Regularly review and update evaluation criteria
+
+### Evaluation Strategy
+- Combine multiple evaluators for comprehensive assessment
+- Use different evaluators for different use cases
+- Implement threshold-based quality gates
+- Monitor evaluation trends over time
+- Validate evaluator performance against human judgment
+
+### Performance Optimization
+- Use batch evaluation for large datasets
+- Cache evaluation results when appropriate
+- Implement async evaluation for better performance
+- Monitor evaluation latency and costs
+- Use sampling for very large datasets
+
+## Error Handling
+
+```python
+try:
+    result = client.evaluators.evaluate(
+        evaluator_id="eval_123",
+        input_text="Question",
+        response_text="Answer"
+    )
+except Exception as e:
+    if "evaluator not found" in str(e).lower():
+        print("Evaluator does not exist")
+    elif "quota exceeded" in str(e).lower():
+        print("Evaluation quota exceeded")
+    elif "invalid input" in str(e).lower():
+        print("Invalid evaluation input")
+    else:
+        print(f"Evaluation error: {e}")
+```
+
+## Common Use Cases
+
+- **Quality Assurance**: Automated quality checking of AI responses
+- **Model Comparison**: Comparing performance of different models
+- **Content Moderation**: Safety and appropriateness checking
+- **Customer Service**: Evaluating support response quality
+- **Educational Content**: Assessing accuracy and clarity
+- **Creative Content**: Evaluating creativity and originality
+- **Technical Documentation**: Checking accuracy and completeness
+- **Compliance**: Ensuring responses meet regulatory requirements
+
+## Getting Started
+
+1. **Define Your Evaluation Needs**: Identify what aspects of responses you want to evaluate
+2. **Create Evaluators**: Set up evaluators with appropriate criteria and scoring
+3. **Test and Validate**: Run evaluations on sample data to validate performance
+4. **Integrate**: Incorporate evaluations into your workflow
+5. **Monitor and Improve**: Track evaluation results and refine criteria as needed
+
+The Evaluators API provides the foundation for building robust, automated quality assurance into your AI applications, ensuring consistent, high-quality outputs that meet your specific requirements.

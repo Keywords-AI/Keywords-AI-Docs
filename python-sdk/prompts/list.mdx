@@ -1,0 +1,258 @@
+---
+title: "List Prompts"
+description: "Retrieve and filter prompts with pagination support"
+---
+
+## Overview
+
+The `list()` method allows you to retrieve prompts with optional filtering and pagination. This is useful for browsing, searching, and managing your prompt collection.
+
+## Usage example
+
+```python
+from keywordsai.prompts.api import PromptAPI
+import asyncio
+import os
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+
+# Create the client
+client = PromptAPI(
+    api_key=os.getenv("KEYWORDS_AI_API_KEY"),
+    base_url=os.getenv("KEYWORDS_AI_BASE_URL")
+)
+
+# Synchronous example
+response = client.list()
+print(f"Total prompts: {response.count}")
+
+for prompt in response.results:
+    print(f"- {prompt.name} (ID: {prompt.prompt_id})")
+
+# Asynchronous example
+async def list_prompts_async():
+    response = await client.alist()
+    print(f"Total prompts: {response.count}")
+    
+    for prompt in response.results:
+        print(f"- {prompt.name} (ID: {prompt.prompt_id})")
+
+# Run the async function
+asyncio.run(list_prompts_async())
+```
+
+## Parameters
+
+<ParamField path="page" type="integer" default={1}>
+  Page number for pagination.
+</ParamField>
+
+<ParamField path="page_size" type="integer" default={50}>
+  Number of prompts per page (max 100).
+</ParamField>
+
+<ParamField path="name" type="string">
+  Filter by prompt name (partial match).
+</ParamField>
+
+<ParamField path="metadata" type="object">
+  Filter by metadata key-value pairs.
+</ParamField>
+
+<ParamField path="sort_by" type="string">
+  Field to sort by (name, created_at, updated_at).
+</ParamField>
+
+<ParamField path="sort_order" type="string">
+  Sort order (asc, desc).
+</ParamField>
+
+## Returns
+
+Returns a `PromptListResponse` object containing the list of prompts and pagination information:
+
+```python
+PromptListResponse(
+    count=3,
+    next="http://api.keywordsai.co/api/prompts/list?page=2",
+    previous=None,
+    results=[
+        Prompt(
+            prompt_id="fa51377c8e8d42e1ad54c5864f2cd201",
+            name="20games",
+            description="",
+            live_version=10883,
+            created_at="2024-01-15T10:30:00Z",
+            updated_at="2024-01-20T14:45:00Z"
+        )
+    ]
+)
+```
+
+## Examples
+
+### Basic Synchronous Example
+
+```python
+import os
+from dotenv import load_dotenv
+from keywordsai.prompts.api import PromptAPI
+
+load_dotenv()
+
+def list_prompts_sync():
+    """Basic synchronous prompt listing"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    base_url = os.getenv("KEYWORDS_AI_BASE_URL")
+    client = PromptAPI(api_key=api_key, base_url=base_url)
+    
+    try:
+        response = client.list()
+        print(f"✓ Found {response.count} prompts")
+        
+        for prompt in response.results:
+            print(f"  - {prompt.name} (ID: {prompt.prompt_id})")
+        
+        return response
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return None
+
+# Usage
+list_prompts_sync()
+```
+
+### With Pagination
+
+```python
+def list_prompts_with_pagination():
+    """List prompts with pagination"""
+    client = PromptAPI(
+        api_key=os.getenv("KEYWORDS_AI_API_KEY"),
+        base_url=os.getenv("KEYWORDS_AI_BASE_URL")
+    )
+    
+    # Get first page with 10 prompts
+    response = client.list(page=1, page_size=10)
+    
+    print(f"Page 1: {len(response.results)} of {response.count} prompts")
+    
+    for prompt in response.results:
+        print(f"  - {prompt.name}")
+    
+    # Check if there's a next page
+    if response.next:
+        print(f"Next page available: {response.next}")
+
+# Usage
+list_prompts_with_pagination()
+```
+
+### With Filtering
+
+```python
+def list_prompts_with_filter():
+    """List prompts with name filtering"""
+    client = PromptAPI(
+        api_key=os.getenv("KEYWORDS_AI_API_KEY"),
+        base_url=os.getenv("KEYWORDS_AI_BASE_URL")
+    )
+    
+    # Filter prompts by name
+    response = client.list(name="game", page_size=20)
+    
+    print(f"Found {response.count} prompts matching 'game'")
+    
+    for prompt in response.results:
+        print(f"  - {prompt.name} (Live Version: {prompt.live_version})")
+        if prompt.description:
+            print(f"    Description: {prompt.description}")
+
+# Usage
+list_prompts_with_filter()
+```
+
+### Asynchronous Example
+
+```python
+import asyncio
+import os
+from dotenv import load_dotenv
+from keywordsai.prompts.api import PromptAPI
+
+load_dotenv()
+
+async def list_prompts_async():
+    """Asynchronous prompt listing"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    base_url = os.getenv("KEYWORDS_AI_BASE_URL")
+    client = PromptAPI(api_key=api_key, base_url=base_url)
+    
+    try:
+        response = await client.alist(page_size=20)
+        print(f"✓ Async: Found {response.count} prompts")
+        
+        for prompt in response.results:
+            print(f"  - {prompt.name} (Live Version: {prompt.live_version})")
+        
+        return response
+    except Exception as e:
+        print(f"✗ Async error: {e}")
+        return None
+
+# Usage
+asyncio.run(list_prompts_async())
+```
+
+### Asynchronous with Filtering
+
+```python
+async def list_prompts_async_filtered():
+    """Asynchronous prompt listing with filtering"""
+    client = PromptAPI(
+        api_key=os.getenv("KEYWORDS_AI_API_KEY"),
+        base_url=os.getenv("KEYWORDS_AI_BASE_URL")
+    )
+    
+    try:
+        # Filter and sort prompts
+        response = await client.alist(
+            name="test",
+            sort_by="created_at",
+            sort_order="desc",
+            page_size=10
+        )
+        
+        print(f"✓ Found {response.count} prompts matching 'test'")
+        
+        for prompt in response.results:
+            print(f"  - {prompt.name}")
+            print(f"    ID: {prompt.prompt_id}")
+            print(f"    Created: {prompt.created_at}")
+            print(f"    Live Version: {prompt.live_version}")
+            print()
+        
+        return response
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return None
+
+# Usage
+asyncio.run(list_prompts_async_filtered())
+```
+
+## Convenience Functions
+
+You can also use the convenience function to create a PromptAPI client:
+
+```python
+from keywordsai import create_prompt_client
+
+client = create_prompt_client(api_key="your-api-key")
+response = client.list()
+print(f"Found {response.count} prompts")
+
+for prompt in response.results:
+    print(f"- {prompt.name}")
+```

@@ -1,0 +1,79 @@
+---
+title: "Update Columns"
+description: "Update column definitions in an experiment dataset"
+---
+
+## Overview
+
+Update the properties and definitions of existing columns in an experiment dataset.
+
+## Method Signature
+
+```python
+# Synchronous
+client.experiments.update_columns(
+    experiment_id: str,
+    column_updates: List[Dict[str, Any]]
+) -> Dict[str, Any]
+
+# Asynchronous
+await client.experiments.update_columns(
+    experiment_id: str,
+    column_updates: List[Dict[str, Any]]
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The unique identifier of the experiment
+</ParamField>
+
+<ParamField path="column_updates" type="List[Dict[str, Any]]" required>
+  List of column updates with name and new properties
+</ParamField>
+
+## Returns
+
+Returns a dictionary containing the updated experiment information.
+
+## Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Update column definitions
+column_updates = [
+    {
+        "name": "score",
+        "type": "float",
+        "description": "Updated scoring metric (0-1)",
+        "required": True
+    },
+    {
+        "name": "category",
+        "description": "Response classification category"
+    }
+]
+
+result = client.experiments.update_columns(
+    experiment_id="exp_123",
+    column_updates=column_updates
+)
+
+print(f"Updated {len(column_updates)} columns in experiment")
+```
+
+## Error Handling
+
+```python
+try:
+    result = client.experiments.update_columns(
+        experiment_id="exp_123",
+        column_updates=column_updates
+    )
+except Exception as e:
+    print(f"Error updating columns: {e}")
+```

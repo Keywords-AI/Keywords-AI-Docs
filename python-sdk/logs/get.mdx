@@ -1,0 +1,174 @@
+---
+title: "Get a log (Todo)"
+description: "Retrieve a specific log entry by its ID"
+---
+
+## Overview
+
+The `get()` and `aget()` methods allow you to retrieve a specific log entry using its unique identifier. Use `get()` for synchronous operations and `aget()` for asynchronous operations.
+
+## Usage example
+
+```python
+from keywordsai.logs.api import LogAPI
+import asyncio
+
+# Create the client
+log_api_client = LogAPI()
+
+# Synchronous example
+log = log_api_client.get("log_123456789")
+print(f"Log ID: {log.id}")
+print(f"Model: {log.model}")
+print(f"Total tokens: {log.total_tokens}")
+
+# Asynchronous example
+async def get_log_async():
+    log = await log_api_client.aget("log_123456789")
+    print(f"Log ID: {log.id}")
+    print(f"Model: {log.model}")
+    print(f"Total tokens: {log.total_tokens}")
+
+# Run the async function
+asyncio.run(get_log_async())
+```
+
+## Parameters
+
+<ParamField path="log_id" type="string" required>
+  The unique identifier of the log entry to retrieve.
+</ParamField>
+
+## Returns
+
+Returns a `Log` object with the following structure:
+
+```python
+{
+    "id": "log_123456789",
+    "unique_id": "unique_123",
+    "model": "gpt-4",
+    "messages": [
+        {"role": "user", "content": "Hello"},
+        {"role": "assistant", "content": "Hi there!"}
+    ],
+    "prompt_tokens": 10,
+    "completion_tokens": 15,
+    "total_tokens": 25,
+    "cost": 0.0005,
+    "latency": 1.2,
+    "timestamp": "2024-01-15T10:30:00Z",
+    "metadata": {...}
+}
+```
+
+## Examples
+
+### Basic Synchronous Example
+
+```python
+import os
+from dotenv import load_dotenv
+from keywordsai.logs.api import LogAPI
+
+load_dotenv()
+
+def get_log_sync():
+    """Basic synchronous log retrieval"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    log_api_client = LogAPI(api_key=api_key)
+    
+    try:
+        log = log_api_client.get("log_123456789")
+        print(f"✓ Retrieved log: {log.id}")
+        print(f"Model: {log.model}")
+        print(f"Total tokens: {log.total_tokens}")
+        print(f"Cost: ${log.cost:.4f}")
+        
+        # Access conversation messages
+        for message in log.messages:
+            role = message["role"].capitalize()
+            content = message["content"][:100] + "..." if len(message["content"]) > 100 else message["content"]
+            print(f"{role}: {content}")
+            
+        return log
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return None
+
+# Usage
+get_log_sync()
+```
+
+### Asynchronous Example
+
+```python
+import asyncio
+import os
+from dotenv import load_dotenv
+from keywordsai.logs.api import LogAPI
+
+load_dotenv()
+
+async def get_log_async():
+    """Asynchronous log retrieval"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    log_api_client = LogAPI(api_key=api_key)
+    
+    try:
+        log = await log_api_client.aget("log_123456789")
+        print(f"✓ Async retrieved log: {log.id}")
+        print(f"Model: {log.model}")
+        print(f"Total tokens: {log.total_tokens}")
+        print(f"Cost: ${log.cost:.4f}")
+        
+        # Access metadata if available
+        if log.metadata:
+            print("Metadata:")
+            for key, value in log.metadata.items():
+                print(f"  {key}: {value}")
+                
+        return log
+    except Exception as e:
+        print(f"✗ Async error: {e}")
+        return None
+
+# Usage
+asyncio.run(get_log_async())
+```
+
+### Batch Retrieval
+
+```python
+def get_multiple_logs(log_ids):
+    """Retrieve multiple logs"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    log_api_client = LogAPI(api_key=api_key)
+    
+    logs = []
+    for log_id in log_ids:
+        try:
+            log = log_api_client.get(log_id)
+            logs.append(log)
+            print(f"✓ Retrieved log: {log.id}")
+        except Exception as e:
+            print(f"✗ Failed to retrieve {log_id}: {e}")
+    
+    return logs
+
+# Usage
+log_ids = ["log_123", "log_456", "log_789"]
+logs = get_multiple_logs(log_ids)
+print(f"Retrieved {len(logs)} out of {len(log_ids)} logs")
+```
+
+## Convenience Functions
+
+You can also use the convenience function to create a LogAPI client:
+
+```python
+from keywordsai import create_log_client
+
+client = create_log_client(api_key="your-api-key")
+log = client.get("log_123456789")
+```

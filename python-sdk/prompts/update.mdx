@@ -1,0 +1,224 @@
+---
+title: "Update Prompt"
+description: "Update an existing prompt's name or description"
+---
+
+## Overview
+
+The `update()` and `aupdate()` methods allow you to modify an existing prompt's name or description. Use `update()` for synchronous operations and `aupdate()` for asynchronous operations.
+
+## Usage example
+
+```python
+from keywordsai.prompts.api import PromptAPI
+import asyncio
+
+# Create the client
+prompt_api_client = PromptAPI()
+
+# Synchronous example
+response = prompt_api_client.update(
+    "prompt_123",
+    {"name": "Updated Prompt Name", "description": "Updated description"}
+)
+print(f"Updated prompt: {response.name}")
+
+# Asynchronous example
+async def update_prompt_async():
+    response = await prompt_api_client.aupdate(
+        "prompt_123",
+        {"name": "Async Updated Name", "description": "Async updated description"}
+    )
+    print(f"Async updated prompt: {response.name}")
+
+# Run the async function
+asyncio.run(update_prompt_async())
+```
+
+## Parameters
+
+### Core Parameters
+
+<ParamField path="prompt_id" type="string">
+  The unique identifier of the prompt to update (passed as first positional argument).
+</ParamField>
+
+<ParamField path="data" type="dict">
+  Dictionary containing the fields to update (passed as second positional argument).
+  
+  **Supported Fields:**
+  - `name` (string, optional): New name for the prompt
+  - `description` (string, optional): New description for the prompt
+</ParamField>
+
+## Returns
+
+Returns a prompt object with the following attributes:
+
+- `id` (string): The prompt's unique identifier
+- `name` (string): The prompt's name
+- `description` (string): The prompt's description
+- `content` (string): The prompt's content
+- `variables` (list): List of variables in the prompt
+- `metadata` (dict): Additional metadata
+- `created_at` (string): Creation timestamp
+- `updated_at` (string): Last update timestamp
+
+## Examples
+
+### Basic Synchronous Example
+
+```python
+import os
+from dotenv import load_dotenv
+from keywordsai.prompts.api import PromptAPI
+
+load_dotenv()
+
+def update_prompt_sync():
+    """Basic synchronous prompt update"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    prompt_api_client = PromptAPI(api_key=api_key)
+    
+    prompt_id = "your_prompt_id_here"
+    
+    try:
+        # Update both name and description
+        response = prompt_api_client.update(
+            prompt_id,
+            {
+                "name": "Updated Customer Greeting",
+                "description": "An improved customer greeting prompt"
+            }
+        )
+        
+        print(f"✓ Updated prompt: {response.name}")
+        print(f"  Description: {response.description}")
+        print(f"  Updated at: {response.updated_at}")
+        return response
+        
+    except Exception as e:
+        print(f"✗ Error updating prompt: {e}")
+        return None
+
+# Usage
+update_prompt_sync()
+```
+
+### Asynchronous Example
+
+```python
+import asyncio
+import os
+from dotenv import load_dotenv
+from keywordsai.prompts.api import PromptAPI
+
+load_dotenv()
+
+async def update_prompt_async():
+    """Asynchronous prompt update"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    prompt_api_client = PromptAPI(api_key=api_key)
+    
+    prompt_id = "your_prompt_id_here"
+    
+    try:
+        # Update only the description
+        response = await prompt_api_client.aupdate(
+            prompt_id,
+            {"description": "Asynchronously updated description"}
+        )
+        
+        print(f"✓ Async updated prompt: {response.name}")
+        print(f"  New description: {response.description}")
+        return response
+        
+    except Exception as e:
+        print(f"✗ Async error: {e}")
+        return None
+
+# Usage
+asyncio.run(update_prompt_async())
+```
+
+### Update Name Only
+
+```python
+def update_prompt_name():
+    """Update only the prompt name"""
+    prompt_api_client = PromptAPI()
+    
+    try:
+        response = prompt_api_client.update(
+            "prompt_123",
+            {"name": "New Prompt Name"}
+        )
+        print(f"✓ Name updated to: {response.name}")
+        return response
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return None
+```
+
+### Update Description Only
+
+```python
+def update_prompt_description():
+    """Update only the prompt description"""
+    prompt_api_client = PromptAPI()
+    
+    try:
+        response = prompt_api_client.update(
+            "prompt_123",
+            {"description": "This prompt is used for customer onboarding"}
+        )
+        print(f"✓ Description updated: {response.description}")
+        return response
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return None
+```
+
+## Error Handling
+
+```python
+def update_with_error_handling():
+    """Example with comprehensive error handling"""
+    prompt_api_client = PromptAPI()
+    
+    try:
+        response = prompt_api_client.update(
+            "prompt_123",
+            {
+                "name": "Updated Name",
+                "description": "Updated description"
+            }
+        )
+        print(f"✓ Successfully updated: {response.name}")
+        return response
+        
+    except Exception as e:
+        error_message = str(e).lower()
+        
+        if "not found" in error_message:
+            print("✗ Error: Prompt not found")
+        elif "unauthorized" in error_message:
+            print("✗ Error: Invalid API key or insufficient permissions")
+        elif "validation" in error_message:
+            print(f"✗ Validation error: {e}")
+        else:
+            print(f"✗ Unexpected error: {e}")
+        
+        return None
+```
+
+## Convenience Functions
+
+You can also use the convenience function to create a PromptAPI client:
+
+```python
+from keywordsai import create_prompt_client
+
+client = create_prompt_client(api_key="your-api-key")
+response = client.update(prompt_id, update_data)
+```

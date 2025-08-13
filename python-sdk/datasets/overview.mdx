@@ -1,0 +1,433 @@
+---
+title: "Datasets API Overview"
+description: "Manage datasets and collections of logs with the Keywords AI Python SDK"
+---
+
+## Overview
+
+The Datasets API allows you to create, manage, and organize collections of logs for analysis, evaluation, and machine learning workflows. Datasets serve as containers for grouping related conversations and interactions.
+
+## Key Features
+
+- **Create and manage datasets** for organizing logs
+- **Add and remove logs** from datasets
+- **Run evaluations** on dataset contents
+- **Generate evaluation reports** and analytics
+- **List dataset contents** with filtering
+- **Update dataset metadata** and descriptions
+
+## Quick Start
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Create a dataset
+dataset = client.datasets.create(
+    name="Customer Support Conversations",
+    description="Collection of customer support interactions for analysis"
+)
+
+# Add logs to the dataset
+client.datasets.add_logs_to_dataset(
+    dataset_id=dataset.id,
+    log_ids=["log_123", "log_456", "log_789"]
+)
+
+print(f"Created dataset {dataset.id} with logs")
+```
+
+## Available Methods
+
+### Core Dataset Operations
+
+| Method | Description |
+|--------|-------------|
+| [`create()`](/python-sdk/datasets/create) | Create a new dataset |
+| [`list()`](/python-sdk/datasets/list) | List all datasets |
+| [`get()`](/python-sdk/datasets/get) | Retrieve a specific dataset |
+| [`update()`](/python-sdk/datasets/update) | Update dataset information |
+| [`delete()`](/python-sdk/datasets/delete) | Delete a dataset |
+
+### Log Management
+
+| Method | Description |
+|--------|-------------|
+| [`add_logs_to_dataset()`](/python-sdk/datasets/add-logs-to-dataset) | Add logs to a dataset |
+| [`remove_logs_from_dataset()`](/python-sdk/datasets/remove-logs-from-dataset) | Remove logs from a dataset |
+| [`list_dataset_logs()`](/python-sdk/datasets/list-dataset-logs) | List logs in a dataset |
+
+### Evaluation Operations
+
+| Method | Description |
+|--------|-------------|
+| [`run_dataset_evaluation()`](/python-sdk/datasets/run-dataset-evaluation) | Run evaluation on dataset |
+| [`get_evaluation_report()`](/python-sdk/datasets/get-evaluation-report) | Get evaluation results |
+| [`list_evaluation_reports()`](/python-sdk/datasets/list-evaluation-reports) | List all evaluation reports |
+
+### Asynchronous Methods
+
+All methods have asynchronous counterparts with the `a` prefix:
+- `acreate()`, `alist()`, `aget()`, `aupdate()`, `adelete()`
+- `aadd_logs_to_dataset()`, `aremove_logs_from_dataset()`, `alist_dataset_logs()`
+- `arun_dataset_evaluation()`, `aget_evaluation_report()`, `alist_evaluation_reports()`
+
+## Dataset Structure
+
+A dataset contains the following information:
+
+```python
+{
+    "id": "dataset_123456",
+    "name": "Customer Support Dataset",
+    "description": "Collection of customer support conversations",
+    "log_count": 150,
+    "created_at": "2024-01-15T10:30:00Z",
+    "updated_at": "2024-01-16T14:20:00Z",
+    "metadata": {
+        "category": "support",
+        "version": "1.0",
+        "tags": ["customer-service", "qa"]
+    }
+}
+```
+
+## Common Workflows
+
+### 1. Dataset Creation and Population
+
+```python
+# Create a dataset
+dataset = client.datasets.create(
+    name="Product Q&A Dataset",
+    description="Questions and answers about our products",
+    metadata={
+        "category": "product_support",
+        "version": "1.0"
+    }
+)
+
+# Get relevant logs
+logs = client.logs.list(
+    metadata_filter={"category": "product_questions"},
+    limit=100
+)
+
+# Add logs to dataset
+log_ids = [log.id for log in logs]
+client.datasets.add_logs_to_dataset(
+    dataset_id=dataset.id,
+    log_ids=log_ids
+)
+
+print(f"Added {len(log_ids)} logs to dataset {dataset.name}")
+```
+
+### 2. Dataset Evaluation
+
+```python
+# Run evaluation on the dataset
+evaluation = client.datasets.run_dataset_evaluation(
+    dataset_id=dataset.id,
+    evaluator_ids=["evaluator_123", "evaluator_456"]
+)
+
+print(f"Started evaluation {evaluation.id}")
+
+# Get evaluation results
+report = client.datasets.get_evaluation_report(
+    dataset_id=dataset.id,
+    evaluation_id=evaluation.id
+)
+
+print(f"Evaluation score: {report.overall_score}")
+```
+
+### 3. Dataset Analysis
+
+```python
+# Get dataset logs for analysis
+dataset_logs = client.datasets.list_dataset_logs(
+    dataset_id=dataset.id,
+    limit=500
+)
+
+# Analyze the dataset
+total_tokens = sum(log.total_tokens or 0 for log in dataset_logs)
+average_cost = sum(log.cost or 0 for log in dataset_logs) / len(dataset_logs)
+
+print(f"Dataset Analysis:")
+print(f"  Total logs: {len(dataset_logs)}")
+print(f"  Total tokens: {total_tokens:,}")
+print(f"  Average cost per log: ${average_cost:.4f}")
+```
+
+## Advanced Use Cases
+
+### Batch Dataset Operations
+
+```python
+import asyncio
+
+async def create_multiple_datasets(dataset_configs):
+    tasks = []
+    
+    for config in dataset_configs:
+        task = client.datasets.acreate(**config)
+        tasks.append(task)
+    
+    datasets = await asyncio.gather(*tasks)
+    return datasets
+
+# Create multiple datasets
+configs = [
+    {"name": "Training Set", "description": "Training data"},
+    {"name": "Validation Set", "description": "Validation data"},
+    {"name": "Test Set", "description": "Test data"}
+]
+
+datasets = asyncio.run(create_multiple_datasets(configs))
+print(f"Created {len(datasets)} datasets")
+```
+
+### Dataset Versioning
+
+```python
+def create_dataset_version(base_dataset_id, version_name):
+    # Get the base dataset
+    base_dataset = client.datasets.get(dataset_id=base_dataset_id)
+    
+    # Create new version
+    new_dataset = client.datasets.create(
+        name=f"{base_dataset.name} - {version_name}",
+        description=f"Version {version_name} of {base_dataset.name}",
+        metadata={
+            **base_dataset.metadata,
+            "version": version_name,
+            "parent_dataset_id": base_dataset_id
+        }
+    )
+    
+    # Copy logs from base dataset
+    base_logs = client.datasets.list_dataset_logs(
+        dataset_id=base_dataset_id,
+        limit=1000
+    )
+    
+    if base_logs:
+        log_ids = [log.id for log in base_logs]
+        client.datasets.add_logs_to_dataset(
+            dataset_id=new_dataset.id,
+            log_ids=log_ids
+        )
+    
+    return new_dataset
+
+# Create a new version
+v2_dataset = create_dataset_version("dataset_123", "v2.0")
+```
+
+### Dataset Quality Monitoring
+
+```python
+def monitor_dataset_quality(dataset_id):
+    # Get dataset logs
+    logs = client.datasets.list_dataset_logs(
+        dataset_id=dataset_id,
+        limit=1000
+    )
+    
+    quality_metrics = {
+        "total_logs": len(logs),
+        "empty_responses": 0,
+        "high_latency_logs": 0,
+        "high_cost_logs": 0,
+        "average_tokens": 0,
+        "average_cost": 0
+    }
+    
+    total_tokens = 0
+    total_cost = 0
+    
+    for log in logs:
+        # Check for empty responses
+        for msg in log.messages:
+            if msg["role"] == "assistant" and not msg["content"].strip():
+                quality_metrics["empty_responses"] += 1
+                break
+        
+        # Check latency
+        if log.latency and log.latency > 5.0:
+            quality_metrics["high_latency_logs"] += 1
+        
+        # Check cost
+        if log.cost and log.cost > 0.01:
+            quality_metrics["high_cost_logs"] += 1
+        
+        # Accumulate metrics
+        total_tokens += log.total_tokens or 0
+        total_cost += log.cost or 0
+    
+    if logs:
+        quality_metrics["average_tokens"] = total_tokens / len(logs)
+        quality_metrics["average_cost"] = total_cost / len(logs)
+    
+    # Calculate quality score
+    quality_score = 100
+    quality_score -= (quality_metrics["empty_responses"] / len(logs)) * 50
+    quality_score -= (quality_metrics["high_latency_logs"] / len(logs)) * 20
+    quality_score -= (quality_metrics["high_cost_logs"] / len(logs)) * 10
+    
+    quality_metrics["quality_score"] = max(0, quality_score)
+    
+    return quality_metrics
+
+# Monitor dataset quality
+quality = monitor_dataset_quality("dataset_123")
+print(f"Dataset Quality Score: {quality['quality_score']:.1f}/100")
+```
+
+## Best Practices
+
+### 1. Organize Datasets by Purpose
+
+```python
+# Good - clear purpose and naming
+training_dataset = client.datasets.create(
+    name="GPT-4 Training Data - Customer Support",
+    description="High-quality customer support conversations for training",
+    metadata={
+        "purpose": "training",
+        "domain": "customer_support",
+        "quality_threshold": "high"
+    }
+)
+```
+
+### 2. Use Metadata for Organization
+
+```python
+# Rich metadata for better organization
+dataset = client.datasets.create(
+    name="Product Documentation Q&A",
+    description="Questions and answers about product documentation",
+    metadata={
+        "category": "documentation",
+        "language": "english",
+        "product_version": "2.1",
+        "created_by": "data_team",
+        "tags": ["documentation", "qa", "product"]
+    }
+)
+```
+
+### 3. Implement Dataset Validation
+
+```python
+def validate_dataset_logs(dataset_id):
+    logs = client.datasets.list_dataset_logs(dataset_id=dataset_id)
+    
+    validation_results = {
+        "valid_logs": 0,
+        "invalid_logs": 0,
+        "issues": []
+    }
+    
+    for log in logs:
+        is_valid = True
+        
+        # Check message structure
+        if not log.messages or len(log.messages) < 2:
+            validation_results["issues"].append(f"Log {log.id}: Insufficient messages")
+            is_valid = False
+        
+        # Check for required roles
+        roles = [msg["role"] for msg in log.messages]
+        if "user" not in roles or "assistant" not in roles:
+            validation_results["issues"].append(f"Log {log.id}: Missing required roles")
+            is_valid = False
+        
+        if is_valid:
+            validation_results["valid_logs"] += 1
+        else:
+            validation_results["invalid_logs"] += 1
+    
+    return validation_results
+
+# Validate dataset
+validation = validate_dataset_logs("dataset_123")
+print(f"Validation: {validation['valid_logs']} valid, {validation['invalid_logs']} invalid")
+```
+
+### 4. Regular Dataset Maintenance
+
+```python
+def cleanup_dataset(dataset_id):
+    # Remove logs with issues
+    logs = client.datasets.list_dataset_logs(dataset_id=dataset_id)
+    
+    logs_to_remove = []
+    
+    for log in logs:
+        # Remove logs with empty responses
+        has_empty_response = any(
+            msg["role"] == "assistant" and not msg["content"].strip()
+            for msg in log.messages
+        )
+        
+        if has_empty_response:
+            logs_to_remove.append(log.id)
+    
+    if logs_to_remove:
+        client.datasets.remove_logs_from_dataset(
+            dataset_id=dataset_id,
+            log_ids=logs_to_remove
+        )
+        print(f"Removed {len(logs_to_remove)} problematic logs")
+    
+    return len(logs_to_remove)
+
+# Clean up dataset
+removed_count = cleanup_dataset("dataset_123")
+```
+
+## Error Handling
+
+```python
+from keywordsai.exceptions import (
+    NotFoundError,
+    ValidationError,
+    RateLimitError
+)
+
+def safe_dataset_operation(operation, **kwargs):
+    try:
+        return operation(**kwargs)
+    except NotFoundError as e:
+        print(f"Resource not found: {e}")
+        return None
+    except ValidationError as e:
+        print(f"Validation error: {e}")
+        return None
+    except RateLimitError:
+        print("Rate limit exceeded. Please retry later.")
+        return None
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return None
+
+# Use safe operations
+dataset = safe_dataset_operation(
+    client.datasets.create,
+    name="Test Dataset",
+    description="Test description"
+)
+```
+
+## Next Steps
+
+- Learn how to [create datasets](/python-sdk/datasets/create)
+- Explore [adding logs to datasets](/python-sdk/datasets/add-logs-to-dataset)
+- Understand [dataset evaluation](/python-sdk/datasets/run-dataset-evaluation)
+- See [complete examples](/python-sdk/examples) for real-world usage

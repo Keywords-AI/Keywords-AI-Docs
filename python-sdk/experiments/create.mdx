@@ -1,0 +1,319 @@
+---
+title: "Create Experiment"
+description: "Create a new experiment to test different variants"
+---
+
+## Overview
+
+The `create` method allows you to create a new experiment with multiple variants to test. This is the foundation for running A/B tests and comparing different approaches.
+
+## Method Signature
+
+### Synchronous
+```python
+def create(
+    name: str,
+    description: Optional[str] = None,
+    variants: List[Dict[str, Any]] = None,
+    metrics: Optional[List[str]] = None,
+    traffic_split: Optional[Dict[str, float]] = None,
+    metadata: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]
+```
+
+### Asynchronous
+```python
+async def create(
+    name: str,
+    description: Optional[str] = None,
+    variants: List[Dict[str, Any]] = None,
+    metrics: Optional[List[str]] = None,
+    traffic_split: Optional[Dict[str, float]] = None,
+    metadata: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `name` | `str` | Yes | The name of the experiment |
+| `description` | `str` | No | Description of the experiment |
+| `variants` | `List[Dict]` | Yes | List of variants to test |
+| `metrics` | `List[str]` | No | Metrics to track (default: standard metrics) |
+| `traffic_split` | `Dict[str, float]` | No | Traffic distribution between variants |
+| `metadata` | `Dict[str, Any]` | No | Custom metadata for the experiment |
+
+## Returns
+
+Returns a dictionary containing the created experiment information.
+
+## Examples
+
+### Basic A/B Test
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Create a simple A/B test
+experiment = client.experiments.create(
+    name="Greeting Style Test",
+    description="Testing formal vs casual greeting approaches",
+    variants=[
+        {
+            "name": "formal",
+            "prompt_id": "prompt_123",
+            "description": "Formal greeting style"
+        },
+        {
+            "name": "casual",
+            "prompt_id": "prompt_456",
+            "description": "Casual greeting style"
+        }
+    ]
+)
+
+print(f"Created experiment: {experiment['id']}")
+print(f"Status: {experiment['status']}")
+```
+
+### Experiment with Custom Metrics
+```python
+# Create experiment with specific metrics to track
+experiment = client.experiments.create(
+    name="Response Quality Test",
+    description="Testing different response generation approaches",
+    variants=[
+        {"name": "control", "prompt_id": "prompt_123"},
+        {"name": "enhanced", "prompt_id": "prompt_456"}
+    ],
+    metrics=[
+        "response_time",
+        "user_satisfaction",
+        "task_completion_rate",
+        "error_rate"
+    ]
+)
+
+print(f"Tracking metrics: {experiment['metrics']}")
+```
+
+### Experiment with Custom Traffic Split
+```python
+# Create experiment with uneven traffic distribution
+experiment = client.experiments.create(
+    name="Conservative Rollout Test",
+    description="Testing new feature with limited traffic",
+    variants=[
+        {"name": "control", "prompt_id": "prompt_123"},
+        {"name": "new_feature", "prompt_id": "prompt_456"}
+    ],
+    traffic_split={
+        "control": 0.8,      # 80% of traffic
+        "new_feature": 0.2   # 20% of traffic
+    }
+)
+
+print(f"Traffic split: {experiment['traffic_split']}")
+```
+
+### Multi-Variant Experiment
+```python
+# Create experiment with multiple variants
+experiment = client.experiments.create(
+    name="Tone Comparison Test",
+    description="Testing different communication tones",
+    variants=[
+        {
+            "name": "professional",
+            "prompt_id": "prompt_123",
+            "description": "Professional tone"
+        },
+        {
+            "name": "friendly",
+            "prompt_id": "prompt_456",
+            "description": "Friendly tone"
+        },
+        {
+            "name": "enthusiastic",
+            "prompt_id": "prompt_789",
+            "description": "Enthusiastic tone"
+        }
+    ],
+    traffic_split={
+        "professional": 0.4,
+        "friendly": 0.4,
+        "enthusiastic": 0.2
+    }
+)
+
+print(f"Created {len(experiment['variants'])} variant experiment")
+```
+
+### Experiment with Metadata
+```python
+# Create experiment with detailed metadata
+experiment = client.experiments.create(
+    name="Q4 Performance Optimization",
+    description="Optimizing for Q4 customer interactions",
+    variants=[
+        {"name": "baseline", "prompt_id": "prompt_123"},
+        {"name": "optimized", "prompt_id": "prompt_456"}
+    ],
+    metadata={
+        "quarter": "Q4_2024",
+        "team": "product",
+        "priority": "high",
+        "hypothesis": "Optimized prompt will improve conversion by 15%",
+        "success_criteria": {
+            "primary_metric": "conversion_rate",
+            "minimum_improvement": 0.15,
+            "confidence_level": 0.95
+        },
+        "duration_days": 14
+    }
+)
+
+print(f"Experiment metadata: {experiment['metadata']}")
+```
+
+### Asynchronous Creation
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def create_experiment_example():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    experiment = await client.experiments.create(
+        name="Async Experiment",
+        description="Created asynchronously",
+        variants=[
+            {"name": "control", "prompt_id": "prompt_123"},
+            {"name": "test", "prompt_id": "prompt_456"}
+        ]
+    )
+    
+    print(f"Async experiment created: {experiment['id']}")
+    return experiment
+
+asyncio.run(create_experiment_example())
+```
+
+### Model Comparison Experiment
+```python
+# Create experiment to compare different models
+experiment = client.experiments.create(
+    name="Model Performance Comparison",
+    description="Comparing GPT-4 vs Claude for customer support",
+    variants=[
+        {
+            "name": "gpt4",
+            "model": "gpt-4",
+            "prompt_id": "prompt_123",
+            "description": "GPT-4 with standard prompt"
+        },
+        {
+            "name": "claude",
+            "model": "claude-3",
+            "prompt_id": "prompt_123",
+            "description": "Claude-3 with same prompt"
+        }
+    ],
+    metrics=[
+        "response_quality",
+        "response_time",
+        "cost_per_request",
+        "user_satisfaction"
+    ]
+)
+
+print(f"Model comparison experiment: {experiment['id']}")
+```
+
+### Batch Experiment Creation
+```python
+# Create multiple related experiments
+experiment_configs = [
+    {
+        "name": "Customer Support - Greeting",
+        "variants": [
+            {"name": "formal", "prompt_id": "prompt_123"},
+            {"name": "casual", "prompt_id": "prompt_456"}
+        ]
+    },
+    {
+        "name": "Customer Support - Resolution",
+        "variants": [
+            {"name": "step_by_step", "prompt_id": "prompt_789"},
+            {"name": "direct", "prompt_id": "prompt_101"}
+        ]
+    }
+]
+
+created_experiments = []
+for config in experiment_configs:
+    try:
+        experiment = client.experiments.create(**config)
+        created_experiments.append(experiment)
+        print(f"Created: {experiment['name']}")
+    except Exception as e:
+        print(f"Failed to create {config['name']}: {e}")
+
+print(f"Successfully created {len(created_experiments)} experiments")
+```
+
+## Error Handling
+
+```python
+try:
+    experiment = client.experiments.create(
+        name="Test Experiment",
+        variants=[
+            {"name": "control", "prompt_id": "prompt_123"},
+            {"name": "test", "prompt_id": "prompt_456"}
+        ]
+    )
+    print(f"Experiment created successfully: {experiment['id']}")
+except Exception as e:
+    if "validation" in str(e).lower():
+        print(f"Validation error: {e}")
+    elif "duplicate" in str(e).lower():
+        print("Experiment name already exists")
+    else:
+        print(f"Error creating experiment: {e}")
+```
+
+## Experiment Structure
+
+A created experiment contains:
+
+- `id`: Unique experiment identifier
+- `name`: Experiment name
+- `description`: Optional description
+- `variants`: List of variants being tested
+- `metrics`: Metrics being tracked
+- `traffic_split`: Traffic distribution
+- `status`: Current status (draft)
+- `metadata`: Custom metadata
+- `created_at`: Creation timestamp
+- `created_by`: User who created the experiment
+
+## Best Practices
+
+- Use descriptive names that indicate the experiment purpose
+- Define clear hypotheses in the description or metadata
+- Ensure variants are truly different and testable
+- Choose appropriate metrics for your goals
+- Plan traffic split based on risk tolerance
+- Include success criteria in metadata
+
+## Common Use Cases
+
+- A/B testing different prompt variations
+- Comparing model performance
+- Testing new features with limited traffic
+- Optimizing for specific metrics
+- Multi-variant testing for complex scenarios
+- Progressive rollout experiments

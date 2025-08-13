@@ -1,0 +1,129 @@
+---
+title: "Run Dataset Evaluation"
+description: "Execute an evaluation on a dataset using specified evaluators"
+---
+
+## Overview
+
+The `run_dataset_evaluation` method allows you to run evaluations on a dataset using one or more evaluators. This is essential for measuring model performance and data quality.
+
+## Method Signature
+
+### Synchronous
+```python
+def run_dataset_evaluation(
+    dataset_id: str,
+    evaluator_ids: List[str],
+    evaluation_name: Optional[str] = None
+) -> Dict[str, Any]
+```
+
+### Asynchronous
+```python
+async def run_dataset_evaluation(
+    dataset_id: str,
+    evaluator_ids: List[str],
+    evaluation_name: Optional[str] = None
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `dataset_id` | `str` | Yes | The unique identifier of the dataset to evaluate |
+| `evaluator_ids` | `List[str]` | Yes | List of evaluator IDs to use for evaluation |
+| `evaluation_name` | `str` | No | Optional name for the evaluation run |
+
+## Returns
+
+Returns a dictionary containing the evaluation job information and status.
+
+## Examples
+
+### Basic Usage
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Run evaluation on dataset
+evaluation = client.datasets.run_dataset_evaluation(
+    dataset_id="dataset_123",
+    evaluator_ids=["evaluator_456", "evaluator_789"]
+)
+
+print(f"Evaluation started: {evaluation['evaluation_id']}")
+print(f"Status: {evaluation['status']}")
+```
+
+### With Custom Name
+```python
+# Run evaluation with custom name
+evaluation = client.datasets.run_dataset_evaluation(
+    dataset_id="dataset_123",
+    evaluator_ids=["evaluator_456"],
+    evaluation_name="Quality Check - Week 1"
+)
+
+print(f"Named evaluation '{evaluation['name']}' started")
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def run_evaluation_example():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    evaluation = await client.datasets.run_dataset_evaluation(
+        dataset_id="dataset_123",
+        evaluator_ids=["evaluator_456", "evaluator_789"],
+        evaluation_name="Async Evaluation"
+    )
+    
+    print(f"Evaluation {evaluation['evaluation_id']} started")
+    return evaluation
+
+asyncio.run(run_evaluation_example())
+```
+
+### Multiple Evaluators
+```python
+# Run comprehensive evaluation with multiple evaluators
+evaluators = [
+    "accuracy_evaluator",
+    "relevance_evaluator",
+    "safety_evaluator"
+]
+
+evaluation = client.datasets.run_dataset_evaluation(
+    dataset_id="dataset_123",
+    evaluator_ids=evaluators,
+    evaluation_name="Comprehensive Quality Check"
+)
+
+print(f"Running {len(evaluators)} evaluators on dataset")
+```
+
+## Error Handling
+
+```python
+try:
+    evaluation = client.datasets.run_dataset_evaluation(
+        dataset_id="dataset_123",
+        evaluator_ids=["evaluator_456"]
+    )
+    print(f"Evaluation started successfully: {evaluation['evaluation_id']}")
+except Exception as e:
+    print(f"Error starting evaluation: {e}")
+```
+
+## Common Use Cases
+
+- Quality assurance for training datasets
+- Model performance benchmarking
+- Automated dataset validation
+- A/B testing of different model versions
+- Compliance and safety checks

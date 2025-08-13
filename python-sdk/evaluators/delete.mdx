@@ -1,0 +1,70 @@
+---
+title: "Delete Evaluator"
+description: "Delete an existing evaluator"
+---
+
+## Overview
+
+Permanently delete an evaluator from your account. This action cannot be undone.
+
+## Method Signature
+
+```python
+# Synchronous
+client.evaluators.delete(
+    evaluator_id: str
+) -> Dict[str, Any]
+
+# Asynchronous
+await client.evaluators.delete(
+    evaluator_id: str
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+<ParamField path="evaluator_id" type="string" required>
+  The unique identifier of the evaluator to delete
+</ParamField>
+
+## Returns
+
+Returns a dictionary confirming the deletion.
+
+## Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Delete an evaluator
+result = client.evaluators.delete(evaluator_id="eval_123")
+
+print(f"Deletion status: {result['status']}")
+print(f"Message: {result['message']}")
+
+# Verify deletion
+try:
+    client.evaluators.get(evaluator_id="eval_123")
+except Exception:
+    print("Evaluator successfully deleted")
+```
+
+## Error Handling
+
+```python
+try:
+    result = client.evaluators.delete(evaluator_id="eval_123")
+except Exception as e:
+    print(f"Error deleting evaluator: {e}")
+    # Handle case where evaluator doesn't exist
+    if "not found" in str(e).lower():
+        print("Evaluator does not exist")
+```
+
+## Important Notes
+
+- Deletion is permanent and cannot be undone
+- Ensure the evaluator is not being used in active experiments
+- Consider backing up evaluator configuration before deletion

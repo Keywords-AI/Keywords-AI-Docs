@@ -1,0 +1,77 @@
+---
+title: "Run Experiment"
+description: "Execute an experiment with the configured dataset"
+---
+
+## Overview
+
+Run an experiment to test and evaluate model performance on the configured dataset.
+
+## Method Signature
+
+```python
+# Synchronous
+client.experiments.run_experiment(
+    experiment_id: str,
+    config: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]
+
+# Asynchronous
+await client.experiments.run_experiment(
+    experiment_id: str,
+    config: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The unique identifier of the experiment to run
+</ParamField>
+
+<ParamField path="config" type="Dict[str, Any]" optional>
+  Optional configuration parameters for the experiment run
+</ParamField>
+
+## Returns
+
+Returns a dictionary containing the experiment run results and status.
+
+## Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Run experiment with default configuration
+result = client.experiments.run_experiment(
+    experiment_id="exp_123"
+)
+
+print(f"Experiment status: {result['status']}")
+print(f"Run ID: {result['run_id']}")
+
+# Run experiment with custom configuration
+config = {
+    "model": "gpt-4",
+    "temperature": 0.7,
+    "max_tokens": 150
+}
+
+result = client.experiments.run_experiment(
+    experiment_id="exp_123",
+    config=config
+)
+```
+
+## Error Handling
+
+```python
+try:
+    result = client.experiments.run_experiment(
+        experiment_id="exp_123"
+    )
+except Exception as e:
+    print(f"Error running experiment: {e}")
+```

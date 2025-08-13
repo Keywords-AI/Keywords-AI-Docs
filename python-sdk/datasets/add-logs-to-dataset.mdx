@@ -1,0 +1,117 @@
+---
+title: "Add Logs to Dataset"
+description: "Add logs to an existing dataset based on filters and time range"
+---
+
+## Overview
+
+The `add_logs_to_dataset` method allows you to expand a dataset by adding more logs that match specific criteria. This is useful for creating comprehensive datasets that include different types of logs or extending the time range of analysis.
+
+## Method Signature
+
+### Synchronous
+```python
+def add_logs_to_dataset(
+    dataset_id: str,
+    log_request: Union[Dict[str, Any], LogManagementRequest]
+) -> Dict[str, Any]
+```
+
+### Asynchronous
+```python
+async def aadd_logs_to_dataset(
+    dataset_id: str,
+    log_request: Union[Dict[str, Any], LogManagementRequest]
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `dataset_id` | `str` | Yes | The unique identifier of the target dataset |
+| `log_request` | `Union[Dict[str, Any], LogManagementRequest]` | Yes | Log selection criteria containing start_time, end_time, and filters |
+
+## Returns
+
+Returns a dictionary containing:
+- `message` (str): Success message
+- `count` (int): Number of logs added
+- `dataset_id` (str): ID of the updated dataset
+
+## Examples
+
+### Basic Usage
+```python
+from keywordsai import KeywordsAI
+from keywordsai_sdk.keywordsai_types.dataset_types import LogManagementRequest
+from datetime import datetime, timedelta
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Add error logs from the last week
+end_time = datetime.utcnow()
+start_time = end_time - timedelta(days=7)
+
+log_request = LogManagementRequest(
+    start_time=start_time.strftime("%Y-%m-%d %H:%M:%S"),
+    end_time=end_time.strftime("%Y-%m-%d %H:%M:%S"),
+    filters={
+        "status": {"value": "error", "operator": "equals"}
+    }
+)
+
+result = client.datasets.add_logs_to_dataset("dataset-123", log_request)
+print(f"Added {result['count']} error logs to dataset")
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+from keywordsai_sdk.keywordsai_types.dataset_types import LogManagementRequest
+from datetime import datetime, timedelta
+
+async def add_logs_example():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    end_time = datetime.utcnow()
+    start_time = end_time - timedelta(days=7)
+    
+    log_request = LogManagementRequest(
+        start_time=start_time.strftime("%Y-%m-%d %H:%M:%S"),
+        end_time=end_time.strftime("%Y-%m-%d %H:%M:%S"),
+        filters={
+            "status": {"value": "error", "operator": "equals"}
+        }
+    )
+    
+    result = await client.datasets.aadd_logs_to_dataset("dataset-123", log_request)
+    print(f"Added {result['count']} error logs to dataset")
+
+asyncio.run(add_logs_example())
+```
+
+## Error Handling
+
+```python
+try:
+    result = client.datasets.add_logs_to_dataset(
+        dataset_id="dataset-123",
+        log_request=log_request
+    )
+except KeywordsAIError as e:
+    if "not found" in str(e):
+        print("Dataset not found")
+    elif "no logs match" in str(e):
+        print("No logs found matching the criteria")
+    else:
+        print(f"Error adding logs to dataset: {e}")
+```
+
+## Common Use Cases
+
+- Expanding datasets with logs from specific time periods
+- Adding error logs for failure analysis
+- Including logs from specific models or users
+- Building comprehensive training datasets with filtered criteria
