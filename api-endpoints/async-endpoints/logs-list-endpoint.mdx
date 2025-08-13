@@ -1,5 +1,5 @@
 ---
-title: Retrieve Log list
+title: Retrieve log list
 api: POST https://api.keywordsai.co/api/request-logs/
 ---
 
@@ -139,8 +139,10 @@ response = requests.post(url, headers=headers, json=data)
           Greater than or equal
         </ParamField>
         <ParamField body="contains" type="string">
+          Contains
         </ParamField>
         <ParamField body="endswith" type="string">
+          Ends with
         </ParamField>
         <ParamField body="in" type="string">
           Can be used in arrays or text
@@ -152,6 +154,7 @@ response = requests.post(url, headers=headers, json=data)
           Case insensitive contains
         </ParamField>
         <ParamField body="not" type="string">
+          Not equal
         </ParamField>
     </Accordion>
 

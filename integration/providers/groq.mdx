@@ -2,22 +2,33 @@
 title: "Groq"
 description: "Use your own Groq credits through Keywords AI"
 ---
-## OpenRouter models compatibility
 
-**✅ Supported Frameworks:**
-- [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
-- [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
-- [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
-- [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
-- [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
-- [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
-- [Keywords native (Otel)]('/documentation/gateway/get_started)
+<CardGroup cols={1}>
+  <Card title="Get Groq API key" icon="key" href="https://console.groq.com/keys">
+    Get your Groq API key from the Groq Console to start using Groq models through Keywords AI.
+  </Card>
+</CardGroup>
 
-**❌ Unsupported Frameworks:**
-- [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
-- [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+## Groq models compatibility
 
-## Add OpenRouter API keys
+<AccordionGroup>
+  <Accordion title="✅ Supported Frameworks">
+    - [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+    - [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+    - [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+    - [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+    - [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+    - [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+    - [Keywords native (Otel)]('/documentation/gateway/get_started)
+  </Accordion>
+  
+  <Accordion title="❌ Unsupported Frameworks">
+    - [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+    - [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+  </Accordion>
+</AccordionGroup>
+
+## Add Groq API keys
 There are 2 ways to add your OpenRouter credentials to your requests:
 ### Via UI
 <Steps>
@@ -86,7 +97,6 @@ response = client.chat.completions.create(
                 }
               }
 )
-```
 ```python api_example.py
 import requests
 def demo_call(input, 
