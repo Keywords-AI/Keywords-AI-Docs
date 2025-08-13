@@ -1,0 +1,16 @@
+# TODO:
+
+- [x] openai-update: Update openai.mdx with card and accordion components (priority: High)
+- [x] anthropic-update: Update anthropic.mdx with card and accordion components (priority: High)
+- [x] groq-update: Update groq.mdx with card and accordion components (priority: High)
+- [x] azure-update: Update azure.mdx with card and accordion components (priority: High)
+- [x] openrouter-update: Update openrouter.mdx with card and accordion components (priority: Medium)
+- [x] fireworks-update: Update Fireworks.mdx with card and accordion components (priority: Medium)
+- [x] together-update: Update together.mdx with card and accordion components (priority: Medium)
+- [x] perplexity-update: Update perplexity.mdx with card and accordion components (priority: Medium)
+- [x] vertex-update: Update vertex.mdx with card and accordion components (priority: Medium)
+- [x] gemini-update: Update gemini.mdx with card and accordion components (priority: Medium)
+- [x] bedrock-update: Update bedrock.mdx with card and accordion components (priority: Medium)
+- [x] nebius-update: Update nebius.mdx with card and accordion components (priority: Medium)
+- [x] novita-update: Update novita.mdx with card and accordion components (priority: Medium)
+- [x] assemblyai-update: Update assemblyai.mdx with card and accordion components (priority: Medium)
