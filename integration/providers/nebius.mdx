@@ -2,20 +2,30 @@
 title: "Nebius AI"
 ---
 
+<CardGroup cols={1}>
+  <Card title="Get Nebius AI API key" icon="key" href="https://nebius.com/">
+    Get your Nebius AI API key from the Nebius AI platform to start using Nebius AI models through Keywords AI.
+  </Card>
+</CardGroup>
+
 ## Nebius AI models compatibility
 
-**✅ Supported Frameworks:**
-- [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
-- [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
-- [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
-- [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
-- [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
-- [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
-- [Keywords native (Otel)]('/documentation/gateway/get_started)
-
-**❌ Unsupported Frameworks:**
-- [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
-- [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+<AccordionGroup>
+  <Accordion title="✅ Supported Frameworks">
+    - [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+    - [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+    - [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+    - [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+    - [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+    - [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+    - [Keywords native (Otel)]('/documentation/gateway/get_started)
+  </Accordion>
+  
+  <Accordion title="❌ Unsupported Frameworks">
+    - [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+    - [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+  </Accordion>
+</AccordionGroup>
 
 To use Keywords AI LLM proxy, you need to add your own credentials to call models from each provider. Here's how you can add your [Nebius AI](https://nebius.com/) credentials on Keywords AI platform.
 
