@@ -3,20 +3,30 @@ title: "AWS Bedrock"
 description: "Use your own AWS credits through Keywords AI"
 ---
 
+<CardGroup cols={1}>
+  <Card title="Get AWS Bedrock credentials" icon="key" href="https://console.aws.amazon.com/iam/home#/security_credentials">
+    Get your AWS Bedrock credentials from the AWS Console to start using AWS Bedrock models through Keywords AI.
+  </Card>
+</CardGroup>
+
 ## AWS Bedrock models compatibility
 
-**✅ Supported Frameworks:**
-- [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
-- [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
-- [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
-- [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
-- [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
-- [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
-- [Keywords native (Otel)]('/documentation/gateway/get_started)
-
-**❌ Unsupported Frameworks:**
-- [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
-- [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+<AccordionGroup>
+  <Accordion title="✅ Supported Frameworks">
+    - [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+    - [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+    - [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+    - [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+    - [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+    - [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+    - [Keywords native (Otel)]('/documentation/gateway/get_started)
+  </Accordion>
+  
+  <Accordion title="❌ Unsupported Frameworks">
+    - [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+    - [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+  </Accordion>
+</AccordionGroup>
 
 ## Add AWS Bedrock API keys
 There are 2 ways to add your AWS Bedrock credentials to your requests:

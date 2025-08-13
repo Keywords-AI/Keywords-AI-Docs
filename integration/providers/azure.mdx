@@ -2,20 +2,31 @@
 title: "Azure OpenAI"
 description: "Use your own Azure OpenAI credits through Keywords AI"
 ---
+
+<CardGroup cols={1}>
+  <Card title="Get Azure OpenAI credentials" icon="key" href="https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI">
+    Get your Azure OpenAI API key, base URL, and API version from the Azure Portal to start using Azure OpenAI models through Keywords AI.
+  </Card>
+</CardGroup>
+
 ## Azure OpenAI models compatibility
 
-**✅ Supported Frameworks:**
-- [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
-- [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
-- [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
-- [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
-- [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
-- [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
-- [Keywords native (Otel)]('/documentation/gateway/get_started)
-
-**❌ Unsupported Frameworks:**
-- [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
-- [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+<AccordionGroup>
+  <Accordion title="✅ Supported Frameworks">
+    - [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+    - [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+    - [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+    - [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+    - [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+    - [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+    - [Keywords native (Otel)]('/documentation/gateway/get_started)
+  </Accordion>
+  
+  <Accordion title="❌ Unsupported Frameworks">
+    - [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+    - [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+  </Accordion>
+</AccordionGroup>
 
 ## Add Azure OpenAI API keys
 There are 2 ways to add your Azure OpenAI credentials to your requests:
