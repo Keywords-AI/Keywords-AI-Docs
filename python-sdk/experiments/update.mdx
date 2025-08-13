@@ -1,0 +1,447 @@
+---
+title: "Update Experiment"
+description: "Modify experiment configuration and settings"
+---
+
+## Overview
+
+The `update` method allows you to modify experiment configuration, including name, description, variants, traffic split, and metadata. Note that some fields may have restrictions based on the experiment's current status.
+
+## Method Signature
+
+### Synchronous
+```python
+def update(
+    experiment_id: str,
+    name: Optional[str] = None,
+    description: Optional[str] = None,
+    variants: Optional[List[Dict[str, Any]]] = None,
+    traffic_split: Optional[Dict[str, float]] = None,
+    metadata: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]
+```
+
+### Asynchronous
+```python
+async def update(
+    experiment_id: str,
+    name: Optional[str] = None,
+    description: Optional[str] = None,
+    variants: Optional[List[Dict[str, Any]]] = None,
+    traffic_split: Optional[Dict[str, float]] = None,
+    metadata: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `experiment_id` | `str` | Yes | The unique identifier of the experiment |
+| `name` | `str` | No | New name for the experiment |
+| `description` | `str` | No | New description for the experiment |
+| `variants` | `List[Dict]` | No | Updated list of variants |
+| `traffic_split` | `Dict[str, float]` | No | Updated traffic distribution |
+| `metadata` | `Dict[str, Any]` | No | Updated metadata |
+
+## Returns
+
+Returns a dictionary containing the updated experiment information.
+
+## Examples
+
+### Basic Update
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Update experiment name and description
+experiment = client.experiments.update(
+    experiment_id="exp_123",
+    name="Updated Greeting Style Test",
+    description="Testing formal vs casual greeting approaches - updated with new insights"
+)
+
+print(f"Updated experiment: {experiment['name']}")
+print(f"New description: {experiment['description']}")
+```
+
+### Update Multiple Fields
+```python
+# Update multiple fields at once
+experiment = client.experiments.update(
+    experiment_id="exp_123",
+    name="Enhanced Customer Support Test",
+    description="Comprehensive testing of customer support approaches",
+    metadata={
+        "version": "2.0",
+        "updated_by": "product_team",
+        "update_reason": "Added new success criteria",
+        "success_criteria": {
+            "primary_metric": "customer_satisfaction",
+            "minimum_improvement": 0.20,
+            "confidence_level": 0.95
+        }
+    }
+)
+
+print(f"Updated experiment: {experiment['name']}")
+print(f"Version: {experiment['metadata']['version']}")
+```
+
+### Update Metadata Only
+```python
+# Update just the metadata
+experiment = client.experiments.update(
+    experiment_id="exp_123",
+    metadata={
+        "priority": "high",
+        "team": "customer_success",
+        "review_date": "2024-02-15",
+        "stakeholders": ["product_manager", "data_scientist", "engineer"],
+        "budget_allocated": 5000,
+        "expected_duration_days": 21
+    }
+)
+
+print("Metadata updated successfully")
+print(f"Priority: {experiment['metadata']['priority']}")
+print(f"Team: {experiment['metadata']['team']}")
+```
+
+### Update Traffic Split
+```python
+# Adjust traffic distribution (only for draft or paused experiments)
+experiment = client.experiments.update(
+    experiment_id="exp_123",
+    traffic_split={
+        "control": 0.6,      # Reduce control traffic
+        "variant_a": 0.3,    # Increase variant A
+        "variant_b": 0.1     # Keep variant B low
+    }
+)
+
+print("Traffic split updated:")
+for variant, percentage in experiment['traffic_split'].items():
+    print(f"- {variant}: {percentage * 100}%")
+```
+
+### Partial Metadata Update
+```python
+# Get current experiment to preserve existing metadata
+current_experiment = client.experiments.get("exp_123")
+current_metadata = current_experiment.get('metadata', {})
+
+# Update specific metadata fields while preserving others
+updated_metadata = current_metadata.copy()
+updated_metadata.update({
+    "status_notes": "Performing well, considering extension",
+    "last_review": "2024-01-20",
+    "performance_score": 8.5
+})
+
+experiment = client.experiments.update(
+    experiment_id="exp_123",
+    metadata=updated_metadata
+)
+
+print("Metadata partially updated")
+print(f"Status notes: {experiment['metadata']['status_notes']}")
+```
+
+### Asynchronous Update
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def update_experiment_example():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    experiment = await client.experiments.update(
+        experiment_id="exp_123",
+        name="Async Updated Experiment",
+        description="Updated asynchronously",
+        metadata={
+            "updated_async": True,
+            "update_timestamp": "2024-01-20T15:30:00Z"
+        }
+    )
+    
+    print(f"Async update completed: {experiment['name']}")
+    return experiment
+
+asyncio.run(update_experiment_example())
+```
+
+### Add New Variants (Draft Only)
+```python
+# Add a new variant to a draft experiment
+current_experiment = client.experiments.get("exp_123")
+
+if current_experiment['status'] == 'draft':
+    # Get existing variants
+    existing_variants = current_experiment['variants']
+    
+    # Add new variant
+    new_variants = existing_variants + [
+        {
+            "name": "variant_c",
+            "prompt_id": "prompt_999",
+            "description": "New experimental approach"
+        }
+    ]
+    
+    # Update traffic split to include new variant
+    new_traffic_split = {
+        "control": 0.5,
+        "variant_a": 0.3,
+        "variant_b": 0.1,
+        "variant_c": 0.1
+    }
+    
+    experiment = client.experiments.update(
+        experiment_id="exp_123",
+        variants=new_variants,
+        traffic_split=new_traffic_split
+    )
+    
+    print(f"Added new variant. Total variants: {len(experiment['variants'])}")
+else:
+    print(f"Cannot modify variants for {current_experiment['status']} experiment")
+```
+
+### Incremental Metadata Updates
+```python
+# Function to incrementally update metadata
+def update_experiment_metadata(experiment_id, new_metadata):
+    # Get current experiment
+    current = client.experiments.get(experiment_id)
+    
+    # Merge metadata
+    current_metadata = current.get('metadata', {})
+    merged_metadata = {**current_metadata, **new_metadata}
+    
+    # Update experiment
+    return client.experiments.update(
+        experiment_id=experiment_id,
+        metadata=merged_metadata
+    )
+
+# Usage
+experiment = update_experiment_metadata(
+    "exp_123",
+    {
+        "phase": "optimization",
+        "optimization_target": "conversion_rate",
+        "notes": "Focusing on conversion optimization"
+    }
+)
+
+print("Metadata updated incrementally")
+```
+
+### Conditional Updates
+```python
+# Update experiment only if certain conditions are met
+experiment = client.experiments.get("exp_123")
+
+if experiment['status'] == 'draft':
+    # Safe to update variants and traffic split
+    updated_experiment = client.experiments.update(
+        experiment_id="exp_123",
+        name="Finalized Experiment Name",
+        description="Ready for launch",
+        metadata={
+            **experiment.get('metadata', {}),
+            "ready_for_launch": True,
+            "final_review_completed": True
+        }
+    )
+    print("Experiment updated and ready for launch")
+elif experiment['status'] == 'running':
+    # Only update metadata for running experiments
+    updated_experiment = client.experiments.update(
+        experiment_id="exp_123",
+        metadata={
+            **experiment.get('metadata', {}),
+            "monitoring_notes": "Performance tracking updated",
+            "last_monitored": "2024-01-20T16:00:00Z"
+        }
+    )
+    print("Monitoring metadata updated")
+else:
+    print(f"No updates allowed for {experiment['status']} experiment")
+```
+
+### Batch Updates
+```python
+# Update multiple experiments
+experiment_updates = [
+    {
+        "id": "exp_123",
+        "metadata": {"batch_update": True, "update_group": "Q1_2024"}
+    },
+    {
+        "id": "exp_456",
+        "metadata": {"batch_update": True, "update_group": "Q1_2024"}
+    },
+    {
+        "id": "exp_789",
+        "metadata": {"batch_update": True, "update_group": "Q1_2024"}
+    }
+]
+
+updated_experiments = []
+for update_config in experiment_updates:
+    try:
+        experiment = client.experiments.update(
+            experiment_id=update_config["id"],
+            metadata=update_config["metadata"]
+        )
+        updated_experiments.append(experiment)
+        print(f"✅ Updated: {experiment['name']}")
+    except Exception as e:
+        print(f"❌ Failed to update {update_config['id']}: {e}")
+
+print(f"Successfully updated {len(updated_experiments)} experiments")
+```
+
+### Asynchronous Batch Updates
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def batch_update_experiments(updates):
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    async def update_single_experiment(update_config):
+        try:
+            return await client.experiments.update(**update_config)
+        except Exception as e:
+            print(f"Error updating {update_config.get('experiment_id')}: {e}")
+            return None
+    
+    # Update all experiments concurrently
+    tasks = [update_single_experiment(config) for config in updates]
+    results = await asyncio.gather(*tasks)
+    
+    # Filter successful updates
+    successful_updates = [exp for exp in results if exp is not None]
+    
+    print(f"Updated {len(successful_updates)} out of {len(updates)} experiments")
+    return successful_updates
+
+# Usage
+updates = [
+    {
+        "experiment_id": "exp_123",
+        "metadata": {"async_batch_update": True}
+    },
+    {
+        "experiment_id": "exp_456",
+        "metadata": {"async_batch_update": True}
+    }
+]
+
+updated = asyncio.run(batch_update_experiments(updates))
+```
+
+### Validation Before Update
+```python
+# Validate update before applying
+def validate_experiment_update(experiment_id, **updates):
+    current = client.experiments.get(experiment_id)
+    issues = []
+    
+    # Check if experiment can be updated
+    if current['status'] == 'completed':
+        if any(key in updates for key in ['variants', 'traffic_split']):
+            issues.append("Cannot modify variants or traffic split for completed experiments")
+    
+    # Validate traffic split
+    if 'traffic_split' in updates:
+        total = sum(updates['traffic_split'].values())
+        if abs(total - 1.0) > 0.001:
+            issues.append(f"Traffic split must sum to 1.0, got {total}")
+    
+    # Validate variants match traffic split
+    if 'variants' in updates and 'traffic_split' in updates:
+        variant_names = {v['name'] for v in updates['variants']}
+        traffic_names = set(updates['traffic_split'].keys())
+        if variant_names != traffic_names:
+            issues.append("Variant names must match traffic split keys")
+    
+    return issues
+
+# Safe update with validation
+update_data = {
+    "name": "Validated Update",
+    "traffic_split": {"control": 0.6, "test": 0.4}
+}
+
+issues = validate_experiment_update("exp_123", **update_data)
+
+if issues:
+    print("Validation failed:")
+    for issue in issues:
+        print(f"- {issue}")
+else:
+    experiment = client.experiments.update(
+        experiment_id="exp_123",
+        **update_data
+    )
+    print("Update successful after validation")
+```
+
+## Error Handling
+
+```python
+try:
+    experiment = client.experiments.update(
+        experiment_id="exp_123",
+        name="Updated Name",
+        metadata={"updated": True}
+    )
+    print(f"Successfully updated: {experiment['name']}")
+except Exception as e:
+    error_msg = str(e).lower()
+    
+    if "not found" in error_msg:
+        print("Experiment not found")
+    elif "permission" in error_msg:
+        print("Permission denied - cannot update this experiment")
+    elif "invalid status" in error_msg:
+        print("Cannot update experiment in current status")
+    elif "validation" in error_msg:
+        print(f"Validation error: {e}")
+    else:
+        print(f"Update failed: {e}")
+```
+
+## Update Restrictions
+
+Depending on experiment status, certain fields may be restricted:
+
+- **Draft**: All fields can be updated
+- **Running**: Only metadata and description can be updated
+- **Paused**: Metadata, description, and traffic split can be updated
+- **Completed**: Only metadata can be updated
+
+## Best Practices
+
+- Always validate updates before applying them
+- Use incremental metadata updates to preserve existing data
+- Check experiment status before attempting structural changes
+- Use batch updates for efficiency when updating multiple experiments
+- Include update reasons and timestamps in metadata
+- Test traffic split changes carefully
+
+## Common Use Cases
+
+- Updating experiment metadata with progress notes
+- Adjusting traffic split during experiment runtime
+- Adding context and documentation to experiments
+- Correcting experiment names and descriptions
+- Preparing experiments for launch
+- Tracking experiment lifecycle changes

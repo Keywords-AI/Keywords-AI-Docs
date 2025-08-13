@@ -182,25 +182,25 @@
               "documentation/resources/automatic-retries",
               "documentation/resources/streaming",
               {
-                    "group": "Retrieval",
-                    "pages": [
-                      "documentation/resources/relari_eval/retrieval/context-precision"
-                    ]
-                  },
-                  {
-                    "group": "Text generation",
-                    "pages": [
-                      "documentation/resources/relari_eval/generation/faithfulness",
-                      "documentation/resources/relari_eval/generation/flesch-kincaid",
-                      "documentation/resources/relari_eval/generation/answer-relevance"
-                    ]
-                  },
-                  {
-                    "group": "Other",
-                    "pages": [
-                      "documentation/resources/relari_eval/other/sentiment"
-                    ]
-                  }
+                "group": "Retrieval",
+                "pages": [
+                  "documentation/resources/relari_eval/retrieval/context-precision"
+                ]
+              },
+              {
+                "group": "Text generation",
+                "pages": [
+                  "documentation/resources/relari_eval/generation/faithfulness",
+                  "documentation/resources/relari_eval/generation/flesch-kincaid",
+                  "documentation/resources/relari_eval/generation/answer-relevance"
+                ]
+              },
+              {
+                "group": "Other",
+                "pages": [
+                  "documentation/resources/relari_eval/other/sentiment"
+                ]
+              }
             ]
           },
           {
@@ -296,9 +296,7 @@
           {
             "group": "Logs",
             "pages": [
-              "api-endpoints/async-endpoints/batch-logging-endpoint",
               "api-endpoints/async-endpoints/logs-list-endpoint",
-              "api-endpoints/async-endpoints/get-log-endpoint",
               "api-endpoints/async-endpoints/logs-update-endpoint"
             ]
           },
@@ -434,5 +432,15 @@
     "body": {
       "family": "Inter"
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/integration/development-frameworks/openai-agent",
+      "destination": "/integration/development-frameworks/tracing/openai-agents-sdk"
+    },
+    {
+      "source": "/integration/development-frameworks/openai-agents-sdk-js",
+      "destination": "/integration/development-frameworks/tracing/openai-agents-sdk-js"
+    }
+  ]
 }

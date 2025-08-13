@@ -1,0 +1,186 @@
+---
+title: "Delete Dataset"
+description: "Permanently delete a dataset and all its associated data"
+---
+
+## Overview
+
+The `delete()` method allows you to permanently delete a dataset and all its associated data. This action is irreversible, so use with caution.
+
+<Warning>
+  **Irreversible Action**: Deleting a dataset permanently removes all associated logs and metadata. This action cannot be undone.
+</Warning>
+
+## Method Signature
+
+### Synchronous
+
+```python
+client.datasets.delete(
+    dataset_id: str,
+    **kwargs
+) -> bool
+```
+
+### Asynchronous
+
+```python
+await client.datasets.adelete(
+    dataset_id: str,
+    **kwargs
+) -> bool
+```
+
+## Parameters
+
+<ParamField path="dataset_id" type="str" required>
+  The unique identifier of the dataset to delete.
+</ParamField>
+
+## Returns
+
+Returns `True` if the dataset was successfully deleted, `False` otherwise.
+
+## Examples
+
+### Basic Dataset Deletion
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Delete a dataset
+dataset_id = "dataset_123456789"
+success = client.datasets.delete(dataset_id)
+
+if success:
+    print(f"Dataset {dataset_id} deleted successfully")
+else:
+    print(f"Failed to delete dataset {dataset_id}")
+```
+
+### Safe Deletion with Confirmation
+
+```python
+def delete_dataset_safely(dataset_id, confirm_name=None):
+    try:
+        # Get dataset information first
+        dataset = client.datasets.get(dataset_id)
+        
+        print(f"Dataset to delete:")
+        print(f"  ID: {dataset.id}")
+        print(f"  Name: {dataset.name}")
+        print(f"  Log Count: {dataset.log_count}")
+        print(f"  Created: {dataset.created_at}")
+        
+        # Require name confirmation for safety
+        if confirm_name and confirm_name != dataset.name:
+            print(f"Error: Confirmation name '{confirm_name}' does not match dataset name '{dataset.name}'")
+            return False
+        
+        # Perform deletion
+        success = client.datasets.delete(dataset_id)
+        
+        if success:
+            print(f"✓ Dataset '{dataset.name}' deleted successfully")
+        else:
+            print(f"✗ Failed to delete dataset '{dataset.name}'")
+        
+        return success
+        
+    except Exception as e:
+        print(f"Error during deletion: {e}")
+        return False
+
+# Safe deletion with name confirmation
+success = delete_dataset_safely(
+    "dataset_123456789",
+    confirm_name="Test Dataset"
+)
+```
+
+### Conditional Deletion
+
+```python
+def delete_if_empty(dataset_id):
+    try:
+        # Get dataset information
+        dataset = client.datasets.get(dataset_id)
+        
+        # Only delete if empty
+        if dataset.log_count == 0:
+            success = client.datasets.delete(dataset_id)
+            if success:
+                print(f"Empty dataset '{dataset.name}' deleted")
+            return success
+        else:
+            print(f"Dataset '{dataset.name}' has {dataset.log_count} logs - not deleting")
+            return False
+            
+    except Exception as e:
+        print(f"Error checking dataset: {e}")
+        return False
+
+# Delete only if empty
+success = delete_if_empty("dataset_123456789")
+```
+
+### Bulk Deletion
+
+```python
+def delete_multiple_datasets(dataset_ids, confirm=False):
+    if not confirm:
+        print("Warning: This will delete multiple datasets permanently!")
+        print("Set confirm=True to proceed")
+        return []
+    
+    results = []
+    
+    for dataset_id in dataset_ids:
+        try:
+            # Get dataset info for logging
+            dataset = client.datasets.get(dataset_id)
+            
+            # Attempt deletion
+            success = client.datasets.delete(dataset_id)
+            
+            result = {
+                "dataset_id": dataset_id,
+                "name": dataset.name,
+                "success": success
+            }
+            
+            if success:
+                print(f"✓ Deleted: {dataset.name}")
+            else:
+                print(f"✗ Failed: {dataset.name}")
+            
+            results.append(result)
+            
+        except Exception as e:
+            print(f"✗ Error with {dataset_id}: {e}")
+            results.append({
+                "dataset_id": dataset_id,
+                "name": "Unknown",
+                "success": False,
+                "error": str(e)
+            })
+    
+    # Summary
+    successful = sum(1 for r in results if r["success"])
+    print(f"\nDeletion Summary:")
+    print(f"  Total: {len(dataset_ids)}")
+    print(f"  Successful: {successful}")
+    print(f"  Failed: {len(dataset_ids) - successful}")
+    
+    return results
+
+# Delete multiple datasets
+dataset_ids = [
+    "dataset_123456789",
+    "dataset_987654321",
+    "dataset_555666777"
+]
+
+results

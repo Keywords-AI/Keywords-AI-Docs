@@ -1,0 +1,84 @@
+---
+title: "Update Evaluator"
+description: "Update an existing evaluator's properties"
+---
+
+## Overview
+
+Update the properties of an existing evaluator, including its name, description, and configuration.
+
+## Method Signature
+
+```python
+# Synchronous
+client.evaluators.update(
+    evaluator_id: str,
+    name: Optional[str] = None,
+    description: Optional[str] = None,
+    config: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]
+
+# Asynchronous
+await client.evaluators.update(
+    evaluator_id: str,
+    name: Optional[str] = None,
+    description: Optional[str] = None,
+    config: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+<ParamField path="evaluator_id" type="string" required>
+  The unique identifier of the evaluator to update
+</ParamField>
+
+<ParamField path="name" type="string" optional>
+  New name for the evaluator
+</ParamField>
+
+<ParamField path="description" type="string" optional>
+  New description for the evaluator
+</ParamField>
+
+<ParamField path="config" type="Dict[str, Any]" optional>
+  New configuration parameters for the evaluator
+</ParamField>
+
+## Returns
+
+Returns a dictionary containing the updated evaluator information.
+
+## Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Update evaluator properties
+updated_evaluator = client.evaluators.update(
+    evaluator_id="eval_123",
+    name="Enhanced Accuracy Evaluator",
+    description="Improved accuracy measurement with better thresholds",
+    config={
+        "threshold": 0.9,
+        "metric": "semantic_similarity",
+        "model": "sentence-transformers"
+    }
+)
+
+print(f"Updated evaluator: {updated_evaluator['name']}")
+```
+
+## Error Handling
+
+```python
+try:
+    updated_evaluator = client.evaluators.update(
+        evaluator_id="eval_123",
+        name="New Name"
+    )
+except Exception as e:
+    print(f"Error updating evaluator: {e}")
+```

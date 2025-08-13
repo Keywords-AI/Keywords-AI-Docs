@@ -1,0 +1,287 @@
+---
+title: "Examples"
+description: "Comprehensive examples for using the Keywords AI Python SDK"
+---
+
+## Complete Workflow Example
+
+This example demonstrates a complete workflow using logs, datasets, prompts, and evaluations:
+
+```python
+from keywordsai import KeywordsAI
+import asyncio
+
+# Initialize the client
+client = KeywordsAI(api_key="your-api-key-here")
+
+async def complete_workflow():
+    # 1. Create some logs
+    log1 = await client.logs.acreate(
+        messages=[
+            {"role": "user", "content": "What is machine learning?"},
+            {"role": "assistant", "content": "Machine learning is a subset of AI..."}
+        ],
+        model="gpt-4",
+        prompt_tokens=20,
+        completion_tokens=50,
+        total_tokens=70
+    )
+    
+    log2 = await client.logs.acreate(
+        messages=[
+            {"role": "user", "content": "Explain neural networks"},
+            {"role": "assistant", "content": "Neural networks are computing systems..."}
+        ],
+        model="gpt-4",
+        prompt_tokens=15,
+        completion_tokens=45,
+        total_tokens=60
+    )
+    
+    # 2. Create a dataset and add logs
+    dataset = await client.datasets.acreate(
+        name="ML Education Dataset",
+        description="Dataset for machine learning educational content"
+    )
+    
+    await client.datasets.aadd_logs_to_dataset(
+        dataset_id=dataset.id,
+        log_ids=[log1.id, log2.id]
+    )
+    
+    # 3. Create a prompt template
+    prompt = await client.prompts.acreate(
+        name="Educational Assistant",
+        messages=[
+            {"role": "system", "content": "You are an educational assistant specializing in {{subject}}."},
+            {"role": "user", "content": "{{question}}"}
+        ]
+    )
+    
+    # 4. Create an evaluator
+    evaluator = await client.evaluators.acreate(
+        name="Accuracy Evaluator",
+        description="Evaluates the accuracy of educational responses"
+    )
+    
+    # 5. Run evaluation on the dataset
+    evaluation = await client.datasets.arun_dataset_evaluation(
+        dataset_id=dataset.id,
+        evaluator_ids=[evaluator.id]
+    )
+    
+    print(f"Evaluation completed with ID: {evaluation.id}")
+    
+    # 6. Get evaluation report
+    report = await client.datasets.aget_evaluation_report(
+        dataset_id=dataset.id,
+        evaluation_id=evaluation.id
+    )
+    
+    print(f"Evaluation score: {report.score}")
+
+# Run the async workflow
+asyncio.run(complete_workflow())
+```
+
+## Synchronous vs Asynchronous Usage
+
+### Synchronous Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key-here")
+
+# Synchronous operations
+log = client.logs.create(
+    messages=[{"role": "user", "content": "Hello"}],
+    model="gpt-3.5-turbo"
+)
+
+logs = client.logs.list(limit=10)
+specific_log = client.logs.get(log_id=log.id)
+```
+
+### Asynchronous Example
+
+```python
+from keywordsai import KeywordsAI
+import asyncio
+
+client = KeywordsAI(api_key="your-api-key-here")
+
+async def async_operations():
+    # Asynchronous operations
+    log = await client.logs.acreate(
+        messages=[{"role": "user", "content": "Hello"}],
+        model="gpt-3.5-turbo"
+    )
+    
+    logs = await client.logs.alist(limit=10)
+    specific_log = await client.logs.aget(log_id=log.id)
+    
+    return log, logs, specific_log
+
+# Run async operations
+results = asyncio.run(async_operations())
+```
+
+## Dataset Management Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key-here")
+
+# Create a dataset
+dataset = client.datasets.create(
+    name="Customer Support Dataset",
+    description="Collection of customer support conversations"
+)
+
+# Create some logs
+logs = []
+for i in range(5):
+    log = client.logs.create(
+        messages=[
+            {"role": "user", "content": f"Customer question {i+1}"},
+            {"role": "assistant", "content": f"Support response {i+1}"}
+        ],
+        model="gpt-3.5-turbo"
+    )
+    logs.append(log)
+
+# Add logs to dataset
+client.datasets.add_logs_to_dataset(
+    dataset_id=dataset.id,
+    log_ids=[log.id for log in logs]
+)
+
+# List dataset logs
+dataset_logs = client.datasets.list_dataset_logs(
+    dataset_id=dataset.id,
+    limit=10
+)
+
+print(f"Dataset contains {len(dataset_logs)} logs")
+
+# Update dataset
+updated_dataset = client.datasets.update(
+    dataset_id=dataset.id,
+    name="Updated Customer Support Dataset",
+    description="Updated description"
+)
+```
+
+## Prompt Version Management
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key-here")
+
+# Create a base prompt
+prompt = client.prompts.create(
+    name="Code Review Assistant",
+    messages=[
+        {"role": "system", "content": "You are a code review assistant."},
+        {"role": "user", "content": "Please review this code: {{code}}"}
+    ]
+)
+
+# Create multiple versions
+version_1 = client.prompts.create_version(
+    prompt_id=prompt.id,
+    messages=[
+        {"role": "system", "content": "You are an expert code review assistant with focus on security."},
+        {"role": "user", "content": "Please review this code for security issues: {{code}}"}
+    ],
+    version_name="security-focused"
+)
+
+version_2 = client.prompts.create_version(
+    prompt_id=prompt.id,
+    messages=[
+        {"role": "system", "content": "You are an expert code review assistant with focus on performance."},
+        {"role": "user", "content": "Please review this code for performance optimizations: {{code}}"}
+    ],
+    version_name="performance-focused"
+)
+
+# List all versions
+versions = client.prompts.list_versions(prompt_id=prompt.id)
+print(f"Prompt has {len(versions)} versions")
+
+# Get specific version
+specific_version = client.prompts.get_version(
+    prompt_id=prompt.id,
+    version_id=version_1.id
+)
+```
+
+## Experiment Management
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key-here")
+
+# Create an experiment
+experiment = client.experiments.create(
+    name="Model Comparison Experiment",
+    description="Comparing different models on the same dataset"
+)
+
+# Add rows to experiment
+client.experiments.add_rows(
+    experiment_id=experiment.id,
+    rows=[
+        {"input": "What is AI?", "expected_output": "Artificial Intelligence explanation"},
+        {"input": "Explain ML", "expected_output": "Machine Learning explanation"}
+    ]
+)
+
+# Add columns for different models
+client.experiments.add_columns(
+    experiment_id=experiment.id,
+    columns=[
+        {"name": "gpt-3.5-turbo", "type": "model_output"},
+        {"name": "gpt-4", "type": "model_output"}
+    ]
+)
+
+# Run the experiment
+result = client.experiments.run_experiment(
+    experiment_id=experiment.id,
+    model_configs=[
+        {"model": "gpt-3.5-turbo", "temperature": 0.7},
+        {"model": "gpt-4", "temperature": 0.7}
+    ]
+)
+
+print(f"Experiment completed with result ID: {result.id}")
+```
+
+## Error Handling
+
+```python
+from keywordsai import KeywordsAI
+from keywordsai.exceptions import KeywordsAIError, AuthenticationError, RateLimitError
+
+client = KeywordsAI(api_key="your-api-key-here")
+
+try:
+    log = client.logs.create(
+        messages=[{"role": "user", "content": "Hello"}],
+        model="gpt-3.5-turbo"
+    )
+except AuthenticationError:
+    print("Invalid API key")
+except RateLimitError:
+    print("Rate limit exceeded")
+except KeywordsAIError as e:
+    print(f"API error: {e}")
+except Exception as e:
+    print(f"Unexpected error: {e}")
+```

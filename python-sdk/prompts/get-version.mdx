@@ -1,0 +1,432 @@
+---
+title: "Get Prompt Version"
+description: "Retrieve a specific version of a prompt"
+---
+
+## Method Signature
+
+```python
+# Synchronous
+def get_version(
+    prompt_id: str,
+    version_id: str
+) -> PromptVersion
+
+# Asynchronous
+async def aget_version(
+    prompt_id: str,
+    version_id: str
+) -> PromptVersion
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `prompt_id` | `str` | Yes | The unique identifier of the prompt |
+| `version_id` | `str` | Yes | The unique identifier of the version |
+
+## Examples
+
+### Basic Usage
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Get a specific version
+version = client.prompts.get_version(
+    prompt_id="prompt_123",
+    version_id="version_456"
+)
+
+print(f"Version: {version.version}")
+print(f"Model: {version.model}")
+print(f"Temperature: {version.temperature}")
+```
+
+### Access Version Details
+```python
+# Get version and inspect its properties
+version = client.prompts.get_version("prompt_123", "version_456")
+
+print(f"Version ID: {version.id}")
+print(f"Messages: {version.messages}")
+print(f"Configuration: {version.model}, temp={version.temperature}")
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def get_version():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    version = await client.prompts.aget_version(
+        prompt_id="prompt_123",
+        version_id="version_456"
+    )
+    
+    print(f"Retrieved version: {version.version}")
+    return version
+
+asyncio.run(get_version())
+```
+
+### Error Handling
+```python
+try:
+    version = client.prompts.get_version("prompt_123", "version_456")
+    print(f"Version found: {version.version}")
+except Exception as e:
+    if "not found" in str(e).lower():
+        print("Version does not exist")
+    else:
+        print(f"Error retrieving version: {e}")
+```
+
+## Overview
+
+The `get_version` method allows you to retrieve a specific version of a prompt by its version ID or version number. This is useful for accessing historical versions, comparing changes, or rolling back to previous versions.
+
+## Method Signature
+
+### Synchronous
+```python
+def get_version(
+    prompt_id: str,
+    version_id: Optional[str] = None,
+    version_number: Optional[int] = None
+) -> Dict[str, Any]
+```
+
+### Asynchronous
+```python
+async def get_version(
+    prompt_id: str,
+    version_id: Optional[str] = None,
+    version_number: Optional[int] = None
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `prompt_id` | `str` | Yes | The unique identifier of the prompt |
+| `version_id` | `str` | No* | The unique identifier of the version |
+| `version_number` | `int` | No* | The version number to retrieve |
+
+*Either `version_id` or `version_number` must be provided.
+
+## Returns
+
+Returns a dictionary containing the complete version information.
+
+## Examples
+
+### Get Version by Number
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Get version 2 of a prompt
+version = client.prompts.get_version(
+    prompt_id="prompt_123",
+    version_number=2
+)
+
+print(f"Version {version['version_number']}:")
+print(f"Content: {version['content']}")
+print(f"Description: {version.get('description', 'No description')}")
+```
+
+### Get Version by ID
+```python
+# Get version by its unique ID
+version = client.prompts.get_version(
+    prompt_id="prompt_123",
+    version_id="version_456"
+)
+
+print(f"Retrieved version: {version['version_id']}")
+print(f"Version number: {version['version_number']}")
+```
+
+### Detailed Version Information
+```python
+# Get version and display all details
+version = client.prompts.get_version(
+    prompt_id="prompt_123",
+    version_number=3
+)
+
+print(f"Version Details:")
+print(f"  ID: {version['version_id']}")
+print(f"  Number: {version['version_number']}")
+print(f"  Prompt ID: {version['prompt_id']}")
+print(f"  Description: {version.get('description', 'No description')}")
+print(f"  Content: {version['content']}")
+print(f"  Variables: {version.get('variables', [])}")
+print(f"  Active: {version.get('is_active', False)}")
+print(f"  Created: {version['created_at']}")
+print(f"  Created by: {version.get('created_by', 'Unknown')}")
+
+if version.get('metadata'):
+    print(f"  Metadata: {version['metadata']}")
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def get_version_example():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    version = await client.prompts.get_version(
+        prompt_id="prompt_123",
+        version_number=1
+    )
+    
+    print(f"Retrieved version {version['version_number']} asynchronously")
+    return version
+
+asyncio.run(get_version_example())
+```
+
+### Compare Versions
+```python
+# Get two versions for comparison
+version_1 = client.prompts.get_version(
+    prompt_id="prompt_123",
+    version_number=1
+)
+
+version_2 = client.prompts.get_version(
+    prompt_id="prompt_123",
+    version_number=2
+)
+
+print(f"Comparing versions {version_1['version_number']} and {version_2['version_number']}:")
+print(f"\nVersion 1 content: {version_1['content']}")
+print(f"Version 2 content: {version_2['content']}")
+
+# Compare variables
+v1_vars = set(version_1.get('variables', []))
+v2_vars = set(version_2.get('variables', []))
+
+if v1_vars != v2_vars:
+    added = v2_vars - v1_vars
+    removed = v1_vars - v2_vars
+    
+    if added:
+        print(f"Added variables: {list(added)}")
+    if removed:
+        print(f"Removed variables: {list(removed)}")
+else:
+    print("Variables unchanged between versions")
+```
+
+### Get Latest Version
+```python
+# Get the latest version (highest version number)
+versions_list = client.prompts.list_versions(
+    prompt_id="prompt_123",
+    limit=1,
+    sort_order="desc"
+)
+
+if versions_list['versions']:
+    latest_version_number = versions_list['versions'][0]['version_number']
+    
+    latest_version = client.prompts.get_version(
+        prompt_id="prompt_123",
+        version_number=latest_version_number
+    )
+    
+    print(f"Latest version ({latest_version_number}): {latest_version['content']}")
+else:
+    print("No versions found")
+```
+
+### Get Active Version
+```python
+# Find and get the active version
+versions_list = client.prompts.list_versions(prompt_id="prompt_123")
+
+active_version_number = None
+for version_summary in versions_list['versions']:
+    if version_summary.get('is_active', False):
+        active_version_number = version_summary['version_number']
+        break
+
+if active_version_number:
+    active_version = client.prompts.get_version(
+        prompt_id="prompt_123",
+        version_number=active_version_number
+    )
+    
+    print(f"Active version {active_version_number}:")
+    print(f"Content: {active_version['content']}")
+else:
+    print("No active version found")
+```
+
+### Batch Version Retrieval
+```python
+# Get multiple specific versions
+version_numbers = [1, 3, 5]
+versions = []
+
+for version_num in version_numbers:
+    try:
+        version = client.prompts.get_version(
+            prompt_id="prompt_123",
+            version_number=version_num
+        )
+        versions.append(version)
+        print(f"Retrieved version {version_num}")
+    except Exception as e:
+        print(f"Failed to get version {version_num}: {e}")
+
+print(f"Successfully retrieved {len(versions)} versions")
+```
+
+### Asynchronous Batch Retrieval
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def get_multiple_versions():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    version_numbers = [1, 2, 3, 4]
+    
+    # Get all versions concurrently
+    tasks = [
+        client.prompts.get_version(
+            prompt_id="prompt_123",
+            version_number=num
+        )
+        for num in version_numbers
+    ]
+    
+    results = await asyncio.gather(*tasks, return_exceptions=True)
+    
+    successful_versions = []
+    for i, result in enumerate(results):
+        if isinstance(result, Exception):
+            print(f"Failed to get version {version_numbers[i]}: {result}")
+        else:
+            successful_versions.append(result)
+            print(f"Retrieved version {result['version_number']}")
+    
+    return successful_versions
+
+asyncio.run(get_multiple_versions())
+```
+
+### Version Content Analysis
+```python
+# Get version and analyze its content
+version = client.prompts.get_version(
+    prompt_id="prompt_123",
+    version_number=2
+)
+
+content = version['content']
+variables = version.get('variables', [])
+
+print(f"Version {version['version_number']} Analysis:")
+print(f"Content length: {len(content)} characters")
+print(f"Number of variables: {len(variables)}")
+
+# Check variable usage in content
+for var in variables:
+    count = content.count(f"{{{var}}}")
+    print(f"Variable '{var}' used {count} times")
+
+# Check for potential issues
+if not variables and '{' in content:
+    print("Warning: Content contains braces but no variables defined")
+
+if len(content) < 10:
+    print("Warning: Content is very short")
+```
+
+### Export Version
+```python
+import json
+from datetime import datetime
+
+# Get version and export to file
+version = client.prompts.get_version(
+    prompt_id="prompt_123",
+    version_number=2
+)
+
+export_data = {
+    "exported_at": datetime.now().isoformat(),
+    "version_info": version
+}
+
+filename = f"prompt_version_{version['prompt_id']}_v{version['version_number']}.json"
+with open(filename, 'w') as f:
+    json.dump(export_data, f, indent=2)
+
+print(f"Version exported to {filename}")
+```
+
+## Error Handling
+```python
+try:
+    version = client.prompts.get_version(
+        prompt_id="prompt_123",
+        version_number=5
+    )
+    print(f"Successfully retrieved version {version['version_number']}")
+except Exception as e:
+    if "not found" in str(e).lower():
+        if "prompt" in str(e).lower():
+            print("Prompt does not exist")
+        else:
+            print("Version does not exist")
+    else:
+        print(f"Error retrieving version: {e}")
+```
+
+## Version Structure
+
+A retrieved version contains:
+
+- `version_id`: Unique identifier for this version
+- `prompt_id`: ID of the parent prompt
+- `version_number`: Sequential version number
+- `content`: The version content with variables
+- `description`: Optional description of changes
+- `variables`: List of variables used in content
+- `metadata`: Version-specific metadata
+- `is_active`: Whether this version is currently active
+- `created_at`: Creation timestamp
+- `created_by`: User who created the version
+- `updated_at`: Last modification timestamp (if applicable)
+
+## Best Practices
+
+- Use version numbers for sequential access
+- Use version IDs when you have the specific identifier
+- Always handle cases where versions might not exist
+- Cache frequently accessed versions
+- Validate version content before using in production
+- Compare versions to understand evolution
+
+## Common Use Cases
+
+- Retrieving specific versions for rollback
+- Comparing different versions for analysis
+- Loading historical versions for audit
+- Accessing A/B test versions
+- Reviewing version evolution
+- Preparing versions for deployment

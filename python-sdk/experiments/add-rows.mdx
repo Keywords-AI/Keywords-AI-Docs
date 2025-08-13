@@ -1,0 +1,85 @@
+---
+title: "Add Rows"
+description: "Add rows to an existing experiment"
+---
+
+## Overview
+
+Add new test cases to an experiment. Each row represents a different input scenario that will be tested against all columns.
+
+## Method Signature
+
+```python
+# Synchronous
+client.experiments.add_rows(
+    experiment_id: str,
+    rows_request: Union[Dict[str, Any], AddExperimentRowsRequest]
+) -> Dict[str, Any]
+
+# Asynchronous
+await client.experiments.aadd_rows(
+    experiment_id: str,
+    rows_request: Union[Dict[str, Any], AddExperimentRowsRequest]
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The unique identifier of the target experiment
+</ParamField>
+
+<ParamField path="rows_request" type="Union[Dict[str, Any], AddExperimentRowsRequest]" required>
+  Request containing rows to add, each with input variables and optional ideal output
+</ParamField>
+
+## Returns
+
+Returns a dictionary containing:
+- `message` (str): Success message
+- `added_rows` (int): Number of rows added
+- `experiment_id` (str): ID of the updated experiment
+
+## Example
+
+```python
+from keywordsai import KeywordsAI
+from keywordsai.types.experiment_types import AddExperimentRowsRequest, ExperimentRowType
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Add rows to experiment
+rows_request = AddExperimentRowsRequest(
+    rows=[
+        ExperimentRowType(
+            input={"user_question": "What is machine learning?"}
+        ),
+        ExperimentRowType(
+            input={"user_question": "Explain neural networks"},
+            ideal_output="A neural network is..."
+        )
+    ]
+)
+
+result = client.experiments.add_rows(
+    experiment_id="experiment-123",
+    rows_request=rows_request
+)
+
+print(f"Added {result['added_rows']} rows to experiment")
+```
+
+## Error Handling
+
+```python
+try:
+    result = client.experiments.add_rows(
+        experiment_id="experiment-123",
+        rows_request=rows_request
+    )
+except KeywordsAIError as e:
+    if "not found" in str(e):
+        print("Experiment not found")
+    else:
+        print(f"Error adding rows: {e}")
+```

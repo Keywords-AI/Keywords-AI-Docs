@@ -1,0 +1,101 @@
+---
+title: "Update Prompt Version"
+description: "Update an existing prompt version"
+---
+
+## Method Signature
+
+```python
+# Synchronous
+def update_version(
+    prompt_id: str,
+    version_id: str,
+    **kwargs
+) -> PromptVersion
+
+# Asynchronous
+async def aupdate_version(
+    prompt_id: str,
+    version_id: str,
+    **kwargs
+) -> PromptVersion
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `prompt_id` | `str` | Yes | The unique identifier of the prompt |
+| `version_id` | `str` | Yes | The unique identifier of the version |
+| `messages` | `List[Dict]` | No | Updated message objects |
+| `model` | `str` | No | Updated AI model |
+| `temperature` | `float` | No | Updated temperature (0.0-2.0) |
+| `max_tokens` | `int` | No | Updated maximum tokens |
+
+## Examples
+
+### Basic Usage
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Update a version
+version = client.prompts.update_version(
+    prompt_id="prompt_123",
+    version_id="version_456",
+    temperature=0.8,
+    max_tokens=200
+)
+
+print(f"Updated version: {version.version}")
+```
+
+### Update Messages
+```python
+# Update messages in a version
+version = client.prompts.update_version(
+    prompt_id="prompt_123",
+    version_id="version_456",
+    messages=[
+        {"role": "system", "content": "You are an expert assistant."},
+        {"role": "user", "content": "Explain quantum computing."}
+    ],
+    model="gpt-4"
+)
+
+print(f"Messages updated for version: {version.version}")
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def update_version():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    version = await client.prompts.aupdate_version(
+        prompt_id="prompt_123",
+        version_id="version_456",
+        temperature=0.3,
+        model="gpt-3.5-turbo"
+    )
+    
+    print(f"Version {version.version} updated")
+
+asyncio.run(update_version())
+```
+
+### Error Handling
+```python
+try:
+    version = client.prompts.update_version(
+        prompt_id="prompt_123",
+        version_id="version_456",
+        temperature=0.9
+    )
+    print(f"Version updated: {version.version}")
+except Exception as e:
+    print(f"Error updating version: {e}")
+```

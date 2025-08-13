@@ -1,0 +1,113 @@
+---
+title: "List Dataset Logs"
+description: "Retrieve all logs associated with a specific dataset"
+---
+
+## Overview
+
+The `list_dataset_logs` method allows you to retrieve all logs that are part of a specific dataset. This is useful for reviewing dataset contents and analyzing the data.
+
+## Method Signature
+
+### Synchronous
+```python
+def list_dataset_logs(
+    dataset_id: str,
+    limit: Optional[int] = None,
+    offset: Optional[int] = None
+) -> Dict[str, Any]
+```
+
+### Asynchronous
+```python
+async def list_dataset_logs(
+    dataset_id: str,
+    limit: Optional[int] = None,
+    offset: Optional[int] = None
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `dataset_id` | `str` | Yes | The unique identifier of the dataset |
+| `limit` | `int` | No | Maximum number of logs to return (default: 50) |
+| `offset` | `int` | No | Number of logs to skip for pagination (default: 0) |
+
+## Returns
+
+Returns a dictionary containing the list of logs and pagination information.
+
+## Examples
+
+### Basic Usage
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# List all logs in a dataset
+logs = client.datasets.list_dataset_logs(dataset_id="dataset_123")
+
+print(f"Found {len(logs['logs'])} logs in dataset")
+for log in logs['logs']:
+    print(f"Log ID: {log['id']}, Created: {log['created_at']}")
+```
+
+### With Pagination
+```python
+# Get first 10 logs
+logs = client.datasets.list_dataset_logs(
+    dataset_id="dataset_123",
+    limit=10,
+    offset=0
+)
+
+print(f"Page 1: {len(logs['logs'])} logs")
+
+# Get next 10 logs
+next_logs = client.datasets.list_dataset_logs(
+    dataset_id="dataset_123",
+    limit=10,
+    offset=10
+)
+
+print(f"Page 2: {len(next_logs['logs'])} logs")
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def list_logs_example():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    logs = await client.datasets.list_dataset_logs(
+        dataset_id="dataset_123",
+        limit=20
+    )
+    
+    print(f"Retrieved {len(logs['logs'])} logs")
+    return logs
+
+asyncio.run(list_logs_example())
+```
+
+## Error Handling
+
+```python
+try:
+    logs = client.datasets.list_dataset_logs(dataset_id="dataset_123")
+    print(f"Successfully retrieved {len(logs['logs'])} logs")
+except Exception as e:
+    print(f"Error listing dataset logs: {e}")
+```
+
+## Common Use Cases
+
+- Reviewing dataset contents before training
+- Analyzing data quality and distribution
+- Exporting dataset logs for external processing
+- Monitoring dataset size and growth
