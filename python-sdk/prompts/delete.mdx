@@ -1,0 +1,57 @@
+---
+title: "Delete Prompt"
+description: "Delete a prompt permanently from your account"
+---
+
+## Method Signature
+
+```python
+# Synchronous
+def delete(prompt_id: str) -> Dict[str, Any]
+
+# Asynchronous  
+async def adelete(prompt_id: str) -> Dict[str, Any]
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `prompt_id` | `str` | Yes | The unique identifier of the prompt to delete |
+
+## Examples
+
+### Basic Usage
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Delete a prompt
+result = client.prompts.delete(prompt_id="prompt_123")
+print(f"Deletion result: {result['message']}")
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def delete_prompt():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    result = await client.prompts.adelete(prompt_id="prompt_123")
+    print(f"Prompt deleted: {result['message']}")
+
+asyncio.run(delete_prompt())
+```
+
+### Error Handling
+```python
+try:
+    result = client.prompts.delete(prompt_id="prompt_123")
+    print(f"Successfully deleted: {result['message']}")
+except Exception as e:
+    print(f"Error deleting prompt: {e}")
+```
+
+⚠️ **Warning**: Deletion is permanent and cannot be undone.

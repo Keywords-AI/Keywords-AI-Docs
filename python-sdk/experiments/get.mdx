@@ -1,0 +1,357 @@
+---
+title: "Get Experiment"
+description: "Retrieve detailed information about a specific experiment"
+---
+
+## Overview
+
+The `get` method allows you to retrieve detailed information about a specific experiment, including its configuration, variants, current status, and results.
+
+## Method Signature
+
+### Synchronous
+```python
+def get(experiment_id: str) -> Dict[str, Any]
+```
+
+### Asynchronous
+```python
+async def get(experiment_id: str) -> Dict[str, Any]
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `experiment_id` | `str` | Yes | The unique identifier of the experiment |
+
+## Returns
+
+Returns a dictionary containing detailed experiment information including configuration, variants, metrics, and current status.
+
+## Examples
+
+### Basic Retrieval
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Get experiment details
+experiment = client.experiments.get("exp_123")
+
+print(f"Experiment: {experiment['name']}")
+print(f"Status: {experiment['status']}")
+print(f"Variants: {len(experiment['variants'])}")
+print(f"Created: {experiment['created_at']}")
+```
+
+### Accessing Experiment Details
+```python
+# Get comprehensive experiment information
+experiment = client.experiments.get("exp_123")
+
+print(f"Experiment ID: {experiment['id']}")
+print(f"Name: {experiment['name']}")
+print(f"Description: {experiment['description']}")
+print(f"Status: {experiment['status']}")
+
+# Variant information
+print("\nVariants:")
+for variant in experiment['variants']:
+    print(f"- {variant['name']}: {variant['description']}")
+    print(f"  Prompt ID: {variant['prompt_id']}")
+    if 'traffic_percentage' in variant:
+        print(f"  Traffic: {variant['traffic_percentage']}%")
+
+# Metrics being tracked
+if 'metrics' in experiment:
+    print(f"\nTracked Metrics: {', '.join(experiment['metrics'])}")
+
+# Traffic split
+if 'traffic_split' in experiment:
+    print("\nTraffic Split:")
+    for variant_name, percentage in experiment['traffic_split'].items():
+        print(f"- {variant_name}: {percentage * 100}%")
+```
+
+### Checking Experiment Status
+```python
+# Check if experiment is ready to start
+experiment = client.experiments.get("exp_123")
+
+status = experiment['status']
+print(f"Current status: {status}")
+
+if status == 'draft':
+    print("Experiment is in draft mode - ready to start")
+    print(f"Variants configured: {len(experiment['variants'])}")
+elif status == 'running':
+    print(f"Experiment is running since: {experiment['started_at']}")
+    if 'current_results' in experiment:
+        print("Current results available")
+elif status == 'completed':
+    print(f"Experiment completed at: {experiment['completed_at']}")
+    print("Final results available")
+elif status == 'paused':
+    print(f"Experiment paused at: {experiment['paused_at']}")
+    print("Can be resumed")
+```
+
+### Analyzing Experiment Configuration
+```python
+# Analyze experiment setup
+experiment = client.experiments.get("exp_123")
+
+print(f"Experiment Analysis: {experiment['name']}")
+print("=" * 50)
+
+# Validate traffic split
+if 'traffic_split' in experiment:
+    total_traffic = sum(experiment['traffic_split'].values())
+    print(f"Total traffic allocation: {total_traffic * 100}%")
+    
+    if abs(total_traffic - 1.0) > 0.001:
+        print("⚠️  Warning: Traffic split doesn't sum to 100%")
+    else:
+        print("✅ Traffic split is valid")
+
+# Check variant configuration
+variant_names = [v['name'] for v in experiment['variants']]
+print(f"\nVariants ({len(variant_names)}): {', '.join(variant_names)}")
+
+# Check if all variants have required fields
+for variant in experiment['variants']:
+    if 'prompt_id' not in variant:
+        print(f"⚠️  Warning: Variant '{variant['name']}' missing prompt_id")
+    else:
+        print(f"✅ Variant '{variant['name']}' properly configured")
+```
+
+### Error Handling for Missing Experiments
+```python
+try:
+    experiment = client.experiments.get("exp_nonexistent")
+    print(f"Found experiment: {experiment['name']}")
+except Exception as e:
+    if "not found" in str(e).lower():
+        print("Experiment does not exist")
+    elif "access denied" in str(e).lower():
+        print("You don't have permission to access this experiment")
+    else:
+        print(f"Error retrieving experiment: {e}")
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def get_experiment_example():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    try:
+        experiment = await client.experiments.get("exp_123")
+        
+        print(f"Retrieved experiment: {experiment['name']}")
+        print(f"Status: {experiment['status']}")
+        
+        return experiment
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
+asyncio.run(get_experiment_example())
+```
+
+### Accessing Current Results
+```python
+# Get experiment with current results (if running or completed)
+experiment = client.experiments.get("exp_123")
+
+if experiment['status'] in ['running', 'completed']:
+    if 'current_results' in experiment:
+        results = experiment['current_results']
+        
+        print("Current Results:")
+        print(f"Total requests: {results.get('total_requests', 0)}")
+        print(f"Start time: {results.get('start_time')}")
+        
+        # Variant performance
+        if 'variant_results' in results:
+            print("\nVariant Performance:")
+            for variant_name, metrics in results['variant_results'].items():
+                print(f"\n{variant_name}:")
+                print(f"  Requests: {metrics.get('request_count', 0)}")
+                print(f"  Success rate: {metrics.get('success_rate', 0):.2%}")
+                print(f"  Avg response time: {metrics.get('avg_response_time', 0):.2f}ms")
+                
+                # Custom metrics
+                for metric_name, value in metrics.items():
+                    if metric_name not in ['request_count', 'success_rate', 'avg_response_time']:
+                        print(f"  {metric_name}: {value}")
+else:
+    print(f"No results available for {experiment['status']} experiment")
+```
+
+### Batch Retrieval
+```python
+# Get multiple experiments
+experiment_ids = ["exp_123", "exp_456", "exp_789"]
+experiments = []
+
+for exp_id in experiment_ids:
+    try:
+        experiment = client.experiments.get(exp_id)
+        experiments.append(experiment)
+        print(f"✅ Retrieved: {experiment['name']}")
+    except Exception as e:
+        print(f"❌ Failed to get {exp_id}: {e}")
+
+print(f"\nSuccessfully retrieved {len(experiments)} experiments")
+```
+
+### Asynchronous Batch Retrieval
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def get_experiments_batch(experiment_ids):
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    async def get_single_experiment(exp_id):
+        try:
+            return await client.experiments.get(exp_id)
+        except Exception as e:
+            print(f"Error getting {exp_id}: {e}")
+            return None
+    
+    # Get all experiments concurrently
+    tasks = [get_single_experiment(exp_id) for exp_id in experiment_ids]
+    results = await asyncio.gather(*tasks)
+    
+    # Filter out None results
+    experiments = [exp for exp in results if exp is not None]
+    
+    print(f"Retrieved {len(experiments)} out of {len(experiment_ids)} experiments")
+    return experiments
+
+# Usage
+experiment_ids = ["exp_123", "exp_456", "exp_789"]
+experiments = asyncio.run(get_experiments_batch(experiment_ids))
+```
+
+### Experiment Validation
+```python
+# Validate experiment configuration
+def validate_experiment(experiment):
+    issues = []
+    
+    # Check required fields
+    required_fields = ['id', 'name', 'variants', 'status']
+    for field in required_fields:
+        if field not in experiment:
+            issues.append(f"Missing required field: {field}")
+    
+    # Check variants
+    if 'variants' in experiment:
+        if len(experiment['variants']) < 2:
+            issues.append("Experiment should have at least 2 variants")
+        
+        variant_names = [v['name'] for v in experiment['variants']]
+        if len(variant_names) != len(set(variant_names)):
+            issues.append("Duplicate variant names found")
+    
+    # Check traffic split
+    if 'traffic_split' in experiment:
+        total = sum(experiment['traffic_split'].values())
+        if abs(total - 1.0) > 0.001:
+            issues.append(f"Traffic split sums to {total:.3f}, should be 1.0")
+    
+    return issues
+
+# Validate an experiment
+experiment = client.experiments.get("exp_123")
+issues = validate_experiment(experiment)
+
+if issues:
+    print("Validation Issues:")
+    for issue in issues:
+        print(f"- {issue}")
+else:
+    print("✅ Experiment configuration is valid")
+```
+
+### Export Experiment Details
+```python
+import json
+from datetime import datetime
+
+# Export experiment to JSON file
+experiment = client.experiments.get("exp_123")
+
+# Create filename with timestamp
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+filename = f"experiment_{experiment['id']}_{timestamp}.json"
+
+# Export with pretty formatting
+with open(filename, 'w', encoding='utf-8') as f:
+    json.dump(experiment, f, indent=2, ensure_ascii=False)
+
+print(f"Experiment exported to {filename}")
+print(f"File size: {len(json.dumps(experiment))} characters")
+```
+
+## Error Handling
+
+```python
+try:
+    experiment = client.experiments.get("exp_123")
+    print(f"Retrieved experiment: {experiment['name']}")
+except Exception as e:
+    error_msg = str(e).lower()
+    
+    if "not found" in error_msg:
+        print("Experiment not found - check the experiment ID")
+    elif "access denied" in error_msg or "permission" in error_msg:
+        print("Access denied - you don't have permission to view this experiment")
+    elif "invalid" in error_msg:
+        print("Invalid experiment ID format")
+    else:
+        print(f"Unexpected error: {e}")
+```
+
+## Experiment Structure
+
+A retrieved experiment contains:
+
+- `id`: Unique experiment identifier
+- `name`: Experiment name
+- `description`: Optional description
+- `status`: Current status (draft, running, completed, paused)
+- `variants`: List of variants being tested
+- `metrics`: Metrics being tracked
+- `traffic_split`: Traffic distribution between variants
+- `created_at`: Creation timestamp
+- `created_by`: User who created the experiment
+- `started_at`: When experiment was started (if applicable)
+- `completed_at`: When experiment was completed (if applicable)
+- `current_results`: Current performance data (if running/completed)
+- `metadata`: Custom metadata
+
+## Best Practices
+
+- Always handle the case where an experiment might not exist
+- Check experiment status before performing status-dependent operations
+- Validate experiment configuration before starting
+- Use async methods for better performance when retrieving multiple experiments
+- Cache experiment data when appropriate to reduce API calls
+
+## Common Use Cases
+
+- Displaying experiment details in a dashboard
+- Validating experiment configuration before starting
+- Monitoring experiment progress and results
+- Exporting experiment data for analysis
+- Checking experiment status before performing operations
+- Retrieving experiment metadata for reporting

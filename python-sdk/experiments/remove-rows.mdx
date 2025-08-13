@@ -1,0 +1,68 @@
+---
+title: "Remove Rows"
+description: "Remove rows from an experiment dataset"
+---
+
+## Overview
+
+Remove specific rows from an existing experiment dataset.
+
+## Method Signature
+
+```python
+# Synchronous
+client.experiments.remove_rows(
+    experiment_id: str,
+    row_ids: List[str]
+) -> Dict[str, Any]
+
+# Asynchronous
+await client.experiments.remove_rows(
+    experiment_id: str,
+    row_ids: List[str]
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The unique identifier of the experiment
+</ParamField>
+
+<ParamField path="row_ids" type="List[str]" required>
+  List of row IDs to remove from the experiment
+</ParamField>
+
+## Returns
+
+Returns a dictionary containing the updated experiment information.
+
+## Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Remove specific rows from experiment
+row_ids_to_remove = ["row_123", "row_456"]
+
+result = client.experiments.remove_rows(
+    experiment_id="exp_123",
+    row_ids=row_ids_to_remove
+)
+
+print(f"Removed {len(row_ids_to_remove)} rows from experiment")
+```
+
+## Error Handling
+
+```python
+try:
+    result = client.experiments.remove_rows(
+        experiment_id="exp_123",
+        row_ids=["row_123", "row_456"]
+    )
+except Exception as e:
+    print(f"Error removing rows: {e}")
+```

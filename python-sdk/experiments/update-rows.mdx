@@ -1,0 +1,79 @@
+---
+title: "Update Rows"
+description: "Update existing rows in an experiment dataset"
+---
+
+## Overview
+
+Update data in existing rows of an experiment dataset.
+
+## Method Signature
+
+```python
+# Synchronous
+client.experiments.update_rows(
+    experiment_id: str,
+    updates: List[Dict[str, Any]]
+) -> Dict[str, Any]
+
+# Asynchronous
+await client.experiments.update_rows(
+    experiment_id: str,
+    updates: List[Dict[str, Any]]
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The unique identifier of the experiment
+</ParamField>
+
+<ParamField path="updates" type="List[Dict[str, Any]]" required>
+  List of row updates containing row_id and new data
+</ParamField>
+
+## Returns
+
+Returns a dictionary containing the updated experiment information.
+
+## Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Update specific rows in experiment
+updates = [
+    {
+        "row_id": "row_123",
+        "input": "What is machine learning?",
+        "expected_output": "ML is a subset of AI"
+    },
+    {
+        "row_id": "row_456",
+        "input": "Define neural networks",
+        "expected_output": "Networks inspired by biological neurons"
+    }
+]
+
+result = client.experiments.update_rows(
+    experiment_id="exp_123",
+    updates=updates
+)
+
+print(f"Updated {len(updates)} rows in experiment")
+```
+
+## Error Handling
+
+```python
+try:
+    result = client.experiments.update_rows(
+        experiment_id="exp_123",
+        updates=updates
+    )
+except Exception as e:
+    print(f"Error updating rows: {e}")
+```

@@ -1,0 +1,379 @@
+---
+title: "List Experiments"
+description: "Retrieve a list of experiments with filtering and pagination"
+---
+
+## Overview
+
+The `list` method allows you to retrieve experiments with support for filtering, sorting, and pagination. This is useful for managing and reviewing your experiment portfolio.
+
+## Method Signature
+
+### Synchronous
+```python
+def list(
+    limit: Optional[int] = 50,
+    offset: Optional[int] = 0,
+    status: Optional[str] = None,
+    name: Optional[str] = None,
+    created_by: Optional[str] = None,
+    sort_by: Optional[str] = "created_at",
+    sort_order: Optional[str] = "desc"
+) -> Dict[str, Any]
+```
+
+### Asynchronous
+```python
+async def list(
+    limit: Optional[int] = 50,
+    offset: Optional[int] = 0,
+    status: Optional[str] = None,
+    name: Optional[str] = None,
+    created_by: Optional[str] = None,
+    sort_by: Optional[str] = "created_at",
+    sort_order: Optional[str] = "desc"
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `limit` | `int` | No | Maximum number of experiments to return (default: 50) |
+| `offset` | `int` | No | Number of experiments to skip (default: 0) |
+| `status` | `str` | No | Filter by experiment status (draft, running, completed, paused) |
+| `name` | `str` | No | Filter by experiment name (partial match) |
+| `created_by` | `str` | No | Filter by creator user ID |
+| `sort_by` | `str` | No | Field to sort by (created_at, name, status) |
+| `sort_order` | `str` | No | Sort order (asc, desc) |
+
+## Returns
+
+Returns a dictionary containing:
+- `experiments`: List of experiment objects
+- `total`: Total number of experiments matching filters
+- `limit`: Applied limit
+- `offset`: Applied offset
+- `has_more`: Whether more experiments are available
+
+## Examples
+
+### Basic Usage
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Get all experiments
+response = client.experiments.list()
+
+print(f"Total experiments: {response['total']}")
+print(f"Retrieved: {len(response['experiments'])}")
+
+for experiment in response['experiments']:
+    print(f"- {experiment['name']} ({experiment['status']})")
+```
+
+### Pagination
+```python
+# Get experiments with pagination
+response = client.experiments.list(limit=10, offset=0)
+
+print(f"Page 1: {len(response['experiments'])} experiments")
+print(f"Has more: {response['has_more']}")
+
+# Get next page
+if response['has_more']:
+    next_page = client.experiments.list(limit=10, offset=10)
+    print(f"Page 2: {len(next_page['experiments'])} experiments")
+```
+
+### Filter by Status
+```python
+# Get only running experiments
+running_experiments = client.experiments.list(status="running")
+print(f"Running experiments: {len(running_experiments['experiments'])}")
+
+# Get completed experiments
+completed_experiments = client.experiments.list(status="completed")
+print(f"Completed experiments: {len(completed_experiments['experiments'])}")
+
+# Get draft experiments
+draft_experiments = client.experiments.list(status="draft")
+print(f"Draft experiments: {len(draft_experiments['experiments'])}")
+```
+
+### Filter by Name
+```python
+# Search experiments by name
+support_experiments = client.experiments.list(name="support")
+print(f"Support-related experiments: {len(support_experiments['experiments'])}")
+
+for experiment in support_experiments['experiments']:
+    print(f"- {experiment['name']}")
+    print(f"  Status: {experiment['status']}")
+    print(f"  Created: {experiment['created_at']}")
+```
+
+### Sorting
+```python
+# Sort by name alphabetically
+response = client.experiments.list(
+    sort_by="name",
+    sort_order="asc"
+)
+
+print("Experiments sorted by name:")
+for experiment in response['experiments']:
+    print(f"- {experiment['name']}")
+
+# Sort by creation date (newest first)
+response = client.experiments.list(
+    sort_by="created_at",
+    sort_order="desc"
+)
+
+print("\nNewest experiments:")
+for experiment in response['experiments'][:5]:
+    print(f"- {experiment['name']} ({experiment['created_at']})")
+```
+
+### Combined Filtering
+```python
+# Get recent running experiments
+response = client.experiments.list(
+    status="running",
+    sort_by="created_at",
+    sort_order="desc",
+    limit=5
+)
+
+print("Recent running experiments:")
+for experiment in response['experiments']:
+    print(f"- {experiment['name']}")
+    print(f"  Started: {experiment['started_at']}")
+    print(f"  Variants: {len(experiment['variants'])}")
+```
+
+### Filter by Creator
+```python
+# Get experiments created by specific user
+user_experiments = client.experiments.list(created_by="user_123")
+
+print(f"Experiments by user_123: {len(user_experiments['experiments'])}")
+for experiment in user_experiments['experiments']:
+    print(f"- {experiment['name']} ({experiment['status']})")
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def list_experiments_example():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    # Get experiments asynchronously
+    response = await client.experiments.list(limit=20)
+    
+    print(f"Retrieved {len(response['experiments'])} experiments")
+    
+    for experiment in response['experiments']:
+        print(f"- {experiment['name']} ({experiment['status']})")
+    
+    return response
+
+asyncio.run(list_experiments_example())
+```
+
+### Pagination Loop
+```python
+# Get all experiments using pagination
+all_experiments = []
+offset = 0
+limit = 50
+
+while True:
+    response = client.experiments.list(limit=limit, offset=offset)
+    experiments = response['experiments']
+    
+    if not experiments:
+        break
+    
+    all_experiments.extend(experiments)
+    print(f"Retrieved {len(experiments)} experiments (total: {len(all_experiments)})")
+    
+    if not response['has_more']:
+        break
+    
+    offset += limit
+
+print(f"Total experiments retrieved: {len(all_experiments)}")
+```
+
+### Detailed Analysis
+```python
+# Analyze experiment portfolio
+response = client.experiments.list(limit=100)
+experiments = response['experiments']
+
+# Group by status
+status_counts = {}
+for experiment in experiments:
+    status = experiment['status']
+    status_counts[status] = status_counts.get(status, 0) + 1
+
+print("Experiment Status Summary:")
+for status, count in status_counts.items():
+    print(f"- {status}: {count}")
+
+# Find long-running experiments
+from datetime import datetime, timedelta
+
+long_running = []
+for experiment in experiments:
+    if experiment['status'] == 'running':
+        started_at = datetime.fromisoformat(experiment['started_at'])
+        if datetime.now() - started_at > timedelta(days=30):
+            long_running.append(experiment)
+
+print(f"\nLong-running experiments (>30 days): {len(long_running)}")
+for experiment in long_running:
+    print(f"- {experiment['name']} (started: {experiment['started_at']})")
+```
+
+### Export Experiment List
+```python
+import csv
+from datetime import datetime
+
+# Export experiments to CSV
+response = client.experiments.list(limit=1000)
+experiments = response['experiments']
+
+filename = f"experiments_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+
+with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+    fieldnames = ['id', 'name', 'status', 'variants_count', 'created_at', 'created_by']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    
+    writer.writeheader()
+    for experiment in experiments:
+        writer.writerow({
+            'id': experiment['id'],
+            'name': experiment['name'],
+            'status': experiment['status'],
+            'variants_count': len(experiment.get('variants', [])),
+            'created_at': experiment['created_at'],
+            'created_by': experiment.get('created_by', '')
+        })
+
+print(f"Exported {len(experiments)} experiments to {filename}")
+```
+
+### Asynchronous Batch Processing
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def process_experiments_batch():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    # Get experiments in batches
+    batch_size = 25
+    offset = 0
+    all_experiments = []
+    
+    while True:
+        response = await client.experiments.list(
+            limit=batch_size,
+            offset=offset
+        )
+        
+        experiments = response['experiments']
+        if not experiments:
+            break
+        
+        all_experiments.extend(experiments)
+        print(f"Processed batch: {len(experiments)} experiments")
+        
+        if not response['has_more']:
+            break
+        
+        offset += batch_size
+        
+        # Small delay to avoid rate limiting
+        await asyncio.sleep(0.1)
+    
+    print(f"Total experiments processed: {len(all_experiments)}")
+    return all_experiments
+
+asyncio.run(process_experiments_batch())
+```
+
+## Error Handling
+
+```python
+try:
+    response = client.experiments.list(
+        status="running",
+        limit=50
+    )
+    
+    experiments = response['experiments']
+    print(f"Retrieved {len(experiments)} experiments")
+    
+except Exception as e:
+    if "invalid status" in str(e).lower():
+        print("Invalid status filter provided")
+    elif "limit" in str(e).lower():
+        print("Invalid limit parameter")
+    else:
+        print(f"Error listing experiments: {e}")
+```
+
+## Response Structure
+
+The response contains:
+
+```python
+{
+    "experiments": [
+        {
+            "id": "exp_123",
+            "name": "Greeting Style Test",
+            "description": "Testing formal vs casual approaches",
+            "status": "running",
+            "variants": [...],
+            "metrics": [...],
+            "traffic_split": {...},
+            "created_at": "2024-01-15T10:30:00Z",
+            "created_by": "user_123",
+            "started_at": "2024-01-15T11:00:00Z",
+            "metadata": {...}
+        }
+    ],
+    "total": 25,
+    "limit": 50,
+    "offset": 0,
+    "has_more": false
+}
+```
+
+## Best Practices
+
+- Use appropriate page sizes (10-50) for UI display
+- Implement pagination for large experiment lists
+- Filter by status to focus on relevant experiments
+- Sort by creation date to see recent activity
+- Cache results when appropriate to reduce API calls
+- Use async methods for better performance in concurrent applications
+
+## Common Use Cases
+
+- Dashboard displaying experiment overview
+- Finding experiments by name or creator
+- Monitoring running experiments
+- Analyzing experiment portfolio
+- Exporting experiment data
+- Cleaning up old or completed experiments

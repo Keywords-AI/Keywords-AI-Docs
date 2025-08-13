@@ -1,0 +1,254 @@
+---
+title: "List logs"
+description: "Retrieve log entries with pagination and sorting using URL query parameters"
+---
+
+## Overview
+
+The `list()` and `alist()` methods allow you to retrieve multiple log entries using URL query parameters. Use `list()` for synchronous operations and `alist()` for asynchronous operations.
+
+## Usage example
+
+```python
+from keywordsai.logs.api import LogAPI
+import asyncio
+
+# Create the client
+log_api_client = LogAPI()
+
+# Synchronous example
+response = log_api_client.list(page_size=50)
+print(f"Retrieved {len(response.results)} logs")
+for log in response.results:
+    print(f"Log {log.unique_id}: {log.model}")
+
+# Asynchronous example
+async def list_logs_async():
+    response = await log_api_client.alist(page_size=50)
+    print(f"Retrieved {len(response.results)} logs asynchronously")
+    return response.results
+
+# Run the async function
+asyncio.run(list_logs_async())
+```
+
+## Parameters
+
+<ParamField path="page" type="int" default="1">
+  The page number to retrieve.
+</ParamField>
+
+<ParamField path="page_size" type="int" default="100">
+  Number of logs to return per page (maximum: 1000).
+</ParamField>
+
+<ParamField path="sort_by" type="str" default="-id">
+  Field to sort by. Use `-` prefix for descending order.
+  Available options: `id`, `cost`, `latency`, `prompt_tokens`, `completion_tokens`, `all_tokens`, `time_to_first_token`
+</ParamField>
+
+<ParamField path="is_test" type="str" default="false">
+  Whether to include test logs. Options: `"true"`, `"false"`.
+</ParamField>
+
+<ParamField path="all_envs" type="str" default="false">
+  Whether to include logs from all environments. Options: `"true"`, `"false"`.
+</ParamField>
+
+## Returns
+
+Returns a `LogListResponse` object with:
+
+```python
+{
+    "results": [
+        {
+            "id": "log_123456789",
+            "unique_id": "unique_123",
+            "model": "gpt-4",
+            "prompt_tokens": 20,
+            "completion_tokens": 50,
+            "total_tokens": 70,
+            "cost": 0.0014,
+            "latency": 1.2,
+            "timestamp": "2024-01-15T10:30:00Z",
+            "metadata": {...}
+        },
+        ...
+    ],
+    "count": 150,
+    "next": "...",
+    "previous": "..."
+}
+```
+
+## Examples
+
+### Basic Synchronous Example
+
+```python
+import os
+from dotenv import load_dotenv
+from keywordsai.logs.api import LogAPI
+
+load_dotenv()
+
+def list_logs_sync():
+    """Basic synchronous log listing"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    log_api_client = LogAPI(api_key=api_key)
+    
+    try:
+        response = log_api_client.list(page_size=50)
+        print(f"✓ Retrieved {len(response.results)} logs")
+        
+        for log in response.results:
+            print(f"Log {log.unique_id}: {log.model} - {log.total_tokens} tokens - ${log.cost:.4f}")
+            
+        return response.results
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return []
+
+# Usage
+list_logs_sync()
+```
+
+### Asynchronous Example
+
+```python
+import asyncio
+import os
+from dotenv import load_dotenv
+from keywordsai.logs.api import LogAPI
+
+load_dotenv()
+
+async def list_logs_async():
+    """Asynchronous log listing"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    log_api_client = LogAPI(api_key=api_key)
+    
+    try:
+        response = await log_api_client.alist(
+            page_size=50,
+            sort_by="-id"
+        )
+        print(f"✓ Async retrieved {len(response.results)} logs")
+        
+        for log in response.results:
+            print(f"Log {log.unique_id}: {log.model} - {log.total_tokens} tokens")
+            
+        return response.results
+    except Exception as e:
+        print(f"✗ Async error: {e}")
+        return []
+
+# Usage
+asyncio.run(list_logs_async())
+```
+
+### Sorting and Pagination
+
+```python
+def list_logs_with_options():
+    """List logs with sorting and pagination"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    log_api_client = LogAPI(api_key=api_key)
+    
+    # Sort by cost (highest first)
+    expensive_logs = log_api_client.list(
+        sort_by="-cost",
+        page_size=25
+    )
+    print(f"Top 25 expensive logs: {len(expensive_logs.results)}")
+    
+    # Sort by latency (fastest first)
+    fast_logs = log_api_client.list(
+        sort_by="latency",
+        page_size=25
+    )
+    print(f"Top 25 fastest logs: {len(fast_logs.results)}")
+    
+    # Get second page
+    page_2_logs = log_api_client.list(
+        page=2,
+        page_size=100
+    )
+    print(f"Page 2 logs: {len(page_2_logs.results)}")
+
+# Usage
+list_logs_with_options()
+```
+
+### Environment Filtering
+
+```python
+def list_logs_by_environment():
+    """List logs filtered by environment"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    log_api_client = LogAPI(api_key=api_key)
+    
+    # Get only production logs (default)
+    prod_logs = log_api_client.list(
+        is_test="false",
+        page_size=50
+    )
+    print(f"Production logs: {len(prod_logs.results)}")
+    
+    # Get only test logs
+    test_logs = log_api_client.list(
+        is_test="true",
+        page_size=50
+    )
+    print(f"Test logs: {len(test_logs.results)}")
+    
+    # Get logs from all environments
+    all_env_logs = log_api_client.list(
+        all_envs="true",
+        page_size=50
+    )
+    print(f"All environment logs: {len(all_env_logs.results)}")
+
+# Usage
+list_logs_by_environment()
+```
+
+## Convenience Functions
+
+You can also use the convenience function to create a LogAPI client:
+
+```python
+from keywordsai import create_log_client
+
+client = create_log_client(api_key="your-api-key")
+response = client.list(page_size=100)
+```
+
+## Limitations
+
+<Warning>
+The SDK's `list()` method only supports URL query parameters. For advanced filtering with operators (gt, lt, contains, etc.), you need to use the direct API endpoint with POST requests.
+</Warning>
+
+### What's NOT supported in the SDK:
+- Complex filters in request body
+- Metadata filtering
+- Model filtering
+- Date range filtering
+- Custom field filtering
+
+### For advanced filtering, use the direct API:
+```python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/"
+headers = {"Authorization": f"Api-Key {api_key}"}
+data = {
+    "filters": {
+        "model": {"operator": "", "value": ["gpt-4"]},
+        "cost": {"operator": "gt", "value": [0.01]}
+    }
+}
+response = requests.post(url, headers=headers, json=data)
+```

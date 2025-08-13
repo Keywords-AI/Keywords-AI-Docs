@@ -1,0 +1,91 @@
+---
+title: "Remove Logs from Dataset"
+description: "Remove logs from an existing dataset"
+---
+
+## Overview
+
+The `remove_logs_from_dataset` method allows you to remove specific logs from a dataset. This is useful for cleaning up datasets or removing outdated or irrelevant logs.
+
+## Method Signature
+
+### Synchronous
+```python
+def remove_logs_from_dataset(
+    dataset_id: str,
+    log_ids: List[str]
+) -> Dict[str, Any]
+```
+
+### Asynchronous
+```python
+async def remove_logs_from_dataset(
+    dataset_id: str,
+    log_ids: List[str]
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `dataset_id` | `str` | Yes | The unique identifier of the dataset |
+| `log_ids` | `List[str]` | Yes | List of log IDs to remove from the dataset |
+
+## Returns
+
+Returns a dictionary containing the operation result and updated dataset information.
+
+## Examples
+
+### Basic Usage
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Remove logs from dataset
+result = client.datasets.remove_logs_from_dataset(
+    dataset_id="dataset_123",
+    log_ids=["log_456", "log_789"]
+)
+
+print(f"Removed {len(result['removed_logs'])} logs from dataset")
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def remove_logs_example():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    result = await client.datasets.remove_logs_from_dataset(
+        dataset_id="dataset_123",
+        log_ids=["log_456", "log_789"]
+    )
+    
+    print(f"Successfully removed {len(result['removed_logs'])} logs")
+
+asyncio.run(remove_logs_example())
+```
+
+## Error Handling
+
+```python
+try:
+    result = client.datasets.remove_logs_from_dataset(
+        dataset_id="dataset_123",
+        log_ids=["log_456"]
+    )
+except Exception as e:
+    print(f"Error removing logs from dataset: {e}")
+```
+
+## Common Use Cases
+
+- Cleaning up datasets by removing irrelevant logs
+- Removing outdated or incorrect data
+- Managing dataset size and quality
+- Preparing clean datasets for training

@@ -1,0 +1,87 @@
+---
+title: "Quickstart"
+description: "Get started with the Keywords AI Python SDK in minutes"
+---
+
+## Installation
+
+Install the Keywords AI Python SDK using pip:
+
+```bash
+pip install keywordsai
+```
+
+## Authentication
+
+First, you'll need to get your API key from the Keywords AI dashboard. Then, initialize the client:
+
+```python
+from keywordsai import KeywordsAI
+
+# Initialize the client
+client = KeywordsAI(api_key="your-api-key-here")
+```
+
+## Basic Usage
+
+### Creating a Log
+
+```python
+# Create a log entry
+log = client.logs.create(
+    messages=[
+        {"role": "user", "content": "Hello, world!"},
+        {"role": "assistant", "content": "Hi there! How can I help you today?"}
+    ],
+    model="gpt-3.5-turbo",
+    prompt_tokens=10,
+    completion_tokens=15,
+    total_tokens=25
+)
+
+print(f"Created log with ID: {log.id}")
+```
+
+### Working with Datasets
+
+```python
+# Create a dataset
+dataset = client.datasets.create(
+    name="My First Dataset",
+    description="A sample dataset for testing"
+)
+
+# Add logs to the dataset
+client.datasets.add_logs_to_dataset(
+    dataset_id=dataset.id,
+    log_ids=[log.id]
+)
+```
+
+### Managing Prompts
+
+```python
+# Create a prompt
+prompt = client.prompts.create(
+    name="Greeting Prompt",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "{{user_input}}"}
+    ]
+)
+
+# Create a version of the prompt
+version = client.prompts.create_version(
+    prompt_id=prompt.id,
+    messages=[
+        {"role": "system", "content": "You are a very helpful assistant."},
+        {"role": "user", "content": "{{user_input}}"}
+    ],
+    version_name="v1.1"
+)
+```
+
+## Next Steps
+
+- Explore the [Examples](/python-sdk/examples) for more detailed use cases
+- Check out the API reference for [Logs](/python-sdk/logs/overview), [Datasets](/python-sdk/datasets/overview), [Prompts](/python-sdk/prompts/overview), [Experiments](/python-sdk/experiments/overview), and [Evaluators](/python-sdk/evaluators/overview)
