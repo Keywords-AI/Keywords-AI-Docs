@@ -1,0 +1,102 @@
+---
+title: "Prompts API Overview"
+description: "Manage and version your prompts with the Keywords AI Prompts API"
+---
+
+## Overview
+
+The Prompts API allows you to create, manage, and version prompts for your AI applications. This enables you to maintain consistent prompt templates, track changes over time, and deploy different versions across environments.
+
+## Key Features
+
+- **Prompt Management**: Create and organize prompts with metadata
+- **Version Control**: Track prompt versions and changes
+- **Template Support**: Use variables and placeholders in prompts
+- **Environment Management**: Deploy different versions across environments
+- **Collaboration**: Share and manage prompts across teams
+
+## Quick Start
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Create a new prompt
+prompt = client.prompts.create(
+    name="Customer Support Assistant",
+    content="You are a helpful customer support assistant. Help the user with their question: {user_question}",
+    description="Standard customer support prompt template"
+)
+
+# List all prompts
+prompts = client.prompts.list()
+
+# Get a specific prompt
+prompt_details = client.prompts.get(prompt_id="prompt_123")
+```
+
+## Available Methods
+
+### Synchronous Methods
+- `create()` - Create a new prompt
+- `list()` - List prompts with filtering and pagination
+- `get()` - Retrieve a specific prompt
+- `update()` - Update an existing prompt
+- `delete()` - Delete a prompt
+- `create_version()` - Create a new version of a prompt
+- `list_versions()` - List all versions of a prompt
+- `get_version()` - Get a specific prompt version
+- `deploy_version()` - Deploy a prompt version to an environment
+
+### Asynchronous Methods
+All methods are also available in asynchronous versions using `AsyncKeywordsAI`.
+
+## Prompt Structure
+
+A prompt typically contains:
+
+- `id`: Unique identifier
+- `name`: Human-readable name
+- `content`: The actual prompt text with optional variables
+- `description`: Optional description
+- `metadata`: Custom metadata for organization
+- `variables`: List of variables used in the prompt
+- `versions`: Version history
+- `created_at`: Creation timestamp
+- `updated_at`: Last update timestamp
+
+## Common Use Cases
+
+- **Template Management**: Create reusable prompt templates
+- **A/B Testing**: Test different prompt versions
+- **Environment Deployment**: Deploy prompts across dev/staging/prod
+- **Team Collaboration**: Share prompts across team members
+- **Version Control**: Track prompt changes and rollbacks
+
+## Best Practices
+
+- Use descriptive names and descriptions for prompts
+- Leverage variables for dynamic content
+- Version prompts when making significant changes
+- Test prompts thoroughly before deployment
+- Use metadata for organization and filtering
+
+## Error Handling
+
+```python
+try:
+    prompt = client.prompts.create(
+        name="My Prompt",
+        content="Hello {name}!"
+    )
+except Exception as e:
+    print(f"Error creating prompt: {e}")
+```
+
+## Next Steps
+
+- [Create a Prompt](./create) - Learn how to create new prompts
+- [List Prompts](./list) - Browse and filter your prompts
+- [Manage Versions](./create-version) - Work with prompt versions
+- [Deploy Prompts](./deploy-version) - Deploy prompts to environments

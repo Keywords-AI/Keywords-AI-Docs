@@ -1,0 +1,86 @@
+---
+title: "List Evaluators"
+description: "Retrieve a list of available evaluators"
+---
+
+## Overview
+
+Retrieve a paginated list of evaluators with optional filtering and sorting.
+
+## Method Signature
+
+```python
+# Synchronous
+client.evaluators.list(
+    limit: Optional[int] = 50,
+    offset: Optional[int] = 0,
+    evaluator_type: Optional[str] = None,
+    sort_by: Optional[str] = "created_at",
+    sort_order: Optional[str] = "desc"
+) -> Dict[str, Any]
+
+# Asynchronous
+await client.evaluators.list(
+    limit: Optional[int] = 50,
+    offset: Optional[int] = 0,
+    evaluator_type: Optional[str] = None,
+    sort_by: Optional[str] = "created_at",
+    sort_order: Optional[str] = "desc"
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+<ParamField path="limit" type="integer" optional>
+  Maximum number of evaluators to return (default: 50)
+</ParamField>
+
+<ParamField path="offset" type="integer" optional>
+  Number of evaluators to skip (default: 0)
+</ParamField>
+
+<ParamField path="evaluator_type" type="string" optional>
+  Filter by evaluator type
+</ParamField>
+
+<ParamField path="sort_by" type="string" optional>
+  Field to sort by (default: "created_at")
+</ParamField>
+
+<ParamField path="sort_order" type="string" optional>
+  Sort order: "asc" or "desc" (default: "desc")
+</ParamField>
+
+## Returns
+
+Returns a dictionary containing the list of evaluators and pagination information.
+
+## Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# List all evaluators
+evaluators = client.evaluators.list()
+
+print(f"Found {evaluators['total']} evaluators")
+for evaluator in evaluators['data']:
+    print(f"- {evaluator['name']} ({evaluator['type']})")
+
+# List evaluators with filtering
+accuracy_evaluators = client.evaluators.list(
+    evaluator_type="accuracy",
+    limit=10
+)
+```
+
+## Error Handling
+
+```python
+try:
+    evaluators = client.evaluators.list()
+except Exception as e:
+    print(f"Error listing evaluators: {e}")
+```

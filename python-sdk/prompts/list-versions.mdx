@@ -1,0 +1,99 @@
+---
+title: "List Prompt Versions"
+description: "Retrieve all versions of a specific prompt"
+---
+
+## Method Signature
+
+```python
+# Synchronous
+def list_versions(
+    prompt_id: str,
+    page: Optional[int] = None,
+    page_size: Optional[int] = None
+) -> PromptVersionListResponse
+
+# Asynchronous
+async def alist_versions(
+    prompt_id: str,
+    page: Optional[int] = None,
+    page_size: Optional[int] = None
+) -> PromptVersionListResponse
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `prompt_id` | `str` | Yes | The unique identifier of the prompt |
+| `page` | `int` | No | Page number for pagination |
+| `page_size` | `int` | No | Number of versions per page |
+
+## Examples
+
+### Basic Usage
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# List all versions
+versions = client.prompts.list_versions("prompt_123")
+
+print(f"Total versions: {versions.count}")
+for version in versions.results:
+    print(f"Version {version.version}: {version.model}")
+```
+
+### With Pagination
+```python
+# List with pagination
+page1 = client.prompts.list_versions(
+    "prompt_123", 
+    page=1, 
+    page_size=5
+)
+
+print(f"Page 1 has {len(page1.results)} versions")
+
+# Get next page if available
+if page1.next:
+    page2 = client.prompts.list_versions("prompt_123", page=2, page_size=5)
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def list_versions():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    versions = await client.prompts.alist_versions("prompt_123")
+    
+    print(f"Found {versions.count} versions")
+    for version in versions.results[:3]:
+        print(f"Version {version.version}: {version.model}")
+
+asyncio.run(list_versions())
+```
+
+### Error Handling
+```python
+try:
+    versions = client.prompts.list_versions("prompt_123")
+    print(f"Retrieved {versions.count} versions")
+except Exception as e:
+    if "not found" in str(e).lower():
+        print("Prompt does not exist")
+    else:
+        print(f"Error listing versions: {e}")
+```
+
+## Response Structure
+
+The `PromptVersionListResponse` includes:
+- `results`: List of PromptVersion objects
+- `count`: Total number of versions
+- `next`: URL for next page (if available)
+- `previous`: URL for previous page (if available)

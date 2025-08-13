@@ -1,0 +1,83 @@
+---
+title: "Create Evaluator"
+description: "Create a new evaluator for experiment assessment"
+---
+
+## Overview
+
+Create a new evaluator to assess and score experiment results based on specific criteria.
+
+## Method Signature
+
+```python
+# Synchronous
+client.evaluators.create(
+    name: str,
+    description: Optional[str] = None,
+    evaluator_type: str = "custom",
+    config: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]
+
+# Asynchronous
+await client.evaluators.create(
+    name: str,
+    description: Optional[str] = None,
+    evaluator_type: str = "custom",
+    config: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+<ParamField path="name" type="string" required>
+  The name of the evaluator
+</ParamField>
+
+<ParamField path="description" type="string" optional>
+  Description of what the evaluator measures
+</ParamField>
+
+<ParamField path="evaluator_type" type="string" optional>
+  Type of evaluator (e.g., "accuracy", "relevance", "custom")
+</ParamField>
+
+<ParamField path="config" type="Dict[str, Any]" optional>
+  Configuration parameters for the evaluator
+</ParamField>
+
+## Returns
+
+Returns a dictionary containing the created evaluator information.
+
+## Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Create a custom evaluator
+evaluator = client.evaluators.create(
+    name="Response Accuracy",
+    description="Measures accuracy of model responses",
+    evaluator_type="accuracy",
+    config={
+        "threshold": 0.8,
+        "metric": "exact_match"
+    }
+)
+
+print(f"Created evaluator: {evaluator['id']}")
+```
+
+## Error Handling
+
+```python
+try:
+    evaluator = client.evaluators.create(
+        name="My Evaluator",
+        evaluator_type="custom"
+    )
+except Exception as e:
+    print(f"Error creating evaluator: {e}")
+```

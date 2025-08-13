@@ -1,0 +1,176 @@
+---
+title: "List Evaluation Reports"
+description: "Retrieve a list of evaluation reports with filtering and pagination"
+---
+
+## Overview
+
+The `list_evaluation_reports` method allows you to retrieve a list of evaluation reports with optional filtering and pagination. This is useful for monitoring evaluation history and tracking performance over time.
+
+## Method Signature
+
+### Synchronous
+```python
+def list_evaluation_reports(
+    dataset_id: Optional[str] = None,
+    status: Optional[str] = None,
+    limit: Optional[int] = None,
+    offset: Optional[int] = None
+) -> Dict[str, Any]
+```
+
+### Asynchronous
+```python
+async def list_evaluation_reports(
+    dataset_id: Optional[str] = None,
+    status: Optional[str] = None,
+    limit: Optional[int] = None,
+    offset: Optional[int] = None
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `dataset_id` | `str` | No | Filter by specific dataset ID |
+| `status` | `str` | No | Filter by evaluation status (running, completed, failed) |
+| `limit` | `int` | No | Maximum number of reports to return (default: 50) |
+| `offset` | `int` | No | Number of reports to skip for pagination (default: 0) |
+
+## Returns
+
+Returns a dictionary containing the list of evaluation reports and pagination information.
+
+## Examples
+
+### Basic Usage
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# List all evaluation reports
+reports = client.datasets.list_evaluation_reports()
+
+print(f"Found {len(reports['reports'])} evaluation reports")
+for report in reports['reports']:
+    print(f"ID: {report['evaluation_id']}, Status: {report['status']}")
+```
+
+### Filter by Dataset
+```python
+# List evaluations for a specific dataset
+reports = client.datasets.list_evaluation_reports(
+    dataset_id="dataset_123"
+)
+
+print(f"Found {len(reports['reports'])} evaluations for dataset_123")
+```
+
+### Filter by Status
+```python
+# List only completed evaluations
+completed_reports = client.datasets.list_evaluation_reports(
+    status="completed"
+)
+
+print(f"Found {len(completed_reports['reports'])} completed evaluations")
+
+# List running evaluations
+running_reports = client.datasets.list_evaluation_reports(
+    status="running"
+)
+
+print(f"Found {len(running_reports['reports'])} running evaluations")
+```
+
+### With Pagination
+```python
+# Get first 10 reports
+reports = client.datasets.list_evaluation_reports(
+    limit=10,
+    offset=0
+)
+
+print(f"Page 1: {len(reports['reports'])} reports")
+
+# Get next 10 reports
+next_reports = client.datasets.list_evaluation_reports(
+    limit=10,
+    offset=10
+)
+
+print(f"Page 2: {len(next_reports['reports'])} reports")
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def list_reports_example():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    reports = await client.datasets.list_evaluation_reports(
+        dataset_id="dataset_123",
+        status="completed",
+        limit=20
+    )
+    
+    print(f"Retrieved {len(reports['reports'])} completed reports")
+    return reports
+
+asyncio.run(list_reports_example())
+```
+
+### Combined Filtering
+```python
+# Filter by both dataset and status
+reports = client.datasets.list_evaluation_reports(
+    dataset_id="dataset_123",
+    status="completed",
+    limit=5
+)
+
+print(f"Latest 5 completed evaluations for dataset_123:")
+for report in reports['reports']:
+    print(f"  {report['evaluation_id']}: {report['overall_score']}")
+```
+
+## Error Handling
+
+```python
+try:
+    reports = client.datasets.list_evaluation_reports(
+        dataset_id="dataset_123"
+    )
+    print(f"Successfully retrieved {len(reports['reports'])} reports")
+except Exception as e:
+    print(f"Error listing evaluation reports: {e}")
+```
+
+## Response Structure
+
+The response includes:
+
+- `reports`: List of evaluation report summaries
+- `total_count`: Total number of reports matching filters
+- `has_more`: Whether more reports are available
+- `next_offset`: Offset for the next page
+
+Each report summary contains:
+- `evaluation_id`: Unique identifier
+- `dataset_id`: Associated dataset ID
+- `status`: Current status
+- `overall_score`: Aggregate score (if completed)
+- `created_at`: Creation timestamp
+- `completed_at`: Completion timestamp (if applicable)
+
+## Common Use Cases
+
+- Monitoring evaluation history across datasets
+- Tracking model performance trends
+- Finding failed evaluations for debugging
+- Generating performance dashboards
+- Audit an

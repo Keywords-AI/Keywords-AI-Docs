@@ -1,0 +1,563 @@
+---
+title: "Create Dataset"
+description: "Create a new dataset to organize and manage collections of logs"
+---
+
+## Overview
+
+The `create()` method allows you to create a new dataset for organizing and managing collections of logs. Datasets serve as containers for grouping related conversations and interactions.
+
+## Method Signature
+
+### Synchronous
+
+```python
+client.datasets.create(
+    name: str,
+    description: str = None,
+    metadata: Dict[str, Any] = None,
+    **kwargs
+) -> Dataset
+```
+
+### Asynchronous
+
+```python
+await client.datasets.acreate(
+    name: str,
+    description: str = None,
+    metadata: Dict[str, Any] = None,
+    **kwargs
+) -> Dataset
+```
+
+## Parameters
+
+<ParamField path="name" type="str" required>
+  The name of the dataset. Should be descriptive and unique.
+</ParamField>
+
+<ParamField path="description" type="str">
+  A detailed description of the dataset's purpose and contents.
+</ParamField>
+
+<ParamField path="metadata" type="Dict[str, Any]">
+  Additional metadata to store with the dataset for organization and filtering.
+</ParamField>
+
+## Returns
+
+Returns a `Dataset` object with the following structure:
+
+```python
+{
+    "id": "dataset_123456789",
+    "name": "Customer Support Dataset",
+    "description": "Collection of customer support conversations",
+    "log_count": 0,
+    "created_at": "2024-01-15T10:30:00Z",
+    "updated_at": "2024-01-15T10:30:00Z",
+    "metadata": {
+        "category": "support",
+        "version": "1.0"
+    }
+}
+```
+
+## Examples
+
+### Basic Dataset Creation
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Create a simple dataset
+dataset = client.datasets.create(
+    name="Product Q&A Dataset",
+    description="Questions and answers about our products"
+)
+
+print(f"Created dataset: {dataset.id}")
+print(f"Name: {dataset.name}")
+print(f"Description: {dataset.description}")
+```
+
+### Dataset with Metadata
+
+```python
+# Create a dataset with rich metadata
+dataset = client.datasets.create(
+    name="Customer Support Training Data",
+    description="High-quality customer support conversations for model training",
+    metadata={
+        "category": "customer_support",
+        "purpose": "training",
+        "language": "english",
+        "quality_level": "high",
+        "version": "1.0",
+        "created_by": "data_team",
+        "tags": ["support", "training", "quality"]
+    }
+)
+
+print(f"Created dataset with metadata: {dataset.id}")
+```
+
+### Multiple Dataset Creation
+
+```python
+# Create multiple datasets for different purposes
+datasets_config = [
+    {
+        "name": "Training Dataset",
+        "description": "Data for model training",
+        "metadata": {"split": "train", "size": "large"}
+    },
+    {
+        "name": "Validation Dataset",
+        "description": "Data for model validation",
+        "metadata": {"split": "validation", "size": "medium"}
+    },
+    {
+        "name": "Test Dataset",
+        "description": "Data for model testing",
+        "metadata": {"split": "test", "size": "small"}
+    }
+]
+
+created_datasets = []
+for config in datasets_config:
+    dataset = client.datasets.create(**config)
+    created_datasets.append(dataset)
+    print(f"Created {config['name']}: {dataset.id}")
+
+print(f"Total datasets created: {len(created_datasets)}")
+```
+
+### Async Dataset Creation
+
+```python
+import asyncio
+
+async def create_dataset_async():
+    client = KeywordsAI(api_key="your-api-key")
+    
+    dataset = await client.datasets.acreate(
+        name="Async Created Dataset",
+        description="Dataset created asynchronously",
+        metadata={"creation_method": "async"}
+    )
+    
+    print(f"Async created dataset: {dataset.id}")
+    return dataset
+
+# Run async creation
+dataset = asyncio.run(create_dataset_async())
+```
+
+### Batch Async Creation
+
+```python
+import asyncio
+
+async def create_multiple_datasets_async(dataset_configs):
+    client = KeywordsAI(api_key="your-api-key")
+    
+    # Create tasks for all datasets
+    tasks = []
+    for config in dataset_configs:
+        task = client.datasets.acreate(**config)
+        tasks.append(task)
+    
+    # Wait for all datasets to be created
+    datasets = await asyncio.gather(*tasks)
+    
+    print(f"Created {len(datasets)} datasets asynchronously")
+    return datasets
+
+# Configuration for multiple datasets
+configs = [
+    {
+        "name": f"Dataset {i+1}",
+        "description": f"Description for dataset {i+1}",
+        "metadata": {"batch_id": "batch_001", "index": i}
+    }
+    for i in range(5)
+]
+
+# Create datasets in parallel
+datasets = asyncio.run(create_multiple_datasets_async(configs))
+```
+
+## Domain-Specific Examples
+
+### Customer Support Dataset
+
+```python
+support_dataset = client.datasets.create(
+    name="Customer Support Conversations - Q1 2024",
+    description="Customer support interactions from Q1 2024 for analysis and training",
+    metadata={
+        "domain": "customer_support",
+        "time_period": "Q1_2024",
+        "channels": ["chat", "email", "phone"],
+        "languages": ["english", "spanish"],
+        "resolution_rate": 0.85,
+        "avg_satisfaction": 4.2,
+        "total_tickets": 1500
+    }
+)
+```
+
+### Educational Content Dataset
+
+```python
+education_dataset = client.datasets.create(
+    name="Educational Q&A - Computer Science",
+    description="Questions and answers about computer science topics for educational AI",
+    metadata={
+        "domain": "education",
+        "subject": "computer_science",
+        "difficulty_levels": ["beginner", "intermediate", "advanced"],
+        "topics": ["algorithms", "data_structures", "programming"],
+        "target_audience": "students",
+        "curriculum_aligned": True
+    }
+)
+```
+
+### Product Documentation Dataset
+
+```python
+docs_dataset = client.datasets.create(
+    name="Product Documentation Q&A",
+    description="Questions and answers derived from product documentation",
+    metadata={
+        "domain": "documentation",
+        "product_version": "2.1.0",
+        "doc_sections": ["api", "tutorials", "troubleshooting"],
+        "last_updated": "2024-01-15",
+        "completeness": 0.95,
+        "review_status": "approved"
+    }
+)
+```
+
+### A/B Testing Dataset
+
+```python
+ab_test_dataset = client.datasets.create(
+    name="A/B Test - Prompt Variations",
+    description="Dataset for testing different prompt variations",
+    metadata={
+        "experiment_type": "ab_test",
+        "experiment_id": "exp_001",
+        "variants": ["control", "variant_a", "variant_b"],
+        "start_date": "2024-01-01",
+        "end_date": "2024-01-31",
+        "hypothesis": "Variant A will improve response quality",
+        "success_metric": "user_satisfaction"
+    }
+)
+```
+
+## Error Handling
+
+### Basic Error Handling
+
+```python
+from keywordsai.exceptions import ValidationError, RateLimitError
+
+def create_dataset_safely(name, description=None, metadata=None):
+    try:
+        dataset = client.datasets.create(
+            name=name,
+            description=description,
+            metadata=metadata
+        )
+        return dataset
+    except ValidationError as e:
+        print(f"Validation error: {e}")
+        return None
+    except RateLimitError:
+        print("Rate limit exceeded. Please retry later.")
+        return None
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return None
+
+# Use safe creation
+dataset = create_dataset_safely(
+    name="Test Dataset",
+    description="A test dataset",
+    metadata={"test": True}
+)
+
+if dataset:
+    print(f"Successfully created dataset: {dataset.id}")
+else:
+    print("Failed to create dataset")
+```
+
+### Comprehensive Error Handling
+
+```python
+from keywordsai.exceptions import (
+    KeywordsAIError,
+    ValidationError,
+    RateLimitError,
+    AuthenticationError
+)
+import time
+
+def create_dataset_with_retry(name, description=None, metadata=None, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            dataset = client.datasets.create(
+                name=name,
+                description=description,
+                metadata=metadata
+            )
+            return dataset
+        except ValidationError as e:
+            print(f"Validation error (attempt {attempt + 1}): {e}")
+            return None  # Don't retry validation errors
+        except AuthenticationError:
+            print("Authentication failed. Check your API key.")
+            return None  # Don't retry auth errors
+        except RateLimitError:
+            if attempt < max_retries - 1:
+                wait_time = 2 ** attempt  # Exponential backoff
+                print(f"Rate limited. Retrying in {wait_time} seconds...")
+                time.sleep(wait_time)
+            else:
+                print("Rate limit exceeded. Max retries reached.")
+                return None
+        except KeywordsAIError as e:
+            print(f"API error (attempt {attempt + 1}): {e}")
+            if attempt < max_retries - 1:
+                time.sleep(1)
+            else:
+                return None
+        except Exception as e:
+            print(f"Unexpected error (attempt {attempt + 1}): {e}")
+            if attempt < max_retries - 1:
+                time.sleep(1)
+            else:
+                return None
+    
+    return None
+
+# Use retry logic
+dataset = create_dataset_with_retry(
+    name="Resilient Dataset",
+    description="Dataset created with retry logic"
+)
+```
+
+## Validation and Best Practices
+
+### Input Validation
+
+```python
+def validate_dataset_input(name, description=None, metadata=None):
+    errors = []
+    
+    # Validate name
+    if not name or not isinstance(name, str):
+        errors.append("Name is required and must be a string")
+    elif len(name.strip()) < 3:
+        errors.append("Name must be at least 3 characters long")
+    elif len(name) > 100:
+        errors.append("Name must be less than 100 characters")
+    
+    # Validate description
+    if description is not None:
+        if not isinstance(description, str):
+            errors.append("Description must be a string")
+        elif len(description) > 1000:
+            errors.append("Description must be less than 1000 characters")
+    
+    # Validate metadata
+    if metadata is not None:
+        if not isinstance(metadata, dict):
+            errors.append("Metadata must be a dictionary")
+        elif len(str(metadata)) > 5000:  # Rough size check
+            errors.append("Metadata is too large")
+    
+    return errors
+
+def create_validated_dataset(name, description=None, metadata=None):
+    # Validate input
+    errors = validate_dataset_input(name, description, metadata)
+    if errors:
+        print("Validation errors:")
+        for error in errors:
+            print(f"  - {error}")
+        return None
+    
+    # Create dataset
+    return client.datasets.create(
+        name=name.strip(),
+        description=description.strip() if description else None,
+        metadata=metadata
+    )
+
+# Use validated creation
+dataset = create_validated_dataset(
+    name="Validated Dataset",
+    description="This dataset has been validated",
+    metadata={"validated": True}
+)
+```
+
+### Naming Conventions
+
+```python
+def generate_dataset_name(purpose, domain, version=None, date=None):
+    from datetime import datetime
+    
+    # Base name
+    name_parts = [purpose.title(), domain.title()]
+    
+    # Add version if provided
+    if version:
+        name_parts.append(f"v{version}")
+    
+    # Add date if provided
+    if date:
+        if isinstance(date, str):
+            name_parts.append(date)
+        else:
+            name_parts.append(date.strftime("%Y-%m"))
+    elif not version:  # Add current date if no version specified
+        name_parts.append(datetime.now().strftime("%Y-%m"))
+    
+    return " - ".join(name_parts)
+
+# Generate standardized names
+training_name = generate_dataset_name(
+    purpose="training",
+    domain="customer_support",
+    version="1.0"
+)
+
+test_name = generate_dataset_name(
+    purpose="evaluation",
+    domain="product_qa",
+    date="2024-01"
+)
+
+print(f"Training dataset name: {training_name}")
+print(f"Test dataset name: {test_name}")
+```
+
+### Template-Based Creation
+
+```python
+class DatasetTemplate:
+    def __init__(self, domain, purpose):
+        self.domain = domain
+        self.purpose = purpose
+    
+    def create_dataset(self, name_suffix="", additional_metadata=None):
+        from datetime import datetime
+        
+        # Generate name
+        base_name = f"{self.domain.title()} {self.purpose.title()}"
+        if name_suffix:
+            name = f"{base_name} - {name_suffix}"
+        else:
+            name = f"{base_name} - {datetime.now().strftime('%Y-%m')}"
+        
+        # Base metadata
+        metadata = {
+            "domain": self.domain,
+            "purpose": self.purpose,
+            "created_date": datetime.now().isoformat(),
+            "template_version": "1.0"
+        }
+        
+        # Add additional metadata
+        if additional_metadata:
+            metadata.update(additional_metadata)
+        
+        # Generate description
+        description = f"{self.purpose.title()} dataset for {self.domain} domain"
+        
+        return client.datasets.create(
+            name=name,
+            description=description,
+            metadata=metadata
+        )
+
+# Use templates
+support_template = DatasetTemplate("customer_support", "training")
+education_template = DatasetTemplate("education", "evaluation")
+
+support_dataset = support_template.create_dataset(
+    name_suffix="High Quality",
+    additional_metadata={"quality_threshold": 4.5}
+)
+
+education_dataset = education_template.create_dataset(
+    additional_metadata={"subject": "computer_science"}
+)
+```
+
+## Common Use Cases
+
+### Research Dataset
+
+```python
+research_dataset = client.datasets.create(
+    name="AI Safety Research Dataset",
+    description="Conversations and interactions for AI safety research",
+    metadata={
+        "research_area": "ai_safety",
+        "institution": "university_xyz",
+        "ethics_approved": True,
+        "anonymized": True,
+        "consent_obtained": True,
+        "data_retention_period": "5_years"
+    }
+)
+```
+
+### Production Monitoring Dataset
+
+```python
+monitoring_dataset = client.datasets.create(
+    name="Production API Monitoring - January 2024",
+    description="Production API calls for monitoring and analysis",
+    metadata={
+        "environment": "production",
+        "monitoring_period": "2024-01",
+        "api_version": "v2.1",
+        "alert_thresholds": {
+            "error_rate": 0.05,
+            "latency_p95": 2.0,
+            "cost_per_request": 0.01
+        }
+    }
+)
+```
+
+### Compliance Dataset
+
+```python
+compliance_dataset = client.datasets.create(
+    name="GDPR Compliance Dataset",
+    description="Dataset for GDPR compliance monitoring and reporting",
+    metadata={
+        "compliance_framework": "GDPR",
+        "data_classification": "personal",
+        "retention_policy": "2_years",
+        "access_controls": ["data_protection_officer", "compliance_team"],
+        "audit_trail": True,
+        "encryption_required": True
+    }
+)
+```

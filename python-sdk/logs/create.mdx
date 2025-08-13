@@ -1,0 +1,357 @@
+---
+title: "Create a log"
+description: "Create a new log entry to track conversations and API requests"
+---
+
+## Overview
+
+The `create()` and `acreate()` methods allow you to create a new log entry to track conversations, API requests, and their associated metadata. These methods support comprehensive logging of LLM interactions with detailed parameters for monitoring and analysis. Use `create()` for synchronous operations and `acreate()` for asynchronous operations.
+
+## Usage example
+
+```python
+from keywordsai.logs.api import LogAPI
+import asyncio
+
+# Create the client
+log_api_client = LogAPI()
+
+# Synchronous example
+response = log_api_client.create({
+    "model": "gpt-4",
+    "prompt_messages": [{"role": "user", "content": "Hello, world!"}],
+    "completion_message": {"role": "assistant", "content": "Hi there!"}
+})
+print(response["message"])  # "log successful"
+
+# Asynchronous example
+async def create_log_async():
+    response = await log_api_client.acreate({
+        "model": "gpt-4",
+        "prompt_messages": [{"role": "user", "content": "Hello, world!"}],
+        "completion_message": {"role": "assistant", "content": "Hi there!"}
+    })
+    print(response["message"])  # "log successful"
+
+# Run the async function
+asyncio.run(create_log_async())
+```
+
+## Parameters
+
+### Core Parameters
+
+<ParamField path="model" type="string">
+  Model used for the LLM inference. See the list of supported models [here](/integration/supported-models).
+</ParamField>
+
+<ParamField path="prompt_messages" type="array">
+  Array of prompt messages in chat format.
+  
+  **Message Structure:**
+  - `role` (string, required): The role of the message (`system`, `developer`, `user`, `assistant`, `tool`)
+  - `content` (string, required): The content of the message
+  - `tool_call_id` (string, optional): The tool call ID for tool messages
+</ParamField>
+
+<ParamField path="completion_message" type="dict">
+  Completion message in JSON format containing the model's response.
+  
+  **Structure:**
+  - `role` (string): Usually "assistant"
+  - `content` (string): The generated response content
+</ParamField>
+
+### Token and Cost Parameters
+
+<ParamField path="prompt_tokens" type="integer">
+  Number of tokens in the prompt.
+</ParamField>
+
+<ParamField path="completion_tokens" type="integer">
+  Number of tokens in the completion.
+</ParamField>
+
+<ParamField path="cost" type="float" default={0}>
+  Cost of the inference in US dollars.
+</ParamField>
+
+<ParamField path="prompt_unit_price" type="number">
+  Unit price per token for prompt tokens (for self-hosted/fine-tuned models).
+</ParamField>
+
+<ParamField path="completion_unit_price" type="number">
+  Unit price per token for completion tokens (for self-hosted/fine-tuned models).
+</ParamField>
+
+### Performance Metrics
+
+<ParamField path="generation_time" type="float" default={0}>
+  Total generation time in seconds. This is TTFT + TPOT × number of tokens.
+</ParamField>
+
+<ParamField path="ttft" type="float" default={0.0}>
+  Time to first token in seconds.
+</ParamField>
+
+### Model Configuration Parameters
+
+<ParamField path="temperature" type="number" default={1}>
+  Controls randomness in the output (0-2 range).
+</ParamField>
+
+<ParamField path="top_p" type="number" default={1}>
+  Nucleus sampling parameter for token selection.
+</ParamField>
+
+<ParamField path="frequency_penalty" type="number">
+  Penalty for token frequency to reduce repetition.
+</ParamField>
+
+<ParamField path="presence_penalty" type="number">
+  Penalty for token presence to encourage new topics.
+</ParamField>
+
+<ParamField path="stop" type="array[string]">
+  Stop sequences for generation termination.
+</ParamField>
+
+<ParamField path="stream" type="boolean" default={false}>
+  Whether the LLM inference was streamed.
+</ParamField>
+
+### Tool and Function Parameters
+
+<ParamField path="tools" type="array">
+  List of tools available to the model.
+  
+  **Tool Structure:**
+  - `type` (string): Currently only "function" is supported
+  - `function` (object): Function definition with name, description, and parameters
+</ParamField>
+
+<ParamField path="tool_choice" type="object">
+  Controls which tool is called by the model.
+  
+  **Structure:**
+  - `type` (string): "function"
+  - `function` (object): Function specification with name
+</ParamField>
+
+### Response Format
+
+<ParamField path="response_format" type="object">
+  Response format specification for structured outputs.
+  
+  **Supported Types:**
+  - `text`: Default text response
+  - `json_object`: JSON object response
+  - `json_schema`: Structured JSON with schema validation
+</ParamField>
+
+### Customer and Identification Parameters
+
+<ParamField path="customer_params" type="object">
+  Customer-related parameters for user tracking.
+  
+  **Structure:**
+  - `customer_identifier` (string): Unique customer identifier
+  - `name` (string, optional): Customer name
+  - `email` (string, optional): Customer email
+</ParamField>
+
+<ParamField path="custom_identifier" type="string">
+  Custom identifier for fast querying (indexed field).
+</ParamField>
+
+<ParamField path="group_identifier" type="string">
+  Group identifier for organizing related logs.
+</ParamField>
+
+<ParamField path="thread_identifier" type="string">
+  Unique identifier for conversation threads.
+</ParamField>
+
+### Prompt Management
+
+<ParamField path="prompt_id" type="string">
+  ID of the prompt used. Set `is_custom_prompt` to true for custom prompt IDs.
+</ParamField>
+
+<ParamField path="prompt_name" type="string">
+  Name of the prompt used.
+</ParamField>
+
+<ParamField path="is_custom_prompt" type="boolean" default={false}>
+  Whether the prompt is a custom prompt.
+</ParamField>
+
+### Status and Error Handling
+
+<ParamField path="status_code" type="integer" default={200}>
+  HTTP status code of the LLM inference. Supports all valid HTTP status codes.
+</ParamField>
+
+<ParamField path="error_message" type="string">
+  Error message if the LLM inference failed.
+</ParamField>
+
+<ParamField path="warnings" type="string">
+  Any warnings that occurred during the LLM inference.
+</ParamField>
+
+### Metadata and Additional Data
+
+<ParamField path="metadata" type="dict">
+  Custom key-value pairs for additional context and filtering.
+</ParamField>
+
+<ParamField path="full_request" type="object">
+  The complete request object including all configuration parameters.
+</ParamField>
+
+<ParamField path="positive_feedback" type="boolean">
+  Whether the user liked the output (true = liked).
+</ParamField>
+
+### Usage and Caching
+
+<ParamField path="usage" type="object">
+  Usage details including prompt caching information.
+  
+  **Structure:**
+  - `prompt_tokens_details` (object): Contains `cached_tokens` count
+  - `cache_creation_prompt_tokens` (integer): Cache creation tokens (Anthropic only)
+</ParamField>
+
+### API Control Parameters
+
+<ParamField path="keywordsai_api_controls" type="object">
+  Controls for Keywords AI API behavior.
+  
+  **Structure:**
+  - `block` (boolean, default=true): If false, returns immediately with status
+</ParamField>
+
+## Returns
+
+Returns a dictionary containing the API response:
+
+```python
+{
+    "message": "log successful"
+}
+```
+
+**Note**: The log create endpoint is designed for high throughput and returns only a success message, not the full log object. Use the `list()` or `get()` methods to retrieve detailed log information.
+
+## Examples
+
+### Basic Synchronous Example
+
+```python
+import os
+from dotenv import load_dotenv
+from keywordsai.logs.api import LogAPI
+
+load_dotenv()
+
+def create_log_sync():
+    """Basic synchronous log creation"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    log_api_client = LogAPI(api_key=api_key)
+    
+    log_params = {
+        "model": "gpt-4",
+        "prompt_messages": [
+            {"role": "user", "content": "What are the benefits of renewable energy?"}
+        ],
+        "completion_message": {
+            "role": "assistant", 
+            "content": "Renewable energy offers environmental sustainability, cost savings, and energy independence."
+        },
+        "prompt_tokens": 15,
+        "completion_tokens": 25,
+        "cost": 0.0008,
+        "generation_time": 0.8,
+        "temperature": 0.7,
+        "customer_params": {
+            "customer_identifier": "user_12345",
+            "name": "John Doe"
+        },
+        "custom_identifier": "renewable_energy_qa",
+        "status_code": 200,
+        "metadata": {"topic": "renewable_energy", "source": "web_chat"}
+    }
+    
+    try:
+        response = log_api_client.create(log_params)
+        print(f"✓ Log created: {response['message']}")
+        return response
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return None
+
+# Usage
+create_log_sync()
+```
+
+### Asynchronous Example
+
+```python
+import asyncio
+import os
+from dotenv import load_dotenv
+from keywordsai.logs.api import LogAPI
+
+load_dotenv()
+
+async def create_log_async():
+    """Asynchronous log creation"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    log_api_client = LogAPI(api_key=api_key)
+    
+    log_params = {
+        "model": "gpt-4",
+        "prompt_messages": [
+            {"role": "user", "content": "How does solar energy work?"}
+        ],
+        "completion_message": {
+            "role": "assistant", 
+            "content": "Solar energy works by converting sunlight into electricity using photovoltaic cells."
+        },
+        "prompt_tokens": 12,
+        "completion_tokens": 18,
+        "cost": 0.0006,
+        "generation_time": 0.6,
+        "temperature": 0.7,
+        "customer_params": {
+            "customer_identifier": "user_12345",
+            "name": "John Doe"
+        },
+        "custom_identifier": "solar_energy_qa",
+        "status_code": 200,
+        "metadata": {"topic": "solar_energy", "source": "async_example"}
+    }
+    
+    try:
+        response = await log_api_client.acreate(log_params)
+        print(f"✓ Async log created: {response['message']}")
+        return response
+    except Exception as e:
+        print(f"✗ Async error: {e}")
+        return None
+
+# Usage
+asyncio.run(create_log_async())
+```
+
+## Convenience Functions
+
+You can also use the convenience function to create a LogAPI client:
+
+```python
+from keywordsai import create_log_client
+
+client = create_log_client(api_key="your-api-key")
+response = client.create(log_data)

@@ -1,0 +1,252 @@
+---
+title: "Get Prompt"
+description: "Retrieve a specific prompt by its ID"
+---
+
+## Overview
+
+The `get()` method allows you to retrieve a specific prompt by its unique identifier. This returns the complete prompt information including content, variables, and metadata.
+
+## Usage example
+
+```python
+from keywordsai.prompts.api import PromptAPI
+import asyncio
+import os
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+
+# Create the client
+client = PromptAPI(
+    api_key=os.getenv("KEYWORDS_AI_API_KEY"),
+    base_url=os.getenv("KEYWORDS_AI_BASE_URL")
+)
+
+# Synchronous example
+prompt_id = "fa51377c8e8d42e1ad54c5864f2cd201"
+prompt = client.get(prompt_id)
+
+print(f"Prompt Name: {prompt.name}")
+print(f"ID: {prompt.prompt_id}")
+print(f"Description: {prompt.description}")
+print(f"Live Version: {prompt.live_version}")
+
+# Asynchronous example
+async def get_prompt_async():
+    prompt = await client.aget(prompt_id)
+    print(f"Async - Prompt Name: {prompt.name}")
+    print(f"Async - Live Version: {prompt.live_version}")
+
+# Run the async function
+asyncio.run(get_prompt_async())
+```
+
+## Parameters
+
+<ParamField path="prompt_id" type="string">
+  The unique identifier of the prompt to retrieve.
+</ParamField>
+
+## Returns
+
+Returns a `Prompt` object containing the complete prompt information:
+
+```python
+Prompt(
+    prompt_id="fa51377c8e8d42e1ad54c5864f2cd201",
+    name="20games",
+    description="",
+    live_version=10883,
+    created_at="2024-01-15T10:30:00Z",
+    updated_at="2024-01-20T14:45:00Z",
+    metadata={},
+    variables=[],
+    starred=False
+)
+```
+
+## Examples
+
+### Basic Synchronous Example
+
+```python
+import os
+from dotenv import load_dotenv
+from keywordsai.prompts.api import PromptAPI
+
+load_dotenv()
+
+def get_prompt_sync():
+    """Basic synchronous prompt retrieval"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    base_url = os.getenv("KEYWORDS_AI_BASE_URL")
+    client = PromptAPI(api_key=api_key, base_url=base_url)
+    
+    prompt_id = "fa51377c8e8d42e1ad54c5864f2cd201"
+    
+    try:
+        prompt = client.get(prompt_id)
+        print(f"✓ Retrieved prompt: {prompt.name}")
+        print(f"  - ID: {prompt.prompt_id}")
+        print(f"  - Description: {prompt.description or 'No description'}")
+        print(f"  - Live Version: {prompt.live_version}")
+        print(f"  - Starred: {prompt.starred}")
+        
+        return prompt
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return None
+
+# Usage
+get_prompt_sync()
+```
+
+### Error Handling for Missing Prompts
+
+```python
+def get_prompt_with_error_handling():
+    """Get prompt with proper error handling"""
+    client = PromptAPI(
+        api_key=os.getenv("KEYWORDS_AI_API_KEY"),
+        base_url=os.getenv("KEYWORDS_AI_BASE_URL")
+    )
+    
+    prompt_id = "nonexistent_prompt_id"
+    
+    try:
+        prompt = client.get(prompt_id)
+        print(f"✓ Found prompt: {prompt.name}")
+        return prompt
+    except Exception as e:
+        if "404" in str(e) or "not found" in str(e).lower():
+            print(f"✗ Prompt not found: {prompt_id}")
+        else:
+            print(f"✗ Error retrieving prompt: {e}")
+        return None
+
+# Usage
+get_prompt_with_error_handling()
+```
+
+### Detailed Prompt Information
+
+```python
+def get_prompt_detailed():
+    """Get prompt with detailed information display"""
+    client = PromptAPI(
+        api_key=os.getenv("KEYWORDS_AI_API_KEY"),
+        base_url=os.getenv("KEYWORDS_AI_BASE_URL")
+    )
+    
+    prompt_id = "fa51377c8e8d42e1ad54c5864f2cd201"
+    
+    try:
+        prompt = client.get(prompt_id)
+        print(f"✓ Prompt Details:")
+        print(f"  - Name: {prompt.name}")
+        print(f"  - ID: {prompt.prompt_id}")
+        print(f"  - Description: {prompt.description or 'No description'}")
+        print(f"  - Live Version: {prompt.live_version}")
+        print(f"  - Starred: {prompt.starred}")
+        print(f"  - Created: {prompt.created_at}")
+        print(f"  - Updated: {prompt.updated_at}")
+        
+        if prompt.metadata:
+            print(f"  - Metadata: {prompt.metadata}")
+        
+        if prompt.variables:
+            print(f"  - Variables: {len(prompt.variables)} defined")
+            for var in prompt.variables:
+                print(f"    • {var}")
+        
+        return prompt
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return None
+
+# Usage
+get_prompt_detailed()
+```
+
+### Asynchronous Example
+
+```python
+import asyncio
+import os
+from dotenv import load_dotenv
+from keywordsai.prompts.api import PromptAPI
+
+load_dotenv()
+
+async def get_prompt_async():
+    """Asynchronous prompt retrieval"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    base_url = os.getenv("KEYWORDS_AI_BASE_URL")
+    client = PromptAPI(api_key=api_key, base_url=base_url)
+    
+    prompt_id = "fa51377c8e8d42e1ad54c5864f2cd201"
+    
+    try:
+        prompt = await client.aget(prompt_id)
+        print(f"✓ Async retrieved: {prompt.name}")
+        print(f"  - Live Version: {prompt.live_version}")
+        print(f"  - Starred: {prompt.starred}")
+        
+        return prompt
+    except Exception as e:
+        print(f"✗ Async error: {e}")
+        return None
+
+# Usage
+asyncio.run(get_prompt_async())
+```
+
+### Asynchronous with Multiple Prompts
+
+```python
+async def get_multiple_prompts_async():
+    """Get multiple prompts asynchronously"""
+    client = PromptAPI(
+        api_key=os.getenv("KEYWORDS_AI_API_KEY"),
+        base_url=os.getenv("KEYWORDS_AI_BASE_URL")
+    )
+    
+    prompt_ids = [
+        "fa51377c8e8d42e1ad54c5864f2cd201",
+        "another-prompt-id-here"
+    ]
+    
+    try:
+        # Get all prompts concurrently
+        prompts = await asyncio.gather(
+            *[client.aget(prompt_id) for prompt_id in prompt_ids],
+            return_exceptions=True
+        )
+        
+        for i, result in enumerate(prompts):
+            if isinstance(result, Exception):
+                print(f"✗ Error getting prompt {prompt_ids[i]}: {result}")
+            else:
+                print(f"✓ Got prompt: {result.name} (ID: {result.prompt_id})")
+        
+        return [p for p in prompts if not isinstance(p, Exception)]
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return []
+
+# Usage
+asyncio.run(get_multiple_prompts_async())
+```
+
+## Convenience Functions
+
+You can also use the convenience function to create a PromptAPI client:
+
+```python
+from keywordsai import create_prompt_client
+
+client = create_prompt_client(api_key="your-api-key")
+prompt = client.get(prompt_id)
+print(f"Retrieved: {prompt.name}")
+```

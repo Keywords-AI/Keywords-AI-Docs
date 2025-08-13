@@ -1,0 +1,262 @@
+---
+title: "Logs API Overview"
+description: "Manage conversation logs and request/response data with the Keywords AI Python SDK"
+---
+
+## Overview
+
+The Logs API allows you to create, retrieve, and list conversation logs. Logs capture the complete context of interactions including messages, model information, token usage, and metadata.
+
+## Key Features
+
+- **Create logs** for conversations and API requests
+- **Retrieve specific logs** by ID
+- **List logs** with filtering and pagination
+- **Track token usage** and costs
+- **Store custom metadata** for analysis
+
+## Quick Start
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Create a log
+log = client.logs.create(
+    messages=[
+        {"role": "user", "content": "What is machine learning?"},
+        {"role": "assistant", "content": "Machine learning is a subset of artificial intelligence..."}
+    ],
+    model="gpt-4",
+    prompt_tokens=20,
+    completion_tokens=50,
+    total_tokens=70
+)
+
+print(f"Created log with ID: {log.id}")
+```
+
+## Available Methods
+
+### Synchronous Methods
+
+| Method | Description |
+|--------|-------------|
+| [`create()`](/python-sdk/logs/create) | Create a new log entry |
+| [`list()`](/python-sdk/logs/list) | List logs with optional filtering |
+| [`get()`](/python-sdk/logs/get) | Retrieve a specific log by ID |
+
+### Asynchronous Methods
+
+| Method | Description |
+|--------|-------------|
+| [`acreate()`](/python-sdk/logs/create) | Async version of create |
+| [`alist()`](/python-sdk/logs/list) | Async version of list |
+| [`aget()`](/python-sdk/logs/get) | Async version of get |
+
+<Note>
+  Update and delete operations are not supported for logs to maintain data integrity and audit trails.
+</Note>
+
+## Log Structure
+
+A log entry contains the following key information:
+
+```python
+{
+    "id": "log_123456",
+    "messages": [
+        {"role": "user", "content": "Hello"},
+        {"role": "assistant", "content": "Hi there!"}
+    ],
+    "model": "gpt-4",
+    "prompt_tokens": 10,
+    "completion_tokens": 15,
+    "total_tokens": 25,
+    "cost": 0.0012,
+    "latency": 1.5,
+    "created_at": "2024-01-15T10:30:00Z",
+    "metadata": {
+        "user_id": "user_789",
+        "session_id": "session_456"
+    }
+}
+```
+
+## Common Use Cases
+
+### 1. Logging Chat Conversations
+
+```python
+# Log a multi-turn conversation
+log = client.logs.create(
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "What's the weather like?"},
+        {"role": "assistant", "content": "I don't have access to real-time weather data."},
+        {"role": "user", "content": "How can I check the weather?"},
+        {"role": "assistant", "content": "You can check weather apps or websites."}
+    ],
+    model="gpt-3.5-turbo",
+    prompt_tokens=45,
+    completion_tokens=32,
+    total_tokens=77
+)
+```
+
+### 2. Tracking API Usage
+
+```python
+# Log API requests with metadata
+log = client.logs.create(
+    messages=[{"role": "user", "content": "Summarize this text"}],
+    model="gpt-4",
+    prompt_tokens=100,
+    completion_tokens=50,
+    total_tokens=150,
+    metadata={
+        "api_endpoint": "/summarize",
+        "user_id": "user_123",
+        "request_id": "req_456"
+    }
+)
+```
+
+### 3. Performance Monitoring
+
+```python
+# Log with performance metrics
+log = client.logs.create(
+    messages=[{"role": "user", "content": "Generate code"}],
+    model="gpt-4",
+    prompt_tokens=50,
+    completion_tokens=200,
+    total_tokens=250,
+    latency=2.3,  # Response time in seconds
+    cost=0.005,   # Cost in USD
+    metadata={
+        "temperature": 0.7,
+        "max_tokens": 500
+    }
+)
+```
+
+## Filtering and Search
+
+When listing logs, you can apply various filters:
+
+```python
+# Filter by model
+logs = client.logs.list(
+    model="gpt-4",
+    limit=50
+)
+
+# Filter by date range
+from datetime import datetime, timedelta
+
+end_date = datetime.now()
+start_date = end_date - timedelta(days=7)
+
+logs = client.logs.list(
+    created_after=start_date.isoformat(),
+    created_before=end_date.isoformat(),
+    limit=100
+)
+
+# Filter by metadata
+logs = client.logs.list(
+    metadata_filter={"user_id": "user_123"},
+    limit=25
+)
+```
+
+## Best Practices
+
+### 1. Include Relevant Metadata
+
+```python
+# Good - includes context for analysis
+log = client.logs.create(
+    messages=[...],
+    model="gpt-4",
+    metadata={
+        "user_id": "user_123",
+        "session_id": "session_456",
+        "feature": "chat_assistant",
+        "version": "1.2.0"
+    }
+)
+```
+
+### 2. Log Errors and Edge Cases
+
+```python
+try:
+    # Your AI operation
+    response = generate_response(prompt)
+    
+    log = client.logs.create(
+        messages=[{"role": "user", "content": prompt}],
+        model="gpt-4",
+        status="success",
+        metadata={"operation": "text_generation"}
+    )
+except Exception as e:
+    # Log the error
+    log = client.logs.create(
+        messages=[{"role": "user", "content": prompt}],
+        model="gpt-4",
+        status="error",
+        metadata={
+            "operation": "text_generation",
+            "error": str(e),
+            "error_type": type(e).__name__
+        }
+    )
+```
+
+### 3. Use Async for High Volume
+
+```python
+import asyncio
+
+async def log_batch(conversations):
+    tasks = []
+    for conv in conversations:
+        task = client.logs.acreate(
+            messages=conv["messages"],
+            model=conv["model"],
+            **conv.get("metadata", {})
+        )
+        tasks.append(task)
+    
+    results = await asyncio.gather(*tasks)
+    return results
+```
+
+## Error Handling
+
+```python
+from keywordsai.exceptions import ValidationError, RateLimitError
+
+try:
+    log = client.logs.create(
+        messages=[{"role": "user", "content": "Hello"}],
+        model="gpt-4"
+    )
+except ValidationError as e:
+    print(f"Invalid log data: {e}")
+except RateLimitError:
+    print("Rate limit exceeded, please retry later")
+except Exception as e:
+    print(f"Unexpected error: {e}")
+```
+
+## Next Steps
+
+- Learn how to [create logs](/python-sdk/logs/create)
+- Explore [listing and filtering logs](/python-sdk/logs/list)
+- Understand how to [retrieve specific logs](/python-sdk/logs/get)
+- See [complete examples](/python-sdk/examples) for real-world usage

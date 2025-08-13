@@ -1,0 +1,425 @@
+---
+title: "Delete Experiment"
+description: "Remove an experiment from your account"
+---
+
+## Overview
+
+The `delete` method allows you to permanently remove an experiment from your account. This action is irreversible and will delete all associated data including results and configurations.
+
+## Method Signature
+
+### Synchronous
+```python
+def delete(experiment_id: str) -> Dict[str, Any]
+```
+
+### Asynchronous
+```python
+async def delete(experiment_id: str) -> Dict[str, Any]
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `experiment_id` | `str` | Yes | The unique identifier of the experiment to delete |
+
+## Returns
+
+Returns a dictionary confirming the deletion with details about the deleted experiment.
+
+## Examples
+
+### Basic Deletion
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Delete an experiment
+result = client.experiments.delete("exp_123")
+
+print(f"Deleted experiment: {result['experiment_id']}")
+print(f"Deletion confirmed at: {result['deleted_at']}")
+```
+
+### Safe Deletion with Confirmation
+```python
+# Get experiment details before deletion
+experiment = client.experiments.get("exp_123")
+
+print(f"About to delete experiment: {experiment['name']}")
+print(f"Status: {experiment['status']}")
+print(f"Created: {experiment['created_at']}")
+
+# Confirm deletion
+confirm = input("Are you sure you want to delete this experiment? (yes/no): ")
+
+if confirm.lower() == 'yes':
+    result = client.experiments.delete("exp_123")
+    print(f"Experiment {result['experiment_id']} has been deleted")
+else:
+    print("Deletion cancelled")
+```
+
+### Check Status Before Deletion
+```python
+# Only delete if experiment is in appropriate status
+experiment = client.experiments.get("exp_123")
+
+if experiment['status'] in ['draft', 'completed']:
+    result = client.experiments.delete("exp_123")
+    print(f"Deleted {experiment['status']} experiment: {experiment['name']}")
+elif experiment['status'] == 'running':
+    print("Cannot delete running experiment. Stop it first.")
+    # Optionally stop the experiment first
+    # client.experiments.stop("exp_123")
+    # result = client.experiments.delete("exp_123")
+else:
+    print(f"Experiment status '{experiment['status']}' - check if deletion is appropriate")
+```
+
+### Asynchronous Deletion
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def delete_experiment_example():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    try:
+        result = await client.experiments.delete("exp_123")
+        print(f"Async deletion completed: {result['experiment_id']}")
+        return result
+    except Exception as e:
+        print(f"Deletion failed: {e}")
+        return None
+
+asyncio.run(delete_experiment_example())
+```
+
+### Batch Deletion
+```python
+# Delete multiple experiments
+experiment_ids = ["exp_123", "exp_456", "exp_789"]
+deleted_experiments = []
+failed_deletions = []
+
+for exp_id in experiment_ids:
+    try:
+        result = client.experiments.delete(exp_id)
+        deleted_experiments.append(result)
+        print(f"✅ Deleted: {exp_id}")
+    except Exception as e:
+        failed_deletions.append({"id": exp_id, "error": str(e)})
+        print(f"❌ Failed to delete {exp_id}: {e}")
+
+print(f"\nSummary:")
+print(f"Successfully deleted: {len(deleted_experiments)}")
+print(f"Failed deletions: {len(failed_deletions)}")
+
+if failed_deletions:
+    print("\nFailed deletions:")
+    for failure in failed_deletions:
+        print(f"- {failure['id']}: {failure['error']}")
+```
+
+### Conditional Deletion
+```python
+# Delete experiments based on criteria
+experiments_response = client.experiments.list(status="draft", limit=100)
+draft_experiments = experiments_response['experiments']
+
+# Delete old draft experiments (older than 30 days)
+from datetime import datetime, timedelta
+
+cutoff_date = datetime.now() - timedelta(days=30)
+old_drafts = []
+
+for experiment in draft_experiments:
+    created_at = datetime.fromisoformat(experiment['created_at'].replace('Z', '+00:00'))
+    if created_at < cutoff_date:
+        old_drafts.append(experiment)
+
+print(f"Found {len(old_drafts)} old draft experiments to delete")
+
+for experiment in old_drafts:
+    try:
+        result = client.experiments.delete(experiment['id'])
+        print(f"Deleted old draft: {experiment['name']}")
+    except Exception as e:
+        print(f"Failed to delete {experiment['name']}: {e}")
+```
+
+### Backup Before Deletion
+```python
+import json
+from datetime import datetime
+
+# Backup experiment data before deletion
+def backup_and_delete_experiment(experiment_id):
+    # Get experiment data
+    experiment = client.experiments.get(experiment_id)
+    
+    # Create backup file
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    backup_filename = f"experiment_backup_{experiment_id}_{timestamp}.json"
+    
+    # Save backup
+    with open(backup_filename, 'w', encoding='utf-8') as f:
+        json.dump(experiment, f, indent=2, ensure_ascii=False)
+    
+    print(f"Backup saved to: {backup_filename}")
+    
+    # Delete experiment
+    result = client.experiments.delete(experiment_id)
+    print(f"Experiment deleted: {result['experiment_id']}")
+    
+    return backup_filename, result
+
+# Usage
+backup_file, deletion_result = backup_and_delete_experiment("exp_123")
+print(f"Backup: {backup_file}")
+print(f"Deleted: {deletion_result['experiment_id']}")
+```
+
+### Asynchronous Batch Deletion
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def batch_delete_experiments(experiment_ids):
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    async def delete_single_experiment(exp_id):
+        try:
+            result = await client.experiments.delete(exp_id)
+            print(f"✅ Deleted: {exp_id}")
+            return result
+        except Exception as e:
+            print(f"❌ Failed to delete {exp_id}: {e}")
+            return None
+    
+    # Delete all experiments concurrently
+    tasks = [delete_single_experiment(exp_id) for exp_id in experiment_ids]
+    results = await asyncio.gather(*tasks)
+    
+    # Filter successful deletions
+    successful_deletions = [result for result in results if result is not None]
+    
+    print(f"\nDeleted {len(successful_deletions)} out of {len(experiment_ids)} experiments")
+    return successful_deletions
+
+# Usage
+experiment_ids = ["exp_123", "exp_456", "exp_789"]
+deleted = asyncio.run(batch_delete_experiments(experiment_ids))
+```
+
+### Delete with Metadata Check
+```python
+# Delete experiments with specific metadata
+experiments_response = client.experiments.list(limit=100)
+experiments = experiments_response['experiments']
+
+# Find experiments marked for deletion
+to_delete = []
+for experiment in experiments:
+    metadata = experiment.get('metadata', {})
+    if metadata.get('marked_for_deletion') or metadata.get('temporary'):
+        to_delete.append(experiment)
+
+print(f"Found {len(to_delete)} experiments marked for deletion")
+
+for experiment in to_delete:
+    try:
+        # Double-check metadata before deletion
+        current_exp = client.experiments.get(experiment['id'])
+        current_metadata = current_exp.get('metadata', {})
+        
+        if current_metadata.get('marked_for_deletion'):
+            result = client.experiments.delete(experiment['id'])
+            print(f"Deleted marked experiment: {experiment['name']}")
+        else:
+            print(f"Skipped {experiment['name']} - no longer marked for deletion")
+    except Exception as e:
+        print(f"Failed to delete {experiment['name']}: {e}")
+```
+
+### Deletion with Audit Log
+```python
+import csv
+from datetime import datetime
+
+# Create audit log for deletions
+def delete_with_audit(experiment_id, reason=""):
+    # Get experiment info before deletion
+    experiment = client.experiments.get(experiment_id)
+    
+    # Delete experiment
+    result = client.experiments.delete(experiment_id)
+    
+    # Log deletion
+    audit_entry = {
+        'timestamp': datetime.now().isoformat(),
+        'experiment_id': experiment_id,
+        'experiment_name': experiment['name'],
+        'status_at_deletion': experiment['status'],
+        'created_at': experiment['created_at'],
+        'deleted_by': 'current_user',  # Replace with actual user info
+        'reason': reason,
+        'variants_count': len(experiment.get('variants', [])),
+        'had_results': 'current_results' in experiment
+    }
+    
+    # Append to audit log file
+    audit_file = 'experiment_deletions_audit.csv'
+    file_exists = False
+    try:
+        with open(audit_file, 'r'):
+            file_exists = True
+    except FileNotFoundError:
+        pass
+    
+    with open(audit_file, 'a', newline='', encoding='utf-8') as csvfile:
+        fieldnames = audit_entry.keys()
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        
+        if not file_exists:
+            writer.writeheader()
+        
+        writer.writerow(audit_entry)
+    
+    print(f"Deleted experiment {experiment_id} and logged to {audit_file}")
+    return result
+
+# Usage
+result = delete_with_audit("exp_123", "Experiment completed and no longer needed")
+```
+
+### Safe Deletion Function
+```python
+def safe_delete_experiment(experiment_id, force=False):
+    """
+    Safely delete an experiment with checks and confirmations
+    """
+    try:
+        # Get experiment details
+        experiment = client.experiments.get(experiment_id)
+        
+        # Check if experiment can be safely deleted
+        if experiment['status'] == 'running' and not force:
+            return {
+                'success': False,
+                'error': 'Cannot delete running experiment without force=True'
+            }
+        
+        # Check if experiment has important results
+        if 'current_results' in experiment and not force:
+            total_requests = experiment['current_results'].get('total_requests', 0)
+            if total_requests > 1000:
+                return {
+                    'success': False,
+                    'error': f'Experiment has {total_requests} requests. Use force=True to delete.'
+                }
+        
+        # Perform deletion
+        result = client.experiments.delete(experiment_id)
+        
+        return {
+            'success': True,
+            'result': result,
+            'experiment_name': experiment['name']
+        }
+        
+    except Exception as e:
+        return {
+            'success': False,
+            'error': str(e)
+        }
+
+# Usage
+deletion_result = safe_delete_experiment("exp_123")
+
+if deletion_result['success']:
+    print(f"Successfully deleted: {deletion_result['experiment_name']}")
+else:
+    print(f"Deletion failed: {deletion_result['error']}")
+```
+
+## Error Handling
+
+```python
+try:
+    result = client.experiments.delete("exp_123")
+    print(f"Experiment deleted successfully: {result['experiment_id']}")
+except Exception as e:
+    error_msg = str(e).lower()
+    
+    if "not found" in error_msg:
+        print("Experiment not found - may have already been deleted")
+    elif "permission" in error_msg:
+        print("Permission denied - you don't have permission to delete this experiment")
+    elif "running" in error_msg:
+        print("Cannot delete running experiment - stop it first")
+    elif "has active" in error_msg:
+        print("Experiment has active dependencies - resolve them first")
+    else:
+        print(f"Deletion failed: {e}")
+```
+
+## Safety Considerations
+
+- **Irreversible Action**: Deletion permanently removes all experiment data
+- **Running Experiments**: Some systems may prevent deletion of running experiments
+- **Data Loss**: All results, configurations, and metadata will be lost
+- **Dependencies**: Check for any dependent systems or reports before deletion
+- **Backup**: Consider backing up important experiment data before deletion
+
+## Best Practices
+
+- Always confirm deletion for important experiments
+- Check experiment status before deletion
+- Backup experiment data if results are valuable
+- Use batch deletion carefully with proper error handling
+- Maintain audit logs for compliance and tracking
+- Consider "soft deletion" (marking as deleted) for critical experiments
+
+## Alternative Approaches
+
+### Soft Deletion
+```python
+# Instead of deleting, mark as deleted
+experiment = client.experiments.update(
+    experiment_id="exp_123",
+    metadata={
+        "deleted": True,
+        "deleted_at": datetime.now().isoformat(),
+        "deleted_by": "user_123"
+    }
+)
+print("Experiment marked as deleted (soft deletion)")
+```
+
+### Archiving
+```python
+# Archive instead of delete
+experiment = client.experiments.update(
+    experiment_id="exp_123",
+    metadata={
+        "archived": True,
+        "archived_at": datetime.now().isoformat(),
+        "archive_reason": "Experiment completed, results preserved"
+    }
+)
+print("Experiment archived")
+```
+
+## Common Use Cases
+
+- Cleaning up old draft experiments
+- Removing failed or invalid experiments
+- Batch deletion of temporary experiments
+- Removing experiments after data export
+- Cleanup during account migration
+- Removing experiments with sensitive data
