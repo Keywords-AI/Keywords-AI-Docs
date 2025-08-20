@@ -1,0 +1,61 @@
+---
+title: "Log Images"
+description: "How to log LLM requests that include images"
+---
+
+Logging images with Keywords AI follows the same process as regular logging, but includes image URLs in the message content.
+
+## Image Format
+
+Include images in your prompt messages using this JSON structure:
+
+```json
+{
+  "type": "image_url",
+  "image_url": {
+    "url": "https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/integrations/integration_cards/openai_agent_v0.png",
+    "detail": "auto"
+  }
+}
+```
+
+## Example Request
+
+```json
+{
+  "model": "gpt-4-vision-preview",
+  "prompt_messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "What do you see in this image?"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/integrations/integration_cards/openai_agent_v0.png",
+            "detail": "auto"
+          }
+        }
+      ]
+    }
+  ],
+  "completion_message": {
+    "role": "assistant",
+    "content": "This image is the logo for OpenAI Agent, featuring a circular design with a stylized 'O' shape."
+  },
+  "prompt_tokens": 1120,
+  "completion_tokens": 23
+}
+```
+
+## Key Points
+
+- Use vision-capable models for evaluations.
+- Images are included as `image_url` objects within the message content array
+- The `detail` parameter can be set to `auto`, `low`, or `high`
+- All other logging parameters remain the same as regular text logging
+
+For complete API reference, see the [Request Logging Endpoint](https://docs.keywordsai.co/api-endpoints/integration/request-logging-endpoint) documentation.
