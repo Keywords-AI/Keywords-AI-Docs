@@ -1,0 +1,180 @@
+---
+title: "Log tool calls"
+description: "How to log tool calls and function calling interactions with Keywords AI"
+---
+
+Keywords AI allows you to log tool calls and function calling interactions for monitoring, debugging, and analytics purposes.
+
+Tool calls enable AI models to interact with external functions and APIs. Logging these interactions helps you:
+
+- **Monitor function usage** and performance
+- **Debug tool calling** issues and errors
+- **Analyze user interactions** with AI-powered tools
+- **Track costs and usage** across different functions
+
+## Simple Example
+
+Here's a minimal example focusing just on the tool-related fields:
+
+```python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "model": "gpt-4",
+    "prompt_messages": [
+        {"role": "user", "content": "Get weather for NYC"},
+        {
+            "role": "assistant",
+            "tool_calls": [{
+                "id": "call_123",
+                "type": "function",
+                "function": {
+                    "name": "get_weather",
+                    "arguments": '{"location": "New York, NY"}'
+                }
+            }]
+        }
+    ],
+    "tools": [{
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get current weather",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {"type": "string"}
+                },
+                "required": ["location"]
+            }
+        }
+    }]
+}
+
+response = requests.post(url, headers=headers, json=payload)
+```
+
+## Key Tool Call Parameters
+
+### Tool Calls Structure
+- **`tool_calls`**: Array of function calls made by the assistant
+  - **`id`**: Unique identifier for the tool call
+  - **`type`**: Always "function" for function calls
+  - **`function.name`**: Name of the called function
+  - **`function.arguments`**: JSON string of function arguments
+
+### Tool Choice
+- **`tool_choice`**: Specifies which tool the model should use
+  - **`type`**: "function" for function calling
+  - **`function.name`**: Name of the preferred function
+
+### Tools Definition
+- **`tools`**: Array of available functions
+  - **`type`**: "function" for function definitions
+  - **`function.name`**: Function name
+  - **`function.description`**: What the function does
+  - **`function.parameters`**: JSON schema for function parameters
+
+## Best Practices
+
+1. **Include complete tool definitions** in the `tools` array
+2. **Use descriptive function names** and descriptions
+3. **Log both successful and failed** tool calls
+4. **Include customer identification** for user tracking
+5. **Add relevant metadata** for filtering and analysis
+
+## Viewing Tool Call Logs
+
+Tool call logs appear in your Keywords AI dashboard with:
+
+- Function names and arguments
+- Execution results and errors
+- Performance metrics (latency, tokens)
+- User context and metadata
+
+Use the dashboard filters to analyze tool usage patterns and optimize your function calling implementations.
+
+## Complete Example
+
+Here's a full example with all available parameters:
+
+```python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+payload = {
+    "model": "gpt-4",
+    "prompt_messages": [
+        {
+          "role": "user",
+          "content": "What's the weather like in Boston?"
+        },
+        {
+          "role": "assistant",
+          "content": None,
+          "tool_calls": [
+            {
+              "id": "call_abc123",
+              "type": "function",
+              "function": {
+                "name": "get_current_weather",
+                "arguments": '{"location": "Boston, MA"}'
+              }
+            }
+          ]
+        }
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "The current weather in Boston is 72°F and sunny."
+    },
+    "tool_choice": {
+        "type": "function",
+        "function": {
+            "name": "get_current_weather"
+        }
+    },
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_current_weather",
+          "description": "Get the current weather in a given location",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string",
+                "description": "The city and state, e.g. San Francisco, CA"
+              },
+              "unit": {
+                "type": "string", 
+                "enum": ["celsius", "fahrenheit"]
+              }
+            },
+            "required": ["location"]
+          }
+        }
+      }
+    ],
+    "customer_params": {
+        "customer_identifier": "customer_123"
+    },
+    "prompt_tokens": 25,
+    "completion_tokens": 12,
+    "cost": 0.00037,
+    "timestamp": "2024-04-15T08:30:37.721313Z"
+}
+
+response = requests.post(url, headers=headers, json=payload)
+```

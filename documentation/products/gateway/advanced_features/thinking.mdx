@@ -1,0 +1,40 @@
+---
+title: "Enable thinking"
+description: "How to enable thinking mode for supported models"
+---
+
+Thinking mode allows supported models to show their reasoning process before providing the final answer. This feature is currently available for select models like Claude Sonnet 4.
+
+## Basic Usage
+
+To enable thinking mode, add the `thinking` parameter to your request:
+
+```python
+payload = {
+    "model": "claude-sonnet-4-20250514",
+    "max_tokens": 16000,
+    "thinking": {
+        "type": "enabled",
+        "budget_tokens": 10000
+    },
+    "messages": [
+        {
+            "role": "user",
+            "content": "Are there an infinite number of prime numbers such that n mod 4 == 3?"
+        }
+    ]
+}
+```
+
+## Parameters
+
+- **type**: Set to `"enabled"` to activate thinking mode
+- **budget_tokens**: Maximum number of tokens allocated for the thinking process (optional)
+
+## Supported Models
+
+- choose models that support thinking like `gpt-5`, `claude-sonnet-4-20250514`.
+
+## Response Format
+
+When thinking is enabled, the response will include additional fields showing the model's reasoning process. See the [Log Thinking](/documentation/products/logs/log_thinking) documentation for details on the response structure.
