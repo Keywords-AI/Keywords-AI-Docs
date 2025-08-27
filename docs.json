@@ -55,7 +55,25 @@
                   "documentation/products/logs/filters",
                   "documentation/products/logs/sharing",
                   "documentation/products/logs/export_logs",
-                  "documentation/products/logs/save_log_to_prompt"
+                  "documentation/products/logs/save_log_to_prompt",
+                  {
+                    "group": "Providers",
+                    "pages": [
+                      "documentation/products/logs/providers/openai",
+                      "documentation/products/logs/providers/anthropic",
+                      "documentation/products/logs/providers/openrouter",
+                      "documentation/products/logs/providers/groq",
+                      "documentation/products/logs/providers/fireworks",
+                      "documentation/products/logs/providers/together",
+                      "documentation/products/logs/providers/perplexity",
+                      "documentation/products/logs/providers/azure",
+                      "documentation/products/logs/providers/vertex",
+                      "documentation/products/logs/providers/gemini",
+                      "documentation/products/logs/providers/bedrock",
+                      "documentation/products/logs/providers/nebius",
+                      "documentation/products/logs/providers/novita"
+                    ]
+                  }
                 ]
               },
               {
@@ -182,7 +200,7 @@
           {
             "group": "Security",
             "pages": [
-              "https://sprinto.com/trust-center/",
+              "documentation/security/trust_center",
               "documentation/security/socii",
               "documentation/security/hipaa",
               "documentation/security/gdpr",
@@ -194,35 +212,15 @@
             "pages": [
               "documentation/resources/what-is-llm-observability-and-monitoring",
               "documentation/resources/automatic-retries",
-              "documentation/resources/streaming",
-              {
-                "group": "Retrieval",
-                "pages": [
-                  "documentation/resources/relari_eval/retrieval/context-precision"
-                ]
-              },
-              {
-                "group": "Text generation",
-                "pages": [
-                  "documentation/resources/relari_eval/generation/faithfulness",
-                  "documentation/resources/relari_eval/generation/flesch-kincaid",
-                  "documentation/resources/relari_eval/generation/answer-relevance"
-                ]
-              },
-              {
-                "group": "Other",
-                "pages": [
-                  "documentation/resources/relari_eval/other/sentiment"
-                ]
-              }
+              "documentation/resources/streaming"
             ]
           },
           {
-            "group": "Cookbooks",
+            "group": "Help & Community",
             "pages": [
-              "cookbooks/what-is-keywords-ai",
-              "cookbooks/anthropic-structure-output",
-              "cookbooks/filters-in-jinja"
+              "documentation/support/support",
+              "documentation/support/feedback",
+              "documentation/support/status"
             ]
           }
         ]
@@ -316,8 +314,7 @@
           {
             "group": "Logs",
             "pages": [
-              "api-endpoints/async-endpoints/logs-list-endpoint",
-              "api-endpoints/async-endpoints/logs-update-endpoint"
+              "api-endpoints/async-endpoints/logs-list-endpoint"
             ]
           },
           {
@@ -327,7 +324,7 @@
             ]
           },
           {
-            "group": "Prompts ",
+            "group": "Prompts",
             "pages": [
               "api-endpoints/prompt-endpoints/create-prompts",
               "api-endpoints/prompt-endpoints/get-prompts",
@@ -519,7 +516,9 @@
   },
   "footer": {
     "socials": {
-      "linkedin": "https://www.linkedin.com/company/keywordsai/"
+      "linkedin": "https://www.linkedin.com/company/keywordsai/",
+      "github": "https://github.com/keywordsai",
+      "discord": "https://discord.com/invite/KEanfAafQQ"
     }
   },
   "integrations": {
