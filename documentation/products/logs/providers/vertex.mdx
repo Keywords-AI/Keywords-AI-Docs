@@ -1,0 +1,42 @@
+---
+title: "Vertex AI"
+description: "Track and monitor your Google Vertex AI API requests with Keywords AI logging"
+---
+
+## Log Vertex AI requests
+
+Monitor your Google Vertex AI API calls by logging requests and responses asynchronously. Track metrics like cost, duration, and performance for Vertex AI models.
+
+```python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "model": "gemini-1.5-pro",
+    "prompt_messages": [
+        {
+            "role": "user",
+            "content": "Create a marketing strategy for a tech startup"
+        }
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Here's a comprehensive marketing strategy for your tech startup..."
+    },
+    "cost": 0.0018,
+    "generation_time": 4.1,
+    "customer_params": {
+        "customer_identifier": "user_606"
+    }
+}
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, headers=headers, json=payload)
+```
+
+<Card title="Get Started with Logging" icon="rocket" href="/documentation/products/logs/quickstart">
+  Learn how to set up comprehensive logging for all your LLM requests
+</Card>

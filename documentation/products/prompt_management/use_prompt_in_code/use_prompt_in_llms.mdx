@@ -5,13 +5,13 @@ description: "Deploy a prompt to your codebase and understand override modes."
 
 After you create a prompt, you can deploy it to your codebase and call it through the API. Keywords AI provides two powerful override modes to give you complete control over your prompts.
 
-## 1. Find the Prompt ID
+## Find the prompt ID
 You should first find the Prompt ID of the prompt you want to deploy. You can find the Prompt ID in the Overview panel on the [Prompts page](https://platform.keywordsai.co/platform/prompts).
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/prompt-id.png" alt="Prompt ID" />
 </Frame>
 
-## 2. Connect the prompt to codebase
+## Connect the prompt to codebase
 
 <Tabs>
 <Tab title="OpenAI Python SDK">
@@ -94,11 +94,22 @@ print(demo_call().json())
 With the standard API, you don't need to pass `model` and `messages` fields since the prompt configuration is used automatically.
 </Tab>
 <Tab title="Other SDKs">
-We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/own-api-keys) for more information.
+We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/overview) for more information.
 </Tab>
 </Tabs>
 
-## 3. Override prompt configuration (optional)
+## Use specific prompt version
+Users can now specify a version of prompt they want to call. This prompt version does not need to be deployed and therefore this feature is very nice for testing a prompt through the gateway.
+```python {4}
+{
+    "prompt": {
+        "prompt_id": YOUR_PROMPT_ID,
+        "version":3,
+    }
+}
+```
+
+## Override prompt configuration (optional)
 
 You can dynamically override your saved prompt settings using `override_params` and `override_config`. This gives you runtime flexibility while keeping your base prompt template intact.
 
@@ -148,7 +159,7 @@ request_body = {
     }
 }
 ```
-## 4. View the logs with the prompt
+## View the logs with the prompt
 You can view the logs with the prompt by clicking a log on the [Logs page](https://platform.keywordsai.co/platform/logs) or filtering the logs with the prompt name.
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/prompt-logs.png" alt="View prompt" />
