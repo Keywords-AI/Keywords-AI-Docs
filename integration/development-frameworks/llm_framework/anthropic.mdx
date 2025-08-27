@@ -8,6 +8,10 @@ description: "Use Anthropic SDK through Keywords AI"
 This is only a pass-through integration. So with this integration, some features are not available.
 </Warning>
 
+<Warning>
+**Default max_tokens**: Anthropic requests sent through Keywords AI have a default of 4096 max_tokens. Make sure to explicitly set `max_tokens` in your requests if you need a different value.
+</Warning>
+
 ## Pros and Cons
 
 ### Pros
@@ -36,7 +40,7 @@ message = client.messages.create(
     system="Respond only in Yoda-speak.",
     messages=[
         {"role": "user", "content": "How are you today?"}
-    ]
+    ],
     metadata={
         "keywordsai_params": {
             "customer_identifier": "something" # You need to wrap the customer_identifier into the "keywordsai_params" key
@@ -79,6 +83,68 @@ metadata: {
 console.log(msg);
 ```
 </CodeGroup>
+
+## Extra Headers
+
+You can pass additional headers to be sent with your LLM requests using the `extra_headers` parameter. This is useful for sending custom headers required by specific models or configurations.
+
+<CodeGroup>
+```python Python
+import anthropic
+
+client = anthropic.Anthropic(
+    base_url="https://api.keywordsai.co/api/anthropic/",
+    api_key="Your_Keywords_AI_API_Key",
+)
+
+message = client.messages.create(
+    model="claude-sonnet-4-20250514",
+    max_tokens=1000,
+    system="Respond only in Yoda-speak.",
+    messages=[
+        {"role": "user", "content": "Are there an infinite number of prime numbers such that n mod 4 == 3?"}
+    ],
+    metadata={
+        "extra_headers": {
+            "anthropic-beta": "context-1m-2025-08-07"
+        }
+    },
+)
+
+print(message.content)
+```
+```TypeScript TypeScript
+import Anthropic from "@anthropic-ai/sdk";
+
+const anthropic = new Anthropic({
+  baseUrl: "https://api.keywordsai.co/api/anthropic/",  
+  apiKey: 'YOUR_KEYWORDS_AI_API_KEY',
+});
+
+const msg = await anthropic.messages.create({
+  model: "claude-sonnet-4-20250514",
+  max_tokens: 1000,
+  temperature: 0,
+  system: "Respond only with short poems.",
+  messages: [
+    {
+      "role": "user",
+      "content": "Are there an infinite number of prime numbers such that n mod 4 == 3?"
+    }
+  ],
+  metadata: {
+    "extra_headers": {
+      "anthropic-beta": "context-1m-2025-08-07"
+    }
+  }
+});
+console.log(msg);
+```
+</CodeGroup>
+
+<Note>
+**Extra Headers**: The `extra_headers` parameter allows you to pass additional headers that will be sent with your LLM request. This is particularly useful for accessing beta features like Claude Sonnet 4's 1M token context window using the `anthropic-beta: context-1m-2025-08-07` header.
+</Note>
 
 ## Keywords AI parameters
 
