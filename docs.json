@@ -395,23 +395,6 @@
             ]
           },
           {
-            "group": "Datasets",
-            "pages": [
-              "python-sdk/datasets/overview",
-              "python-sdk/datasets/create",
-              "python-sdk/datasets/list",
-              "python-sdk/datasets/get",
-              "python-sdk/datasets/update",
-              "python-sdk/datasets/delete",
-              "python-sdk/datasets/add-logs-to-dataset",
-              "python-sdk/datasets/remove-logs-from-dataset",
-              "python-sdk/datasets/list-dataset-logs",
-              "python-sdk/datasets/run-dataset-evaluation",
-              "python-sdk/datasets/get-evaluation-report",
-              "python-sdk/datasets/list-evaluation-reports"
-            ]
-          },
-          {
             "group": "Prompts",
             "pages": [
               "python-sdk/prompts/overview",
