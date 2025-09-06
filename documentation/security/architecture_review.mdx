@@ -3,21 +3,38 @@ title: "Architecture review"
 description: "Keywords AI security architecture and infrastructure overview"
 ---
 
-Keywords AI maintains a robust security architecture designed to protect customer data and ensure platform reliability.
+Keywords AI provides LLM observability service: keeping track of all the inputs to and outputs of LLM inferences, along with any additional metrics that are calculated during the inference, such as token usage, generation time etc.
 
-- **Multi-cloud deployment** across AWS and Google Cloud
-- **Auto-scaling infrastructure** with high availability
-- **Network segmentation** with Virtual Private Clouds (VPC)
-- **DDoS protection** and Web Application Firewall (WAF)
-- **Zero-trust architecture** principles
+## Architecture and Data Flow Overview
 
-## Data Protection
+### Cloud Infrastructure
 
-- **Encryption at rest**: AES-256
-- **Encryption in transit**: TLS 1.3
-- **Hardware Security Modules (HSM)** for key management
-- **Data classification** and handling procedures
-- **Geographic data residency** options available
+- **Amazon Web Services (AWS)** as the primary cloud service provider
+- **Application hosted on Amazon Elastic Container Service (ECS)**
+- **Redis** for event queue management
+- **PostgreSQL** for persistent data storage
+
+### Data Flow
+
+1. Client requests are sent to our API server hosted on AWS ECS
+2. During LLM inference operations, events are generated and pushed to Redis queue
+3. Celery workers consume these events from Redis
+4. Data is batch inserted into PostgreSQL database
+
+## Security and Encryption Standards
+
+- **All API communications secured via TLS 1.2+ (HTTPS)**
+- **Authentication credentials and API keys** are hashed using SHA-256 (SHA-2 family) before storage
+- **Data at rest is encrypted** using AWS-managed encryption (AES-256)
+- **Inter-service communication** within AWS infrastructure is secured through AWS security groups
+
+## Security Operations
+
+- **Regular internal security audits** (monthly)
+- **Weekly security testing** of applications
+- **Continuous monitoring** via AWS CloudWatch
+- **Regular code reviews** (weekly)
+- **Vulnerability scanning and penetration testing** planned for next security roadmap phase
 
 ## Access Controls
 
@@ -25,14 +42,6 @@ Keywords AI maintains a robust security architecture designed to protect custome
 - **Role-based access control (RBAC)** with least privilege
 - **Just-in-time (JIT)** access for administrative functions
 - **Regular access reviews** and deprovisioning
-
-## Security Operations
-
-- **24/7 security monitoring** and incident response
-- **Security Information and Event Management (SIEM)**
-- **Automated vulnerability scanning** and patch management
-- **Regular penetration testing** by third-party security firms
-- **Comprehensive audit logging** with integrity protection
 
 ## Incident Response
 
@@ -50,10 +59,10 @@ Keywords AI maintains a robust security architecture designed to protect custome
 
 ## Compliance & Certifications
 
-- **SOC 2 Type II** - Security, Availability, Confidentiality
-- **ISO 27001** - Information Security Management
-- **HIPAA** - Healthcare data protection readiness
+- **SOC 2 Type II** - Security, Availability, Confidentiality (Certified)
+- **HIPAA** - Healthcare data protection compliance
 - **GDPR** - European data protection compliance
+- **AWS and GCP security frameworks** utilized
 
 ## Security Reports
 

@@ -11,8 +11,6 @@ The [OpenAI Agents SDK](https://github.com/openai/openai-agents-python?tab=readm
 <Frame caption="Keywords AI agent tracing with OpenAI Agents SDK.">
 <img width="100%" className="block dark:hidden" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/agents-sdk-tracing-light.jpg" />
 <img width="100%" className="hidden dark:block" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/agents-sdk-tracing-dark.jpg" />
-
-
 </Frame>
 
 ## Core concepts:
@@ -23,7 +21,7 @@ The [OpenAI Agents SDK](https://github.com/openai/openai-agents-python?tab=readm
 
 ## Quickstart
 
-When install OpenAI Agents SDK and [Keywords AI tracing SDK](https://github.com/Keywords-AI/keywordsai), implement `KeywordsProcessor` in your code to send traces from the OpenAI Agents SDK to Keywords AI.
+When you install OpenAI Agents SDK and Keywords AI exporter, implement `KeywordsAISpanExporter` in your code to send traces from the OpenAI Agents SDK to Keywords AI.
 
 ### Prerequisites
 
@@ -32,11 +30,7 @@ pip install openai-agents
 ```
 
 ```bash
-pip install keywordsai-tracing
-```
-
-```bash
-pip install "keywordsai-tracing[openai-agents]"
+pip install keywordsai-exporter-openai-agents
 ```
 
 **Please use the specific endpoint for the OpenAI Agents SDK.**
@@ -50,48 +44,58 @@ https://api.keywordsai.co/api/openai/v1/traces/ingest
 ### Hello World example
 
 ```python Python
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+import pytest
+# ==========copy paste below==========
 import asyncio
 import os
 from agents import Agent, Runner
-from agents.tracing import set_trace_processors
-from keywordsai_tracing.integrations.openai_agents_integration import KeywordsAITraceProcessor
+from agents.tracing import set_trace_processors, trace
+from keywordsai_exporter_openai_agents import KeywordsAISpanExporter
 
 set_trace_processors(
     [
-        KeywordsAITraceProcessor(
+        KeywordsAISpanExporter(
             api_key=os.getenv("KEYWORDSAI_API_KEY"),
-            endpoint="https://api.keywordsai.co/api/openai/v1/traces/ingest"
+            endpoint=os.getenv("KEYWORDSAI_OAIA_TRACING_ENDPOINT"),
         ),
     ]
 )
 
-async def main():
+
+@pytest.mark.asyncio
+async def test_main():
     agent = Agent(
         name="Assistant",
         instructions="You only respond in haikus.",
     )
 
-    result = await Runner.run(agent, "Tell me about recursion in programming.")
-    print(result.final_output)
+    with trace("Hello world test"):
+        result = await Runner.run(agent, "Tell me about recursion in programming.")
+        print(result.final_output)
     # Function calls itself,
     # Looping in smaller pieces,
     # Endless by design.
 
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(test_main())
 ```
+
 ### Handoffs example
 
 ```python Python
 from agents import Agent, Runner
 import asyncio
-from keywordsai_tracing.integrations.openai_agents_integration import KeywordsAITraceProcessor
+from keywordsai_exporter_openai_agents import KeywordsAISpanExporter
 from agents.tracing import set_trace_processors
 import os
 
 set_trace_processors(
     [
-        KeywordsAITraceProcessor(
+        KeywordsAISpanExporter(
             api_key=os.getenv("KEYWORDSAI_API_KEY"),
             endpoint="https://api.keywordsai.co/api/openai/v1/traces/ingest",
         ),
@@ -124,20 +128,21 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 ```
+
 ### Functions example
 
 ```python Python
 import asyncio
 
 from agents import Agent, Runner, function_tool
-from keywordsai_tracing.integrations.openai_agents_integration import KeywordsAITraceProcessor
+from keywordsai_exporter_openai_agents import KeywordsAISpanExporter
 from agents.tracing import set_trace_processors
 import os
 
 set_trace_processors(
     [
-        KeywordsAITraceProcessor(
-            os.getenv("KEYWORDSAI_API_KEY"),
+        KeywordsAISpanExporter(
+            api_key=os.getenv("KEYWORDSAI_API_KEY"),
             endpoint="https://api.keywordsai.co/api/openai/v1/traces/ingest",
         ),
     ]

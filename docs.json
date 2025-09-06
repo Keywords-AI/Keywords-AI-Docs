@@ -29,7 +29,7 @@
             ]
           },
           {
-            "group": "Products",
+            "group": "Features",
             "pages": [
               {
                 "group": "Dashboard",
@@ -204,12 +204,14 @@
               "documentation/security/socii",
               "documentation/security/hipaa",
               "documentation/security/gdpr",
-              "documentation/security/architecture_review"
+              "documentation/security/architecture_review",
+              "documentation/security/security-qa"
             ]
           },
           {
             "group": "Resources",
             "pages": [
+              "documentation/resources/observability-data-model",
               "documentation/resources/what-is-llm-observability-and-monitoring",
               "documentation/resources/automatic-retries",
               "documentation/resources/streaming"
