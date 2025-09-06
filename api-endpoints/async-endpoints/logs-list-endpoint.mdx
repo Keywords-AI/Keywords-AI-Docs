@@ -12,6 +12,27 @@ For example:
 ```
 "https://api.keywordsai.co/api/request-logs/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
 ```
+<ParamField query="start_time" type="string" required>
+  The start time for filtering logs in ISO 8601 format. If not provided, defaults to 1 hour ago.
+  <Accordion title="Example">
+    ```json
+    {
+      "start_time": "2025-08-15T00:00:00" // ISO 8601 format
+    }
+    ```
+  </Accordion>
+</ParamField>
+
+<ParamField query="end_time" type="string" required>
+  The end time for filtering logs in ISO 8601 format. If not provided, defaults to current time.
+  <Accordion title="Example">
+    ```json
+    {
+      "end_time": "2025-08-16T00:00:00" // ISO 8601 format
+    }
+    ```
+  </Accordion>
+</ParamField>
 
 <ParamField query="sort_by" type="string" required>
   The field to sort by. Default is `-id` (same as sort by `-timestamp`, but with better performance).
