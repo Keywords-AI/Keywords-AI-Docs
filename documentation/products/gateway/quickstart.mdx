@@ -38,6 +38,10 @@ Keywords AI's AI Gateway is a gateway that lets you interface with 250+ large 
 - [Set up Keywords AI API key](https://platform.keywordsai.co/platform/api/api-keys)
 - [Set up LLM provider API key](https://platform.keywordsai.co/platform/api/providers)
 
+<Tip>
+**Environment Management**: To separate test and production environments, create separate API keys for each environment instead of using an `env` parameter. This approach provides better security and clearer separation between your development and production workflows.
+</Tip>
+
 <Info>For all AI gateway users, you have to add your own credentials to activate AI gateway. We will use your credentials to call LLMs on your behalf. </Info>
 For example, if you want to use OpenAI, you have to add your OpenAI API key to activate AI gateway. 
 We won’t use your credentials for any other purposes.
@@ -209,4 +213,4 @@ We support all OpenAI parameters. which is the standard format for LLMs. You can
 For **Keywords AI parameters**, you should use them when you want to achieve specific goals. For example, you can use `fallback_models` to specify fallback models when the primary model is down. You can check out all [Keywords AI parameters in this page](/api-endpoints/integration/chat-completions#keywords-ai-parameters).
 
 
-The most used feature of the LLM gateway is the ability to call 200+ LLMs with a single API format. You can switch between models with only 1 line of code change. 
+The most used feature of the LLM gateway is the ability to call 200+ LLMs with a single API format. You can switch between models with only 1 line of code change.

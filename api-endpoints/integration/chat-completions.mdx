@@ -6,6 +6,10 @@ api: POST https://api.keywordsai.co/api/chat/completions
 ## OpenAI compatible parameters 
 To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `extra_body` parameter if you're using the OpenAI SDK.
 
+<Info>
+**Environment Switching**: Keywords AI doesn't support an `env` parameter in API calls. To switch between environments (test/production), use different API keys - one for your test environment and another for production. You can manage these keys in your [API Keys settings](https://platform.keywordsai.co/platform/api/api-keys).
+</Info>
+
 <RequestExample>
 
 {/* ```Python OpenAI Python
@@ -489,7 +493,7 @@ You can pass in your customer's credentials for [supported providers](/integrati
 <ParamField body="credential_override" type="object">
 One-off credential overrides. Instead of using what is uploaded for each provider, this targets credentials for individual models. 
 
-Go to [provider page](/integration/own-api-keys) to see how to add your own credentials and override them for a specific model.
+Go to [provider page](/integration/overview) to see how to add your own credentials and override them for a specific model.
   <Accordion title="Example">
 ```json
 "credential_override": {

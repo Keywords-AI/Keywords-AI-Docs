@@ -1,0 +1,140 @@
+---
+title: "Security FAQ"
+description: "Frequently asked questions about Keywords AI's security practices and compliance"
+---
+
+## Security & Encryption
+
+<Accordion title="What encryption standards does Keywords AI use?">
+We implement multiple layers of encryption:
+- **TLS 1.2+** for all data in transit
+- **SHA-256 hashing** for data integrity verification
+- **AES-256 encryption** for data at rest in our PostgreSQL databases
+- All API communications are encrypted end-to-end
+</Accordion>
+
+<Accordion title="How is data transmitted securely?">
+All data transmission between your applications and Keywords AI uses:
+- TLS 1.2 or higher encryption protocols
+- Certificate pinning for additional security
+- Encrypted API keys for authentication
+- Secure WebSocket connections for real-time data
+</Accordion>
+
+<Accordion title="What are your data storage security practices?">
+Our data storage follows enterprise security standards:
+- AES-256 encryption for all data at rest
+- Regular automated backups with encryption
+- Database access controls and audit logging
+- Network isolation and VPC security groups
+</Accordion>
+
+## Testing & Audits
+
+<Accordion title="What security testing do you perform?">
+We maintain rigorous security testing practices:
+- **Internal security audits** conducted regularly
+- **Weekly penetration testing** by our security team
+- **Automated vulnerability scanning** of all infrastructure
+- **Code security reviews** for all deployments
+</Accordion>
+
+<Accordion title="Do you have external security assessments?">
+Yes, we undergo regular external security assessments:
+- Third-party penetration testing annually
+- Security architecture reviews by external experts
+- Compliance audits for industry standards
+- Vulnerability assessments by certified security firms
+</Accordion>
+
+## Compliance
+
+<Accordion title="What compliance certifications do you have?">
+We have completed and maintain several compliance certifications:
+- **SOC 2 Type II** certification (completed 2024)
+- **GDPR** compliance for European data protection
+- **HIPAA** compliance for healthcare applications
+- Regular compliance audits and updates
+</Accordion>
+
+## Data Protection
+
+<Accordion title="How do you handle data retention?">
+Our data retention policies are designed for security and compliance:
+- Configurable retention periods based on your requirements
+- Automatic data purging after retention period expires
+- Secure data deletion using DoD 5220.22-M standards
+- Data export capabilities before deletion
+</Accordion>
+
+<Accordion title="Can I control what data is collected?">
+Yes, you have full control over data collection:
+- Configurable logging levels and data types
+- Option to exclude sensitive data from logging
+- Custom metadata filtering capabilities
+- Real-time data masking for PII protection
+</Accordion>
+
+<Accordion title="Where is my data stored geographically?">
+Data storage locations are configurable:
+- Primary data centers in US East (Virginia) and US West (Oregon)
+- EU data residency options available
+- Data never leaves your specified geographic region
+- Compliance with local data sovereignty requirements
+</Accordion>
+
+## Access Control
+
+<Accordion title="How do you control access to customer data?">
+We implement strict access controls:
+- Role-based access control (RBAC) for all team members
+- Multi-factor authentication (MFA) required for all accounts
+- Principle of least privilege access
+- Regular access reviews and deprovisioning
+</Accordion>
+
+<Accordion title="Do Keywords AI employees have access to my data?">
+Employee access is strictly controlled:
+- No default access to customer data
+- Access only granted for specific support requests with customer approval
+- All access is logged and audited
+- Time-limited access tokens for support activities
+</Accordion>
+
+## Incident Response
+
+<Accordion title="What is your incident response process?">
+We have a comprehensive incident response plan:
+- 24/7 monitoring and alerting systems
+- Dedicated security incident response team
+- Automated threat detection and response
+- Customer notification within 24 hours of confirmed incidents
+</Accordion>
+
+<Accordion title="How do you handle security vulnerabilities?">
+Our vulnerability management process includes:
+- Continuous vulnerability scanning and assessment
+- Prioritized patching based on risk assessment
+- Coordinated disclosure for security researchers
+- Regular security updates and patches
+</Accordion>
+
+## Monitoring & Analytics
+
+<Accordion title="What monitoring systems do you use?">
+We use comprehensive monitoring and analytics across our infrastructure:
+- **PostHog** for product analytics and user behavior tracking
+- **ClickHouse** for high-performance data warehousing and analytics
+- **AWS CloudWatch** for infrastructure monitoring
+- **Custom alerting** for security events
+- **Real-time dashboards** for system health
+- **Automated incident escalation** for critical issues
+</Accordion>
+
+<Accordion title="How do you detect security threats?">
+Our threat detection includes:
+- Machine learning-based anomaly detection
+- Real-time log analysis and correlation
+- Network traffic monitoring and analysis
+- Behavioral analysis for unusual access patterns
+</Accordion>
