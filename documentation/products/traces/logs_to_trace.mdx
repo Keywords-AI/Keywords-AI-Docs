@@ -1,0 +1,129 @@
+---
+title: "Create trace from logs"
+description: "Learn how to create a trace by properly formatting a list of logs"
+---
+
+This example demonstrates how to send trace logs to Keywords AI while avoiding ID collisions by processing existing trace data.
+
+## Overview
+
+As long as the following conditions are met, a list of logs will be aggregated into a trace automatically upon ingestion:
+
+- Tracing proper timestamps of each span
+- Assigning proper trace and span IDs that represent the correct parent-child relationship
+
+## How It Works
+
+The example code:
+
+1. Loads sample trace data from a JSON file
+2. Shifts timestamps to current time while preserving relative timing
+3. Remaps trace and span IDs to prevent conflicts with existing traces
+4. Sends processed logs to Keywords AI traces endpoint
+
+## Code Example
+
+You can find the complete example code in our [GitHub repository](https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/example_scripts/python/logs_to_trace).
+
+```python
+# Sample code snippet (simplified)
+import json
+import os
+import time
+import uuid
+import requests
+from datetime import datetime, timedelta
+
+# Load sample trace data
+with open('trace_logs.json', 'r') as f:
+    logs = json.load(f)
+
+# Shift timestamps to current time
+current_time = datetime.now()
+base_time = datetime.fromisoformat(logs[0]['timestamp'].replace('Z', '+00:00'))
+time_diff = current_time - base_time
+
+# Generate new trace ID to prevent collisions
+new_trace_id = str(uuid.uuid4())
+id_mapping = {}
+
+# Process each log
+for log in logs:
+    # Update timestamp
+    log_time = datetime.fromisoformat(log['timestamp'].replace('Z', '+00:00'))
+    new_time = log_time + time_diff
+    log['timestamp'] = new_time.isoformat()
+    
+    # Remap IDs
+    old_span_id = log['span_id']
+    if old_span_id not in id_mapping:
+        id_mapping[old_span_id] = str(uuid.uuid4())
+    log['span_id'] = id_mapping[old_span_id]
+    
+    # Update trace ID
+    log['trace_id'] = new_trace_id
+    
+    # Update parent span ID if present
+    if 'parent_span_id' in log and log['parent_span_id']:
+        old_parent_id = log['parent_span_id']
+        if old_parent_id not in id_mapping:
+            id_mapping[old_parent_id] = str(uuid.uuid4())
+        log['parent_span_id'] = id_mapping[old_parent_id]
+
+# Send logs to Keywords AI
+api_key = os.environ.get('KEYWORDSAI_API_KEY')
+base_url = os.environ.get('KEYWORDSAI_BASE_URL', 'https://api.keywordsai.co')
+
+headers = {
+    'Authorization': f'Bearer {api_key}',
+    'Content-Type': 'application/json'
+}
+
+response = requests.post(
+    f"{base_url}/api/traces/",
+    headers=headers,
+    json=logs
+)
+
+print(f"Response: {response.status_code}")
+print(response.json())
+```
+
+## Setup
+
+To run this example:
+
+1. Install the required dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Set environment variables:
+   ```bash
+   # Windows
+   set KEYWORDSAI_API_KEY=your_api_key
+   set KEYWORDSAI_BASE_URL=https://api.keywordsai.co
+   
+   # Linux/Mac
+   export KEYWORDSAI_API_KEY=your_api_key
+   export KEYWORDSAI_BASE_URL=https://api.keywordsai.co
+   ```
+
+3. Run the example:
+   ```bash
+   python main.py
+   ```
+
+## Key Concepts
+
+### Trace and Span IDs
+
+Each trace has a unique `trace_id` that groups all related spans together. Each individual operation within the trace has its own `span_id`. Parent-child relationships are established using the `parent_span_id` field.
+
+### Timestamps
+
+Accurate timestamps are crucial for proper trace visualization. Each span must have a timestamp that reflects when it occurred, and the relative timing between spans must be preserved.
+
+### Automatic Trace Construction
+
+When properly formatted logs are sent to Keywords AI, the system automatically constructs the trace based on the IDs and timestamps. This allows you to visualize the flow and timing of your application's operations.
