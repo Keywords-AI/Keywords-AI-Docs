@@ -1,0 +1,371 @@
+---
+title: Log Scores Management
+api: POST https://api.keywordsai.co/api/logs/{log_id}/scores/
+---
+
+The Log Scores Management API allows you to create, retrieve, update, and delete evaluation scores for specific logs. This ensures that only one score exists per evaluator per log, providing clean score management for your logged requests.
+
+## Overview
+
+The scoring system ensures uniqueness by enforcing that each evaluator (identified by either `evaluator_id` or `evaluator_slug`) can only have one score per log. This prevents duplicate scores and maintains data integrity.
+
+**Note**: The response format follows the standard evaluation results schema, providing comprehensive metadata including `type`, `environment`, `is_passed`, and other evaluation context fields.
+
+### Key Concepts
+
+<CardGroup cols={2}>
+  <Card title="Log ID" icon="file-lines">
+    The unique identifier of the request log you want to score
+  </Card>
+  <Card title="Score ID" icon="star">
+    The unique identifier of a specific score (returned as `id` in responses)
+  </Card>
+  <Card title="Evaluator ID" icon="id-badge">
+    The UUID of an evaluator created in Keywords AI platform (managed evaluators)
+  </Card>
+  <Card title="Evaluator Slug" icon="tag">
+    A custom string identifier that you define for your own custom evaluators
+  </Card>
+</CardGroup>
+
+## Authentication
+
+All endpoints require authentication via either:
+
+- JWT token: `Authorization: Bearer <token>`
+- API key: `Authorization: Bearer <key>`
+
+## Endpoints
+
+### 1. Create a Score
+
+Creates a new evaluation score for a specific log.
+
+<Endpoint method="POST" url="/api/logs/{log_id}/scores/" />
+
+#### Request Body
+
+You must provide either `evaluator_id` (for evaluators created in Keywords AI platform) or `evaluator_slug` (a custom string for your own evaluators), plus at least one score value.
+
+<ParamField body="evaluator_id" type="string">
+  UUID of evaluator created in Keywords AI. Either this or `evaluator_slug` must be provided.
+</ParamField>
+
+<ParamField body="evaluator_slug" type="string">
+  Custom string identifier for your evaluator. Either this or `evaluator_id` must be provided.
+</ParamField>
+
+<ParamField body="numerical_value" type="number">
+  Optional numerical score value.
+</ParamField>
+
+<ParamField body="string_value" type="string">
+  Optional string score value.
+</ParamField>
+
+<ParamField body="boolean_value" type="boolean">
+  Optional boolean score value.
+</ParamField>
+
+<RequestExample>
+```json Request
+{
+  "evaluator_slug": "my_custom_evaluator",
+  "numerical_value": 4.5,
+  "string_value": "Good response quality",
+  "boolean_value": true
+}
+```
+</RequestExample>
+
+<ResponseExample>
+```json 201 Created
+{
+  "id": "eval_result_unique_id",
+  "created_at": "2024-01-15T10:30:00Z",
+  "type": "llm",
+  "environment": "test",
+  "numerical_value": 4.5,
+  "string_value": "Good response quality",
+  "boolean_value": true,
+  "is_passed": false,
+  "cost": 0.0,
+  "evaluator_id": null,
+  "evaluator_slug": "my_custom_evaluator",
+  "log_id": null,
+  "dataset_id": null
+}
+```
+
+```json 409 Conflict
+{
+  "error": "A score already exists for this evaluator in this log."
+}
+```
+
+```json 400 Bad Request
+{
+  "error": "Either evaluator_id or evaluator_slug must be provided"
+}
+```
+</ResponseExample>
+
+### 2. List Scores for a Log
+
+Retrieves all scores associated with a specific log.
+
+<Endpoint method="GET" url="/api/logs/{log_id}/scores/" />
+
+<ResponseExample>
+```json 200 OK
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": "eval_result_unique_id_1",
+      "created_at": "2024-01-15T10:30:00Z",
+      "type": "llm",
+      "environment": "test",
+      "numerical_value": 4.5,
+      "string_value": "Good quality",
+      "boolean_value": true,
+      "is_passed": false,
+      "cost": 0.0,
+      "evaluator_id": null,
+      "evaluator_slug": "quality_evaluator",
+      "log_id": "log_unique_id",
+      "dataset_id": null
+    },
+    {
+      "id": "eval_result_unique_id_2",
+      "created_at": "2024-01-15T10:32:00Z",
+      "type": "llm",
+      "environment": "test",
+      "numerical_value": 3.8,
+      "string_value": "Mostly relevant",
+      "boolean_value": true,
+      "is_passed": false,
+      "cost": 0.0,
+      "evaluator_id": null,
+      "evaluator_slug": "relevance_evaluator",
+      "log_id": "log_unique_id",
+      "dataset_id": null
+    }
+  ]
+}
+```
+</ResponseExample>
+
+### 3. Retrieve a Specific Score
+
+Gets detailed information about a specific score.
+
+<Endpoint method="GET" url="/api/logs/{log_id}/scores/{score_id}/" />
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "eval_result_unique_id",
+  "created_at": "2024-01-15T10:30:00Z",
+  "type": "llm",
+  "environment": "test",
+  "numerical_value": 4.5,
+  "string_value": "Good quality",
+  "boolean_value": true,
+  "is_passed": false,
+  "cost": 0.0,
+  "evaluator_id": null,
+  "evaluator_slug": "quality_evaluator",
+  "log_id": "log_unique_id",
+  "dataset_id": null
+}
+```
+</ResponseExample>
+
+### 4. Update a Score
+
+Updates an existing score. You can update any combination of score values.
+
+<Endpoint method="PATCH" url="/api/logs/{log_id}/scores/{score_id}/" />
+
+<ParamField body="numerical_value" type="number">
+  Optional updated numerical score value.
+</ParamField>
+
+<ParamField body="string_value" type="string">
+  Optional updated string score value.
+</ParamField>
+
+<ParamField body="boolean_value" type="boolean">
+  Optional updated boolean score value.
+</ParamField>
+
+<RequestExample>
+```json Request
+{
+  "numerical_value": 4.8,
+  "string_value": "Excellent quality"
+}
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "eval_result_unique_id",
+  "created_at": "2024-01-15T10:30:00Z",
+  "type": "llm",
+  "environment": "test",
+  "numerical_value": 4.8,
+  "string_value": "Excellent quality",
+  "boolean_value": true,
+  "is_passed": false,
+  "cost": 0.0,
+  "evaluator_id": null,
+  "evaluator_slug": "quality_evaluator",
+  "log_id": "log_unique_id",
+  "dataset_id": null
+}
+```
+</ResponseExample>
+
+### 5. Delete a Score
+
+Removes a score from a log.
+
+<Endpoint method="DELETE" url="/api/logs/{log_id}/scores/{score_id}/" />
+
+<ResponseExample>
+```json 204 No Content
+// No response body is returned for successful deletions.
+```
+</ResponseExample>
+
+## Usage Examples
+
+<AccordionGroup>
+  <Accordion title="Creating a Score with Custom Evaluator">
+    ```bash
+    curl -X POST "https://api.keywordsai.co/api/logs/my-log-id/scores/" \
+      -H "Authorization: Bearer <your-jwt-token>" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "evaluator_slug": "response_quality",
+        "numerical_value": 4.2,
+        "string_value": "Good response with minor issues",
+        "boolean_value": true
+      }'
+    ```
+
+    **Note**: The `evaluator_slug` can be any custom string you choose to identify your evaluator (e.g., "quality_check", "relevance_score", "custom_eval_v1").
+  </Accordion>
+
+  <Accordion title="Creating a Score with Keywords AI Evaluator">
+    ```bash
+    curl -X POST "https://api.keywordsai.co/api/logs/my-log-id/scores/" \
+      -H "Authorization: Bearer <your-jwt-token>" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "evaluator_id": "550e8400-e29b-41d4-a716-446655440000",
+        "numerical_value": 3.8
+      }'
+    ```
+
+    **Note**: The `evaluator_id` must be a evaluator ID copied from the Keywords AI platform.
+  </Accordion>
+
+  <Accordion title="Listing All Scores for a Log">
+    ```bash
+    curl -X GET "https://api.keywordsai.co/api/logs/my-log-id/scores/" \
+      -H "Authorization: Bearer <your-jwt-token>"
+    ```
+  </Accordion>
+
+  <Accordion title="Updating a Score">
+    ```bash
+    curl -X PATCH "https://api.keywordsai.co/api/logs/my-log-id/scores/score-unique-id/" \
+      -H "Authorization: Bearer <your-jwt-token>" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "numerical_value": 4.5,
+        "string_value": "Updated assessment"
+      }'
+    ```
+  </Accordion>
+
+  <Accordion title="Deleting a Score">
+    ```bash
+    curl -X DELETE "https://api.keywordsai.co/api/logs/my-log-id/scores/score-unique-id/" \
+      -H "Authorization: Bearer <your-jwt-token>"
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Log Enrichment
+
+When you retrieve log details, scores are automatically included in the response under a `scores` field:
+
+```json
+{
+  "id": "my-log-id",
+  "model": "gpt-4",
+  "prompt_tokens": 150,
+  "completion_tokens": 75,
+  "scores": {
+    "response_quality": {
+      "evaluator_slug": "response_quality",
+      "numerical_value": 4.2,
+      "string_value": "Good response",
+      "boolean_value": true,
+      "is_passed": false,
+      "cost": 0.0
+    },
+    "relevance_check": {
+      "evaluator_slug": "relevance_check",
+      "numerical_value": 3.8,
+      "string_value": "Mostly relevant",
+      "boolean_value": true,
+      "is_passed": false,
+      "cost": 0.0
+    }
+  }
+}
+```
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Use descriptive evaluator slugs" icon="tag">
+    Make them meaningful and consistent across your application
+  </Card>
+  <Card title="Handle uniqueness errors" icon="triangle-exclamation">
+    Always check for 409 Conflict responses when creating scores
+  </Card>
+  <Card title="Validate score types" icon="check-double">
+    Ensure you're using the appropriate score type (numerical, string, boolean) for your use case
+  </Card>
+  <Card title="Batch operations carefully" icon="layer-group">
+    Since these are manual operations (max ~50 calls/sec), avoid overwhelming the API
+  </Card>
+  <Card title="Store score IDs" icon="database">
+    Keep track of score IDs if you need to update or delete them later
+  </Card>
+</CardGroup>
+
+## Error Handling
+
+The API returns standard HTTP status codes:
+
+| Status Code | Description |
+|-------------|-------------|
+| `200 OK` | Successful GET/PATCH requests |
+| `201 Created` | Successful POST requests |
+| `204 No Content` | Successful DELETE requests |
+| `400 Bad Request` | Invalid request data |
+| `401 Unauthorized` | Invalid or missing authentication |
+| `404 Not Found` | Log or score not found |
+| `409 Conflict` | Score already exists for this evaluator in this log |
+
+Always check the response status code and handle errors appropriately in your application.

@@ -84,7 +84,8 @@
                   "documentation/products/traces/configuration/pass_keywordsai_parameters",
                   "documentation/products/traces/configuration/group_traces",
                   "documentation/products/traces/configuration/customer_identifier",
-                  "documentation/products/traces/filters"
+                  "documentation/products/traces/filters",
+                  "documentation/products/traces/logs_to_trace"
                 ]
               },
               {
@@ -117,6 +118,7 @@
                 "group": "Evaluations",
                 "pages": [
                   "documentation/products/evaluation/overview",
+                  "documentation/products/evaluation/scores",
                   {
                     "group": "Experiments",
                     "pages": [
@@ -374,6 +376,13 @@
               "api-endpoints/temporary-api-keys/retrieve-temporary-key",
               "api-endpoints/temporary-api-keys/update-temporary-key",
               "api-endpoints/temporary-api-keys/delete-temporary-key"
+            ]
+          },
+          {
+            "group": "Evaluation",
+            "pages": [
+              "api-endpoints/evaluation/scores",
+              "api-endpoints/async-endpoints/evaluations"
             ]
           }
         ]
