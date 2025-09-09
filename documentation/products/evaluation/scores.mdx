@@ -1,0 +1,91 @@
+---
+title: "Scores"
+description: "Learn how to manage evaluation scores for your logs"
+---
+
+Log Scores Management allows you to assign, track, and analyze evaluation scores for your LLM requests. This feature enables you to:
+
+- Manually score individual log responses
+- Integrate custom evaluators with your workflow
+- Track quality metrics over time
+- Compare performance across different models or prompts
+
+## Understanding Scores
+
+Scores represent evaluation results for specific logs. Each score is associated with:
+
+- A specific log (identified by `log_id`)
+- An evaluator (either a Keywords AI evaluator or your custom evaluator)
+- One or more value types (numerical, string, boolean)
+
+<Note>
+Each log can have multiple scores, but only one score per evaluator. This ensures clean, consistent evaluation data.
+</Note>
+
+## Score Types
+
+You can use three types of values for your scores:
+
+<CardGroup cols={3}>
+  <Card title="Numerical" icon="calculator">
+    A floating-point value (e.g., 4.5 out of 5.0)
+  </Card>
+  <Card title="String" icon="font">
+    A text description or category (e.g., "Good quality")
+  </Card>
+  <Card title="Boolean" icon="toggle-on">
+    A pass/fail indicator (true/false)
+  </Card>
+</CardGroup>
+
+You can use any combination of these types in a single score.
+
+## Using the Scores API
+
+The Scores API allows you to programmatically manage scores. See the [API Reference](/api-endpoints/evaluation/scores) for detailed documentation.
+
+Here's a quick example of creating a score:
+
+```python
+import requests
+
+api_key = "your_api_key"
+log_id = "your_log_id"
+
+url = f"https://api.keywordsai.co/api/logs/{log_id}/scores/"
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "evaluator_slug": "response_quality",
+    "numerical_value": 4.2,
+    "string_value": "Good response with minor issues",
+    "boolean_value": True
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+## Viewing Scores in the Dashboard
+
+Scores are visible in the log details view in the Keywords AI dashboard. You can:
+
+1. Navigate to the Logs section
+2. Click on a specific log to view its details
+3. See all scores associated with that log in the Scores tab
+
+## Best Practices
+
+- **Use consistent evaluator slugs** across your application
+- **Define clear scoring criteria** for each evaluator
+- **Combine with automated evaluations** for comprehensive quality assessment
+- **Track scores over time** to measure improvements
+
+## Next Steps
+
+- Learn about [Experiments](/documentation/products/evaluation/experiments/overview) for systematic evaluation
+- Explore [LLM Evaluators](/documentation/products/evaluation/llm-evals/llm-evaluator) for automated scoring
+- Set up [Human Evaluations](/documentation/products/evaluation/human-evals/human-evals-setup) for subjective assessment

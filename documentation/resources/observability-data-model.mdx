@@ -28,6 +28,44 @@ Logs record individual LLM API calls and responses
 - Error tracking
 - Response latency
 
+<AccordionGroup>
+  <Accordion title="Log Parameters" icon="sliders">
+    <AccordionGroup>
+      <Accordion title="Content Types">
+        - Text
+        - Chat
+        - Completion
+        - Response
+        - Embedding
+        - Transcription
+        - Speech
+        - Workflow
+        - Task
+        - Tool
+        - Agent
+        - Handoff
+        - Guardrail
+        - Function
+        - Custom
+        - Generation
+      </Accordion>
+      <Accordion title="Filtering Metrics">
+        - Status (Error, Success)
+        - Time
+        - Trace ID
+        - Workflow name
+        - Customer ID
+        - Span count
+        - Error count
+        - Input token count
+        - Output token count
+        - Total tokens
+        - Duration
+      </Accordion>
+    </AccordionGroup>
+  </Accordion>
+</AccordionGroup>
+
 ### Traces
 <Info>
 Traces capture the full execution flow of agent workflows
@@ -39,11 +77,65 @@ Traces capture the full execution flow of agent workflows
 - Hierarchical workflow visualization
 - Agent reasoning and planning
 
+<AccordionGroup>
+  <Accordion title="Trace Parameters" icon="sliders">
+    <AccordionGroup>
+      <Accordion title="Filtering Metrics">
+        - Thread ID
+        - Customer ID
+        - API key
+        - Input tokens
+        - Output tokens
+        - All tokens
+        - Cost
+        - Generation
+        - Number of Rows
+      </Accordion>
+    </AccordionGroup>
+  </Accordion>
+</AccordionGroup>
+
+## User Data
+
+<Info>
+User data provides insights into customer usage patterns and activity
+</Info>
+
+<AccordionGroup>
+  <Accordion title="User Parameters" icon="user">
+    - Customer ID
+    - Name
+    - Email
+    - Requests
+    - Total tokens
+    - Total cost
+    - Active for
+  </Accordion>
+</AccordionGroup>
+
+## Testsets
+
+<Info>
+Testsets allow systematic evaluation of model performance
+</Info>
+
+<AccordionGroup>
+  <Accordion title="Testset Parameters" icon="vial">
+    - Testset ID
+    - Name
+    - Created At
+    - Updated At
+    - Row Count
+    - Column Count
+    - Starred
+  </Accordion>
+</AccordionGroup>
+
 ## Evaluation Framework
 
 The evaluation system helps you assess and improve LLM performance through systematic testing.
 
-### Test Sets
+### Testsets
 <Tip>
 Curated collections of examples for evaluation
 </Tip>
@@ -79,10 +171,27 @@ Comparative testing of different configurations
 Quantitative and qualitative assessment results
 </Tip>
 
-- Numeric ratings (1-5, 1-10)
-- Boolean pass/fail
-- Categorical classifications
-- Comments and feedback
+<AccordionGroup>
+  <Accordion title="Score Types">
+    - **Numerical values**: Ratings on scales (1-5, 1-10, percentages)
+    - **Boolean values**: Pass/fail assessments
+    - **String values**: Textual feedback and classifications
+  </Accordion>
+  
+  <Accordion title="Score Properties">
+    - Unique per evaluator per log
+    - Includes creation timestamp
+    - Can be managed via API
+    - Automatically enriches log data
+  </Accordion>
+  
+  <Accordion title="Score Relationships">
+    - Connected to specific logs via `log_id`
+    - Associated with evaluators via `evaluator_id` or `evaluator_slug`
+    - Can be part of test sets via `dataset_id`
+    - Provides context through `type` and `environment` fields
+  </Accordion>
+</AccordionGroup>
 
 ## Data Flow
 
@@ -90,9 +199,39 @@ Quantitative and qualitative assessment results
 graph TD
     A[LLM Application] --> B[Logs]
     A --> C[Traces]
-    B --> D[Test Sets]
+    B --> D[Testsets]
     C --> D
     D --> E[Evaluators]
     E --> F[Experiments]
     F --> G[Scores]
+    B -.-> G[Scores]
+    E -.-> G[Scores]
 ```
+
+<Info>
+Important terminology notes:
+- "testsets" is one word in our product
+- A "log" is actually a type of "trace" in our system
+</Info>
+
+## Score Integration
+
+Scores are integrated throughout the Keywords AI platform:
+
+<AccordionGroup>
+  <Accordion title="Log Enrichment" icon="file-circle-plus">
+    Scores automatically appear in log details under the `scores` field
+  </Accordion>
+  
+  <Accordion title="Evaluation Results" icon="chart-simple">
+    Scores provide quantitative metrics for evaluating model performance
+  </Accordion>
+  
+  <Accordion title="API Access" icon="code">
+    Create, retrieve, update, and delete scores programmatically
+  </Accordion>
+  
+  <Accordion title="Filtering" icon="filter">
+    Filter logs and test results based on score values
+  </Accordion>
+</AccordionGroup>
