@@ -1,0 +1,77 @@
+---
+title: Create Score
+api: POST https://api.keywordsai.co/api/scores/
+---
+
+Creates a new evaluation score.
+
+<ParamField body="evaluator_id" type="string">
+  UUID of evaluator created in Keywords AI platform
+</ParamField>
+
+<ParamField body="evaluator_slug" type="string">
+  Custom string identifier for your evaluator
+</ParamField>
+
+<ParamField body="numerical_value" type="number">
+  Optional numerical score value
+</ParamField>
+
+<ParamField body="string_value" type="string">
+  Optional string score value
+</ParamField>
+
+<ParamField body="boolean_value" type="boolean">
+  Optional boolean score value
+</ParamField>
+
+<RequestExample>
+```Python Python
+import requests
+
+url = "https://api.keywordsai.co/api/scores/"
+api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
+data = {
+    "evaluator_slug": "my_custom_evaluator",
+    "numerical_value": 4.5,
+    "string_value": "Good response quality",
+    "boolean_value": True
+}
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```json Request
+{
+  "evaluator_slug": "my_custom_evaluator",
+  "numerical_value": 4.5,
+  "string_value": "Good response quality",
+  "boolean_value": true
+}
+```
+</RequestExample>
+
+<ResponseExample>
+```json 201 Created
+{
+  "id": "eval_result_unique_id",
+  "created_at": "2024-01-15T10:30:00Z",
+  "type": "llm",
+  "environment": "test",
+  "numerical_value": 4.5,
+  "string_value": "Good response quality",
+  "boolean_value": true,
+  "is_passed": false,
+  "cost": 0.0,
+  "evaluator_id": null,
+  "evaluator_slug": "my_custom_evaluator",
+  "log_id": null,
+  "dataset_id": null
+}
+```
+</ResponseExample>

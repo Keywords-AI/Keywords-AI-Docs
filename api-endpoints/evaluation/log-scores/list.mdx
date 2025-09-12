@@ -1,0 +1,49 @@
+---
+title: List Log Scores
+api: GET https://api.keywordsai.co/api/logs/{log_id}/scores/
+---
+
+Retrieves all scores associated with a specific log.
+
+<RequestExample>
+```Python Python
+import requests
+
+url = "https://api.keywordsai.co/api/logs/{log_id}/scores/"
+api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 OK
+{
+  "count": 2,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": "eval_result_unique_id_1",
+      "created_at": "2024-01-15T10:30:00Z",
+      "type": "llm",
+      "environment": "test",
+      "numerical_value": 4.5,
+      "string_value": "Good quality",
+      "boolean_value": true,
+      "is_passed": false,
+      "cost": 0.0,
+      "evaluator_id": null,
+      "evaluator_slug": "quality_evaluator",
+      "log_id": "log_unique_id",
+      "dataset_id": null
+    }
+  ]
+}
+```
+</ResponseExample>
