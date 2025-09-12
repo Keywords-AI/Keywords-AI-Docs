@@ -120,28 +120,28 @@
                   "documentation/products/evaluation/overview",
                   "documentation/products/evaluation/scores",
                   {
-                    "group": "Experiments",
+                    "group": "Evaluators",
                     "pages": [
-                      "documentation/products/evaluation/experiments/overview",
-                      "documentation/products/evaluation/experiments/experiments",
+                      "documentation/products/evaluation/llm-evals/llm-evaluator",
+                      "documentation/products/evaluation/llm-evals/run-evaluator-code",
+                      "documentation/products/evaluation/llm-evals/run-evaluator-ui",
+                      "documentation/products/evaluation/human-evals/human-evals-setup",
+                      "documentation/products/evaluation/human-evals/human-annotation"
+                    ]
+                  },
+                  {
+                    "group": "Data sets",
+                    "pages": [
                       "documentation/products/evaluation/experiments/datasets",
-                      "documentation/products/evaluation/experiments/experiments-images",
                       "documentation/products/evaluation/experiments/upload-testsets"
                     ]
                   },
                   {
-                    "group": "LLM evals",
+                    "group": "Experiments",
                     "pages": [
-                      "documentation/products/evaluation/llm-evals/llm-evaluator",
-                      "documentation/products/evaluation/llm-evals/run-evaluator-code",
-                      "documentation/products/evaluation/llm-evals/run-evaluator-ui"
-                    ]
-                  },
-                  {
-                    "group": "Human evals",
-                    "pages": [
-                      "documentation/products/evaluation/human-evals/human-evals-setup",
-                      "documentation/products/evaluation/human-evals/human-annotation"
+                      "documentation/products/evaluation/experiments/overview",
+                      "documentation/products/evaluation/experiments/experiments",
+                      "documentation/products/evaluation/experiments/experiments-images"
                     ]
                   }
                 ]
@@ -381,7 +381,25 @@
           {
             "group": "Evaluation",
             "pages": [
-              "api-endpoints/evaluation/scores",
+              {
+                "group": "Scores",
+                "pages": [
+                  "api-endpoints/evaluation/scores/create",
+                  "api-endpoints/evaluation/scores/get",
+                  "api-endpoints/evaluation/scores/update",
+                  "api-endpoints/evaluation/scores/delete",
+                  "api-endpoints/evaluation/scores/list"
+                ]
+              },
+              {
+                "group": "Log Score Management",
+                "pages": [
+                  "api-endpoints/evaluation/log-scores/create",
+                  "api-endpoints/evaluation/log-scores/get",
+                  "api-endpoints/evaluation/log-scores/update",
+                  "api-endpoints/evaluation/log-scores/delete"
+                ]
+              },
               "api-endpoints/async-endpoints/evaluations"
             ]
           }
