@@ -12,7 +12,24 @@ Evaluations help you assess the performance of your prompts. You can create cust
 - To optimize your prompts and models.
 
 ## Quickstart
+```mermaid
+flowchart TD
+    A["Step 1: Prepare Data"] --> B["Step 2: Set Up Evaluators"]
+    B --> C["Step 3: Run Experiments"]
+    
+    A1["Logs (from production)"] --> A
+    A3["Testsets"] --> A
+    
+    B1["LLM-as-judge evaluators"] --> B
+    B2["Human evaluators"] --> B
+    B3["Custom evaluation logic"] --> B
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+```
 
+---
 <CardGroup cols={2}>
 <Card title="LLM-as-judge evaluator" href="../evaluation/llm-evals/llm-evaluator">
     Create an LLM-as-judge evaluator to measure the quality of your prompts.

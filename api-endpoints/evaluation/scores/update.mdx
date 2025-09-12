@@ -1,0 +1,65 @@
+---
+title: Update Score
+api: PATCH https://api.keywordsai.co/api/scores/{score_id}/
+---
+
+Updates an existing evaluation score.
+
+<ParamField body="numerical_value" type="number">
+  Optional updated numerical score value
+</ParamField>
+
+<ParamField body="string_value" type="string">
+  Optional updated string score value
+</ParamField>
+
+<ParamField body="boolean_value" type="boolean">
+  Optional updated boolean score value
+</ParamField>
+
+<RequestExample>
+```Python Python
+import requests
+
+url = "https://api.keywordsai.co/api/scores/{score_id}/"
+api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
+data = {
+    "numerical_value": 4.8,
+    "string_value": "Excellent quality"
+}
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```json Request
+{
+  "numerical_value": 4.8,
+  "string_value": "Excellent quality"
+}
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "eval_result_unique_id",
+  "created_at": "2024-01-15T10:30:00Z",
+  "type": "llm",
+  "environment": "test",
+  "numerical_value": 4.8,
+  "string_value": "Excellent quality",
+  "boolean_value": true,
+  "is_passed": false,
+  "cost": 0.0,
+  "evaluator_id": null,
+  "evaluator_slug": "quality_evaluator",
+  "log_id": "log_unique_id",
+  "dataset_id": null
+}
+```
+</ResponseExample>
