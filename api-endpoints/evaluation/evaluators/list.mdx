@@ -1,0 +1,164 @@
+---
+title: "List Evaluators"
+description: "Retrieve a paginated list of evaluators"
+---
+
+# List Evaluators
+
+**GET** `/api/evaluators/`
+
+Retrieves a paginated list of evaluators for your organization.
+
+## Authentication
+
+Requires API key authentication. Include your API key in the request headers:
+
+```bash
+Authorization: Api-Key YOUR_API_KEY
+```
+
+## Query Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `page` | integer | Page number for pagination (default: 1) |
+| `page_size` | integer | Number of items per page (default: 20) |
+| `search` | string | Search evaluators by name or slug |
+| `type` | string | Filter by evaluator type: `llm`, `human`, or `code` |
+| `score_value_type` | string | Filter by score type: `numerical`, `boolean`, `categorical`, or `comment` |
+| `starred` | boolean | Filter by starred status |
+| `tags` | string | Filter by tags (comma-separated) |
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/evaluators/"
+headers = {
+    "Authorization": "Api-Key YOUR_API_KEY"
+}
+
+# Basic list
+response = requests.get(url, headers=headers)
+print(response.json())
+
+# With filters
+params = {
+    "type": "llm",
+    "score_value_type": "numerical",
+    "page_size": 10
+}
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```bash cURL
+# Basic list
+curl -X GET "https://api.keywordsai.co/api/evaluators/" \
+  -H "Authorization: Api-Key YOUR_API_KEY"
+
+# With filters
+curl -X GET "https://api.keywordsai.co/api/evaluators/?type=llm&score_value_type=numerical&page_size=10" \
+  -H "Authorization: Api-Key YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Response
+
+**Status: 200 OK**
+
+```json
+{
+  "results": [
+    {
+      "id": "0f4325f9-55ef-4c20-8abe-376694419947",
+      "name": "Response Quality Evaluator",
+      "evaluator_slug": "response_quality_v1",
+      "type": "llm",
+      "score_value_type": "numerical",
+      "eval_class": "",
+      "description": "Evaluates response quality on a 1-5 scale",
+      "created_by": {
+        "first_name": "Keywords AI",
+        "last_name": "Team",
+        "email": "admin@keywordsai.co"
+      },
+      "updated_by": {
+        "first_name": "Keywords AI",
+        "last_name": "Team",
+        "email": "admin@keywordsai.co"
+      },
+      "created_at": "2025-09-11T09:43:55.858321Z",
+      "updated_at": "2025-09-11T09:43:55.858331Z",
+      "custom_required_fields": [],
+      "categorical_choices": null,
+      "starred": false,
+      "organization": 2,
+      "tags": []
+    },
+    {
+      "id": "cat-eval-123",
+      "name": "Content Quality Assessment",
+      "evaluator_slug": "content_quality_categorical",
+      "type": "human",
+      "score_value_type": "categorical",
+      "eval_class": "",
+      "description": "Human assessment of content quality with predefined categories",
+      "created_by": {
+        "first_name": "Keywords AI",
+        "last_name": "Team",
+        "email": "admin@keywordsai.co"
+      },
+      "updated_by": {
+        "first_name": "Keywords AI",
+        "last_name": "Team",
+        "email": "admin@keywordsai.co"
+      },
+      "created_at": "2025-09-11T09:44:00.000000Z",
+      "updated_at": "2025-09-11T09:44:00.000000Z",
+      "custom_required_fields": [],
+      "categorical_choices": [
+        { "name": "Excellent", "value": 5 },
+        { "name": "Good", "value": 4 },
+        { "name": "Average", "value": 3 },
+        { "name": "Poor", "value": 2 },
+        { "name": "Very Poor", "value": 1 }
+      ],
+      "starred": false,
+      "organization": 2,
+      "tags": []
+    }
+  ],
+  "count": 2,
+  "previous": null,
+  "next": null,
+  "current_filters": {
+    "type": "llm",
+    "score_value_type": "numerical"
+  }
+}
+```
+
+## Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `results` | array | Array of evaluator objects |
+| `count` | integer | Total number of evaluators matching filters |
+| `previous` | string\|null | URL for previous page (if exists) |
+| `next` | string\|null | URL for next page (if exists) |
+| `current_filters` | object | Applied filters for this request |
+
+## Error Responses
+
+### 401 Unauthorized
+
+```json
+{
+  "detail": "Your API key is invalid or expired, please check your API key at https://platform.keywordsai.co/platform/api/api-keys"
+}
+```
