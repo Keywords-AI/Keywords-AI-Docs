@@ -32,8 +32,8 @@ response = client.chat.completions.create(
     ],
     extra_body={
         "metadata": {
-            "sample_key": "sample_value",
-            "session_id": "abc789"
+            "env": "production",
+            "language": "en"
         }
     }
 )
@@ -55,8 +55,8 @@ const response = await client.chat.completions
     model: "gpt-4o-mini",
     // @ts-expect-error
     metadata: {
-        "sample_key": "sample_value",
-        "session_id": "abc789"
+        "env": "production",
+        "language": "en"
     }
   })
   .asResponse();
@@ -84,8 +84,8 @@ payload = {
         "content": "Hi, how can I assist you today?"
     },
     "metadata": {
-        "sample_key": "sample_value",
-        "session_id": "abc789"
+        "env": "production",
+        "language": "en"
     }
     # other parameters
 }
@@ -111,8 +111,8 @@ def demo_call(input,
         'model': model,
         'messages': [{'role': 'user', 'content': input}],
         'metadata': {
-            "sample_key": "sample_value",
-            "session_id": "abc789"
+            "env": "production",
+            "language": "en"
         }
     }
 
@@ -182,7 +182,8 @@ data = {
     "logs": [
         {   "unique_id": "xxxxxx",
             "metadata": {
-                "metadata_key": "updated_value"
+                "env": "production",
+                "language": "en"
             },
             "note": "updated note"
         }
@@ -208,7 +209,8 @@ fetch("https://api.keywordsai.co/api/request-logs/batch-update/", {
         logs: [
             {   unique_id: "xxxxxx",
                 metadata: {
-                    metadata_key: "updated_value"
+                    env: "production",
+                    language: "en"
                 },
                 note: "updated note"
             }
