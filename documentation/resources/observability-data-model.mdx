@@ -95,6 +95,108 @@ Traces capture the full execution flow of agent workflows
   </Accordion>
 </AccordionGroup>
 
+## Trace Data Model
+
+### Trace Structure
+
+```mermaid
+graph TD
+    T[Trace: trace_unique_id] --> RS[Root Span: WORKFLOW<br/>span_workflow_name]
+    RS --> S1[Span 1: CHAT<br/>span_parent_id → Root]
+    RS --> S2[Span 2: TASK<br/>span_parent_id → Root]
+    RS --> S3[Span 3: EMBEDDING<br/>span_parent_id → Root]
+    
+    S1 --> S1A[Span 1A: GENERATION<br/>span_parent_id → Span 1]
+    S1 --> S1B[Span 1B: FUNCTION<br/>span_parent_id → Span 1]
+    
+    S2 --> S2A[Span 2A: GUARDRAIL<br/>span_parent_id → Span 2]
+    
+    style T fill:#e1f5fe
+    style RS fill:#f3e5f5
+    style S1 fill:#e8f5e8
+    style S2 fill:#fff3e0
+    style S3 fill:#fce4ec
+    style S1A fill:#e8f5e8
+    style S1B fill:#e8f5e8
+    style S2A fill:#fff3e0
+```
+
+### Multi-Trace Workflow Grouping
+
+```mermaid
+graph TD
+    TG[trace_group_identifier: workflow-group-456] --> T1[Trace A: trace-123]
+    TG --> T2[Trace B: trace-124]
+    
+    T1 --> T1RS[Root: WORKFLOW<br/>Parallel Process 1]
+    T1RS --> T1S1[CHAT Span]
+    T1RS --> T1S2[TASK Span]
+    
+    T2 --> T2RS[Root: WORKFLOW<br/>Parallel Process 2]
+    T2RS --> T2S1[EMBEDDING Span]
+    T2RS --> T2S2[SPEECH Span]
+    
+    style TG fill:#ffecb3
+    style T1 fill:#e1f5fe
+    style T2 fill:#e1f5fe
+    style T1RS fill:#f3e5f5
+    style T2RS fill:#f3e5f5
+```
+
+## Organization Data Model
+
+### Single Team Setup (Initial Onboarding)
+```mermaid
+graph TD
+    U[User: sarah@docai.com] --> R1[Role: Owner]
+    R1 --> O1[Team: DocAI Assistant<br/>org-001]
+    O1 --> K1[API Key: docai-prod]
+    O1 --> K2[API Key: docai-test]
+    
+    style U fill:#e1f5fe
+    style O1 fill:#e8f5e8
+```
+
+### Multi-Team Setup (After Scaling)
+```mermaid
+graph TD
+    U[User: sarah@docai.com] --> CR[Company Role: Admin]
+    CR --> CO[Company: DocAI Inc<br/>company-001]
+    
+    CO --> O1[Team 1: Document Assistant<br/>org-001]
+    CO --> O2[Team 2: Code Generator<br/>org-002]
+    
+    U --> R1[Role: Owner] --> O1
+    U --> R2[Role: Admin] --> O2
+    
+    O1 --> K1[API Key: docai-prod]
+    O1 --> K2[API Key: docai-test]
+    O2 --> K3[API Key: codegen-prod]
+    O2 --> K4[API Key: codegen-test]
+    
+    style U fill:#e1f5fe
+    style CO fill:#ffecb3
+    style O1 fill:#e8f5e8
+    style O2 fill:#e8f5e8
+```
+
+### User Journey
+
+```mermaid
+flowchart TD
+    A[User Signs Up] --> B[Creates First Team/Organization]
+    B --> C[Single Team Setup]
+    C --> D{Needs Multiple Teams?}
+    D -->|No| E[Continue with Single Team]
+    D -->|Yes| F[Creates Second Team]
+    F --> G[Auto-creates Company Organization]
+    G --> H[Groups All Teams Under Company]
+    H --> I[Shared Billing & Management]
+    
+    style G fill:#e1f5fe
+    style H fill:#e8f5e8
+```
+
 ## User Data
 
 <Info>
