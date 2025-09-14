@@ -1,0 +1,111 @@
+---
+title: "Delete Evaluator"
+description: "Permanently delete an evaluator"
+---
+
+# Delete Evaluator
+
+**DELETE** `/api/evaluators/{evaluator_id}/`
+
+Permanently deletes an evaluator from your organization.
+
+<Warning>
+**This action is irreversible.** Once an evaluator is deleted, it cannot be recovered. Make sure you want to permanently remove this evaluator before proceeding.
+</Warning>
+
+## Authentication
+
+Requires API key authentication. Include your API key in the request headers:
+
+```bash
+Authorization: Api-Key YOUR_API_KEY
+```
+
+## Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `evaluator_id` | string | The unique ID of the evaluator to delete |
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+evaluator_id = "0f4325f9-55ef-4c20-8abe-376694419947"
+url = f"https://api.keywordsai.co/api/evaluators/{evaluator_id}/"
+headers = {
+    "Authorization": "Api-Key YOUR_API_KEY"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"Status Code: {response.status_code}")
+print(f"Response: {response.text}")
+```
+
+```bash cURL
+curl -X DELETE "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-376694419947/" \
+  -H "Authorization: Api-Key YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Response
+
+**Status: 204 No Content**
+
+A successful deletion returns an empty response body with a 204 status code.
+
+## What Happens When You Delete an Evaluator
+
+1. **Evaluator Removal**: The evaluator is permanently removed from your organization
+2. **Historical Data**: Existing evaluation results using this evaluator remain intact
+3. **Future Evaluations**: The evaluator can no longer be used for new evaluations
+4. **References**: Any references to this evaluator in evaluation configurations will need to be updated
+
+## Before Deleting
+
+Consider these steps before deleting an evaluator:
+
+1. **Check Usage**: Verify if the evaluator is currently being used in any active evaluation workflows
+2. **Export Data**: If needed, export any evaluation results or configurations that reference this evaluator
+3. **Update References**: Remove or update any evaluation configurations that reference this evaluator
+4. **Backup**: Consider creating a backup of the evaluator configuration if you might need it later
+
+## Alternative: Disable Instead of Delete
+
+If you want to temporarily stop using an evaluator without permanently deleting it, consider:
+
+1. **Update the name** to include "[DISABLED]" or similar
+2. **Remove it from active evaluation workflows**
+3. **Update the description** to indicate it's no longer in use
+
+This approach preserves the evaluator for potential future use while preventing accidental usage.
+
+## Error Responses
+
+### 401 Unauthorized
+
+```json
+{
+  "detail": "Your API key is invalid or expired, please check your API key at https://platform.keywordsai.co/platform/api/api-keys"
+}
+```
+
+### 404 Not Found
+
+```json
+{
+  "detail": "Not found."
+}
+```
+
+### 403 Forbidden
+
+```json
+{
+  "detail": "You do not have permission to delete this evaluator."
+}
+```
