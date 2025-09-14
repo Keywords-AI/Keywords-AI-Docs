@@ -130,7 +130,7 @@
                     ]
                   },
                   {
-                    "group": "Data sets",
+                    "group": "Datasets",
                     "pages": [
                       "documentation/products/evaluation/experiments/datasets",
                       "documentation/products/evaluation/experiments/upload-testsets"
@@ -381,6 +381,17 @@
           {
             "group": "Evaluation",
             "pages": [
+              {
+                "group": "Evaluators",
+                "pages": [
+                  "api-endpoints/evaluation/evaluators/create",
+                  "api-endpoints/evaluation/evaluators/list",
+                  "api-endpoints/evaluation/evaluators/get",
+                  "api-endpoints/evaluation/evaluators/update",
+                  "api-endpoints/evaluation/evaluators/delete",
+                  "api-endpoints/evaluation/evaluators/run"
+                ]
+              },
               {
                 "group": "Scores",
                 "pages": [
