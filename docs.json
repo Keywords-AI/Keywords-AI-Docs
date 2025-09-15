@@ -25,7 +25,8 @@
             "group": "Get started",
             "pages": [
               "get-started/overview",
-              "get-started/llm-inference"
+              "get-started/llm-inference",
+              "get-started/data_model"
             ]
           },
           {
