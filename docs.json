@@ -25,8 +25,7 @@
             "group": "Get started",
             "pages": [
               "get-started/overview",
-              "get-started/llm-inference",
-              "get-started/data_model"
+              "get-started/llm-inference"              
             ]
           },
           {
@@ -51,9 +50,9 @@
                   "documentation/products/logs/log_thinking",
                   "documentation/products/logs/embedding_logging",
                   "documentation/products/logs/save_log_to_prompt",
+                  "documentation/products/logs/configuration/threads",
                   "documentation/products/logs/export_logs",
                   "documentation/products/logs/configuration/group_logs",
-                  "documentation/products/logs/configuration/threads",
                   "documentation/products/logs/custom_model",
                   "documentation/products/logs/filters",
                   "documentation/products/logs/sharing",                
