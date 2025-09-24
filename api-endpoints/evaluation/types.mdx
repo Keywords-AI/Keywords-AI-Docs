@@ -1,0 +1,112 @@
+---
+title: "Score types"
+description: "Complete reference for score types, evaluator types, and value mappings"
+---
+
+## Score Value Types
+
+### Type Mapping
+<Warning>
+**Critical: Use the correct value field based on evaluator's `score_value_type`**
+</Warning>
+
+| Evaluator's `score_value_type` | Use This Field | Data Type | Example |
+|--------------------------------|----------------|-----------|---------|
+| `numerical` | `numerical_value` | number | `4.5` |
+| `boolean` | `boolean_value` | boolean | `true` |
+| `categorical` | `categorical_value` | array of strings | `["excellent", "coherent"]` |
+| `comment` | `string_value` | string | `"Good response quality"` |
+
+### Detailed Descriptions
+
+#### Numerical Scores
+- **Use case**: Ratings, confidence scores, quality metrics
+- **Range**: Defined by evaluator's `min_score` and `max_score`
+- **Example**: Rating response quality from 1-5
+
+#### Boolean Scores  
+- **Use case**: Pass/fail evaluations, binary classifications
+- **Values**: `true` or `false`
+- **Example**: Content safety check
+
+#### Categorical Scores
+- **Use case**: Multi-choice classifications
+- **Values**: Array of predefined choices from evaluator's `categorical_choices`
+- **Example**: `["relevant", "accurate", "helpful"]`
+
+#### Comment Scores
+- **Use case**: Qualitative feedback, explanations
+- **Values**: Free-form text
+- **Example**: Detailed evaluation reasoning
+
+## Evaluator Types
+
+### LLM Evaluators (`type: "llm"`)
+- AI-powered evaluation using language models
+- Requires `evaluator_definition` prompt
+- Supports all score value types
+
+### Human Evaluators (`type: "human"`)  
+- Manual evaluation by human reviewers
+- Often used with categorical or comment scores
+- Requires predefined choices for categorical
+
+### Code Evaluators (`type: "code"`)
+- Programmatic evaluation using custom code
+- Requires `eval_code_snippet`
+- Most flexible for complex logic
+
+<Note>
+Legacy fields (`llm_input`, `llm_output`) are normalized to `input`/`output` when reading the `inputs` field.
+</Note>
+
+## Metrics and Metadata Fields
+
+When present, `inputs.metrics` and `inputs.metadata` include the following:
+
+### Metrics Fields
+
+- **start_time**: Request start time (RFC3339)
+- **timestamp**: Span end time (RFC3339)
+- **prompt_tokens**: Tokens in the prompt/input
+- **completion_tokens**: Tokens in the model output
+- **prompt_cache_hit_tokens**: Tokens served from cache
+- **prompt_cache_creation_tokens**: Tokens added to cache
+- **total_request_tokens**: Sum of prompt and completion tokens
+- **latency**: Total request latency in seconds
+- **time_to_first_token**: Time from request start to first output token
+- **tokens_per_second**: Output token throughput (TPS)
+- **routing_time**: Deprecated; time spent deciding the model/route
+- **cost**: Total request cost (USD)
+
+### Metadata Fields
+
+- **unique_id**: Request unique identifier
+- **unique_organization_id**: Organization unique identifier
+- **organization_key_id**: API key identifier
+- **environment**: Runtime environment (e.g., test, prod)
+- **customer_identifier**: User/customer-level identifier
+- **evaluation_identifier**: Evaluator run identifier
+- **prompt_id**: Prompt identifier
+- **prompt_version_number**: Prompt version
+- **custom_identifier**: Custom identifier provided by client
+- **thread_identifier**: Logical thread id
+- **thread_unique_id**: Unique id of thread
+- **span_unique_id**: Span id
+- **span_name**: Span name
+- **span_parent_id**: Parent span id
+- **span_workflow_name**: Workflow name
+- **trace_group_identifier**: Trace group id
+- **deployment_name**: Deployment name
+- **provider_id**: Provider identifier
+- **model**: Model name
+- **status_code**: HTTP-like status code
+- **status**: Status string
+- **tool_calls**: Tool calls recorded
+- **LLM configuration fields**: stream, stream_options, temperature, max_tokens, logit_bias, logprobs, top_logprobs, frequency_penalty, presence_penalty, stop, n, response_format, verbosity, tools
+
+<Note>
+- Some fields may be omitted depending on provider/model and request path
+- `routing_time` is deprecated and retained for historical compatibility
+</Note>
+

@@ -1,20 +1,16 @@
 ---
 title: "Get Evaluator"
-description: "Retrieve detailed information about a specific evaluator"
+api: "GET https://api.keywordsai.co/api/evaluators/{evaluator_id}/"
 ---
-
-# Get Evaluator
-
-**GET** `/api/evaluators/{evaluator_id}/`
 
 Retrieves detailed information about a specific evaluator, including full configuration.
 
 ## Authentication
 
-Requires API key authentication. Include your API key in the request headers:
+All endpoints require API key authentication:
 
 ```bash
-Authorization: Api-Key YOUR_API_KEY
+Authorization: Bearer YOUR_API_KEY
 ```
 
 ## Path Parameters
@@ -33,7 +29,7 @@ import requests
 evaluator_id = "0f4325f9-55ef-4c20-8abe-376694419947"
 url = f"https://api.keywordsai.co/api/evaluators/{evaluator_id}/"
 headers = {
-    "Authorization": "Api-Key YOUR_API_KEY"
+    "Authorization": "Bearer YOUR_API_KEY"
 }
 
 response = requests.get(url, headers=headers)
@@ -42,7 +38,7 @@ print(response.json())
 
 ```bash cURL
 curl -X GET "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-376694419947/" \
-  -H "Authorization: Api-Key YOUR_API_KEY"
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 </CodeGroup>
@@ -89,6 +85,7 @@ curl -X GET "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-37
   "custom_required_fields": [],
   "categorical_choices": null,
   "starred": false,
+  "organization": 2,
   "tags": []
 }
 ```
@@ -105,6 +102,13 @@ curl -X GET "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-37
   "eval_class": "",
   "description": "Human assessment of content quality with predefined categories",
   "configurations": {},
+  "categorical_choices": [
+    { "name": "Excellent", "value": 5 },
+    { "name": "Good", "value": 4 },
+    { "name": "Average", "value": 3 },
+    { "name": "Poor", "value": 2 },
+    { "name": "Very Poor", "value": 1 }
+  ],
   "created_by": {
     "first_name": "Keywords AI",
     "last_name": "Team",
@@ -118,14 +122,8 @@ curl -X GET "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-37
   "created_at": "2025-09-11T09:44:00.000000Z",
   "updated_at": "2025-09-11T09:44:00.000000Z",
   "custom_required_fields": [],
-  "categorical_choices": [
-    { "name": "Excellent", "value": 5 },
-    { "name": "Good", "value": 4 },
-    { "name": "Average", "value": 3 },
-    { "name": "Poor", "value": 2 },
-    { "name": "Very Poor", "value": 1 }
-  ],
   "starred": false,
+  "organization": 2,
   "tags": []
 }
 ```
@@ -134,15 +132,15 @@ curl -X GET "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-37
 
 ```json
 {
-  "id": "code-eval-456",
-  "name": "Custom Length Check",
-  "evaluator_slug": "custom_length_check",
+  "id": "bool-eval-456",
+  "name": "Response Length Checker",
+  "evaluator_slug": "length_checker_boolean",
   "type": "code",
-  "score_value_type": "numerical",
+  "score_value_type": "boolean",
   "eval_class": "",
-  "description": "Evaluates response length appropriateness",
+  "description": "Checks if response meets minimum length requirement",
   "configurations": {
-    "eval_code_snippet": "def evaluate(llm_input, llm_output, **kwargs):\n    length = len(llm_output.split())\n    if length < 10:\n        return 1\n    elif length < 50:\n        return 3\n    else:\n        return 5"
+    "eval_code_snippet": "def evaluate(llm_input, llm_output, **kwargs):\n    '''\n    Check if response meets minimum length requirement\n    Returns True if length >= 50 characters, False otherwise\n    '''\n    if not llm_output:\n        return False\n    \n    return len(llm_output.strip()) >= 50"
   },
   "created_by": {
     "first_name": "Keywords AI",
@@ -159,7 +157,8 @@ curl -X GET "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-37
   "custom_required_fields": [],
   "categorical_choices": [],
   "starred": false,
-  "tags": []
+  "organization": 2,
+  "tags": ["automation", "validation"]
 }
 ```
 
@@ -169,22 +168,56 @@ curl -X GET "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-37
 |-------|------|-------------|
 | `id` | string | Unique evaluator identifier |
 | `name` | string | Display name of the evaluator |
-| `evaluator_slug` | string | Unique slug identifier |
+| `evaluator_slug` | string | URL-friendly identifier |
 | `type` | string | Evaluator type: `llm`, `human`, or `code` |
-| `score_value_type` | string | Score type: `numerical`, `boolean`, `categorical`, or `comment` |
+| `score_value_type` | string | Score format: `numerical`, `boolean`, `categorical`, or `comment` |
 | `eval_class` | string | Pre-built template class (if used) |
-| `description` | string | Evaluator description |
+| `description` | string | Description of the evaluator |
 | `configurations` | object | Type-specific configuration settings |
-| `categorical_choices` | array | Available choices for categorical evaluators |
+| `categorical_choices` | array | Choices for categorical evaluators (null for non-categorical) |
 | `created_by` | object | User who created the evaluator |
 | `updated_by` | object | User who last updated the evaluator |
 | `created_at` | string | ISO timestamp of creation |
 | `updated_at` | string | ISO timestamp of last update |
 | `custom_required_fields` | array | Additional required fields |
 | `starred` | boolean | Whether the evaluator is starred |
-| `tags` | array | Associated tags |
+| `organization` | integer | Organization ID |
+| `tags` | array | Tags associated with the evaluator |
+
+## Configuration Fields by Type
+
+### LLM Evaluators (`type: "llm"`)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `evaluator_definition` | string | The evaluation prompt/instruction with template variables |
+| `scoring_rubric` | string | Description of the scoring criteria |
+| `llm_engine` | string | LLM model to use (e.g., "gpt-4o-mini", "gpt-4o") |
+| `model_options` | object | LLM parameters like temperature, max_tokens |
+| `min_score` | number | Minimum possible score |
+| `max_score` | number | Maximum possible score |
+| `passing_score` | number | Score threshold for passing |
+
+### Code Evaluators (`type: "code"`)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `eval_code_snippet` | string | Python code with evaluate() function |
+
+### Human Evaluators (`type: "human"`)
+
+- No specific configuration fields
+- Use `categorical_choices` field when `score_value_type` is `"categorical"`
 
 ## Error Responses
+
+### 404 Not Found
+
+```json
+{
+  "detail": "Not found."
+}
+```
 
 ### 401 Unauthorized
 
@@ -194,10 +227,10 @@ curl -X GET "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-37
 }
 ```
 
-### 404 Not Found
+### 403 Forbidden
 
 ```json
 {
-  "detail": "Not found."
+  "detail": "You do not have permission to access this evaluator."
 }
 ```

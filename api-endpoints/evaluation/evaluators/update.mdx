@@ -1,20 +1,16 @@
 ---
 title: "Update Evaluator"
-description: "Update specific fields of an evaluator"
+api: "PATCH https://api.keywordsai.co/api/evaluators/{evaluator_id}/"
 ---
-
-# Update Evaluator
-
-**PATCH** `/api/evaluators/{evaluator_id}/`
 
 Updates specific fields of an evaluator. Supports partial updates of configuration fields.
 
 ## Authentication
 
-Requires API key authentication. Include your API key in the request headers:
+All endpoints require API key authentication:
 
 ```bash
-Authorization: Api-Key YOUR_API_KEY
+Authorization: Bearer YOUR_API_KEY
 ```
 
 ## Path Parameters
@@ -51,15 +47,15 @@ import requests
 evaluator_id = "0f4325f9-55ef-4c20-8abe-376694419947"
 url = f"https://api.keywordsai.co/api/evaluators/{evaluator_id}/"
 headers = {
-    "Authorization": "Api-Key YOUR_API_KEY",
+    "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
 }
 
+# Update scoring rubric and passing score
 data = {
     "configurations": {
-        "evaluator_definition": "Updated: Evaluate response quality with enhanced criteria focusing on accuracy, relevance, completeness, and clarity.",
-        "max_score": 10.0,
-        "passing_score": 7.0
+        "scoring_rubric": "Updated: 1=Very Poor, 2=Poor, 3=Fair, 4=Good, 5=Excellent",
+        "passing_score": 4.0
     }
 }
 
@@ -67,40 +63,42 @@ response = requests.patch(url, headers=headers, json=data)
 print(response.json())
 ```
 
-```json JSON
-{
-  "configurations": {
-    "evaluator_definition": "Updated: Evaluate response quality with enhanced criteria focusing on accuracy, relevance, completeness, and clarity.",
-    "max_score": 10.0,
-    "passing_score": 7.0
-  }
-}
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-376694419947/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "configurations": {
+      "scoring_rubric": "Updated: 1=Very Poor, 2=Poor, 3=Fair, 4=Good, 5=Excellent",
+      "passing_score": 4.0
+    }
+  }'
 ```
 
 </CodeGroup>
 
-### Update Basic Information
+### Update Name and Description
 
 <CodeGroup>
 
 ```python Python
 data = {
     "name": "Enhanced Response Quality Evaluator",
-    "description": "Updated evaluator with enhanced quality criteria",
-    "starred": True,
-    "tags": ["quality", "enhanced", "v2"]
+    "description": "Advanced evaluator for response quality assessment with updated criteria"
 }
 
 response = requests.patch(url, headers=headers, json=data)
+print(response.json())
 ```
 
-```json JSON
-{
-  "name": "Enhanced Response Quality Evaluator",
-  "description": "Updated evaluator with enhanced quality criteria",
-  "starred": true,
-  "tags": ["quality", "enhanced", "v2"]
-}
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-376694419947/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Enhanced Response Quality Evaluator",
+    "description": "Advanced evaluator for response quality assessment with updated criteria"
+  }'
 ```
 
 </CodeGroup>
@@ -110,10 +108,14 @@ response = requests.patch(url, headers=headers, json=data)
 <CodeGroup>
 
 ```python Python
+# For categorical evaluators
+categorical_evaluator_id = "cat-eval-123"
+url = f"https://api.keywordsai.co/api/evaluators/{categorical_evaluator_id}/"
+
 data = {
     "categorical_choices": [
         { "name": "Outstanding", "value": 5 },
-        { "name": "Excellent", "value": 4 },
+        { "name": "Very Good", "value": 4 },
         { "name": "Good", "value": 3 },
         { "name": "Fair", "value": 2 },
         { "name": "Poor", "value": 1 }
@@ -121,18 +123,22 @@ data = {
 }
 
 response = requests.patch(url, headers=headers, json=data)
+print(response.json())
 ```
 
-```json JSON
-{
-  "categorical_choices": [
-    { "name": "Outstanding", "value": 5 },
-    { "name": "Excellent", "value": 4 },
-    { "name": "Good", "value": 3 },
-    { "name": "Fair", "value": 2 },
-    { "name": "Poor", "value": 1 }
-  ]
-}
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/evaluators/cat-eval-123/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "categorical_choices": [
+      { "name": "Outstanding", "value": 5 },
+      { "name": "Very Good", "value": 4 },
+      { "name": "Good", "value": 3 },
+      { "name": "Fair", "value": 2 },
+      { "name": "Poor", "value": 1 }
+    ]
+  }'
 ```
 
 </CodeGroup>
@@ -142,21 +148,93 @@ response = requests.patch(url, headers=headers, json=data)
 <CodeGroup>
 
 ```python Python
+# For code evaluators
+code_evaluator_id = "bool-eval-456"
+url = f"https://api.keywordsai.co/api/evaluators/{code_evaluator_id}/"
+
 data = {
+    "name": "Enhanced Length Checker",
     "configurations": {
-        "eval_code_snippet": "def evaluate(llm_input, llm_output, **kwargs):\n    # Enhanced length evaluation\n    length = len(llm_output.split())\n    if length < 5:\n        return 1\n    elif length < 20:\n        return 2\n    elif length < 100:\n        return 4\n    else:\n        return 5"
+        "eval_code_snippet": "def evaluate(llm_input, llm_output, **kwargs):\n    '''\n    Enhanced length checker with word count\n    Returns True if response has >= 10 words, False otherwise\n    '''\n    if not llm_output:\n        return False\n    \n    word_count = len(llm_output.strip().split())\n    return word_count >= 10"
     }
 }
 
 response = requests.patch(url, headers=headers, json=data)
+print(response.json())
 ```
 
-```json JSON
-{
-  "configurations": {
-    "eval_code_snippet": "def evaluate(llm_input, llm_output, **kwargs):\n    # Enhanced length evaluation\n    length = len(llm_output.split())\n    if length < 5:\n        return 1\n    elif length < 20:\n        return 2\n    elif length < 100:\n        return 4\n    else:\n        return 5"
-  }
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/evaluators/bool-eval-456/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Enhanced Length Checker",
+    "configurations": {
+      "eval_code_snippet": "def evaluate(llm_input, llm_output, **kwargs):\n    if not llm_output:\n        return False\n    word_count = len(llm_output.strip().split())\n    return word_count >= 10"
+    }
+  }'
+```
+
+</CodeGroup>
+
+### Update Tags and Starred Status
+
+<CodeGroup>
+
+```python Python
+data = {
+    "starred": True,
+    "tags": ["quality", "assessment", "production"]
 }
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-376694419947/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "starred": true,
+    "tags": ["quality", "assessment", "production"]
+  }'
+```
+
+</CodeGroup>
+
+### Update LLM Engine and Model Options
+
+<CodeGroup>
+
+```python Python
+data = {
+    "configurations": {
+        "llm_engine": "gpt-4o",
+        "model_options": {
+            "temperature": 0.2,
+            "max_tokens": 300
+        }
+    }
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-376694419947/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "configurations": {
+      "llm_engine": "gpt-4o",
+      "model_options": {
+        "temperature": 0.2,
+        "max_tokens": 300
+      }
+    }
+  }'
 ```
 
 </CodeGroup>
@@ -164,6 +242,8 @@ response = requests.patch(url, headers=headers, json=data)
 ## Response
 
 **Status: 200 OK**
+
+Returns the updated evaluator object with all current field values:
 
 ```json
 {
@@ -173,18 +253,18 @@ response = requests.patch(url, headers=headers, json=data)
   "type": "llm",
   "score_value_type": "numerical",
   "eval_class": "",
-  "description": "Updated evaluator with enhanced quality criteria",
+  "description": "Advanced evaluator for response quality assessment with updated criteria",
   "configurations": {
-    "evaluator_definition": "Updated: Evaluate response quality with enhanced criteria focusing on accuracy, relevance, completeness, and clarity.",
-    "scoring_rubric": "1=Poor, 2=Fair, 3=Good, 4=Very Good, 5=Excellent",
-    "llm_engine": "gpt-4o-mini",
+    "evaluator_definition": "Rate the response quality based on accuracy, relevance, and completeness.\n<llm_input>{{llm_input}}</llm_input>\n<llm_output>{{llm_output}}</llm_output>",
+    "scoring_rubric": "Updated: 1=Very Poor, 2=Poor, 3=Fair, 4=Good, 5=Excellent",
+    "llm_engine": "gpt-4o",
     "model_options": {
-      "temperature": 0.1,
-      "max_tokens": 200
+      "temperature": 0.2,
+      "max_tokens": 300
     },
     "min_score": 1.0,
-    "max_score": 10.0,
-    "passing_score": 7.0
+    "max_score": 5.0,
+    "passing_score": 4.0
   },
   "created_by": {
     "first_name": "Keywords AI",
@@ -197,20 +277,60 @@ response = requests.patch(url, headers=headers, json=data)
     "email": "admin@keywordsai.co"
   },
   "created_at": "2025-09-11T09:43:55.858321Z",
-  "updated_at": "2025-09-11T09:43:55.930792Z",
+  "updated_at": "2025-09-11T10:15:22.123456Z",
   "custom_required_fields": [],
-  "categorical_choices": [],
+  "categorical_choices": null,
   "starred": true,
-  "tags": ["quality", "enhanced", "v2"]
+  "organization": 2,
+  "tags": ["quality", "assessment", "production"]
 }
 ```
 
-## Configuration Update Behavior
+## Configuration Update Rules
 
-- **Merge Strategy**: Configuration fields are merged with existing values
-- **Precedence**: Non-null values in the update request take precedence
-- **Partial Updates**: You can update individual configuration fields without affecting others
-- **Validation**: Updated configurations are validated according to the evaluator type
+### Partial Configuration Updates
+
+When updating `configurations`, the system performs a **merge operation**:
+
+- Existing configuration fields are preserved unless explicitly overridden
+- New fields are added to the configuration
+- Setting a field to `null` removes it from the configuration
+- Nested objects (like `model_options`) are completely replaced, not merged
+
+### Example Configuration Merge
+
+**Original Configuration:**
+```json
+{
+  "evaluator_definition": "Original prompt",
+  "scoring_rubric": "Original rubric",
+  "llm_engine": "gpt-4o-mini",
+  "min_score": 1.0,
+  "max_score": 5.0
+}
+```
+
+**Update Request:**
+```json
+{
+  "configurations": {
+    "scoring_rubric": "Updated rubric",
+    "passing_score": 3.0
+  }
+}
+```
+
+**Resulting Configuration:**
+```json
+{
+  "evaluator_definition": "Original prompt",
+  "scoring_rubric": "Updated rubric",
+  "llm_engine": "gpt-4o-mini",
+  "min_score": 1.0,
+  "max_score": 5.0,
+  "passing_score": 3.0
+}
+```
 
 ## Error Responses
 
@@ -219,7 +339,7 @@ response = requests.patch(url, headers=headers, json=data)
 ```json
 {
   "configurations": [
-    "Configuration validation failed: 1 validation error for KeywordsAICustomLLMEvaluatorType\nscoring_rubric\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]"
+    "Configuration validation failed: llm_engine 'invalid-model' is not supported"
   ]
 }
 ```
@@ -232,10 +352,28 @@ response = requests.patch(url, headers=headers, json=data)
 }
 ```
 
+### 403 Forbidden
+
+```json
+{
+  "detail": "You do not have permission to update this evaluator."
+}
+```
+
 ### 404 Not Found
 
 ```json
 {
   "detail": "Not found."
+}
+```
+
+### 422 Unprocessable Entity
+
+```json
+{
+  "categorical_choices": [
+    "This field is required when score_value_type is 'categorical'."
+  ]
 }
 ```

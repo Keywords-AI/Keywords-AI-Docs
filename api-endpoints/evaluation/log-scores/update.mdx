@@ -17,6 +17,10 @@ Updates an existing score for a specific log.
   Optional updated boolean score value.
 </ParamField>
 
+<ParamField body="categorical_value" type="array">
+  Optional updated categorical score value (array of strings). Use when evaluator's `score_value_type` is `categorical`.
+</ParamField>
+
 <RequestExample>
 ```Python Python
 import requests
