@@ -1,6 +1,6 @@
 ---
 title: Retrieve log list
-api: POST https://api.keywordsai.co/api/request-logs/
+api: POST https://api.keywordsai.co/api/request-logs/list/
 ---
 
 The Logs List endpoint allows you to get the past logs with specified filters.
@@ -10,7 +10,7 @@ The Logs List endpoint allows you to get the past logs with specified filters.
 You can add these params to the **URL params**.
 For example:
 ```
-"https://api.keywordsai.co/api/request-logs/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
+"https://api.keywordsai.co/api/request-logs/list/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
 ```
 <ParamField query="start_time" type="string" required>
   The start time for filtering logs in ISO 8601 format. If not provided, defaults to 1 hour ago.
@@ -93,10 +93,19 @@ For example:
   The page number of the current logs.
 </ParamField>
 
+<ParamField query="include_fields" type="string">
+  Comma separated fields to be included in the response logs. This parameter allows you to specify which fields should be returned to improve performance and reduce response size.
+  <Accordion title="Example">
+    ```
+    include_fields=custom_identifier,customer_identifier,id,latency
+    ```
+  </Accordion>
+</ParamField>
+
 ## POST params
 You can add these params to the **body**:
 ```python
-url = "https://api.keywordsai.co/api/request-logs/"
+url = "https://api.keywordsai.co/api/request-logs/list/"
 headers = {
     "Authorization": f"Api-Key {YOUR_KEYWORDS_AI_API_KEY}",
 }
@@ -165,6 +174,9 @@ response = requests.post(url, headers=headers, json=data)
         <ParamField body="endswith" type="string">
           Ends with
         </ParamField>
+        <ParamField body="startswith" type="string">
+          Starts with
+        </ParamField>
         <ParamField body="in" type="string">
           Can be used in arrays or text
         </ParamField>
@@ -184,7 +196,7 @@ response = requests.post(url, headers=headers, json=data)
 <RequestExample>
 
 ```python Python
-url = "https://api.keywordsai.co/api/request-logs/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
+url = "https://api.keywordsai.co/api/request-logs/list/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
 
 
 from urllib.parse import urlencode
@@ -196,7 +208,7 @@ params = {
     "fetch_filters": "false",
     "page_size": 1
 }
-url = f"https://api.keywordsai.co/api/request-logs/?{urlencode(params)}"
+url = f"https://api.keywordsai.co/api/request-logs/list/?{urlencode(params)}"
 headers = {
     "Authorization": f"Api-Key {YOUR_KEYWORDS_AI_API_KEY}",
 }
@@ -205,8 +217,9 @@ data = {
 }
 response = requests.post(url, headers=headers, json=data)
 ```
+
 ```typescript TypeScript
-const url = 'https://api.keywordsai.co/api/request-logs/';
+const url = 'https://api.keywordsai.co/api/request-logs/list/';
 
 const params = new URLSearchParams({
     page: '1',
@@ -239,7 +252,7 @@ fetch(fullUrl, {
 })
 ```
 ```bash cURL
-curl -X POST "https://api.keywordsai.co/api/request-logs/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1" \
+curl -X POST "https://api.keywordsai.co/api/request-logs/list/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1" \
 -H "Authorization: Api-Key YOUR_KEYWORDS_AI_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{"filters": {}}'

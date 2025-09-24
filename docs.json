@@ -25,7 +25,16 @@
             "group": "Get started",
             "pages": [
               "get-started/overview",
-              "get-started/llm-inference"              
+                {
+                "group": "Quickstart",
+                "pages": [
+                  "/documentation/products/logs/quickstart",
+                  "/documentation/products/traces/quickstart",
+                  "/documentation/products/prompt_management/quickstart",
+                  "/documentation/products/evaluation/overview",
+                  "/documentation/products/gateway/quickstart"
+                ]
+              }          
             ]
           },
           {
@@ -381,6 +390,7 @@
           {
             "group": "Evaluation",
             "pages": [
+              "api-endpoints/evaluation/types",
               {
                 "group": "Evaluators",
                 "pages": [

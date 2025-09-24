@@ -1,20 +1,16 @@
 ---
 title: "List Evaluators"
-description: "Retrieve a paginated list of evaluators"
+api: "GET https://api.keywordsai.co/api/evaluators/"
 ---
 
-# List Evaluators
-
-**GET** `/api/evaluators/`
-
-Retrieves a paginated list of evaluators for your organization.
+Returns a paginated list of evaluators for your organization.
 
 ## Authentication
 
-Requires API key authentication. Include your API key in the request headers:
+All endpoints require API key authentication:
 
 ```bash
-Authorization: Api-Key YOUR_API_KEY
+Authorization: Bearer YOUR_API_KEY
 ```
 
 ## Query Parameters
@@ -31,6 +27,8 @@ Authorization: Api-Key YOUR_API_KEY
 
 ## Examples
 
+### Basic List Request
+
 <CodeGroup>
 
 ```python Python
@@ -38,31 +36,76 @@ import requests
 
 url = "https://api.keywordsai.co/api/evaluators/"
 headers = {
-    "Authorization": "Api-Key YOUR_API_KEY"
+    "Authorization": "Bearer YOUR_API_KEY"
 }
 
-# Basic list
 response = requests.get(url, headers=headers)
 print(response.json())
+```
 
-# With filters
+```bash cURL
+curl -X GET "https://api.keywordsai.co/api/evaluators/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+### With Filters and Pagination
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/evaluators/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+# Filter by type and score value type
 params = {
     "type": "llm",
     "score_value_type": "numerical",
+    "page": 1,
     "page_size": 10
 }
+
 response = requests.get(url, headers=headers, params=params)
 print(response.json())
 ```
 
 ```bash cURL
-# Basic list
-curl -X GET "https://api.keywordsai.co/api/evaluators/" \
-  -H "Authorization: Api-Key YOUR_API_KEY"
+curl -X GET "https://api.keywordsai.co/api/evaluators/?type=llm&score_value_type=numerical&page=1&page_size=10" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
 
-# With filters
-curl -X GET "https://api.keywordsai.co/api/evaluators/?type=llm&score_value_type=numerical&page_size=10" \
-  -H "Authorization: Api-Key YOUR_API_KEY"
+</CodeGroup>
+
+### Search Evaluators
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/evaluators/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+# Search by name or slug
+params = {
+    "search": "quality",
+    "starred": True
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/api/evaluators/?search=quality&starred=true" \
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
 </CodeGroup>
@@ -131,27 +174,78 @@ curl -X GET "https://api.keywordsai.co/api/evaluators/?type=llm&score_value_type
       "starred": false,
       "organization": 2,
       "tags": []
+    },
+    {
+      "id": "bool-eval-456",
+      "name": "Response Length Checker",
+      "evaluator_slug": "length_checker_boolean",
+      "type": "code",
+      "score_value_type": "boolean",
+      "eval_class": "",
+      "description": "Checks if response meets minimum length requirement",
+      "created_by": {
+        "first_name": "Keywords AI",
+        "last_name": "Team",
+        "email": "admin@keywordsai.co"
+      },
+      "updated_by": {
+        "first_name": "Keywords AI",
+        "last_name": "Team",
+        "email": "admin@keywordsai.co"
+      },
+      "created_at": "2025-09-11T09:45:00.000000Z",
+      "updated_at": "2025-09-11T09:45:00.000000Z",
+      "custom_required_fields": [],
+      "categorical_choices": [],
+      "starred": false,
+      "organization": 2,
+      "tags": ["automation", "validation"]
     }
   ],
-  "count": 2,
+  "count": 3,
   "previous": null,
   "next": null,
   "current_filters": {
-    "type": "llm",
-    "score_value_type": "numerical"
+    "type": null,
+    "score_value_type": null,
+    "search": null,
+    "starred": null,
+    "tags": null
   }
 }
 ```
 
 ## Response Fields
 
+### Evaluator Object
+
 | Field | Type | Description |
 |-------|------|-------------|
-| `results` | array | Array of evaluator objects |
-| `count` | integer | Total number of evaluators matching filters |
-| `previous` | string\|null | URL for previous page (if exists) |
-| `next` | string\|null | URL for next page (if exists) |
-| `current_filters` | object | Applied filters for this request |
+| `id` | string | Unique evaluator identifier |
+| `name` | string | Display name of the evaluator |
+| `evaluator_slug` | string | URL-friendly identifier |
+| `type` | string | Evaluator type: `llm`, `human`, or `code` |
+| `score_value_type` | string | Score format: `numerical`, `boolean`, `categorical`, or `comment` |
+| `eval_class` | string | Pre-built template class (if used) |
+| `description` | string | Description of the evaluator |
+| `created_by` | object | User who created the evaluator |
+| `updated_by` | object | User who last updated the evaluator |
+| `created_at` | string | ISO timestamp of creation |
+| `updated_at` | string | ISO timestamp of last update |
+| `custom_required_fields` | array | Additional required fields |
+| `categorical_choices` | array | Choices for categorical evaluators |
+| `starred` | boolean | Whether the evaluator is starred |
+| `organization` | integer | Organization ID |
+| `tags` | array | Tags associated with the evaluator |
+
+### Pagination Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `count` | integer | Total number of evaluators |
+| `previous` | string | URL for previous page (null if first page) |
+| `next` | string | URL for next page (null if last page) |
+| `current_filters` | object | Currently applied filters |
 
 ## Error Responses
 
@@ -160,5 +254,13 @@ curl -X GET "https://api.keywordsai.co/api/evaluators/?type=llm&score_value_type
 ```json
 {
   "detail": "Your API key is invalid or expired, please check your API key at https://platform.keywordsai.co/platform/api/api-keys"
+}
+```
+
+### 400 Bad Request
+
+```json
+{
+  "detail": "Invalid filter parameter: type must be one of 'llm', 'human', 'code'"
 }
 ```

@@ -1,11 +1,7 @@
 ---
 title: "Delete Evaluator"
-description: "Permanently delete an evaluator"
+api: "DELETE https://api.keywordsai.co/api/evaluators/{evaluator_id}/"
 ---
-
-# Delete Evaluator
-
-**DELETE** `/api/evaluators/{evaluator_id}/`
 
 Permanently deletes an evaluator from your organization.
 
@@ -15,10 +11,10 @@ Permanently deletes an evaluator from your organization.
 
 ## Authentication
 
-Requires API key authentication. Include your API key in the request headers:
+All endpoints require API key authentication:
 
 ```bash
-Authorization: Api-Key YOUR_API_KEY
+Authorization: Bearer YOUR_API_KEY
 ```
 
 ## Path Parameters
@@ -26,6 +22,27 @@ Authorization: Api-Key YOUR_API_KEY
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `evaluator_id` | string | The unique ID of the evaluator to delete |
+
+## Important Considerations
+
+### Impact on Existing Scores
+
+- **Existing scores will remain**: Scores that have already been created using this evaluator will not be deleted
+- **Score references**: Existing scores will maintain their reference to the deleted evaluator ID
+- **Historical data**: All historical evaluation data remains accessible
+
+### Impact on Running Evaluations
+
+- **Active evaluations**: Any currently running evaluations using this evaluator may fail
+- **Scheduled evaluations**: Future scheduled evaluations using this evaluator will fail
+- **API integrations**: Applications using this evaluator ID will receive 404 errors
+
+### Best Practices
+
+1. **Check dependencies**: Ensure no active integrations are using this evaluator
+2. **Export configurations**: Save evaluator configurations before deletion if you might need them later
+3. **Update integrations**: Update any code or configurations that reference this evaluator
+4. **Consider archiving**: Instead of deleting, consider marking the evaluator as inactive or archived
 
 ## Examples
 
@@ -37,17 +54,42 @@ import requests
 evaluator_id = "0f4325f9-55ef-4c20-8abe-376694419947"
 url = f"https://api.keywordsai.co/api/evaluators/{evaluator_id}/"
 headers = {
-    "Authorization": "Api-Key YOUR_API_KEY"
+    "Authorization": "Bearer YOUR_API_KEY"
 }
 
-response = requests.delete(url, headers=headers)
-print(f"Status Code: {response.status_code}")
-print(f"Response: {response.text}")
+# Confirm deletion before proceeding
+confirm = input(f"Are you sure you want to delete evaluator {evaluator_id}? (yes/no): ")
+if confirm.lower() == 'yes':
+    response = requests.delete(url, headers=headers)
+    if response.status_code == 204:
+        print("Evaluator deleted successfully")
+    else:
+        print(f"Error: {response.status_code} - {response.text}")
+else:
+    print("Deletion cancelled")
 ```
 
 ```bash cURL
 curl -X DELETE "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-376694419947/" \
-  -H "Authorization: Api-Key YOUR_API_KEY"
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript JavaScript
+const evaluatorId = "0f4325f9-55ef-4c20-8abe-376694419947";
+const url = `https://api.keywordsai.co/api/evaluators/${evaluatorId}/`;
+
+const response = await fetch(url, {
+  method: 'DELETE',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY'
+  }
+});
+
+if (response.status === 204) {
+  console.log('Evaluator deleted successfully');
+} else {
+  console.error('Failed to delete evaluator:', response.statusText);
+}
 ```
 
 </CodeGroup>
@@ -56,43 +98,82 @@ curl -X DELETE "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe
 
 **Status: 204 No Content**
 
-A successful deletion returns an empty response body with a 204 status code.
+Successful deletion returns an empty response body with status code 204.
 
-## What Happens When You Delete an Evaluator
+```
+(Empty response body)
+```
 
-1. **Evaluator Removal**: The evaluator is permanently removed from your organization
-2. **Historical Data**: Existing evaluation results using this evaluator remain intact
-3. **Future Evaluations**: The evaluator can no longer be used for new evaluations
-4. **References**: Any references to this evaluator in evaluation configurations will need to be updated
+## Pre-deletion Checklist
 
-## Before Deleting
+Before deleting an evaluator, consider the following:
 
-Consider these steps before deleting an evaluator:
+### 1. Check Active Usage
 
-1. **Check Usage**: Verify if the evaluator is currently being used in any active evaluation workflows
-2. **Export Data**: If needed, export any evaluation results or configurations that reference this evaluator
-3. **Update References**: Remove or update any evaluation configurations that reference this evaluator
-4. **Backup**: Consider creating a backup of the evaluator configuration if you might need it later
+```python Python
+# Example: Check if evaluator is being used in recent scores
+import requests
+from datetime import datetime, timedelta
 
-## Alternative: Disable Instead of Delete
+evaluator_id = "your-evaluator-id"
+scores_url = "https://api.keywordsai.co/api/scores/"
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
 
-If you want to temporarily stop using an evaluator without permanently deleting it, consider:
+# Check for scores created in the last 30 days
+thirty_days_ago = (datetime.now() - timedelta(days=30)).isoformat()
+params = {
+    "evaluator_id": evaluator_id,
+    "created_at__gte": thirty_days_ago
+}
 
-1. **Update the name** to include "[DISABLED]" or similar
-2. **Remove it from active evaluation workflows**
-3. **Update the description** to indicate it's no longer in use
+response = requests.get(scores_url, headers=headers, params=params)
+scores = response.json()
 
-This approach preserves the evaluator for potential future use while preventing accidental usage.
+if scores.get('count', 0) > 0:
+    print(f"Warning: This evaluator has {scores['count']} scores in the last 30 days")
+    print("Consider the impact before deletion")
+else:
+    print("No recent scores found for this evaluator")
+```
+
+### 2. Export Evaluator Configuration
+
+```python Python
+# Example: Export evaluator configuration before deletion
+import requests
+import json
+
+evaluator_id = "your-evaluator-id"
+url = f"https://api.keywordsai.co/api/evaluators/{evaluator_id}/"
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
+
+# Get evaluator details
+response = requests.get(url, headers=headers)
+evaluator = response.json()
+
+# Save to file
+with open(f"evaluator_backup_{evaluator_id}.json", "w") as f:
+    json.dump(evaluator, f, indent=2)
+
+print(f"Evaluator configuration saved to evaluator_backup_{evaluator_id}.json")
+```
+
+### 3. Update Integration Code
+
+Ensure you update any code that references the evaluator:
+
+```python Python
+# Before deletion, update your application code
+# Replace hardcoded evaluator IDs with new ones
+
+# OLD CODE:
+# evaluator_id = "0f4325f9-55ef-4c20-8abe-376694419947"  # This will be deleted
+
+# NEW CODE:
+evaluator_id = "new-evaluator-id-here"  # Use replacement evaluator
+```
 
 ## Error Responses
-
-### 401 Unauthorized
-
-```json
-{
-  "detail": "Your API key is invalid or expired, please check your API key at https://platform.keywordsai.co/platform/api/api-keys"
-}
-```
 
 ### 404 Not Found
 
@@ -102,10 +183,72 @@ This approach preserves the evaluator for potential future use while preventing 
 }
 ```
 
+### 401 Unauthorized
+
+```json
+{
+  "detail": "Your API key is invalid or expired, please check your API key at https://platform.keywordsai.co/platform/api/api-keys"
+}
+```
+
 ### 403 Forbidden
 
 ```json
 {
   "detail": "You do not have permission to delete this evaluator."
 }
+```
+
+### 409 Conflict
+
+```json
+{
+  "detail": "Cannot delete evaluator: it is currently being used in active evaluations. Please wait for evaluations to complete or cancel them before deletion."
+}
+```
+
+## Recovery Options
+
+### If You Accidentally Deleted an Evaluator
+
+Since deletion is permanent, you have these options:
+
+1. **Recreate from backup**: If you exported the configuration, recreate the evaluator
+2. **Contact support**: For critical evaluators, contact Keywords AI support immediately
+3. **Check version control**: If evaluator configurations are in your codebase
+
+### Recreating a Deleted Evaluator
+
+```python Python
+# Example: Recreate evaluator from backup
+import requests
+import json
+
+# Load backup configuration
+with open("evaluator_backup_old-id.json", "r") as f:
+    backup_config = json.load(f)
+
+# Prepare creation payload (remove read-only fields)
+create_payload = {
+    "name": backup_config["name"],
+    "type": backup_config["type"],
+    "score_value_type": backup_config["score_value_type"],
+    "description": backup_config["description"],
+    "configurations": backup_config["configurations"],
+    "categorical_choices": backup_config.get("categorical_choices"),
+    "tags": backup_config.get("tags", [])
+}
+
+# Create new evaluator
+url = "https://api.keywordsai.co/api/evaluators/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, headers=headers, json=create_payload)
+new_evaluator = response.json()
+
+print(f"New evaluator created with ID: {new_evaluator['id']}")
+print("Remember to update your integration code with the new ID")
 ```
