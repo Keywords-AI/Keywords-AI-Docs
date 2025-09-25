@@ -28,11 +28,11 @@
                 {
                 "group": "Quickstart",
                 "pages": [
-                  "/documentation/products/logs/quickstart",
-                  "/documentation/products/traces/quickstart",
-                  "/documentation/products/prompt_management/quickstart",
-                  "/documentation/products/evaluation/overview",
-                  "/documentation/products/gateway/quickstart"
+                  "/get-started/quickstart/logging",
+                  "/get-started/quickstart/tracing",
+                  "/get-started/quickstart/gateway",
+                  "/get-started/quickstart/prompt_management"
+
                 ]
               }          
             ]
