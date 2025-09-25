@@ -1,0 +1,199 @@
+---
+title: "Create a prompt"
+description: "A complete guide to create, deploy, and use prompts in your codebase."
+---
+
+## What is prompt management?
+
+Prompt management helps you create, version, share, and deploy prompt templates easily. Instead of hardcoding prompts in your application, you can manage them centrally, collaborate with your team, and monitor their performance.
+
+
+### Why use prompt management?
+
+- **Version control**: Track changes and roll back when needed
+- **Team collaboration**: Work together on prompts without touching code
+- **Performance monitoring**: See how your prompts perform in production
+- **Dynamic variables**: Use placeholders for flexible, reusable prompts
+- **A/B testing**: Compare different prompt versions
+
+---
+
+## Step 1: Create your first prompt
+ <Steps>
+<Step title="Create a new prompt">
+Once you have signed up and created an account, you can create a new prompt on the platform. Go to the [Prompts page](https://platform.keywordsai.co/platform/prompts) and click on the "Create new prompt" button. You should name your prompt and could add a description to it.
+
+     <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/create-new-prompt.png" alt="Create prompt placeholder" />
+</Step>
+<Step title="Configure the prompt">
+Once you have created a new prompt, you can configure it. Go to the `Editor` tab and you can begin to write your prompt. The right side of the screen defines your prompt. You can set parameters like `Model`, `Temperature`, `Max Tokens`, and `Top P`. You can also add function calls and fallback models to your prompt. Check out the details [here](/api-endpoints/async-endpoints/request-logging-endpoint).
+
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/configure-prompt.png" alt="Create prompt placeholder" />
+
+    </Step>
+<Step title="Write the content">
+Once you have configured your prompt, you can write the content of your prompt. Click on the `+ Add message` button to add a new message to your prompt. You can change the role of the message to `user` or `assistant` by clicking on the role name.
+
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/write-prompt.png" alt="Create prompt placeholder" />
+
+    </Step>
+<Step title="Variables in the prompt">
+You can also add variables to your prompt. Variables are placeholders for dynamic content that can be used to generate prompts. Simply add double curly braces `{{variable_name}}` to your prompt and you will be able to use the variable in your prompt.
+
+Replace the User message with this:
+```
+Please develop an optimized Python function to {{task_description}}, 
+utilizing {{specific_library}},include error handling, and write unit tests for the function.
+```
+<Note>
+The format of the variable can't be `{{task description}}`. It should be `{{task_description}}` with "_" instead of spaces.
+</Note>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/prompt-variables.png" alt="Create prompt placeholder" />
+
+</Step>
+<Step title="Commit the first version">
+After did this, you can:
+1. Add a value for each variable in the `Variables` tab.
+2. Click `Run` to test your prompt.
+
+You now just finished writing your first version of the prompt.
+
+You can click on the `Commit` button and write a commit message, which is helpful for you to track the changes you made to your prompt.
+
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/prompt-commit.png" alt="Create prompt placeholder" />
+
+Congrats! You just created your first prompt on Keywords AI platform.
+
+</Step>
+<Step title="Deploy to production">
+Once you have committed your prompt, you can deploy it to production. Go to the `Deployments` tab and click on the `Deploy` button. You can choose the environment you want to deploy to.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/prompts-deploy.jpg" alt="Create prompt placeholder" />
+</Frame>
+
+</Step>
+</Steps>
+
+---
+
+
+## Step 2: Find your prompt ID
+
+After creating your prompt, you'll need its ID to use it in code. Find the Prompt ID in the Overview panel on the [Prompts page](https://platform.keywordsai.co/platform/prompts).
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/prompt-id.png" alt="Find Prompt ID" />
+</Frame>
+
+---
+
+## Step 3: Use your prompt in code
+
+Now you can call your prompt from your application using the Keywords AI API.
+
+<Tabs>
+<Tab title="OpenAI Python SDK">
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",  # This will be overridden by prompt config
+    messages=[{"role": "user", "content": "placeholder"}],  # This will be overridden
+    extra_body={
+        "prompt": {
+            "prompt_id": "042f5f",  # Your prompt ID here
+            "variables": {
+                "task_description": "Square a number",
+                "specific_library": "math"
+            },
+            "override": True  # Use prompt config instead of SDK parameters
+        }
+    }
+)
+
+print(response.choices[0].message.content)
+```
+</Tab>
+
+<Tab title="OpenAI TypeScript SDK">
+```typescript
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+    baseURL: "https://api.keywordsai.co/api",
+    apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const response = await client.chat.completions.create({
+    messages: [{ role: "user", content: "placeholder" }],
+    model: "gpt-4o-mini",
+    // @ts-expect-error
+    prompt: {
+        prompt_id: "042f5f",  // Your prompt ID here
+        variables: {
+            task_description: "Square a number",
+            specific_library: "math"
+        },
+        override: true
+    }
+});
+
+console.log(response.choices[0].message.content);
+```
+</Tab>
+
+<Tab title="Standard API">
+```python
+import requests
+
+def call_prompt(api_key="YOUR_KEYWORDSAI_API_KEY"):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {api_key}',
+    }
+
+    data = {
+        'prompt': {
+            'prompt_id': '042f5f',  # Your prompt ID here
+            'variables': {
+                'task_description': 'Square a number',
+                'specific_library': 'math'
+            }
+        }
+    }
+
+    response = requests.post(
+        'https://api.keywordsai.co/api/chat/completions',
+        headers=headers,
+        json=data
+    )
+    return response.json()
+
+result = call_prompt()
+print(result['choices'][0]['message']['content'])
+```
+</Tab>
+</Tabs>
+
+---
+
+## Step 4: Monitor your prompts
+
+View your prompt usage and performance on the [Logs page](https://platform.keywordsai.co/platform/logs). You can:
+
+- Filter logs by prompt name
+- See response times and token usage
+- Debug individual prompt executions
+- Track prompt performance over time
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/prompt-logs.png" alt="Monitor prompts" />
+</Frame>
+
+---
