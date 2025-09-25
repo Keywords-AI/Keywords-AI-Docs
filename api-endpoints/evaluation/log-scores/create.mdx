@@ -25,6 +25,10 @@ Creates a new evaluation score for a specific log. This ensures that only one sc
   Optional boolean score value.
 </ParamField>
 
+<ParamField body="categorical_value" type="array">
+  Optional categorical score value (array of strings). Use when evaluator's `score_value_type` is `categorical`.
+</ParamField>
+
 <RequestExample>
 ```Python Python
 import requests
