@@ -1,0 +1,222 @@
+---
+title: "Evaluation"
+description: "Evaluate and improve your LLM applications with automated testing and scoring"
+---
+
+## What is evaluation?
+
+Evaluation helps you systematically test and improve your LLM applications by running automated experiments across different prompts, models, and configurations. With Keywords AI's evaluation suite, you can:
+
+- **Test multiple configurations**: Compare different prompts, models, and parameters side-by-side
+- **Automated scoring**: Use LLM-based evaluators to score outputs on criteria like relevance, accuracy, and tone
+- **Track performance**: Monitor how changes affect your application's quality over time
+- **Data-driven decisions**: Make informed choices about which configurations work best
+
+<Callout type="info">
+  Evaluation is essential for maintaining high-quality LLM applications in production. It helps you catch regressions and validate improvements before deploying changes.
+</Callout>
+
+## Use evaluation
+
+### Step 1: Get Keywords AI API key
+
+1. Sign up for a [Keywords AI account](https://keywordsai.co)
+2. Navigate to the [API Keys page](https://platform.keywordsai.co/platform/api/api-keys)
+3. Click **Create API Key** and copy your key
+4. Save it securely - you'll need it for authentication
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/create-api-key.jpg" />
+</Frame>
+
+### Step 2: Set up LLM provider API key
+
+To run evaluations, you'll need an API key from your LLM provider:
+
+<Tabs>
+  <Tab title="OpenAI">
+    1. Go to [OpenAI API Keys](https://platform.openai.com/api-keys)
+    2. Click **Create new secret key**
+    3. Copy and save your API key
+    4. Add it to your [Keywords AI integrations](https://platform.keywordsai.co/platform/api/integration)
+  </Tab>
+  <Tab title="Anthropic">
+    1. Visit [Anthropic Console](https://console.anthropic.com/)
+    2. Navigate to **API Keys**
+    3. Create a new key and copy it
+    4. Add it to your [Keywords AI integrations](https://platform.keywordsai.co/platform/api/integration)
+  </Tab>
+</Tabs>
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/configure-key.png" />
+</Frame>
+
+### Step 3: Create an evaluator
+
+Evaluators automatically score your LLM outputs based on specific criteria:
+
+1. Navigate to **Evaluation** → **Evaluators** in your dashboard
+2. Click **+ New evaluator** and select **LLM**
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/create-evaluator.png" />
+</Frame>
+
+3. Configure your evaluator with the following settings:
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/llm-evaluator-overview.png" />
+</Frame>
+
+4. Define a unique **Slug** for your evaluator (this will be used to identify it in logs):
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/slug.png" />
+</Frame>
+
+5. Choose your evaluation model (currently supports `gpt-4o` and `gpt-4o-mini`):
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/choose-model.png" />
+</Frame>
+
+6. Write a description for the evaluator task using available variables:
+   - `{{llm_output}}`: The output text from the LLM
+   - `{{ideal_output}}`: The ideal output text (optional)
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/write-description.png" />
+</Frame>
+
+7. Define the scoring rubric and passing score:
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/define-scores.png" />
+</Frame>
+
+8. Click **Save** to create your evaluator
+
+<Callout type="tip">
+  Start with simple criteria like "relevance" or "helpfulness" before creating more complex evaluators.
+</Callout>
+
+### Step 4: Prepare testsets
+
+Testsets contain the input data for your evaluation experiments:
+
+#### Create your test cases in a CSV file
+
+Create a CSV file with columns matching your prompt variables. Each column header should be a variable name (without the `{{}}` syntax). You can include an additional column for expected outputs.
+
+For example, if your prompt uses variables like `{{first_name}}`, `{{description}}`, `{{job_title}}`, and `{{company_name}}`, your CSV should have columns named `first_name`, `description`, `job_title`, and `company_name`.
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/testsets-csv.png" />
+</Frame>
+
+#### Import the testset
+
+You can import the CSV file and edit it like a Google Sheet. You can add, delete, or edit the test cases in the testset.
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/testset-create.png" />
+</Frame>
+
+#### Import ideal outputs
+
+If you want to include ideal outputs in the testset, you can add a column for the expected output. Name the column `ideal_output`, then the testset will show the ideal output for each test case.
+
+### Step 5: Run experiments
+
+Experiments test your prompts against your testsets using your evaluators:
+
+#### Prerequisites
+
+Before creating an experiment, ensure you have:
+- Created prompts with variables
+- Set up testsets (either by importing CSV or creating blank ones)
+- Configured evaluators
+
+#### Create an experiment
+
+1. Navigate to **Evaluation** → **Experiments**
+2. Click **+ New experiment**
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/create-experiment.png" />
+</Frame>
+
+3. Configure your experiment settings:
+   - **Name**: Give it a descriptive name
+   - **Prompt**: Select the prompt template to test
+   - **Testset**: Choose your prepared testset
+   - **Model**: Select the LLM model to evaluate
+   - **Evaluators**: Choose which evaluators to apply
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiment-config.png" />
+</Frame>
+
+4. Click **Run Experiment** to start the evaluation process
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/run-experiment.png" />
+</Frame>
+
+<Callout type="warning">
+  Experiments consume API credits from your LLM provider. Start with small testsets to estimate costs.
+</Callout>
+
+### Step 6: View results
+
+Analyze your experiment results to improve your prompts:
+
+#### Experiment overview
+
+View the overall performance metrics and scores for your experiment:
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiment-results.png" />
+</Frame>
+
+#### Individual test case results
+
+Review detailed results for each test case, including:
+- Input variables and values
+- Generated outputs
+- Evaluation scores and feedback
+- Comparison with ideal outputs (if provided)
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/test-case-results.png" />
+</Frame>
+
+#### Compare experiments
+
+Compare multiple experiments to identify the best performing configurations:
+
+<Frame>
+  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/compare-experiments.png" />
+</Frame>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Advanced Evaluators" href="/documentation/products/evaluation/evaluators/llm-evaluator">
+    Create sophisticated scoring criteria for complex use cases
+  </Card>
+  <Card title="Batch Experiments" href="/documentation/products/evaluation/experiments/experiments">
+    Run large-scale evaluations with multiple configurations
+  </Card>
+  <Card title="API Integration" href="/api-reference/evaluation/experiments/create">
+    Automate evaluations through our REST API
+  </Card>
+  <Card title="Best Practices" href="/documentation/products/evaluation/best-practices">
+    Learn proven strategies for effective LLM evaluation
+  </Card>
+</CardGroup>
+
+<Callout type="success">
+  You're now ready to systematically evaluate and improve your LLM applications! Start with simple experiments and gradually increase complexity as you learn what works best for your use case.
+</Callout>
