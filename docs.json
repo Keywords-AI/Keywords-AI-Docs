@@ -24,7 +24,7 @@
           {
             "group": "Get started",
             "pages": [
-              "get-started/overview",
+              "/get-started/overview",
                 {
                 "group": "Quickstart",
                 "pages": [
@@ -34,7 +34,8 @@
                   "/get-started/quickstart/prompt_management",
                   "/get-started/quickstart/evaluation"
                 ]
-              }          
+              },
+              "get-started/observability_data_model"
             ]
           },
           {

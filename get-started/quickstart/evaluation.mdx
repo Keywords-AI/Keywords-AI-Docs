@@ -5,218 +5,167 @@ description: "Evaluate and improve your LLM applications with automated testing 
 
 ## What is evaluation?
 
-Evaluation helps you systematically test and improve your LLM applications by running automated experiments across different prompts, models, and configurations. With Keywords AI's evaluation suite, you can:
+Evaluation helps you systematically test and improve your LLM applications by running automated experiments across different prompts, models, and configurations. Keywords AI offers two ways of evaluations:
 
-- **Test multiple configurations**: Compare different prompts, models, and parameters side-by-side
-- **Automated scoring**: Use LLM-based evaluators to score outputs on criteria like relevance, accuracy, and tone
-- **Track performance**: Monitor how changes affect your application's quality over time
-- **Data-driven decisions**: Make informed choices about which configurations work best
+- **Online Evaluation**: Run experiments with your draft prompt, iterate before production.
+- **Offline Evaluation**: Select a group of logs you have and evaluate them against your criteria.
 
-<Callout type="info">
-  Evaluation is essential for maintaining high-quality LLM applications in production. It helps you catch regressions and validate improvements before deploying changes.
-</Callout>
+## Use online evaluation
 
-## Use evaluation
+This quickstart focuses on **online evaluation** - testing your prompts before deploying them to production.
 
-### Step 1: Get Keywords AI API key
+### 1. Get your Keywords AI API key
 
-1. Sign up for a [Keywords AI account](https://keywordsai.co)
-2. Navigate to the [API Keys page](https://platform.keywordsai.co/platform/api/api-keys)
-3. Click **Create API Key** and copy your key
-4. Save it securely - you'll need it for authentication
+After you create an account on [Keywords AI](https://platform.keywordsai.co), you can get your API key from the [API keys page](https://platform.keywordsai.co/platform/api/api-keys).
 
-<Frame>
-  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/create-api-key.jpg" />
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/api-keys.png" alt="Create API key placeholder" />
 </Frame>
 
-### Step 2: Set up LLM provider API key
+### 2. Set up LLM provider API key
 
-To run evaluations, you'll need an API key from your LLM provider:
+<Tip>
+**Environment Management**: To separate test and production environments, create separate API keys for each environment instead of using an `env` parameter. This approach provides better security and clearer separation between your development and production workflows.
+</Tip>
 
-<Tabs>
-  <Tab title="OpenAI">
-    1. Go to [OpenAI API Keys](https://platform.openai.com/api-keys)
-    2. Click **Create new secret key**
-    3. Copy and save your API key
-    4. Add it to your [Keywords AI integrations](https://platform.keywordsai.co/platform/api/integration)
-  </Tab>
-  <Tab title="Anthropic">
-    1. Visit [Anthropic Console](https://console.anthropic.com/)
-    2. Navigate to **API Keys**
-    3. Create a new key and copy it
-    4. Add it to your [Keywords AI integrations](https://platform.keywordsai.co/platform/api/integration)
-  </Tab>
-</Tabs>
+<Info>For all AI gateway users, you have to add your own credentials to activate AI gateway. We will use your credentials to call LLMs on your behalf. </Info>
+For example, if you want to use OpenAI, you have to add your OpenAI API key to activate AI gateway. 
+We won't use your credentials for any other purposes.
 
-<Frame>
-  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/configure-key.png" />
-</Frame>
+- [Set up LLM provider API key](https://platform.keywordsai.co/platform/api/providers)
 
-### Step 3: Create an evaluator
+### 3. Create a prompt
 
-Evaluators automatically score your LLM outputs based on specific criteria:
+Before you can evaluate your LLM applications, you need to go to [prompts page](https://platform.keywordsai.co/platform/prompts) and create prompt template with variables that can be tested against different inputs.
+
+**Make sure you add variables to your prompt!**
+
+Variables are placeholders for dynamic content that can be used to generate prompts. Simply add double curly braces `{{variable_name}}` to your prompt and you will be able to use the variable in your prompt.
+
+<Note>
+The format of the variable can't be `{{task description}}`. It should be `{{task_description}}` with "_" instead of spaces.
+</Note>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/prompt-variables.png" alt="Create prompt placeholder" />
+
+<Card title="Prompt management quickstart" href="/get-started/quickstart/prompt_management" icon="plus">
+Check this instruction if you don't know how to setup up your prompt
+</Card>
+
+### Step 4: Create a LLM evaluator
+
+Evaluators automatically score your LLM outputs based on specific criteria. Follow these steps to create your first evaluator:
 
 1. Navigate to **Evaluation** → **Evaluators** in your dashboard
 2. Click **+ New evaluator** and select **LLM**
 
-<Frame>
-  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/create-evaluator.png" />
-</Frame>
-
-3. Configure your evaluator with the following settings:
-
+3. Fill in the evaluator configuration form:
 <Frame>
   <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/llm-evaluator-overview.png" />
 </Frame>
 
-4. Define a unique **Slug** for your evaluator (this will be used to identify it in logs):
+3. Fill in the evaluator configuration form:
 
-<Frame>
-  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/slug.png" />
-</Frame>
+   - **Name**: Give your evaluator a descriptive name (e.g., "Factual Correctness", "Response Relevance")
+   - **Slug**: Create a unique identifier for logs (e.g., "factual-correctness-demo")
+   - **Model**: Choose your evaluation model (`gpt-4o` or `gpt-4o-mini`)
+   - **Definition**: Write a clear description of what the evaluator should assess, using these available variables:
+     - `{{llm_output}}`: The output text from the LLM being evaluated
+     - `{{llm_input}}`: The input/prompt sent to the LLM (optional)
+     - `{{ideal_output}}`: The expected ideal output for comparison (optional)
+   - **Scoring rubric**: Define your scoring criteria and scale (e.g., 0-5 points)
+   - **Min/Max/Passing scores**: Set the score thresholds for your evaluation
 
-5. Choose your evaluation model (currently supports `gpt-4o` and `gpt-4o-mini`):
-
-<Frame>
-  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/choose-model.png" />
-</Frame>
-
-6. Write a description for the evaluator task using available variables:
-   - `{{llm_output}}`: The output text from the LLM
-   - `{{ideal_output}}`: The ideal output text (optional)
-
-<Frame>
-  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/write-description.png" />
-</Frame>
-
-7. Define the scoring rubric and passing score:
-
-<Frame>
-  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/define-scores.png" />
-</Frame>
-
-8. Click **Save** to create your evaluator
+4. Click **Save** to create your evaluator
 
 <Callout type="tip">
-  Start with simple criteria like "relevance" or "helpfulness" before creating more complex evaluators.
+  Start with simple criteria before creating more complex evaluators.
 </Callout>
 
-### Step 4: Prepare testsets
+### Step 5: Prepare testsets
 
-Testsets contain the input data for your evaluation experiments:
+Testsets contain the input data for your evaluation experiments. Each testset should include:
 
-#### Create your test cases in a CSV file
+- **Variables**: Columns matching your prompt variables (without `{{}}` syntax)
+- **Ideal outputs (recommended)**: Expected outputs for comparison during evaluation
 
-Create a CSV file with columns matching your prompt variables. Each column header should be a variable name (without the `{{}}` syntax). You can include an additional column for expected outputs.
+**Example**: If your prompt uses `{{first_name}}`, `{{job_title}}`, and `{{company_name}}`, your testset should have columns: `first_name`, `job_title`, `company_name`, and `ideal_output`.
 
-For example, if your prompt uses variables like `{{first_name}}`, `{{description}}`, `{{job_title}}`, and `{{company_name}}`, your CSV should have columns named `first_name`, `description`, `job_title`, and `company_name`.
+<AccordionGroup>
+<Accordion title="Option 1: Create manually in the platform">
+1. Navigate to **Testsets** and click **+ New testset**
+2. Choose **Create empty** 
+3. Add columns for each variable in your prompt
+4. Add an `ideal_output` column for expected results
+5. Fill in your test cases directly in the interface
+</Accordion>
+
+<Accordion title="Option 2: Import from CSV file">
+1. Create a CSV file with the required columns
+2. Include your test data and ideal outputs
 
 <Frame>
   <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/testsets-csv.png" />
 </Frame>
 
-#### Import the testset
-
-You can import the CSV file and edit it like a Google Sheet. You can add, delete, or edit the test cases in the testset.
+3. Import the CSV file in the **Testsets** section
+4. Edit the imported data like a Google Sheet if needed
 
 <Frame>
   <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/testset-create.png" />
 </Frame>
+</Accordion>
+</AccordionGroup>
 
-#### Import ideal outputs
+### Step 6: Run experiments
 
-If you want to include ideal outputs in the testset, you can add a column for the expected output. Name the column `ideal_output`, then the testset will show the ideal output for each test case.
+Congratulations! Now you have everything ready to run your experiments.
 
-### Step 5: Run experiments
-
-Experiments test your prompts against your testsets using your evaluators:
-
-#### Prerequisites
-
-Before creating an experiment, ensure you have:
-- Created prompts with variables
-- Set up testsets (either by importing CSV or creating blank ones)
-- Configured evaluators
+Experiments test your prompts against your testsets using your evaluators.
 
 #### Create an experiment
 
-1. Navigate to **Evaluation** → **Experiments**
-2. Click **+ New experiment**
+Navigate to **Experiments** and create a new experiment.
 
 <Frame>
-  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/create-experiment.png" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/experiment-create.png" />
 </Frame>
 
-3. Configure your experiment settings:
-   - **Name**: Give it a descriptive name
-   - **Prompt**: Select the prompt template to test
-   - **Testset**: Choose your prepared testset
-   - **Model**: Select the LLM model to evaluate
-   - **Evaluators**: Choose which evaluators to apply
+Select the prompt and the versions you want to test.
 
 <Frame>
-  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiment-config.png" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/experiment-select-prompt.png" />
 </Frame>
 
-4. Click **Run Experiment** to start the evaluation process
+#### Add test cases
+
+Add test cases for your experiment. You can either add test cases manually or import a testset from Testsets.
+
+You can also add test cases manually in Experiments.
 
 <Frame>
-  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/run-experiment.png" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/add-testcases.png" />
+</Frame>
+
+#### Run the experiment
+
+Now you can run the experiment. You can run a single cell by clicking the `Run` button in each cell, or run all the cells by clicking the `Run all` button.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/run-experiments.png" />
+</Frame>
+
+#### Run evaluations for outputs
+
+After the experiment is finished, you can run evaluations for the outputs.
+
+<Frame>
+<video
+  controls
+  className="w-full aspect-video"
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/llm-evals/experiments/evals-result.mp4"
+></video>
 </Frame>
 
 <Callout type="warning">
   Experiments consume API credits from your LLM provider. Start with small testsets to estimate costs.
-</Callout>
-
-### Step 6: View results
-
-Analyze your experiment results to improve your prompts:
-
-#### Experiment overview
-
-View the overall performance metrics and scores for your experiment:
-
-<Frame>
-  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/experiment-results.png" />
-</Frame>
-
-#### Individual test case results
-
-Review detailed results for each test case, including:
-- Input variables and values
-- Generated outputs
-- Evaluation scores and feedback
-- Comparison with ideal outputs (if provided)
-
-<Frame>
-  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/test-case-results.png" />
-</Frame>
-
-#### Compare experiments
-
-Compare multiple experiments to identify the best performing configurations:
-
-<Frame>
-  <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/evaluations/experiments/compare-experiments.png" />
-</Frame>
-
-## Next steps
-
-<CardGroup cols={2}>
-  <Card title="Advanced Evaluators" href="/documentation/products/evaluation/evaluators/llm-evaluator">
-    Create sophisticated scoring criteria for complex use cases
-  </Card>
-  <Card title="Batch Experiments" href="/documentation/products/evaluation/experiments/experiments">
-    Run large-scale evaluations with multiple configurations
-  </Card>
-  <Card title="API Integration" href="/api-reference/evaluation/experiments/create">
-    Automate evaluations through our REST API
-  </Card>
-  <Card title="Best Practices" href="/documentation/products/evaluation/best-practices">
-    Learn proven strategies for effective LLM evaluation
-  </Card>
-</CardGroup>
-
-<Callout type="success">
-  You're now ready to systematically evaluate and improve your LLM applications! Start with simple experiments and gradually increase complexity as you learn what works best for your use case.
 </Callout>
