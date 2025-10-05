@@ -31,10 +31,12 @@
                   "/get-started/quickstart/logging",
                   "/get-started/quickstart/tracing",
                   "/get-started/quickstart/gateway",
-                  "/get-started/quickstart/prompt_management"
+                  "/get-started/quickstart/prompt_management",
+                  "/get-started/evaluation"
 
                 ]
-              }          
+              },
+              "/get-started/observability_data_model"          
             ]
           },
           {
