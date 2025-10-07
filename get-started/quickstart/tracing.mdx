@@ -7,16 +7,176 @@ og:title: 'LLM tracing'
 ## What is traces?
 Traces are a chained collection of workflows and tasks. You can use tree views and waterfalls to better track dependencies and latency.
 
+<<<<<<< HEAD
 <Frame>
+=======
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/overview/traces.png" alt="Traces example" />
+</Frame>
+
+## Use agent tracing
+### 1. Get your Keywords AI API key
+
+After you create an account on [Keywords AI](https://platform.keywordsai.co), you can get your API key from the [API keys page](https://platform.keywordsai.co/platform/api/api-keys).
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/api-keys.png" alt="Create API key placeholder" />
+</Frame>
+
+### 2. Keywords AI Native (OpenTelemetry)
+You just need to add the `keywordsai_tracing` package to your project and annotate your workflows.
+ 
+
+<Tabs>
+<Tab title="Python">
+
+<Steps>
+<Step title="Install the SDK">
+```bash pip
+pip install keywordsai-tracing
+```
+</Step>
+
+<Step title="Set up Environment Variables">
+Get your API key from the [API Keys page](https://platform.keywordsai.co/platform/api/api-keys) in Settings, then configure it in your environment:
+
+```python .env
+KEYWORDSAI_BASE_URL="https://api.keywordsai.co/api"
+KEYWORDSAI_API_KEY="YOUR_KEYWORDSAI_API_KEY"
+```
+</Step>
+
+<Step title="A full example with LLM calls">
+Use the `@workflow` and `@task` decorators to instrument your code:
+```python Python
+import os
+from openai import OpenAI
+from keywordsai_tracing.decorators import workflow, task
+from keywordsai_tracing.main import KeywordsAITelemetry
+
+# Initialize Keywords AI Telemetry
+os.environ["KEYWORDSAI_API_KEY"] = "YOUR_KEYWORDSAI_API_KEY"
+k_tl = KeywordsAITelemetry()
+
+# Initialize OpenAI client
+client = OpenAI()
+
+@task(name="joke_creation")
+def create_joke():
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": "Tell me a joke about AI"}],
+        temperature=0.7,
+        max_tokens=100,
+    )
+    return completion.choices[0].message.content
+
+@workflow(name="simple_joke_workflow")
+def joke_workflow():
+    joke = create_joke()
+    return joke
+
+if __name__ == "__main__":
+    result = joke_workflow()
+    print(result)
+```
+</Step>
+
+</Steps>
+</Tab>
+
+<Tab title="JS/TS">
+<Steps>
+<Step title="Install the SDK">
+Install the package using your preferred package manager:
+```bash 
+npm install @keywordsai/tracing
+# or yarn
+
+yarn add @keywordsai/tracing
+```
+</Step>
+<Step title="Set up Environment Variables">
+Get your API key from the [API Keys page](https://platform.keywordsai.co/platform/api/api-keys) in Settings, then configure it in your environment:
+
+```bash .env
+KEYWORDSAI_BASE_URL="https://api.keywordsai.co/api"
+KEYWORDSAI_API_KEY="YOUR_KEYWORDSAI_API_KEY"
+OPENAI_API_KEY="YOUR_OPENAI_API_KEY"
+```
+</Step>
+<Step title="Create a simple workflow">
+```typescript server.ts {1-2, 5-9, 13-14, 16-17, 25-28}
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+import OpenAI from 'openai';
+
+// Initialize Keywords AI Telemetry
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY || "",
+    appName: 'test-app',
+    disableBatch: true  // For testing, disable batching
+});
+
+// Initialize OpenAI client
+const openai = new OpenAI();
+
+async function createJoke() {
+    return await keywordsAi.withTask(
+        { name: 'joke_creation' },
+        async () => {
+            const completion = await openai.chat.completions.create({
+                messages: [{ role: 'user', content: 'Tell me a joke about AI' }],
+                model: 'gpt-4o-mini',
+                temperature: 0.7,
+                max_tokens: 100
+            });
+            return completion.choices[0].message.content;
+        }
+    );
+}
+
+async function simpleJokeWorkflow() {
+    return await keywordsAi.withWorkflow(
+        { name: 'simple_joke_workflow' },
+        async () => {
+            const joke = await createJoke();
+            return joke;
+        }
+    );
+}
+
+// Run the workflow
+async function main() {
+    const result = await simpleJokeWorkflow();
+    console.log(result);
+}
+
+main().catch(console.error);
+```
+</Step>
+
+</Steps>
+</Tab>
+
+</Tabs>
+
+### 3. View your traces
+You can now see your traces in the [Traces](https://platform.keywordsai.co/platform/traces).
+<Frame className="rounded-md">
+>>>>>>> c18be3fd69f0afc5a6a00456505a5f72fc19f0e9
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/overview/traces.png" alt="Traces example" />
 </Frame>
 
 ## Integrate with your existing AI framework
 
+<<<<<<< HEAD
 Keywords AI integrates seamlessly with popular AI frameworks to give you complete observability into your agent workflows.
 
 ## Supported frameworks
 
+=======
+Keywords AI also integrates seamlessly with popular AI frameworks to give you complete observability into your agent workflows.
+>>>>>>> c18be3fd69f0afc5a6a00456505a5f72fc19f0e9
 
 <CardGroup cols={2}>
 <Card href="/integration/development-frameworks/tracing/openai-agents-sdk" className="bg-white">
@@ -43,6 +203,7 @@ Keywords AI integrates seamlessly with popular AI frameworks to give you complet
     pointerEvents: 'none'
   }} />
 </Card>
+<<<<<<< HEAD
 </CardGroup>
 
 ## Keywords AI native tracing
@@ -194,3 +355,6 @@ async function jokeWorkflow() {
 </Tabs>
 
 You can now see your traces in the [Traces](https://platform.keywordsai.co/platform/traces) and go to [Logs](https://platform.keywordsai.co/platform/requests) to see the details of your LLM calls.
+=======
+</CardGroup>
+>>>>>>> c18be3fd69f0afc5a6a00456505a5f72fc19f0e9

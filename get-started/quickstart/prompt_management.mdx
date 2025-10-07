@@ -7,6 +7,7 @@ description: "A complete guide to create, deploy, and use prompts in your codeba
 
 Prompt management helps you create, version, share, and deploy prompt templates easily. Instead of hardcoding prompts in your application, you can manage them centrally, collaborate with your team, and monitor their performance.
 
+<<<<<<< HEAD
 
 ### Why use prompt management?
 
@@ -19,6 +20,31 @@ Prompt management helps you create, version, share, and deploy prompt templates 
 ---
 
 ## Step 1: Create your first prompt
+=======
+## Use prompt management
+
+### 1. Get your Keywords AI API key
+
+After you create an account on [Keywords AI](https://platform.keywordsai.co), you can get your API key from the [API keys page](https://platform.keywordsai.co/platform/api/api-keys).
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/api-keys.png" alt="Create API key placeholder" />
+</Frame>
+
+### 2. Set up LLM provider API key
+
+<Tip>
+**Environment Management**: To separate test and production environments, create separate API keys for each environment instead of using an `env` parameter. This approach provides better security and clearer separation between your development and production workflows.
+</Tip>
+
+<Info>For all AI gateway users, you have to add your own credentials to activate AI gateway. We will use your credentials to call LLMs on your behalf. </Info>
+For example, if you want to use OpenAI, you have to add your OpenAI API key to activate AI gateway. 
+We won’t use your credentials for any other purposes.
+
+- [Set up LLM provider API key](https://platform.keywordsai.co/platform/api/providers)
+
+### 3. Create your first prompt
+>>>>>>> c18be3fd69f0afc5a6a00456505a5f72fc19f0e9
  <Steps>
 <Step title="Create a new prompt">
 Once you have signed up and created an account, you can create a new prompt on the platform. Go to the [Prompts page](https://platform.keywordsai.co/platform/prompts) and click on the "Create new prompt" button. You should name your prompt and could add a description to it.
@@ -78,7 +104,11 @@ Once you have committed your prompt, you can deploy it to production. Go to the 
 ---
 
 
+<<<<<<< HEAD
 ## Step 2: Find your prompt ID
+=======
+### 4. Find your prompt ID
+>>>>>>> c18be3fd69f0afc5a6a00456505a5f72fc19f0e9
 
 After creating your prompt, you'll need its ID to use it in code. Find the Prompt ID in the Overview panel on the [Prompts page](https://platform.keywordsai.co/platform/prompts).
 
@@ -88,7 +118,11 @@ After creating your prompt, you'll need its ID to use it in code. Find the Promp
 
 ---
 
+<<<<<<< HEAD
 ## Step 3: Use your prompt in code
+=======
+### 5. Use your prompt in code
+>>>>>>> c18be3fd69f0afc5a6a00456505a5f72fc19f0e9
 
 Now you can call your prompt from your application using the Keywords AI API.
 
@@ -181,9 +215,13 @@ print(result['choices'][0]['message']['content'])
 </Tab>
 </Tabs>
 
+<<<<<<< HEAD
 ---
 
 ## Step 4: Monitor your prompts
+=======
+### 6. Monitor your prompts
+>>>>>>> c18be3fd69f0afc5a6a00456505a5f72fc19f0e9
 
 View your prompt usage and performance on the [Logs page](https://platform.keywordsai.co/platform/logs). You can:
 

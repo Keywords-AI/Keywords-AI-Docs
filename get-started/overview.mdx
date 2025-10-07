@@ -7,45 +7,58 @@ twitter:description: 'Keywords AI is a full-stack LLM engineering platform for d
 sidebarTitle: 'Overview'
 ---
 
-Keywords AI helps developers and PMs build reliable AI products 10x faster. In a shared workspace, product teams can **monitor**, and **improve** AI performance.
+## What is Keywords AI?
+Keywords AI is a **full-stack LLM engineering platform** that helps developers and PMs build reliable AI products 10x faster. In a shared workspace, product teams can **monitor**, **optimize**, and **improve** AI performance.
 
-## Product features
-### AI observability
+## Features
 
-- **Monitoring**: Monitor your LLM applications in real-time.
-- **LLM logging**: Dive into an individual log to debug.
-- **Agent tracing**: Visualize the execution flow of your agents.
-- **User analytics**: Understand how your users are interacting with your AI product.
+### Observability
+
+Monitor your LLM applications with comprehensive visibility into performance, costs, and user interactions.
 
 <Tabs>
-<Tab title="Monitoring">
+<Tab title="Monitoring dashboard">
 <Frame>
-<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/observability/dashboard.jpg" alt="LLM monitoring" />
+<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/observability/dashboard.jpg" alt="LLM monitoring dashboard" />
 </Frame>
 </Tab>
 <Tab title="LLM logging">
 <Frame>
-<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/observability/logging.jpg" alt="LLM logging" />
+<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/observability/logging.jpg" alt="LLM logging interface" />
 </Frame>
 </Tab>
 <Tab title="Agent tracing">
 <Frame>
-<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/observability/tracing.jpg" alt="Agent tracing" />
+<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/observability/tracing.jpg" alt="Agent tracing visualization" />
 </Frame>
 </Tab>
 <Tab title="User analytics">
 <Frame>
-<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/observability/user-analytics.jpg" alt="User analytics" />
+<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/observability/user-analytics.jpg" alt="User analytics dashboard" />
 </Frame>
 </Tab>
 </Tabs>
 
+<CardGroup cols={2}>
+  <Card
+    title="Logging quickstart"
+    icon="file-lines"
+    href="/get-started/quickstart/logging"
+  >
+    Send your existing LLM calls to Keywords AI for observability
+  </Card>
+  <Card
+    title="Tracing quickstart"
+    icon="sitemap"
+    href="/get-started/quickstart/tracing"
+  >
+    Monitor complex agent workflows step-by-step
+  </Card>
+</CardGroup>
+
 ### Prompt management
 
-- **Prompt playground**: Test and iterate on prompts the same way your users do.
-- **Prompt editor**: Inspect and debug individual prompt runs with full visibility into variables, context, and model output.
-- **Metrics monitoring**: Track usage, latency, and token counts to understand performance across your workflows.
-- **Version control**: Manage changes to your prompts over time and roll back with confidence.
+Isolate prompts from code, collaborate with your team, and iterate faster with version control.
 
 <Tabs>
 <Tab title="Prompt playground">
@@ -70,103 +83,135 @@ Keywords AI helps developers and PMs build reliable AI products 10x faster. In a
 </Tab>
 </Tabs>
 
+<CardGroup cols={1}>
+  <Card
+    title="Prompt management quickstart"
+    icon="wand-magic-sparkles"
+    href="/get-started/quickstart/prompt_management"
+  >
+    Create, version, and deploy prompt templates with team collaboration
+  </Card>
+</CardGroup>
 
 ### Evaluations
-- **Prompt experiments**: Test your prompt before going production.
-- **Online evals**: Run a group of LLM calls to evaluate your prompts.
-- **Human & LLM evals**: Score your LLM response from LLM or human evaluators.
+
+Test your prompts systematically with evaluators, datasets, and experiments.
 
 <Tabs>
-<Tab title="Prompt experiments">
+<Tab title="Experiments">
 <Frame>
 <img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/evaluations/experiments.jpg" alt="Prompt experiments" />
 </Frame>
 </Tab>
-<Tab title="Online evals">
+<Tab title="Evaluators">
 <Frame>
-<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/evaluations/offline-evals.jpg" alt="Offline evals" />
+<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/evaluations/offline-evals.jpg" alt="Evaluators" />
 </Frame>
 </Tab>
-<Tab title="Human & LLM evals">
+<Tab title="Datasets & scores">
 <Frame>
-<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/evaluations/scores.jpg" alt="Human & LLM evals" />
+<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/evaluations/scores.jpg" alt="Datasets and scores" />
 </Frame>
 </Tab>
 </Tabs>
 
-## Getting started with Keywords AI
+<CardGroup cols={1}>
+  <Card
+    title="Evaluation quickstart"
+    icon="chart-simple"
+    href="/get-started/quickstart/evaluation"
+  >
+    Set up automated testing with evaluators, datasets, and experiments
+  </Card>
+</CardGroup>
 
-Keywords AI helps AI teams build reliable products faster through advanced observability, prompt engineering, and evaluation tools.
+### AI gateway
 
-This guide helps you choose the right tools and integration path based on how you use language models and agents.
+Interface with 250+ LLMs via one unified API with built-in optimization features.
 
----
+```mermaid
+  flowchart TD;
+    A[Your Application]-->B[Keywords AI Gateway];
+    B-->C[OpenAI];
+    B-->D[Anthropic];
+    B-->E[Google];
+    B-->F[250+ Models];
+    B-->G[Model Fallback];
+    B-->H[Load Balancing];
+    B-->I[Prompt Caching];
+    C-->Z[Optimized Response];
+    D-->Z[Optimized Response];
+    E-->Z[Optimized Response];
+    F-->Z[Optimized Response];
+    G-->Z[Optimized Response];
+    H-->Z[Optimized Response];
+    I-->Z[Optimized Response];
+```
 
-## Logging, gateway, or tracing?
+<CardGroup cols={1}>
+  <Card
+    title="AI gateway quickstart"
+    icon="route"
+    href="/get-started/quickstart/gateway"
+  >
+    Connect to 250+ models with unified API, fallbacks, and cost optimization
+  </Card>
+</CardGroup>
 
-<iframe
-  className="w-full aspect-video rounded-xl"
-  src="https://www.youtube.com/embed/QGrUM_H3q_k"
-  title="LLM logging vs AI gateway vs Agent tracing"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowFullScreen={true}
-></iframe>
+## Why Keywords AI?
 
----
+Keywords AI is the **only platform** that combines AI Gateway, Observability, Prompt Management, and Evaluations in one unified solution. Unlike other tools that focus on single aspects of LLM development, we provide everything you need to build, monitor, and improve AI applications.
 
-## LLM logging
+<CardGroup cols={2}>
+  <Card title="Unified platform" icon="puzzle-piece">
+    No need to integrate multiple tools - all core features in one solution
+  </Card>
+  <Card title="24/7 support" icon="headset">
+    Dedicated support team available around the clock
+  </Card>
+  <Card title="Simple setup" icon="rocket">
+    Get started in minutes with our managed platform and straightforward integration process
+  </Card>
+  <Card title="Enterprise ready" icon="shield">
+    SOC 2, GDPR, and HIPAA compliant with enterprise-grade security and scalability built for production environments
+  </Card>
+</CardGroup>
 
-> **Call the LLM yourself**, and we help you monitor those calls.
+### Platform comparison
 
-If you already have LLM API calls in your code and just want observability (prompt, response, latency, user tracking, etc.), use the **Logging API**.
+| Feature | Langfuse | Helicone | Braintrust | **Keywords AI** |
+|:--------|:--------:|:--------:|:----------:|:---------------:|
+| **AI gateway** | No | Yes | Limited | Yes |
+| **Observability** | Yes | Yes | Yes | Yes |
+| **Prompt management** | Yes | Limited | Yes | Yes |
+| **Evaluations** | Yes | No | Yes | Yes |
+| **Team collaboration** | Yes | Yes | Yes | Yes |
+| **Setup complexity** | Hard | Simple | Medium | Simple |
+| **Hosting** | Open Source | Managed | Enterprise | Managed |
+| **Support service** | GitHub (24-48h) | Contact form | Support center | 24/7 dedicated |
 
-- No latency
-- Works with any LLM provider
-- Fast setup with a single HTTP call
+## Support
 
-👉 [Quickstart](/documentation/products/logs/quickstart)
-
----
-
-## LLM gateway
-
-> We help you to **handle LLM calls and everything.**
-
-The Gateway is the easiest way to connect to major LLM providers. We can help you to handle rerouting, retries, load-balancing, caching, fallbacks, and etc..
-
-- 50 - 150ms latency
-- Support 250+ models
-- Built-in cost tracking, retries, observability
-
-👉 [Quickstart](/documentation/products/gateway/quickstart)
-
----
-
-## Agent tracing
-
-> Track your agent workflows step by step
-
-Perfect for multi-step chains, working with popular AI agent frameworks.
-
-- Native support for [OpenAI Agent SDK](https://platform.openai.com/), [Mastra](https://www.mastra.dev/), and more  
-- Custom step tracing with our SDK
-- Visualize execution trees, tools, retries, state changes
-
-👉 [Quickstart](/documentation/products/traces/quickstart)
-
----
-
-## Prompt management and evaluations
-
-> Isolate prompts from code, collaborate with prompt engineers, and iterate faster.
-
-- Version control for prompts  
-- Human + LLM evaluation pipelines  
-- Visual scoreboards, test sets, experiments
-
-👉 [Quickstart](/documentation/products/prompt_management/quickstart)
-
----
-
-## Need help?
-[Join our discord](https://discord.gg/n6ZPqGP6) — we'll help you as best we can.
+<CardGroup cols={3}>
+  <Card
+    title="Join Discord"
+    icon="discord"
+    href="https://discord.gg/swF9Wat3"
+  >
+    Connect with our community
+  </Card>
+  <Card
+    title="Book a demo"
+    icon="calendar"
+    href="https://cal.com/keywordsai"
+  >
+    Schedule a personalized walkthrough
+  </Card>
+  <Card
+    title="Support center"
+    icon="life-ring"
+    href="/documentation/support/support"
+  >
+    Get help and documentation
+  </Card>
+</CardGroup>
