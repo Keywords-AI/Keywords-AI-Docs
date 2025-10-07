@@ -5,14 +5,8 @@ og:title: 'AI gateway'
 ---
 ---
 
-<<<<<<< HEAD
-## Overview
-Keywords AI's AI Gateway is a gateway that lets you interface with 250+ large language models (LLMs) via one unified API. Instead of maintaining separate SDKs or endpoints for OpenAI, Anthropic, Claude, and others, you send your LLM calls to Keywords AI. And we do the rest rerouting, retries, load-balancing, caching, prompt caching, function calling, image uploading, and fallbacks for you.
-
-=======
 ## What is AI gateway?
 Keywords AI's AI Gateway is a gateway that lets you interface with 250+ large language models (LLMs) via one unified API.
->>>>>>> c18be3fd69f0afc5a6a00456505a5f72fc19f0e9
 
 ```mermaid
   flowchart TD;
@@ -27,26 +21,10 @@ Keywords AI's AI Gateway is a gateway that lets you interface with 250+ large 
     F-->Z[Optimized LLM Output];
 ```
 
-<<<<<<< HEAD
-### Benefits of LLM gateway:
-- Call over 250 LLMs using the same format.
-- Ensure your LLM applications become more scalable and reliable.
-- Manage LLM costs in a single place.
-- Mange API keys in a single place without exposing them.
-
-=======
->>>>>>> c18be3fd69f0afc5a6a00456505a5f72fc19f0e9
 ### Considerations:
 - May not be suitable for products with strict latency requirements (**50 - 150ms** added).
 - May not be ideal for those who do not want to integrate a third-party service into the core of their application.
 
-<<<<<<< HEAD
-## Prerequisites
-
-- [Create an account on Keywords AI](https://platform.keywordsai.co)
-- [Set up Keywords AI API key](https://platform.keywordsai.co/platform/api/api-keys)
-- [Set up LLM provider API key](https://platform.keywordsai.co/platform/api/providers)
-=======
 ## Use AI gateway
 ### 1. Get your Keywords AI API key
 
@@ -57,7 +35,6 @@ After you create an account on [Keywords AI](https://platform.keywordsai.co), yo
 </Frame>
 
 ### 2. Set up LLM provider API key
->>>>>>> c18be3fd69f0afc5a6a00456505a5f72fc19f0e9
 
 <Tip>
 **Environment Management**: To separate test and production environments, create separate API keys for each environment instead of using an `env` parameter. This approach provides better security and clearer separation between your development and production workflows.
@@ -67,72 +44,10 @@ After you create an account on [Keywords AI](https://platform.keywordsai.co), yo
 For example, if you want to use OpenAI, you have to add your OpenAI API key to activate AI gateway. 
 We won’t use your credentials for any other purposes.
 
-<<<<<<< HEAD
-## Integrate with your existing AI framework
-Keywords AI offers various integration options, including: mainstream LLM frameworks and REST APIs.
-
-### Supported frameworks
-
-<CardGroup cols={2}>
-<Card href="/integration/development-frameworks/llm_framework/openai/openai-sdk">
-  <img className="block dark:hidden" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/integration_cards/openai_sdk_v0.png" alt="OpenAI SDK" style={{
-    pointerEvents: 'none'
-  }} />
-  <img className="hidden dark:block" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/integration_cards/openai_sdk_v0_black.png" alt="OpenAI SDK" style={{
-    pointerEvents: 'none'
-  }} />
-</Card>
-<Card href="/integration/development-frameworks/llm_framework/langchain">
-  <img className="block dark:hidden" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/integration_cards/langchain_v0.png" alt="LangChain SDK" style={{
-    pointerEvents: 'none'
-  }} />
-  <img className="hidden dark:block" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/integration_cards/langchain_v0_black.png" alt="LangChain SDK" style={{
-    pointerEvents: 'none'
-  }} />
-</Card>
-<Card href="/integration/development-frameworks/llm_framework/vercel">
-  <img className="block dark:hidden" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/integration_cards/vercelai_sdk_v0.png" alt="Vercel AI SDK" style={{
-    pointerEvents: 'none'
-  }} />
-  <img className="hidden dark:block" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/integration_cards/vercelai_sdk_v0_black.png" alt="Vercel AI SDK" style={{
-    pointerEvents: 'none'
-  }} />
-</Card>
-<Card href="/integration/development-frameworks/llm_framework/llama-index">
-  <img className="block dark:hidden" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/integration_cards/llamaindex_v0.png" alt="LlamaIndex SDK" style={{
-    pointerEvents: 'none'
-  }} />
-  <img className="hidden dark:block" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/integration_cards/llamaindex_v0_black.png" alt="LlamaIndex SDK" style={{
-    pointerEvents: 'none'
-  }} />
-</Card>
-<Card href="/integration/development-frameworks/llm_framework/google_genai">
-  <img className="block dark:hidden" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/integration_cards/genai_v0.png" alt="Google GenAI" style={{
-    pointerEvents: 'none'
-  }} />
-  <img className="hidden dark:block" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/integration_cards/genai_v0_black.png" alt="Google GenAI" style={{
-    pointerEvents: 'none'
-  }} />
-</Card>
-<Card href="/integration/development-frameworks/llm_framework/anthropic">
-  <img className="block dark:hidden" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/integration_cards/anthropic_v0.png" alt="Anthropic" style={{
-    pointerEvents: 'none'
-  }} />
-  <img className="hidden dark:block" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/integration_cards/anthropic_v0_black.png" alt="Anthropic" style={{
-    pointerEvents: 'none'
-  }} />
-</Card>
-</CardGroup>
-
-
-### Examples
-If you are not using any LLM frameworks, you can use the standard API call to connect 250+ LLMs.
-=======
 - [Set up LLM provider API key](https://platform.keywordsai.co/platform/api/providers)
 
 ### 3. Call a LLM
 You can use the standard API call to connect 250+ LLMs.
->>>>>>> c18be3fd69f0afc5a6a00456505a5f72fc19f0e9
 <CodeGroup>
 ```python Python
 import requests
@@ -235,15 +150,6 @@ func main() {
 ```
 </CodeGroup>
 
-<<<<<<< HEAD
-### Parameters
-We support all OpenAI parameters. which is the standard format for LLMs. You can check out important [OpenAI parameters in this page](/api-endpoints/integration/chat-completions#openai-parameters). You can also learn more about OpenAI parameters [here](https://platform.openai.com/docs/api-reference/chat).
-
-For **Keywords AI parameters**, you should use them when you want to achieve specific goals. For example, you can use `fallback_models` to specify fallback models when the primary model is down. You can check out all [Keywords AI parameters in this page](/api-endpoints/integration/chat-completions#keywords-ai-parameters).
-
-
-The most used feature of the LLM gateway is the ability to call 200+ LLMs with a single API format. You can switch between models with only 1 line of code change.
-=======
 ### 4. Parameters
 <AccordionGroup>
   <Accordion title="OpenAI Parameters">
@@ -311,4 +217,3 @@ Keywords AI offers various integration options, including all mainstream LLM fra
 </Card>
 </CardGroup>
 
->>>>>>> c18be3fd69f0afc5a6a00456505a5f72fc19f0e9
