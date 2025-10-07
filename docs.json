@@ -1,0 +1,581 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "maple",
+  "name": "Docs",
+  "colors": {
+    "primary": "#6483F0",
+    "light": "#7590F2",
+    "dark": "#05050A"
+  },
+  "favicon": "/logo.svg",
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude"
+    ]
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get started",
+            "pages": [
+              "get-started/overview",
+                {
+                "group": "Quickstart",
+                "pages": [
+                  "/get-started/quickstart/logging",
+                  "/get-started/quickstart/tracing",
+                  "/get-started/quickstart/gateway",
+                  "/get-started/quickstart/prompt_management"
+
+                ]
+              }          
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              {
+                "group": "Dashboard",
+                "pages": [
+                  "documentation/products/dashboard/quickstart",
+                  "documentation/products/dashboard/filter"
+                ]
+              },
+              {
+                "group": "Logs",
+                "pages": [
+                  "documentation/products/logs/quickstart",
+                  "documentation/products/logs/configuration/pass_keywordsai_parameters",
+                  "documentation/products/logs/configuration/custom_properties",
+                  "documentation/products/logs/log_variables",
+                  "documentation/products/logs/log_tool_calls",
+                  "documentation/products/logs/log_images",
+                  "documentation/products/logs/log_thinking",
+                  "documentation/products/logs/embedding_logging",
+                  "documentation/products/logs/save_log_to_prompt",
+                  "documentation/products/logs/configuration/threads",
+                  "documentation/products/logs/export_logs",
+                  "documentation/products/logs/configuration/group_logs",
+                  "documentation/products/logs/custom_model",
+                  "documentation/products/logs/filters",
+                  "documentation/products/logs/sharing",                
+                  {
+                    "group": "Providers",
+                    "pages": [
+                      "documentation/products/logs/providers/openai",
+                      "documentation/products/logs/providers/anthropic",
+                      "documentation/products/logs/providers/openrouter",
+                      "documentation/products/logs/providers/groq",
+                      "documentation/products/logs/providers/fireworks",
+                      "documentation/products/logs/providers/together",
+                      "documentation/products/logs/providers/perplexity",
+                      "documentation/products/logs/providers/azure",
+                      "documentation/products/logs/providers/vertex",
+                      "documentation/products/logs/providers/gemini",
+                      "documentation/products/logs/providers/bedrock",
+                      "documentation/products/logs/providers/nebius",
+                      "documentation/products/logs/providers/novita"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Traces",
+                "pages": [
+                  "documentation/products/traces/quickstart",
+                  "documentation/products/traces/decorators",
+                  "documentation/products/traces/configuration/pass_keywordsai_parameters",
+                  "documentation/products/traces/configuration/group_traces",
+                  "documentation/products/traces/configuration/customer_identifier",
+                  "documentation/products/traces/filters",
+                  "documentation/products/traces/logs_to_trace"
+                ]
+              },
+              {
+                "group": "Prompt management",
+                "pages": [
+                  "documentation/products/prompt_management/quickstart",
+                  "documentation/products/prompt_management/model_playground",
+                  {
+                    "group": "Create prompts",
+                    "pages": [
+                      "documentation/products/prompt_management/creating_prompts/create_prompt",
+                      "documentation/products/prompt_management/creating_prompts/json_schema",
+                      "documentation/products/prompt_management/creating_prompts/streaming",
+                      "documentation/products/prompt_management/creating_prompts/jinja_support",
+                      "documentation/products/prompt_management/creating_prompts/manage_prompt_api"
+                    ]
+                  },
+                  "documentation/products/prompt_management/management_collaboration/version_control",
+                  {
+                    "group": "Use prompt in code",
+                    "pages": [
+                      "documentation/products/prompt_management/use_prompt_in_code/use_prompt_in_llms",
+                      "documentation/products/prompt_management/use_prompt_in_code/prompt_logging"
+                    ]
+                  },
+                  "documentation/products/prompt_management/management_collaboration/team_collaboration"
+                ]
+              },
+              {
+                "group": "Evaluations",
+                "pages": [
+                  "documentation/products/evaluation/overview",
+                  "documentation/products/evaluation/scores",
+                  {
+                    "group": "Evaluators",
+                    "pages": [
+                      "documentation/products/evaluation/llm-evals/llm-evaluator",
+                      "documentation/products/evaluation/llm-evals/run-evaluator-code",
+                      "documentation/products/evaluation/llm-evals/run-evaluator-ui",
+                      "documentation/products/evaluation/human-evals/human-evals-setup",
+                      "documentation/products/evaluation/human-evals/human-annotation"
+                    ]
+                  },
+                  {
+                    "group": "Testsets",
+                    "pages": [
+                      "documentation/products/evaluation/experiments/testsets",
+                      "documentation/products/evaluation/experiments/upload-testsets"
+                    ]
+                  },
+                  {
+                    "group": "Experiments",
+                    "pages": [
+                      "documentation/products/evaluation/experiments/overview",
+                      "documentation/products/evaluation/experiments/experiments",
+                      "documentation/products/evaluation/experiments/experiments-images"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "LLM Gateway",
+                "pages": [
+                  "documentation/products/gateway/quickstart",
+                  "documentation/products/gateway/configuration/models",
+                  "documentation/products/gateway/traffic_management/load-balancing",
+                  "documentation/products/gateway/traffic_management/retries",
+                  "documentation/products/gateway/traffic_management/fallbacks",
+                  "documentation/products/gateway/traffic_management/rate_limit",
+                  {
+                    "group": "Caches",
+                    "pages": [
+                      "documentation/products/gateway/performance_optimization/caches",
+                      "documentation/products/gateway/performance_optimization/prompt-caching"
+                    ]
+                  },
+                  "documentation/products/gateway/advanced_features/function_calling",
+                  "documentation/products/gateway/advanced_features/thinking",
+                  "documentation/products/gateway/advanced_features/upload_pdf",
+                  "documentation/products/gateway/advanced_features/upload_image",
+                  "documentation/products/gateway/monitoring_analysis/disable_logging"
+                ]
+              },
+              {
+                "group": "Users",
+                "pages": [
+                  "documentation/products/users/customer-identifier",
+                  "documentation/products/users/user_rate_limit",
+                  "documentation/products/users/user-budget"
+                ]
+              },
+              {
+                "group": "Notifications",
+                "pages": [
+                  "documentation/products/notifications/subscribe_alerts",
+                  "documentation/products/notifications/webhooks"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Admin",
+            "pages": [
+              "documentation/admin/keywords_api_keys",
+              "documentation/admin/llm_provider_keys",
+              {
+                "group": "Team management",
+                "pages": [
+                  "documentation/admin/team_management/create_a_new_team"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Security",
+            "pages": [
+              "documentation/security/trust_center",
+              "documentation/security/socii",
+              "documentation/security/hipaa",
+              "documentation/security/gdpr",
+              "documentation/security/architecture_review",
+              "documentation/security/security-qa"
+            ]
+          },
+          {
+            "group": "Resources",
+            "pages": [
+              "documentation/resources/observability-data-model",
+              "documentation/resources/what-is-llm-observability-and-monitoring",
+              "documentation/resources/automatic-retries",
+              "documentation/resources/streaming"
+            ]
+          },
+          {
+            "group": "Help & Community",
+            "pages": [
+              "documentation/support/support",
+              "documentation/support/feedback",
+              "documentation/support/status"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Integrations",
+        "groups": [
+          {
+            "group": "Ecosystem",
+            "pages": [
+              "integration/overview"
+            ]
+          },
+          {
+            "group": "Tracing integration",
+            "pages": [
+              {
+                "group": "OpenAI Agents SDK",
+                "pages": [
+                  "integration/development-frameworks/tracing/openai-agents-sdk",
+                  "integration/development-frameworks/tracing/openai-agents-sdk-js"
+                ]
+              },
+              "integration/development-frameworks/tracing/vercel-tracing",
+              "integration/development-frameworks/tracing/mastra",
+              "integration/development-frameworks/tracing/langgraph"
+            ]
+          },
+          {
+            "group": "Gateway integration",
+            "pages": [
+              {
+                "group": "OpenAI SDK",
+                "pages": [
+                  "integration/development-frameworks/llm_framework/openai/openai-sdk",
+                  "integration/development-frameworks/llm_framework/openai/openai-responses"
+                ]
+              },
+              "integration/development-frameworks/llm_framework/anthropic",
+              "integration/development-frameworks/llm_framework/langchain",
+              "integration/development-frameworks/llm_framework/vercel",
+              "integration/development-frameworks/llm_framework/llama-index",
+              "integration/development-frameworks/llm_framework/google_genai"
+            ]
+          },
+          {
+            "group": "LLM providers",
+            "pages": [
+              "integration/providers/openai",
+              "integration/providers/anthropic",
+              "integration/providers/openrouter",
+              "integration/providers/groq",
+              "integration/providers/fireworks",
+              "integration/providers/together",
+              "integration/providers/perplexity",
+              "integration/providers/azure",
+              "integration/providers/vertex",
+              "integration/providers/gemini",
+              "integration/providers/bedrock",
+              "integration/providers/nebius",
+              "integration/providers/novita"
+            ]
+          },
+          {
+            "group": "Memory",
+            "pages": [
+              "integration/development-frameworks/mem0",
+              "integration/others/cognee"
+            ]
+          },
+          {
+            "group": "Others",
+            "pages": [
+              "integration/providers/assemblyai",
+              "integration/dev-tools/linkup",
+              "integration/development-frameworks/baml",
+              "integration/analytics/posthog"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API reference",
+        "groups": [
+          {
+            "group": "Integration methods",
+            "pages": [
+              "api-endpoints/integration/request-logging-endpoint",
+              "api-endpoints/integration/chat-completions"
+            ]
+          },
+          {
+            "group": "Logs",
+            "pages": [
+              "api-endpoints/async-endpoints/logs-list-endpoint"
+            ]
+          },
+          {
+            "group": "Threads",
+            "pages": [
+              "api-endpoints/async-endpoints/thread-list-endpoint"
+            ]
+          },
+          {
+            "group": "Prompts",
+            "pages": [
+              "api-endpoints/prompt-endpoints/create-prompts",
+              "api-endpoints/prompt-endpoints/get-prompts",
+              "api-endpoints/prompt-endpoints/update-prompt",
+              "api-endpoints/prompt-endpoints/delete-prompt"
+            ]
+          },
+          {
+            "group": "Prompt versions",
+            "pages": [
+              "api-endpoints/prompt-endpoints/create-prompt-version",
+              "api-endpoints/prompt-endpoints/get-prompt-versions",
+              "api-endpoints/prompt-endpoints/update-prompt-version",
+              "api-endpoints/prompt-endpoints/delete-prompt-version"
+            ]
+          },
+          {
+            "group": "Multimodal integrations",
+            "pages": [
+              "api-endpoints/integration/text-to-speech",
+              "api-endpoints/integration/speech-to-text",
+              "api-endpoints/integration/embeddings"
+            ]
+          },
+          {
+            "group": "User",
+            "pages": [
+              "api-endpoints/async-endpoints/user-creation-endpoint",
+              "api-endpoints/async-endpoints/users-data-endpoint",
+              "api-endpoints/async-endpoints/user-detail-endpoint",
+              "api-endpoints/async-endpoints/user-update-endpoint"
+            ]
+          },
+          {
+            "group": "Model",
+            "pages": [
+              "api-endpoints/data-endpoints/models-endpoint"
+            ]
+          },
+          {
+            "group": "API keys management",
+            "pages": [
+              "api-endpoints/temporary-api-keys/create-temporary-key",
+              "api-endpoints/temporary-api-keys/list-temporary-keys",
+              "api-endpoints/temporary-api-keys/retrieve-temporary-key",
+              "api-endpoints/temporary-api-keys/update-temporary-key",
+              "api-endpoints/temporary-api-keys/delete-temporary-key"
+            ]
+          },
+          {
+            "group": "Evaluation",
+            "pages": [
+              "api-endpoints/evaluation/types",
+              {
+                "group": "Evaluators",
+                "pages": [
+                  "api-endpoints/evaluation/evaluators/create",
+                  "api-endpoints/evaluation/evaluators/list",
+                  "api-endpoints/evaluation/evaluators/get",
+                  "api-endpoints/evaluation/evaluators/update",
+                  "api-endpoints/evaluation/evaluators/delete",
+                  "api-endpoints/evaluation/evaluators/run"
+                ]
+              },
+              {
+                "group": "Scores",
+                "pages": [
+                  "api-endpoints/evaluation/scores/create",
+                  "api-endpoints/evaluation/scores/get",
+                  "api-endpoints/evaluation/scores/update",
+                  "api-endpoints/evaluation/scores/delete",
+                  "api-endpoints/evaluation/scores/list"
+                ]
+              },
+              {
+                "group": "Log Score Management",
+                "pages": [
+                  "api-endpoints/evaluation/log-scores/create",
+                  "api-endpoints/evaluation/log-scores/get",
+                  "api-endpoints/evaluation/log-scores/update",
+                  "api-endpoints/evaluation/log-scores/delete"
+                ]
+              },
+              "api-endpoints/async-endpoints/evaluations"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Python SDK",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "python-sdk/quickstart",
+              "python-sdk/examples"
+            ]
+          },
+          {
+            "group": "Logs",
+            "pages": [
+              "python-sdk/logs/overview",
+              "python-sdk/logs/create",
+              "python-sdk/logs/list"
+            ]
+          },
+          {
+            "group": "Prompts",
+            "pages": [
+              "python-sdk/prompts/overview",
+              "python-sdk/prompts/create",
+              "python-sdk/prompts/list",
+              "python-sdk/prompts/get",
+              "python-sdk/prompts/update",
+              "python-sdk/prompts/delete",
+              "python-sdk/prompts/create-version",
+              "python-sdk/prompts/list-versions",
+              "python-sdk/prompts/get-version",
+              "python-sdk/prompts/update-version"
+            ]
+          },
+          {
+            "group": "Experiments",
+            "pages": [
+              "python-sdk/experiments/overview",
+              "python-sdk/experiments/create",
+              "python-sdk/experiments/list",
+              "python-sdk/experiments/get",
+              "python-sdk/experiments/update",
+              "python-sdk/experiments/delete",
+              "python-sdk/experiments/add-rows",
+              "python-sdk/experiments/remove-rows",
+              "python-sdk/experiments/update-rows",
+              "python-sdk/experiments/add-columns",
+              "python-sdk/experiments/remove-columns",
+              "python-sdk/experiments/update-columns",
+              "python-sdk/experiments/run-experiment",
+              "python-sdk/experiments/run-experiment-evals"
+            ]
+          },
+          {
+            "group": "Evaluators",
+            "pages": [
+              "python-sdk/evaluators/overview",
+              "python-sdk/evaluators/create",
+              "python-sdk/evaluators/list",
+              "python-sdk/evaluators/get",
+              "python-sdk/evaluators/update",
+              "python-sdk/evaluators/delete"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Changelog ↗",
+        "href": "https://www.keywordsai.co/changelog"
+      }
+    ]
+  },
+  "styling": {
+    "codeblocks": "system"
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://www.keywordsai.co"
+  },
+  "api": {
+    "playground": {
+      "display": "interactive"
+    },
+    "mdx": {
+      "server": "https://api.keywordsai.co",
+      "auth": {
+        "method": "bearer",
+        "name": "Authorization"
+      }
+    }
+  },
+  "background": {
+    "color": {
+      "light": "#ffffff",
+      "dark": "#05050A"
+    }
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Discord",
+        "href": "https://discord.com/invite/KEanfAafQQ"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "platform",
+      "href": "https://platform.keywordsai.co/"
+    }
+  },
+  "search": {
+    "prompt": "Search..."
+  },
+  "seo": {
+    "metatags": {
+      "og:site_name": "Keywords AI | LLM monitoring platform",
+      "og:image": "/logo.svg",
+      "twitter:site": "@keywordsai"
+    },
+    "indexing": "navigable"
+  },
+  "footer": {
+    "socials": {
+      "linkedin": "https://www.linkedin.com/company/keywordsai/",
+      "github": "https://github.com/keywordsai",
+      "discord": "https://discord.com/invite/KEanfAafQQ"
+    }
+  },
+  "integrations": {
+    "posthog": {
+      "apiKey": "phc_rL8MrmFrie28wgxtDurKt9t1bwCzChaJQ7WYaj1F1gH"
+    }
+  },
+  "fonts": {
+    "heading": {
+      "family": "Inter"
+    },
+    "body": {
+      "family": "Inter"
+    }
+  },
+  "redirects": [
+    {
+      "source": "/integration/development-frameworks/openai-agent",
+      "destination": "/integration/development-frameworks/tracing/openai-agents-sdk"
+    },
+    {
+      "source": "/integration/development-frameworks/openai-agents-sdk-js",
+      "destination": "/integration/development-frameworks/tracing/openai-agents-sdk-js"
+    }
+  ]
+}

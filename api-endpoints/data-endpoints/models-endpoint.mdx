@@ -1,0 +1,94 @@
+---
+title: Model list
+api: GET https://api.keywordsai.co/api/models/public
+authMethod: "none"
+---
+
+<ParamField name="data" type="array">
+A list of models.
+<Accordion title="Example">
+```json
+{
+    "models": [
+       {
+        "model_name":"gpt-3.5-turbo",
+        "max_context_window":4096,
+        "input_cost":0.5,
+        "output_cost":0.1,
+        "rate_limit":30000,
+        "provider": {
+            "provider_name": "OpenAI",
+            "provider_id": "openai",
+            "moderation": "Filtered",
+            "credential_fields": [
+                "api_key" // The API key for the provider
+            ]
+        }
+       },
+       // ... other models ... 
+    ]
+}
+```
+</Accordion>
+
+
+</ParamField>
+## Model parameters
+
+<ParamField name="model_name" type="string">
+    The name used in `model` parameter for calling the Keywords AI [chat completion](/api-endpoints/proxy-endpoints/chat-completions) endpoint.
+</ParamField>
+<ParamField name="max_context_window" type="number">
+    The maximum number of tokens the model can process in one API call.
+</ParamField>
+<ParamField name="input_cost" type="number">
+    Cost in US dollars for 1 million input tokens.
+</ParamField>
+<ParamField name="output_cost" type="number">
+    Cost in US dollars for 1 million output tokens.
+</ParamField>
+<ParamField name="rate_limit" type="number">
+    The rate limit for calling this model with Keywords AI.
+</ParamField>
+<ParamField name="provider" type="object">
+    The provider of the model.
+    <Accordion title="Properties">
+        <ParamField name="provider_name" type="string">
+            The name of the provider.
+        </ParamField>
+        <ParamField name="provider_id" type="string">
+            The ID of the provider.
+        </ParamField>
+        <ParamField name="moderation" type="string">
+            The moderation level of the provider. Possible values: `Filtered`, `Unfiltered`.
+        </ParamField>
+        <ParamField name="credential_fields" type="array">
+            The fields required to authenticate with the provider.
+        </ParamField>
+    </Accordion>
+</ParamField>
+
+<ResponseExample>
+```json
+{
+    "models": [
+       {
+        "model_name":"gpt-3.5-turbo",
+        "max_context_window":4096,
+        "input_cost":0.5,
+        "output_cost":0.1,
+        "rate_limit":30000,
+        "provider": {
+            "provider_name": "OpenAI",
+            "provider_id": "openai",
+            "moderation": "Filtered",
+            "credential_fields": [
+                "api_key" // The API key for the provider
+            ]
+        }
+       },
+       // ... other models ... 
+    ]
+}
+```
+</ResponseExample>

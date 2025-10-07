@@ -1,0 +1,79 @@
+---
+title: "Add Columns"
+description: "Add new columns to an experiment dataset"
+---
+
+## Overview
+
+Add new columns to an existing experiment dataset structure.
+
+## Method Signature
+
+```python
+# Synchronous
+client.experiments.add_columns(
+    experiment_id: str,
+    columns: List[Dict[str, Any]]
+) -> Dict[str, Any]
+
+# Asynchronous
+await client.experiments.add_columns(
+    experiment_id: str,
+    columns: List[Dict[str, Any]]
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The unique identifier of the experiment
+</ParamField>
+
+<ParamField path="columns" type="List[Dict[str, Any]]" required>
+  List of column definitions to add to the experiment
+</ParamField>
+
+## Returns
+
+Returns a dictionary containing the updated experiment information.
+
+## Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Add new columns to experiment
+columns = [
+    {
+        "name": "confidence_score",
+        "type": "float",
+        "description": "Model confidence level"
+    },
+    {
+        "name": "category",
+        "type": "string",
+        "description": "Response category"
+    }
+]
+
+result = client.experiments.add_columns(
+    experiment_id="exp_123",
+    columns=columns
+)
+
+print(f"Added {len(columns)} columns to experiment")
+```
+
+## Error Handling
+
+```python
+try:
+    result = client.experiments.add_columns(
+        experiment_id="exp_123",
+        columns=columns
+    )
+except Exception as e:
+    print(f"Error adding columns: {e}")
+```

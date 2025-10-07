@@ -1,0 +1,214 @@
+---
+title: "Azure OpenAI"
+description: "Use your own Azure OpenAI credits through Keywords AI"
+---
+
+<CardGroup cols={1}>
+  <Card title="Get Azure OpenAI credentials" icon="key" href="https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI">
+    Get your Azure OpenAI API key, base URL, and API version from the Azure Portal to start using Azure OpenAI models through Keywords AI.
+  </Card>
+</CardGroup>
+
+## Azure OpenAI models compatibility
+
+<AccordionGroup>
+  <Accordion title="✅ Supported Frameworks">
+    - [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+    - [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+    - [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+    - [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+    - [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+    - [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+    - [Keywords native (Otel)]('/documentation/gateway/get_started)
+  </Accordion>
+  
+  <Accordion title="❌ Unsupported Frameworks">
+    - [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+    - [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+  </Accordion>
+</AccordionGroup>
+
+## Add Azure OpenAI API keys
+There are 2 ways to add your Azure OpenAI credentials to your requests:
+### Via UI
+<Steps>
+<Step title="Go to the Providers page">
+Go to [Providers page](https://platform.keywordsai.co/platform/api/providers)
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg" alt="Providers Page"/>
+</Frame>
+</Step>
+<Step title="Add your Azure OpenAI credentials.">
+
+<img height="200" width="300"  src="/images/providers/azure.png" alt="Dashboard Page"/>
+</Step>
+<Step title="(Optional) Choose models you want to use credits">
+You can choose the models you want to use your credits with. Just simply type the model ID from the [Models page](https://platform.keywordsai.co/platform/models) and copy the model id and paste it in the input field. Press `Enter` to add the model. 
+
+**Leave it empty to apply your credentials for all Azure OpenAI models.**
+
+<img height="200" width="500"  src="/images/providers/azure_model.png" alt="Dashboard Page"/>
+</Step>
+</Steps>
+
+### Map your deployment name
+We understand that you may have a custom name for your Azure deployment. So if you want to specify a particular model to test in the UI, you should map it as `azure/{your deployment name}`.
+
+For example, in Azure OpenAI, you might deployed `gpt-4o` as the deployment name `gpt-4o` or `gpt-4o-whatever`, so you should map it as `azure/apgt-4o` or `azure/gpt-4o-whatever`.
+
+<img width="400" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/azure-mapping.png" alt="Azure deployment name" />
+
+
+### Via Code
+<Steps>
+
+<Step title="Map your deployment name"> 
+We understand that you may have a custom name for your Azure deployment. Keywords AI is using the model's origin name which may not be able to match your deployment. You can use `model_name_map` to map the default name to your custom name. 
+
+Here's an example: if you want to use `azure/gpt-4o` on Keywords AI platform with your own Azure credentials and custom deployment name, you should put your custom deployment name in the `model_name_map` object, and we'll use it to make requests to your deployment.
+```json
+{
+    "model": "azure/gpt-4o",
+    "model_name_map": {
+      "original_model_name": "azure/your_custom_model_name"
+      // e.g, "azure/gpt-4o": "azure/{your gpt-4o's deployment name}"
+    }
+}
+```
+</Step>
+
+<Step title="Add your own credentials"> 
+Add `customer_credentials` parameter in your [request body](/api-endpoints/integration/chat-completions) to use your own Azure OpenAI credits.
+
+<Note>`model_name_map` only works when your credentials is Valid.</Note>
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "azure_openai": {
+      "api_key": "YOUR_AZURE_OPENAI_API_KEY",
+      "api_base": "YOUR_AZURE_OPENAI_API_BASE_URL",
+      "api_version": "YOUR_AZURE_OPENAI_API_VERSION",
+    }
+  }
+}
+```
+</Step>
+
+<Step title="Override credentials for a particular model. (Optional)">
+One-off credential overrides. Instead of using what is uploaded for each provider, this targets credentials for individual models.
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "azure_openai": {
+      "api_key": "YOUR_AZURE_OPENAI_API_KEY",
+      "api_base": "YOUR_AZURE_OPENAI_API_BASE_URL",
+      "api_version": "YOUR_AZURE_OPENAI_API_VERSION",
+    }
+  },
+  "credential_override": {
+    "azure/gpt-4o":{ // override for a specific model.
+      "api_key": "YOUR_ANOTHER_AZURE_OPENAI_API_KEY",
+      "api_base": "YOUR_AZURE_OPENAI_API_BASE_URL",
+      "api_version": "YOUR_AZURE_OPENAI_API_VERSION",
+    }
+  }
+}
+```
+
+</Step>
+
+<Step title="Add more deployments and load balance between them (Optional)">
+You can add more deployments and load balance between them. Learn more about how to do it [here](/features/generation/load-balancing).
+
+</Step>
+
+</Steps>
+## Requirements
+1. Ensure your **deployment name** matches those listed on our [Models page](https://platform.keywordsai.co/platform/models).
+2. Confirm that your models are available in the region specified by your credentials.
+<Warning>Credentials validation is not supported. Failure to comply with these requirements will result in errors!</Warning>
+
+## Full request example
+<Accordion title="Example">
+<CodeGroup>
+```python openai_example.py
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role":"user", "content":"Tell me a long story"}],
+    extra_body={"customer_credentials": {
+                  "azure_openai": {
+                      "api_key": "YOUR_AZURE_OPENAI_API_KEY",
+                      "api_base": "YOUR_AZURE_OPENAI_API_BASE_URL",
+                      "api_version": "YOUR_AZURE_OPENAI_API_VERSION",
+                  }
+                }
+              }
+)
+```
+```python api_example.py
+import requests
+def demo_call(input, 
+              model="gpt-4o",
+              token="YOUR_KEYWORDS_AI_API_KEY"
+              ):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'model': model,
+        'messages': [{'role': 'user', 'content': input}],
+        'customer_credentials': {
+            'azure_openai': {
+                'api_key': "YOUR_AZURE_OPENAI_API_KEY",
+                'api_base': "YOUR_AZURE_OPENAI_API_BASE_URL",
+                'api_version': "YOUR_AZURE_OPENAI_API_VERSION",
+            }
+        }
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+messages = "Say 'Hello World'"
+print(demo_call(messages).json())
+```
+</CodeGroup>
+</Accordion>
+
+
+## How to get your Azure OpenAI credentials
+
+To find the parameters needed, you can follow these steps:
+- Visit your [Azure Portal](https://portal.azure.com/#view/Microsoft_Azure_ProjectOxford/CognitiveServicesHub/~/OpenAI).
+- You will see your deployments via the above link, choose the deployment you want to use.
+<img src="/images/providers/azure/blurred-azure-portal.png"/>
+- Click on the "Endpoints" link to get the API base URL.
+- Click on the "Manage Keys" link to get the API key.
+<img src="/images/providers/azure/blurred-azure-endpoint.png"/>
+- Pick the version from the [available versions](https://learn.microsoft.com/en-us/azure/ai-services/openai/reference).
+
+
+## Supported models
+
+- `azure/gpt-35-turbo`
+- `azure/gpt-4`
+- `azure/gpt-4-1106-preview`
+- `azure/gpt-4-32k`
+- `azure/gpt-4o`
+- `azure/gpt-4o-mini`
+- `azure/gpt-4o-2024-08-06`
+- `azure/gpt-4-vision-preview`
+- `azure/o3-mini`
+
+You can find more models [here](https://platform.keywordsai.co/platform/models).

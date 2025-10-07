@@ -1,0 +1,65 @@
+---
+title: "Get Evaluator"
+description: "Retrieve a specific evaluator by ID"
+---
+
+## Overview
+
+Retrieve detailed information about a specific evaluator using its unique identifier.
+
+## Method Signature
+
+```python
+# Synchronous
+client.evaluators.get(
+    evaluator_id: str
+) -> Dict[str, Any]
+
+# Asynchronous
+await client.evaluators.get(
+    evaluator_id: str
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+<ParamField path="evaluator_id" type="string" required>
+  The unique identifier of the evaluator to retrieve
+</ParamField>
+
+## Returns
+
+Returns a dictionary containing the evaluator's detailed information.
+
+## Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Get specific evaluator
+evaluator = client.evaluators.get(evaluator_id="eval_123")
+
+print(f"Evaluator: {evaluator['name']}")
+print(f"Type: {evaluator['type']}")
+print(f"Description: {evaluator['description']}")
+print(f"Config: {evaluator['config']}")
+
+# Access evaluator configuration
+if 'config' in evaluator:
+    threshold = evaluator['config'].get('threshold', 0.5)
+    print(f"Threshold: {threshold}")
+```
+
+## Error Handling
+
+```python
+try:
+    evaluator = client.evaluators.get(evaluator_id="eval_123")
+except Exception as e:
+    print(f"Error retrieving evaluator: {e}")
+    # Handle case where evaluator doesn't exist
+    if "not found" in str(e).lower():
+        print("Evaluator does not exist")
+```

@@ -1,0 +1,131 @@
+---
+title: Thread list
+api: POST https://api.keywordsai.co/api/log_threads/
+---
+
+This endpoint retrieves log threads based on specified filters and pagination parameters.
+
+## Authentication
+
+Requires API key authentication via Bearer token in the Authorization header.
+
+## Query Params
+
+<ParamField query="page" type="integer" default={1}>
+  The page number to retrieve.
+</ParamField>
+
+<ParamField query="page_size" type="integer" default={100}>
+  The number of items per page. Maximum is 1000.
+</ParamField>
+
+<ParamField query="environment" type="string" default={"prod"}>
+This is controlled by the API key. A `prod` API key creates `prod` threads, `test` key creates `test` threads.
+</ParamField>
+
+
+## Post params
+
+<ParamField body="filters" type="object" default={{}}>
+  The filters to apply to the threads.
+  <Accordion title="Properties">
+
+    <ParamField body="thread_identifier" type="string">
+      The identifier of the thread. Operators: "" (is), "in" (is in list)
+      <Accordion title="Properties">
+        <ParamField body="operator" type="string">
+          The operator to use. Operators: "" (is), "in" (is in list)
+        </ParamField>
+        <ParamField body="value" type="array">
+          The value to filter by.
+        </ParamField>
+      </Accordion>
+    </ParamField>
+
+    <ParamField body="organization_key_id" type="string">
+      The ID of the organization. Operators: "" (is), "not" (is not)
+      <Accordion title="Properties">
+        <ParamField body="operator" type="string">
+          The operator to use. Operators: "" (is), "not" (is not)
+        </ParamField>
+        <ParamField body="value" type="array">
+          The value to filter by.
+        </ParamField>
+      </Accordion>
+    </ParamField>
+
+    <ParamField body="customer_identifier" type="string">
+      Filter by customer ID Operators: "" (is), "not" (is not)
+      <Accordion title="Properties">
+        <ParamField body="operator" type="string">
+          The operator to use. Operators: "" (is), "not" (is not)
+        </ParamField>
+        <ParamField body="value" type="array">
+          The value to filter by.
+        </ParamField>
+      </Accordion>
+    </ParamField>
+  </Accordion>
+</ParamField>
+
+
+## Example
+```python Python
+import requests
+import json
+url = "https://api.keywordsai.co/api/log_threads/?page_size=100"
+payload = json.dumps({
+  "filters": {
+    "thread_identifier": {
+      "operator": "in",
+      "value": [
+        "thread_identifier_1"
+      ]
+    }
+  }
+})
+headers = {
+  'Authorization': 'Bearer YOUR_API_KEY',
+  'Content-Type': 'application/json'
+}
+response = requests.request("POST", url, headers=headers, data=payload)
+print(response.text)
+```
+
+
+## Response
+```json
+{
+  "results": [
+    {
+      "thread_identifier": "thread_id_1",
+      "environment": "prod",
+      "log_count": 21
+    }
+  ],
+  "count": 1,
+  "previous": null,
+  "next": null,
+  "current_filters": {
+    "thread_identifier": {
+      "operator": "in",
+      "value": ["thread_id_1"]
+    }
+  },
+  "filters_data": {
+    "thread_identifier": {
+      "display_name": "Thread ID",
+      "metric": "thread_identifier",
+      "operator_choices": [
+        {"name": "is", "value": ""},
+        {"name": "in", "value": "in"}
+      ],
+      "value_choices": [],
+      "value_field_type": "text",
+      "hidden": false
+    },
+    // Other available filters and their options...
+  }
+}
+```
+

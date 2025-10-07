@@ -1,0 +1,187 @@
+---
+title: "Create a prompt"
+description: "Create a new prompt to organize and manage prompt versions"
+---
+
+## Overview
+
+The `create()` and `acreate()` methods allow you to create a new prompt in Keywords AI. A prompt serves as a container for multiple versions with different configurations. Use `create()` for synchronous operations and `acreate()` for asynchronous operations.
+
+## Usage example
+
+```python
+from keywordsai.prompts.api import PromptAPI
+import asyncio
+
+# Create the client
+prompt_api_client = PromptAPI(api_key="your-api-key")
+
+# Synchronous example
+response = prompt_api_client.create()
+print(f"Created prompt with ID: {response.id}")
+
+# Asynchronous example
+async def create_prompt_async():
+    response = await prompt_api_client.acreate()
+    print(f"Created prompt with ID: {response.id}")
+
+# Run the async function
+asyncio.run(create_prompt_async())
+```
+
+## Parameters
+
+The `create()` and `acreate()` methods do not require any parameters. They create a new prompt with default values that can be updated later using the `update()` method.
+
+## Returns
+
+Returns a `PromptCreateResponse` object containing the created prompt information:
+
+```python
+{
+    "id": "prompt-123",
+    "name": "Untitled",
+    "description": "",
+    "prompt_id": "prompt-123",
+    "created_at": "2024-01-15T10:30:00Z"
+}
+```
+
+## Examples
+
+### Basic Synchronous Example
+
+```python
+import os
+from dotenv import load_dotenv
+from keywordsai.prompts.api import PromptAPI
+
+load_dotenv()
+
+def create_prompt_sync():
+    """Basic synchronous prompt creation"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    prompt_api_client = PromptAPI(api_key=api_key)
+    
+    try:
+        response = prompt_api_client.create()
+        print(f"✓ Prompt created with ID: {response.id}")
+        print(f"  Name: {response.name}")
+        print(f"  Created at: {response.created_at}")
+        return response
+    except Exception as e:
+        print(f"✗ Error: {e}")
+        return None
+
+# Usage
+create_prompt_sync()
+```
+
+### Asynchronous Example
+
+```python
+import asyncio
+import os
+from dotenv import load_dotenv
+from keywordsai.prompts.api import PromptAPI
+
+load_dotenv()
+
+async def create_prompt_async():
+    """Asynchronous prompt creation"""
+    api_key = os.getenv("KEYWORDS_AI_API_KEY")
+    prompt_api_client = PromptAPI(api_key=api_key)
+    
+    try:
+        response = await prompt_api_client.acreate()
+        print(f"✓ Async prompt created with ID: {response.id}")
+        print(f"  Name: {response.name}")
+        print(f"  Created at: {response.created_at}")
+        return response
+    except Exception as e:
+        print(f"✗ Async error: {e}")
+        return None
+
+# Usage
+asyncio.run(create_prompt_async())
+```
+
+### Creating and Updating a Prompt
+
+```python
+from keywordsai.prompts.api import PromptAPI
+from keywordsai_sdk.keywordsai_types.prompt_types import Prompt
+
+def create_and_update_prompt():
+    """Create a prompt and then update it with meaningful information"""
+    api_key = "your-api-key"
+    prompt_api_client = PromptAPI(api_key=api_key)
+    
+    # Step 1: Create a new prompt
+    prompt = prompt_api_client.create()
+    print(f"Created prompt: {prompt.id}")
+    
+    # Step 2: Update the prompt with meaningful information
+    update_data = Prompt(
+        name="Customer Support Assistant",
+        description="AI assistant for handling customer support inquiries"
+    )
+    
+    updated_prompt = prompt_api_client.update(prompt.id, update_data)
+    print(f"Updated prompt: {updated_prompt.name}")
+    
+    return updated_prompt
+
+# Usage
+create_and_update_prompt()
+```
+
+### Creating Multiple Prompts
+
+```python
+import asyncio
+from keywordsai.prompts.api import PromptAPI
+
+async def create_multiple_prompts():
+    """Create multiple prompts asynchronously"""
+    api_key = "your-api-key"
+    prompt_api_client = PromptAPI(api_key=api_key)
+    
+    # Create multiple prompts concurrently
+    tasks = [prompt_api_client.acreate() for _ in range(3)]
+    prompts = await asyncio.gather(*tasks)
+    
+    for i, prompt in enumerate(prompts, 1):
+        print(f"Prompt {i}: {prompt.id}")
+    
+    return prompts
+
+# Usage
+asyncio.run(create_multiple_prompts())
+```
+
+## Convenience Functions
+
+You can also use the convenience function to create a PromptAPI client:
+
+```python
+from keywordsai import create_prompt_client
+
+client = create_prompt_client(api_key="your-api-key")
+response = client.create()
+```
+
+## Next Steps
+
+After creating a prompt, you'll typically want to:
+
+1. **Update the prompt** with a meaningful name and description using the `update()` method
+2. **Create prompt versions** with specific configurations using the `create_version()` method
+3. **Deploy versions** to make them available for use in your applications
+
+```python
+# Example workflow
+prompt = client.create()
+updated_prompt = client.update(prompt.id, {"name": "My Prompt", "description": "Description"})
+version = client.create_version(prompt.id, version_data)
+```

@@ -1,0 +1,43 @@
+---
+title: Get Log Score
+api: GET https://api.keywordsai.co/api/logs/{log_id}/scores/{score_id}/
+---
+
+Gets detailed information about a specific score for a log.
+
+<RequestExample>
+```Python Python
+import requests
+
+url = "https://api.keywordsai.co/api/logs/{log_id}/scores/{score_id}/"
+api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "eval_result_unique_id",
+  "created_at": "2024-01-15T10:30:00Z",
+  "type": "llm",
+  "environment": "test",
+  "numerical_value": 4.5,
+  "string_value": "Good quality",
+  "boolean_value": true,
+  "categorical_value": ["excellent"],
+  "is_passed": false,
+  "cost": 0.0,
+  "evaluator_id": null,
+  "evaluator_slug": "quality_evaluator",
+  "log_id": "log_unique_id",
+  "dataset_id": null
+}
+```
+</ResponseExample>

@@ -1,0 +1,246 @@
+---
+title: "User list"
+api: "GET https://api.keywordsai.co/api/users/"
+---
+
+<Info>Make sure you add **Api-Key** prefix to your token</Info>
+
+You can paste the command below into your terminal to run your first API request. Make sure to replace `YOUR_KEYWORDSAI_API_KEY` with your actual Keywords AI API key.
+
+
+<ParamField path="date" type="string" default="current time">
+    Date string in ISO format. Combined with summary_type, this will retrieve data from the time frame that contains this date.
+    <Accordion title="Example">
+    ```json
+    {
+        "date": "2024-03-09 00:00:00"
+    }
+    ```
+    </Accordion>
+</ParamField>
+
+<ParamField path="summary_type" type="string">
+    The range of data to retrieve. Possible values: `all`, `daily`, `weekly`, `monthly`, and `yearly`.
+
+    Example: `summary_type=weekly, date=2024-03-09 00:00:00` will retrieve data for the week that contains 2024-03-09 00:00:00.
+</ParamField>
+
+<ParamField path="timezone_offset" type="int" default={0}>
+    The timezone offset in hours is defined as UTC - local time. This helps you calibrate the date timeframe of your data.
+
+    Example: PST time is -8 hours from UTC, so the timezone_offset is 8.
+</ParamField>
+
+<ParamField name="count" type="int">
+    The number of UserData objects in the results array.
+</ParamField>
+<ParamField name="next" type="string">
+    The URL to the next page of results.
+</ParamField>
+<ParamField name="previous" type="string">
+    The URL to the previous page of results.
+</ParamField>
+
+### Response params:
+
+<ParamField name="results" type="array" >
+    An array of UserData objects.
+    <Accordion title="Properties">
+        <ParamField name="active_days" default={0}>
+            The number of days the user has been active.
+        </ParamField>
+        <ParamField name="last_active_timeframe" default={0}>
+            The last time the user was active (sent a request to the API).
+        </ParamField>
+        <ParamField name="total_tokens" default={0}>
+            Depending on summary_type, the total tokens used within the timeframe.
+        </ParamField>
+        <ParamField name="total_cost" default={0}>
+            Depending on summary_type, the total cost of the tokens used within the timeframe.
+
+            For example: summary_type=monthly, total_cost=1000 means the user has used 1000 tokens in the current month.
+        </ParamField>
+        <ParamField name="average_sentiment" default={0}>
+            Depending on summary_type, the average sentiment score of the user's requests over this timeframe
+        </ParamField>
+        <ParamField name="active_duration" default={0}>
+            The total duration of the user using the API (time from the first request to the last request).
+        </ParamField>
+        <ParamField name="average_sentiment" default={0}>
+            Depending on summary_type, the average sentiment score of the user's requests over this timeframe
+        </ParamField>
+        <ParamField name="customer_identifier" default={0}>
+            The customer ID you assigned to identify the user in your request.
+        </ParamField>
+    </Accordion>
+</ParamField>
+
+<ParamField name="aggregation_data" type="Aggregation Object">
+    A summary of the data in request results (of all pages).
+    <Accordion title="Properties">
+        <ParamField name="new_users" default={0}>
+            Depending on the summary_type, the number of total users in the current timeframe - the number of users in the previous timeframe.
+        </ParamField>
+        <ParamField name="total_users" default={0}>
+            The total number of users in the current timeframe.
+        </ParamField>
+        <ParamField name="montly_active_users" default={0}>
+            The number of users who have been active in the current month.
+        </ParamField>
+        <ParamField name="daily_active_users" default={0}>
+            The number of users who have been active in the current day.
+        </ParamField>
+        <ParamField name="daily_requests" default={0}>
+            The number of requests made in the current day.
+        </ParamField>
+        <ParamField name="montly_cost" default={0}>
+            The total cost of the tokens used in the current month.
+        </ParamField>
+    </Accordion>
+</ParamField>
+
+<RequestExample>
+```Python Python
+import requests
+from urllib.parse import urlencode
+
+
+base_url = "https://api.keywordsai.co/api/users/"
+api_key = production_api_key # Replace with your actual Keywords AI API key
+get_params = {
+    'page_size': 10,
+    'summary_type': 'all',
+    'date': '2024-03-09 00:00:00'
+}
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+# Convert the params into url encoded string
+params = urlencode(get_params)
+url = f"{base_url}?{params}"
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```JavaScript JavaScript
+const axios = require('axios');
+const qs = require('qs');
+
+const baseURL = "https://api.keywordsai.co/api/users/";
+const apiKey = 'production_api_key'; // Replace with your actual Keywords AI API key
+const getParams = {
+    'page_size': 10,
+    'summary_type': 'all',
+    'date': '2024-03-09 00:00:00'
+};
+const headers = {
+    "Authorization": `Bearer ${apiKey}`,
+    "Content-Type": "application/json"
+};
+
+const params = qs.stringify(getParams);
+const url = `${baseURL}?${params}`;
+
+axios.get(url, { headers: headers })
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+```
+
+```bash cURL
+curl -X GET 'https://api.keywordsai.co/api/users/?page_size=10&summary_type=all&date=2024-03-09%2000:00:00' \
+-H 'Authorization: Bearer production_api_key' \
+-H 'Content-Type: application/json'
+```
+
+```GoLang GoLang
+package main
+
+import (
+    "fmt"
+    "io/ioutil"
+    "net/http"
+    "net/url"
+)
+
+func main() {
+    baseURL := "https://api.keywordsai.co/api/users/"
+    apiKey := "production_api_key" // Replace with your actual Keywords AI API key
+    getParams := url.Values{
+        "page_size":    []string{"10"},
+        "summary_type": []string{"all"},
+        "date":         []string{"2024-03-09 00:00:00"},
+    }
+    headers := map[string]string{
+        "Authorization": "Bearer " + apiKey,
+        "Content-Type":  "application/json",
+    }
+
+    params := getParams.Encode()
+    url := baseURL + "?" + params
+
+    client := &http.Client{}
+    req, _ := http.NewRequest("GET", url, nil)
+    for key, value := range headers {
+        req.Header.Add(key, value)
+    }
+    resp, err := client.Do(req)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    defer resp.Body.Close()
+
+    body, _ := ioutil.ReadAll(resp.Body)
+    fmt.Println(string(body))
+}
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "results": [
+      {
+        "id": 00001,
+        "organization_name": "xxx",
+        "email": "",
+        "name": "",
+        "customer_identifier": "sample-user-id",
+        "active_days": 1,
+        "last_active_timeframe": "2024-06-07 17:35:34.452434+00:00",
+        "requests": 1,
+        "total_requests": 1,
+        "tokens": 33,
+        "total_tokens": 33,
+        "cost": 5.2e-05,
+        "total_cost": 5.2e-05,
+        "average_sentiment": null,
+        "active_duration": "00:00:00",
+        "first_seen": "2024-06-07T17:35:34.491504Z",
+        "top_models": {
+            "gpt-3.5-turbo": 1
+        },
+        "cache_hits": 0,
+        "average_latency": 0.0,
+        "average_ttft": 0.0,
+        "total_prompt_tokens": 8,
+        "total_completion_tokens": 25,
+        "average_monthly_cost": 0.00156,
+        "total_budget": null,
+        "period_budget": null
+      }
+  ],
+    "count": 1,
+    "previous": null,
+    "next": null,
+    "aggregation_data": {}
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,75 @@
+---
+title: "Log thinking blocks"
+description: "How to log LLM requests that include thinking blocks"
+---
+
+When using models with thinking capabilities, the response includes additional reasoning information that can be logged and analyzed.
+
+## Response Structure
+
+Thinking-enabled responses include these additional fields:
+
+- **reasoning_content**: The model's reasoning process in text format
+- **thinking_blocks**: Array of structured thinking blocks with signatures
+
+## Example Request
+
+```json
+{
+  "model": "claude-sonnet-4-20250514",
+  "max_tokens": 16000,
+  "thinking": {
+    "type": "enabled",
+    "budget_tokens": 10000
+  },
+  "messages": [
+    {
+      "role": "user",
+      "content": "Are there an infinite number of prime numbers such that n mod 4 == 3?"
+    }
+  ]
+}
+```
+
+## Example Response
+
+```json
+{
+  "messages": [
+    {
+      "role": "user",
+      "content": "Are there an infinite number of prime numbers such that n mod 4 == 3?"
+    },
+    {
+      "role": "assistant",
+      "content": "Yes, there are infinitely many prime numbers such that n ≡ 3 (mod 4).\n\nThis is a classic theorem in number theory, and here's a proof…",
+      "reasoning_content": "This is asking about whether there are infinitely many prime numbers that are congruent to 3 modulo 4, i.e., primes of the form 4k + 3.\n\nLet me think about this systematically. First…",
+      "thinking_blocks": [
+        {
+          "type": "thinking",
+          "thinking": "This is asking about whether there are infinitely many prime numbers that are congruent to 3 modulo 4, i.e…",
+          "signature": "EswgCkYIBhgCKkDCG…"
+        }
+      ],
+      "tool_calls": []
+    }
+  ]
+}
+```
+
+## Logging Parameters
+
+All standard logging parameters apply. The thinking-related fields are automatically captured when present:
+
+- **reasoning_content**: Full reasoning text
+- **thinking_blocks**: Array of thinking block objects
+- **signature**: Cryptographic signature for thinking block verification
+
+## Key Points
+
+- Thinking blocks are automatically logged when present in the response
+- The `reasoning_content` field contains the complete reasoning process
+- `thinking_blocks` provide structured access to individual reasoning steps
+- All other logging parameters work the same as regular text logging
+
+For more information on enabling thinking mode, see the [Enable Thinking](../gateway/advanced_features/thinking) documentation.

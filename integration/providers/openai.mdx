@@ -1,0 +1,66 @@
+---
+title: "OpenAI"
+---
+
+<Note> This section is only for **Keywords AI LLM proxy** user.</Note>
+
+To use Keywords AI LLM proxy, you need to add your own credentials to call models from each provider. Here's how you can add your OpenAI credentials on Keywords AI platform.
+
+<CardGroup cols={1}>
+  <Card title="Get OpenAI API key" icon="key" href="https://platform.openai.com/account/api-keys">
+    Get your OpenAI API key from the OpenAI platform to start using OpenAI models through Keywords AI.
+  </Card>
+</CardGroup>
+
+## OpenAI models compatibility
+
+<AccordionGroup>
+  <Accordion title="✅ Supported Frameworks">
+    - [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+    - [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+    - [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+    - [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+    - [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+    - [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+    - [Keywords native (Otel)]('/documentation/gateway/get_started)
+  </Accordion>
+  
+  <Accordion title="❌ Unsupported Frameworks">
+    - [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+    - [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+  </Accordion>
+</AccordionGroup>
+
+## Add OpenAI API keys
+There are 2 ways to add your OpenAI credentials to your requests:
+### Via UI
+
+<Steps>
+<Step title="Go to the Providers page">
+The [Providers page](https://platform.keywordsai.co/platform/api/providers) allows you to add your own credentials for each provider. Currently, over 20+ providers are supported.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg" alt="Providers Page"/>
+</Frame>
+</Step>
+<Step title="Add your OpenAI API key.">
+
+<img width="600"  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/api_keys/openai_2.png" alt="Keywords AI Credentials Page"/>
+</Step>
+<Step title="Add more OpenAI API keys.">
+We support adding multiple OpenAI API keys. You can add as many as you want. In the field of `Load balancing weight`, you can set the weight of the API key. This is used to distribute the load between the API keys.
+</Step>
+</Steps>
+
+### Via code
+Add `customer_credentials` parameter in your [request body](/api-endpoints/integration/chat-completions) to use your own OpenAI credits.
+
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "openai": {
+      "api_key": "YOUR_OPENAI_API_KEY",
+    }
+  }
+}
+```

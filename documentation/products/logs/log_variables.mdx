@@ -1,0 +1,68 @@
+---
+title: "Log prompt variables"
+description: "You can send your prompt variables to Keywords AI to log them in your logs. So you can see the prompt template and variables separately"
+---
+<Frame>
+<video
+  controls
+  className="w-full aspect-video"
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/prompt-variable-logging.mp4"
+  alt="Prompt variables in logs"
+></video>
+</Frame>
+
+## How to log prompt variables
+
+### Via LLM Gateway
+If you are using the [LLM Gateway](/documentation/products/gateway/quickstart), you should first [set up your prompts](/documentation/products/prompt_management/use_prompt_in_code/use_prompt_in_llms) in the code. Then we will log the LLM requests and variables automatically.
+
+**Example:**
+When you created a prompt like this:
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt-example.png" alt="Sample prompt in Keywords AI" />
+</Frame>
+
+Then deploy your prompt in the code:
+
+```json
+"model": "gpt-4o-mini",
+"prompt": {
+    "prompt_id": "09IqVI", // prompt ID in the code
+    "variables": {"language": "Python","task_description": "Square a number", "specific_library": "math"},
+    "version": 15 // optional, you can specify a version of the prompt you want to use
+}
+```
+
+Once you send a request through the LLM Gateway, you will see the prompt variables in the side panel.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt-variable-logging.jpg" alt="Prompt variables in logs" />
+</Frame>
+
+### Via Logging ingestion
+When you make a request through the [Logging ingestion](/documentation/api-endpoints/integration/request-logging-endpoint), you can send the prompt variables in the `prompt_messages` field. Just simply wrap your prompt variables in pairs of `{{}}`.
+
+
+**Example:**
+
+```json
+"prompt_messages": [
+    {
+    "content": "Please develop an optimized Python function to {{task_description}}, utilizing {{specific_library}}, include error handling, and write unit tests for the function.",
+    "role": "user"
+    }
+],
+"variables": {
+    "task_description": "Square a number",
+    "specific_library": "math"
+}
+```
+
+## Why you should log prompt variables
+
+1. `Easy to read`: Logged prompt variables appear in the side panel, so you can quickly inspect the content of each variable without digging into the full prompt.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/sidepanel-prompt-variables.png" alt="Prompt variables in logs" />
+</Frame>
+
+2. `Easy to add to a testset`: Logged variables make it simple to turn real-world logs into test cases. With one click, you can add them to a [testset](/documentation/products/evaluation/experiments/testsets) and start iterating on your prompts with realistic data.

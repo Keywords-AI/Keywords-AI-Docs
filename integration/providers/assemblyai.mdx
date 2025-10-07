@@ -1,0 +1,90 @@
+---
+title: "AssemblyAI"
+description: "A guide to call and log AssemblyAI speech-to-text model with Keywords AI gateway."
+---
+
+<CardGroup cols={1}>
+  <Card title="Get AssemblyAI API key" icon="key" href="https://www.assemblyai.com/">
+    Get your AssemblyAI API key from the AssemblyAI platform to start using AssemblyAI speech-to-text models through Keywords AI.
+  </Card>
+</CardGroup>
+
+AssemblyAI is an applied AI company that offers AI models for audio transcription, content moderation, summarization, topic detection, and many other tasks.
+
+In this guide, we will show you how to call and log AssemblyAI speech-to-text model with Keywords AI gateway and log LLM calls.
+
+## Prerequisites
+
+- A Keywords AI account.
+- A [Keywords AI API key](https://platform.keywordsai.co/platform/api/api-keys).
+- An AssemblyAI account.
+- An AssemblyAI API key.
+
+## Quickstart
+
+Here's an example of how to call and log AssemblyAI speech-to-text model with Keywords AI gateway.
+
+The API endpoint for this integration is `https://api.keywordsai.co/api/assemblyai/`.
+
+```python Python {11-14, 21-26}
+import os
+from assemblyai import (
+    Transcriber,
+    Client,
+    Settings,
+    TranscriptStatus,
+)
+from base64 import b64encode
+import json
+
+API_KEY = os.getenv("KEYWORDSAI_API_KEY")
+BASE_URL = (
+    os.getenv("KEYWORDSAI_BASE_URL", "https://api.keywordsai.co/") + "api/assemblyai/"
+)
+
+
+class KeywordsAIAssemblyAIClient(Client):
+    """
+    Define KeywordsAI's AssemblyAI client wrapper for passing extra headers containing keywordsai params
+    """
+
+    def __init__(self, keywordsai_api_key: str, headers: dict):
+        settings = Settings(api_key=keywordsai_api_key, base_url=BASE_URL)
+        print(settings)
+        super().__init__(settings=settings)
+        self._http_client.headers.update(headers)
+
+keywordsai_params = {
+    "metadata": {
+        "paid_user": "true",
+    }
+    # other keywordsai parameters...
+}
+
+keywordsai_headers = {
+    "X-Assemblyai-Api-Key": os.getenv("ASSEMBLYAI_API_KEY"), # <-- This is the AssemblyAI API key
+    "X-Data-Keywordsai-Params": b64encode(
+        json.dumps(keywordsai_params).encode()
+    ).decode(),
+}
+
+client = KeywordsAIAssemblyAIClient(
+    keywordsai_api_key=API_KEY, # <-- This is the API key for authenticating against KeywordsAI, not the AssemblyAI API key (defined above)
+    headers=keywordsai_headers
+)
+
+transcriber = Transcriber(client=client)
+
+transcript = transcriber.transcribe("https://assembly.ai/wildfires.mp3")
+
+if transcript.status == TranscriptStatus.error:
+    print(transcript.error)
+else:
+    print(transcript.text)
+```
+
+### Keywords AI params
+You can pass any [Keywords AI observability parameters](https://docs.keywordsai.co/api-endpoints/integration/chat-completions#observability-parameters) in the `metadata` field.
+
+
+

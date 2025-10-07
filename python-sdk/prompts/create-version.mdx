@@ -1,0 +1,93 @@
+---
+title: "Create Prompt Version"
+description: "Create a new version of an existing prompt"
+---
+
+## Method Signature
+
+```python
+# Synchronous
+def create_version(
+    prompt_id: str,
+    messages: List[Dict[str, Any]],
+    model: str,
+    **kwargs
+) -> PromptVersion
+
+# Asynchronous
+async def acreate_version(
+    prompt_id: str,
+    messages: List[Dict[str, Any]],
+    model: str,
+    **kwargs
+) -> PromptVersion
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `prompt_id` | `str` | Yes | The unique identifier of the prompt |
+| `messages` | `List[Dict]` | Yes | List of message objects |
+| `model` | `str` | Yes | AI model to use |
+| `temperature` | `float` | No | Model temperature (0.0-2.0) |
+| `max_tokens` | `int` | No | Maximum tokens to generate |
+
+## Examples
+
+### Basic Usage
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Create a new version
+version = client.prompts.create_version(
+    prompt_id="prompt_123",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Hello!"}
+    ],
+    model="gpt-4",
+    temperature=0.7
+)
+
+print(f"Created version: {version.version}")
+```
+
+### Asynchronous Usage
+```python
+import asyncio
+from keywordsai import AsyncKeywordsAI
+
+async def create_version():
+    client = AsyncKeywordsAI(api_key="your-api-key")
+    
+    version = await client.prompts.acreate_version(
+        prompt_id="prompt_123",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "What is AI?"}
+        ],
+        model="gpt-4",
+        temperature=0.5,
+        max_tokens=150
+    )
+    
+    print(f"Version {version.version} created")
+
+asyncio.run(create_version())
+```
+
+### Error Handling
+```python
+try:
+    version = client.prompts.create_version(
+        prompt_id="prompt_123",
+        messages=[{"role": "user", "content": "Hello"}],
+        model="gpt-4"
+    )
+    print(f"Version created: {version.version}")
+except Exception as e:
+    print(f"Error creating version: {e}")
+```

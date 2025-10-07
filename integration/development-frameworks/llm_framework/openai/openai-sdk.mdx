@@ -1,0 +1,248 @@
+---
+title: "Chat completion"
+description: "Complete guide to integrating Keywords AI with OpenAI SDK for seamless LLM gateway usage."
+---
+<Note> This integration is for the **Keywords AI gateway**. </Note>
+
+## Overview
+
+OpenAI SDK provides the most robust integration method for accessing multiple model providers. 
+
+Since most AI providers prioritize OpenAI SDK compatibility, you can seamlessly call all 250+ models available through the Keywords AI platform gateway.
+
+## Quickstart
+
+### Step 1: Install OpenAI SDK
+
+- Get a Keywords AI API key
+- Add your provider credentials
+- Install packages
+
+<CodeGroup>
+```bash Python
+pip install openai
+```
+
+```bash TypeScript
+npm install openai
+```
+
+```bash Go
+go get github.com/openai/openai-go
+```
+</CodeGroup>
+
+### Step 2: Initialize Client
+
+<CodeGroup>
+```python {4-5} Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDS_AI_API_KEY",  # Get from Keywords AI dashboard
+)
+```
+
+```typescript {4-5} TypeScript
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api/",
+  apiKey: process.env.KEYWORDS_AI_API_KEY,  # Get from Keywords AI dashboard
+});
+```
+
+```go {11-12} Go
+package main
+
+import (
+    "context"
+    "github.com/openai/openai-go"
+    "github.com/openai/openai-go/option"
+)
+
+func main() {
+    client := openai.NewClient(
+        option.WithBaseURL("https://api.keywordsai.co/api/"),
+        option.WithAPIKey("YOUR_KEYWORDS_AI_API_KEY"), // Get from Keywords AI dashboard
+    )
+}
+```
+</CodeGroup>
+
+### Step 3: Make Your First Request
+
+<CodeGroup>
+```python Python
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello, world!"}],
+)
+print(response.choices[0].message.content)
+```
+```typescript TypeScript
+const response = await client.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [{ role: "user", content: "Hello, world!" }],
+});
+console.log(response.choices[0].message.content);
+```
+```go Go
+chatCompletion, err := client.Chat.Completions.New(context.TODO(), openai.ChatCompletionNewParams{
+    Messages: openai.F([]openai.ChatCompletionMessageParamUnion{
+        openai.UserMessage("Hello, world!"),
+    }),
+    Model: openai.F(openai.ChatModelGPT4oMini),
+})
+if err != nil {
+    panic(err.Error())
+}
+println(chatCompletion.Choices[0].Message.Content)
+```
+</CodeGroup>
+
+### Step 4: See your log on [platform](https://platform.keywordsai.co/platform/requests?sort_by=-timestamp)
+
+## Switch models
+
+<CodeGroup>
+```python Python {3-4}
+# OpenAI GPT models
+model = "gpt-4o"       
+# model = "claude-3-5-sonnet-20241022"  
+# model = "gemini-1.5-pro"           
+
+response = client.chat.completions.create(
+    model=model,
+    messages=[{"role": "user", "content": "Your message"}],
+)
+```
+
+```typescript Typescript {3-4}
+// OpenAI GPT models
+let model = "gpt-4o";           
+// model = "claude-3-5-sonnet-20241022";  
+// model = "gemini-1.5-pro";     
+
+const response = await client.chat.completions.create({
+    model: model,
+    messages: [{ role: "user", content: "Your message" }],
+});
+```
+</CodeGroup>
+
+<Note>
+See the [full model list](https://platform.keywordsai.co/platform/models) for all available models.
+</Note>
+
+## Supported parameters
+
+### OpenAI parameters
+
+We support all the [OpenAI parameters](/api-endpoints/integration/chat-completions#openai-parameters). You can pass them directly in the request body.
+
+<CodeGroup>
+```python Python
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Tell me a story"}],
+    temperature=0.7,          # Control randomness
+    max_tokens=1000,          # Limit response length
+    top_p=0.9,               # Nucleus sampling
+    frequency_penalty=0.1,    # Reduce repetition
+    presence_penalty=0.1,     # Encourage topic diversity
+    stream=True,             # Enable streaming
+)
+```
+
+```typescript Typescript
+
+const response = await client.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [{ role: "user", content: "Tell me a story" }],
+    temperature: 0.7,          // Control randomness
+    max_tokens: 1000,          // Limit response length
+    top_p: 0.9,               // Nucleus sampling
+    frequency_penalty: 0.1,    // Reduce repetition
+    presence_penalty: 0.1,     // Encourage topic diversity
+    stream: true,             // Enable streaming
+});
+```
+</CodeGroup>
+
+### Keywords AI Parameters
+
+[Keywords AI parameters](/api-endpoints/integration/chat-completions#keywords-ai-parameters) can be passed for better handling and customization.
+
+<CodeGroup>
+```python Python {4-10}
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Tell me a story"}],
+    extra_body={
+        "customer_identifier": "user_123",           # Track specific users
+        "fallback_models": ["gpt-3.5-turbo"],       # Automatic fallbacks
+        "metadata": {"session_id": "abc123"},        # Custom metadata
+        "thread_identifier": "conversation_456",     # Group related messages
+        "group_identifier": "team_alpha",           # Organize by groups
+    }
+)
+```
+
+```typescript Typescript
+const response = await client.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [{ role: "user", content: "Tell me a story" }],
+    // @ts-expect-error - Keywords AI parameters
+    customer_identifier: "user_123",           // Track specific users
+    fallback_models: ["gpt-3.5-turbo"],       // Automatic fallbacks
+    metadata: { session_id: "abc123" },        // Custom metadata
+    thread_identifier: "conversation_456",     // Group related messages
+    group_identifier: "team_alpha",           // Organize by groups
+});
+```
+</CodeGroup>
+
+## Azure OpenAI
+To call Azure OpenAI models, instead of using azure OpenAI's client, the easier way is to use the OpenAI client.
+
+<CodeGroup>
+```plain Setup
+1. Go to [Keywords AI Providers](https://platform.keywordsai.co/platform/api/providers)
+2. Add your Azure OpenAI credentials
+3. Configure your Azure deployment settings
+4. Use Azure models through the same Keywords AI endpoint
+```
+
+```python Python
+from openai import AsyncOpenAI
+
+# Use the same Keywords AI endpoint
+azure_client = AsyncOpenAI(
+    api_key="YOUR_KEYWORDS_AI_API_KEY",
+    base_url="https://api.keywordsai.co/api/"
+)
+
+# Call Azure models directly
+response = await azure_client.chat.completions.create(
+    model="gpt-4o",  # Azure-hosted model
+    messages=[{"role": "user", "content": "Hello from Azure!"}],
+)
+```
+</CodeGroup>
+
+<Card title="View your analytics" href="https://platform.keywordsai.co/platform/dashboard">
+  Access your Keywords AI dashboard to see detailed analytics
+</Card>
+
+## Next Steps
+
+<CardGroup cols={2}>
+<Card title="Advanced settings" href="/features/monitoring/user-analytics">
+  Track user behavior and patterns
+</Card>
+<Card title="Prompt Management" href="/features/prompt/prompt-management/overview">
+  Manage and version your prompts
+</Card>
+</CardGroup>

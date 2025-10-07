@@ -1,0 +1,71 @@
+---
+title: "Architecture review"
+description: "Keywords AI security architecture and infrastructure overview"
+---
+
+Keywords AI provides LLM observability service: keeping track of all the inputs to and outputs of LLM inferences, along with any additional metrics that are calculated during the inference, such as token usage, generation time etc.
+
+## Architecture and Data Flow Overview
+
+### Cloud Infrastructure
+
+- **Amazon Web Services (AWS)** as the primary cloud service provider
+- **Application hosted on Amazon Elastic Container Service (ECS)**
+- **Redis** for event queue management
+- **PostgreSQL** for persistent data storage
+
+### Data Flow
+
+1. Client requests are sent to our API server hosted on AWS ECS
+2. During LLM inference operations, events are generated and pushed to Redis queue
+3. Celery workers consume these events from Redis
+4. Data is batch inserted into PostgreSQL database
+
+## Security and Encryption Standards
+
+- **All API communications secured via TLS 1.2+ (HTTPS)**
+- **Authentication credentials and API keys** are hashed using SHA-256 (SHA-2 family) before storage
+- **Data at rest is encrypted** using AWS-managed encryption (AES-256)
+- **Inter-service communication** within AWS infrastructure is secured through AWS security groups
+
+## Security Operations
+
+- **Regular internal security audits** (monthly)
+- **Weekly security testing** of applications
+- **Continuous monitoring** via AWS CloudWatch
+- **Regular code reviews** (weekly)
+- **Vulnerability scanning and penetration testing** planned for next security roadmap phase
+
+## Access Controls
+
+- **Multi-factor authentication (MFA)** required
+- **Role-based access control (RBAC)** with least privilege
+- **Just-in-time (JIT)** access for administrative functions
+- **Regular access reviews** and deprovisioning
+
+## Incident Response
+
+- **Dedicated incident response team** with defined roles
+- **Customer notification** within 24 hours of any security incident
+- **Detailed incident reports** and remediation plans
+- **Post-incident reviews** and continuous improvement
+
+## Business Continuity
+
+- **Recovery Time Objective (RTO)**: 4 hours
+- **Recovery Point Objective (RPO)**: 1 hour
+- **Automated daily backups** with cross-region replication
+- **Regular disaster recovery testing**
+
+## Compliance & Certifications
+
+- **SOC 2 Type II** - Security, Availability, Confidentiality (Certified)
+- **HIPAA** - Healthcare data protection compliance
+- **GDPR** - European data protection compliance
+- **AWS and GCP security frameworks** utilized
+
+## Security Reports
+
+Detailed security architecture documentation, penetration test reports, and compliance certificates are available to enterprise customers under NDA.
+
+**Contact**: security@keywordsai.co

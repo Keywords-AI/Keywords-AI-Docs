@@ -1,0 +1,68 @@
+---
+title: "Remove Columns"
+description: "Remove columns from an experiment dataset"
+---
+
+## Overview
+
+Remove specific columns from an existing experiment dataset.
+
+## Method Signature
+
+```python
+# Synchronous
+client.experiments.remove_columns(
+    experiment_id: str,
+    column_names: List[str]
+) -> Dict[str, Any]
+
+# Asynchronous
+await client.experiments.remove_columns(
+    experiment_id: str,
+    column_names: List[str]
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The unique identifier of the experiment
+</ParamField>
+
+<ParamField path="column_names" type="List[str]" required>
+  List of column names to remove from the experiment
+</ParamField>
+
+## Returns
+
+Returns a dictionary containing the updated experiment information.
+
+## Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Remove specific columns from experiment
+columns_to_remove = ["old_metric", "deprecated_field"]
+
+result = client.experiments.remove_columns(
+    experiment_id="exp_123",
+    column_names=columns_to_remove
+)
+
+print(f"Removed {len(columns_to_remove)} columns from experiment")
+```
+
+## Error Handling
+
+```python
+try:
+    result = client.experiments.remove_columns(
+        experiment_id="exp_123",
+        column_names=["old_metric", "deprecated_field"]
+    )
+except Exception as e:
+    print(f"Error removing columns: {e}")
+```

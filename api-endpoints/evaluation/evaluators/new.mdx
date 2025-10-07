@@ -1,0 +1,930 @@
+# Evaluators API Documentation
+
+Keywords AI evaluators allow you to define functions for evaluating the quality of your LLM responses through a simple REST API.
+
+## Base URL
+
+All evaluator endpoints are prefixed with `/api/evaluators`
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Evaluator Types and Score Value Types
+
+### Evaluator Types (Required)
+
+- **`llm`**: LLM-based evaluators that use another LLM to evaluate responses
+- **`human`**: Human annotation-based evaluators for manual scoring
+- **`code`**: Python code-based evaluators that run custom evaluation logic
+
+### Score Value Types (Required)
+
+- **`numerical`**: Numeric scores (e.g., 1-5, 0.0-1.0)
+- **`boolean`**: True/false or pass/fail evaluations
+- **`categorical`**: Multiple choice selections with predefined options
+- **`comment`**: Text-based feedback and comments
+
+When creating or updating scores via the Scores API, set the field that corresponds to the evaluator's `score_value_type`:
+
+- `numerical` → `numerical_value`
+- `boolean` → `boolean_value`
+- `categorical` → `categorical_value` (array of strings; should match configured `categorical_choices`)
+- `comment` → `string_value`
+
+While the Scores API does not block sending other fields, clients should adhere to the evaluator's `score_value_type` to ensure consistent behavior across the UI and analytics. See the Scores API docs for details (refer to `scores/scores_api_docs.md`).
+
+### Pre-built Templates (Optional)
+
+You can optionally use pre-built templates by specifying `eval_class`:
+
+- **`keywordsai_custom_llm`**: LLM-based evaluator with standard configuration
+- **`custom_code`**: Code-based evaluator template
+
+---
+
+## Unified Evaluator Inputs
+
+All evaluator runs now receive a single unified `inputs` object. This applies to all evaluator types (`llm`, `human`, `code`). The same fields are also recorded and visible on the Scores page for every evaluation.
+
+Structure:
+
+```json
+{
+  "inputs": {
+    "input": {},
+    "output": {},
+    "metrics": {},
+    "metadata": {},
+    "llm_input": "",
+    "llm_output": ""
+  }
+}
+```
+
+- `input` (any JSON): The request/input to be evaluated.
+- `output` (any JSON): The response/output being evaluated.
+- `metrics` (object, optional): System-captured metrics (e.g., tokens, latency, cost).
+- `metadata` (object, optional): Context and custom properties you pass; also logged.
+- `llm_input` and `llm_output` (string, optional): Legacy convenience aliases. New templates should reference `{{input}}` and `{{output}}`. Legacy `{{llm_input}}`/`{{llm_output}}` placeholders remain supported and transparently map to the unified fields.
+
+Example:
+
+```json
+{
+  "inputs": {
+    "input": "What is the capital of France?",
+    "output": "The capital of France is Paris.",
+    "metadata": { "context": "Geography question about European capitals" },
+    "metrics": { "total_request_tokens": 23, "latency": 0.45 }
+  }
+}
+```
+
+Notes:
+
+- These fields are stored with each evaluation and shown in the Scores page alongside the resulting score.
+- When running evaluators from LLM calls, `inputs` is auto-populated from the request/response and tracing data.
+
+## API Endpoints
+
+### Create Evaluator
+
+**POST** `/api/evaluators/`
+
+Creates a new evaluator. You must specify `type` and `score_value_type`. The `eval_class` field is optional and only used for pre-built templates.
+
+#### Required Fields
+
+- **`name`** (string): Display name for the evaluator
+- **`type`** (string): Evaluator type - `"llm"`, `"human"`, or `"code"`
+- **`score_value_type`** (string): Score format - `"numerical"`, `"boolean"`, `"categorical"`, or `"comment"`
+
+#### Optional Fields
+
+- **`evaluator_slug`** (string): Unique identifier (auto-generated if not provided)
+- **`description`** (string): Description of the evaluator
+- **`eval_class`** (string): Pre-built template to use (optional)
+- **`configurations`** (object): Custom configuration based on evaluator type
+- **`categorical_choices`** (array): Required when `score_value_type` is `"categorical"`
+
+---
+
+#### Example 1: Custom LLM Evaluator (Numerical)
+
+**Request:**
+
+```json
+{
+  "name": "Response Quality Evaluator",
+  "evaluator_slug": "response_quality_v1",
+  "type": "llm",
+  "score_value_type": "numerical",
+  "description": "Evaluates response quality on a 1-5 scale",
+  "configurations": {
+    "evaluator_definition": "Rate the response quality based on accuracy, relevance, and completeness.\n<llm_input>{{llm_input}}</llm_input>\n<llm_output>{{llm_output}}</llm_output>",
+    "scoring_rubric": "1=Poor, 2=Fair, 3=Good, 4=Very Good, 5=Excellent",
+    "llm_engine": "gpt-4o-mini",
+    "model_options": {
+      "temperature": 0.1,
+      "max_tokens": 200
+    },
+    "min_score": 1.0,
+    "max_score": 5.0,
+    "passing_score": 3.0
+  }
+}
+```
+
+**Response (201 Created):**
+
+```json
+{
+  "id": "0f4325f9-55ef-4c20-8abe-376694419947",
+  "name": "Response Quality Evaluator",
+  "evaluator_slug": "response_quality_v1",
+  "type": "llm",
+  "score_value_type": "numerical",
+  "eval_class": "",
+  "description": "Evaluates response quality on a 1-5 scale",
+  "configurations": {
+    "evaluator_definition": "Rate the response quality based on accuracy, relevance, and completeness.\n<llm_input>{{llm_input}}</llm_input>\n<llm_output>{{llm_output}}</llm_output>",
+    "scoring_rubric": "1=Poor, 2=Fair, 3=Good, 4=Very Good, 5=Excellent",
+    "llm_engine": "gpt-4o-mini",
+    "model_options": {
+      "temperature": 0.1,
+      "max_tokens": 200
+    },
+    "min_score": 1.0,
+    "max_score": 5.0,
+    "passing_score": 3.0
+  },
+  "created_at": "2025-09-11T09:43:55.858321Z",
+  "updated_at": "2025-09-11T09:43:55.858331Z",
+  "starred": false,
+  "tags": []
+}
+```
+
+#### Example 2: Human Categorical Evaluator
+
+**Request:**
+
+```json
+{
+  "name": "Content Quality Assessment",
+  "evaluator_slug": "content_quality_categorical",
+  "type": "human",
+  "score_value_type": "categorical",
+  "description": "Human assessment of content quality with predefined categories",
+  "categorical_choices": [
+    { "name": "Excellent", "value": 5 },
+    { "name": "Good", "value": 4 },
+    { "name": "Average", "value": 3 },
+    { "name": "Poor", "value": 2 },
+    { "name": "Very Poor", "value": 1 }
+  ]
+}
+```
+
+**Response (201 Created):**
+
+```json
+{
+  "id": "cat-eval-123",
+  "name": "Content Quality Assessment",
+  "evaluator_slug": "content_quality_categorical",
+  "type": "human",
+  "score_value_type": "categorical",
+  "eval_class": "",
+  "description": "Human assessment of content quality with predefined categories",
+  "configurations": {},
+  "categorical_choices": [
+    { "name": "Excellent", "value": 5 },
+    { "name": "Good", "value": 4 },
+    { "name": "Average", "value": 3 },
+    { "name": "Poor", "value": 2 },
+    { "name": "Very Poor", "value": 1 }
+  ],
+  "created_at": "2025-09-11T09:44:00.000000Z",
+  "updated_at": "2025-09-11T09:44:00.000000Z",
+  "custom_required_fields": [],
+  "starred": false,
+  "tags": []
+}
+```
+
+#### Example 3: Code-based Boolean Evaluator
+
+**Request:**
+
+```json
+{
+  "name": "Response Length Checker",
+  "evaluator_slug": "length_checker_boolean",
+  "type": "code",
+  "score_value_type": "boolean",
+  "description": "Checks if response meets minimum length requirement",
+  "configurations": {
+    "eval_code_snippet": "def evaluate(llm_input, llm_output, **kwargs):\n    '''\n    Check if response meets minimum length requirement\n    Returns True if length >= 50 characters, False otherwise\n    '''\n    if not llm_output:\n        return False\n    \n    return len(llm_output.strip()) >= 50"
+  }
+}
+```
+
+**Response (201 Created):**
+
+```json
+{
+  "id": "bool-eval-456",
+  "name": "Response Length Checker",
+  "evaluator_slug": "length_checker_boolean",
+  "type": "code",
+  "score_value_type": "boolean",
+  "eval_class": "",
+  "description": "Checks if response meets minimum length requirement",
+  "configurations": {
+    "eval_code_snippet": "def evaluate(llm_input, llm_output, **kwargs):\n    '''\n    Check if response meets minimum length requirement\n    Returns True if length >= 50 characters, False otherwise\n    '''\n    if not llm_output:\n        return False\n    \n    return len(llm_output.strip()) >= 50"
+  },
+  "created_at": "2025-09-11T09:45:00.000000Z",
+  "updated_at": "2025-09-11T09:45:00.000000Z",
+  "custom_required_fields": [],
+  "starred": false,
+  "tags": []
+}
+```
+
+#### Example 4: LLM Boolean Evaluator
+
+**Request:**
+
+```json
+{
+  "name": "LLM Factual Accuracy Check",
+  "evaluator_slug": "llm_factual_accuracy",
+  "type": "llm",
+  "score_value_type": "boolean",
+  "description": "LLM-based evaluator that checks if response is factually accurate",
+  "configurations": {
+    "evaluator_definition": "Determine if the response is factually accurate and contains no misinformation.\n<llm_input>{{llm_input}}</llm_input>\n<llm_output>{{llm_output}}</llm_output>",
+    "scoring_rubric": "Return True if factually accurate, False if contains errors or misinformation",
+    "llm_engine": "gpt-4o-mini"
+  }
+}
+```
+
+**Response (201 Created):**
+
+```json
+{
+  "id": "llm-bool-789",
+  "name": "LLM Factual Accuracy Check",
+  "evaluator_slug": "llm_factual_accuracy",
+  "type": "llm",
+  "score_value_type": "boolean",
+  "eval_class": "",
+  "description": "LLM-based evaluator that checks if response is factually accurate",
+  "configurations": {
+    "evaluator_definition": "Determine if the response is factually accurate and contains no misinformation.\n<llm_input>{{llm_input}}</llm_input>\n<llm_output>{{llm_output}}</llm_output>",
+    "scoring_rubric": "Return True if factually accurate, False if contains errors or misinformation",
+    "llm_engine": "gpt-4o-mini",
+    "model_options": {},
+    "min_score": 0.0,
+    "max_score": 1.0,
+    "passing_score": null
+  },
+  "created_at": "2025-09-11T09:46:00.000000Z",
+  "updated_at": "2025-09-11T09:46:00.000000Z",
+  "custom_required_fields": [],
+  "starred": false,
+  "tags": []
+}
+```
+
+#### Example 5: LLM Categorical Evaluator
+
+**Request:**
+
+```json
+{
+  "name": "LLM Response Tone Classifier",
+  "evaluator_slug": "llm_tone_classifier",
+  "type": "llm",
+  "score_value_type": "categorical",
+  "description": "LLM classifies response tone into predefined categories",
+  "configurations": {
+    "evaluator_definition": "Classify the tone of the response into one of the predefined categories.\n<llm_input>{{llm_input}}</llm_input>\n<llm_output>{{llm_output}}</llm_output>",
+    "scoring_rubric": "Analyze the language, word choice, and overall sentiment to determine tone",
+    "llm_engine": "gpt-4o-mini"
+  },
+  "categorical_choices": [
+    { "name": "Professional", "value": "professional" },
+    { "name": "Friendly", "value": "friendly" },
+    { "name": "Casual", "value": "casual" },
+    { "name": "Formal", "value": "formal" }
+  ]
+}
+```
+
+**Response (201 Created):**
+
+```json
+{
+  "id": "llm-cat-101",
+  "name": "LLM Response Tone Classifier",
+  "evaluator_slug": "llm_tone_classifier",
+  "type": "llm",
+  "score_value_type": "categorical",
+  "eval_class": "",
+  "description": "LLM classifies response tone into predefined categories",
+  "configurations": {
+    "evaluator_definition": "Classify the tone of the response into one of the predefined categories.\n<llm_input>{{llm_input}}</llm_input>\n<llm_output>{{llm_output}}</llm_output>",
+    "scoring_rubric": "Analyze the language, word choice, and overall sentiment to determine tone",
+    "llm_engine": "gpt-4o-mini",
+    "model_options": {},
+    "min_score": 0.0,
+    "max_score": 1.0,
+    "passing_score": null
+  },
+  "categorical_choices": [
+    { "name": "Professional", "value": "professional" },
+    { "name": "Friendly", "value": "friendly" },
+    { "name": "Casual", "value": "casual" },
+    { "name": "Formal", "value": "formal" }
+  ],
+  "created_at": "2025-09-11T09:47:00.000000Z",
+  "updated_at": "2025-09-11T09:47:00.000000Z",
+  "custom_required_fields": [],
+  "starred": false,
+  "tags": []
+}
+```
+
+#### Example 6: LLM Comment Evaluator
+
+**Request:**
+
+```json
+{
+  "name": "LLM Detailed Feedback",
+  "evaluator_slug": "llm_detailed_feedback",
+  "type": "llm",
+  "score_value_type": "comment",
+  "description": "LLM provides detailed written feedback on response quality",
+  "configurations": {
+    "evaluator_definition": "Provide detailed written feedback on the response, highlighting strengths and areas for improvement.\n<llm_input>{{llm_input}}</llm_input>\n<llm_output>{{llm_output}}</llm_output>",
+    "scoring_rubric": "Give constructive feedback covering accuracy, clarity, completeness, and suggestions for improvement",
+    "llm_engine": "gpt-4o"
+  }
+}
+```
+
+**Response (201 Created):**
+
+```json
+{
+  "id": "llm-comment-202",
+  "name": "LLM Detailed Feedback",
+  "evaluator_slug": "llm_detailed_feedback",
+  "type": "llm",
+  "score_value_type": "comment",
+  "eval_class": "",
+  "description": "LLM provides detailed written feedback on response quality",
+  "configurations": {
+    "evaluator_definition": "Provide detailed written feedback on the response, highlighting strengths and areas for improvement.\n<llm_input>{{llm_input}}</llm_input>\n<llm_output>{{llm_output}}</llm_output>",
+    "scoring_rubric": "Give constructive feedback covering accuracy, clarity, completeness, and suggestions for improvement",
+    "llm_engine": "gpt-4o",
+    "model_options": {},
+    "min_score": 0.0,
+    "max_score": 1.0,
+    "passing_score": null
+  },
+  "created_at": "2025-09-11T09:48:00.000000Z",
+  "updated_at": "2025-09-11T09:48:00.000000Z",
+  "custom_required_fields": [],
+  "starred": false,
+  "tags": []
+}
+```
+
+#### Example 7: Human Numerical Evaluator
+
+**Request:**
+
+```json
+{
+  "name": "Human Quality Rating",
+  "evaluator_slug": "human_quality_rating",
+  "type": "human",
+  "score_value_type": "numerical",
+  "description": "Human evaluators rate response quality on a numerical scale"
+}
+```
+
+**Response (201 Created):**
+
+```json
+{
+  "id": "human-num-303",
+  "name": "Human Quality Rating",
+  "evaluator_slug": "human_quality_rating",
+  "type": "human",
+  "score_value_type": "numerical",
+  "eval_class": "",
+  "description": "Human evaluators rate response quality on a numerical scale",
+  "configurations": {},
+  "created_at": "2025-09-11T09:49:00.000000Z",
+  "updated_at": "2025-09-11T09:49:00.000000Z",
+  "custom_required_fields": [],
+  "categorical_choices": [],
+  "starred": false,
+  "tags": []
+}
+```
+
+#### Example 8: Human Boolean Evaluator
+
+**Request:**
+
+```json
+{
+  "name": "Human Appropriateness Check",
+  "evaluator_slug": "human_appropriateness",
+  "type": "human",
+  "score_value_type": "boolean",
+  "description": "Human evaluators determine if response is appropriate for the context"
+}
+```
+
+**Response (201 Created):**
+
+```json
+{
+  "id": "human-bool-404",
+  "name": "Human Appropriateness Check",
+  "evaluator_slug": "human_appropriateness",
+  "type": "human",
+  "score_value_type": "boolean",
+  "eval_class": "",
+  "description": "Human evaluators determine if response is appropriate for the context",
+  "configurations": {},
+  "categorical_choices": [
+    { "name": "True", "value": true },
+    { "name": "False", "value": false }
+  ],
+  "created_at": "2025-09-11T09:50:00.000000Z",
+  "updated_at": "2025-09-11T09:50:00.000000Z",
+  "custom_required_fields": [],
+  "starred": false,
+  "tags": []
+}
+```
+
+#### Example 9: Human Comment Evaluator
+
+**Request:**
+
+```json
+{
+  "name": "Human Detailed Review",
+  "evaluator_slug": "human_detailed_review",
+  "type": "human",
+  "score_value_type": "comment",
+  "description": "Human evaluators provide detailed written feedback and comments"
+}
+```
+
+**Response (201 Created):**
+
+```json
+{
+  "id": "human-comment-505",
+  "name": "Human Detailed Review",
+  "evaluator_slug": "human_detailed_review",
+  "type": "human",
+  "score_value_type": "comment",
+  "eval_class": "",
+  "description": "Human evaluators provide detailed written feedback and comments",
+  "configurations": {},
+  "created_at": "2025-09-11T09:51:00.000000Z",
+  "updated_at": "2025-09-11T09:51:00.000000Z",
+  "custom_required_fields": [],
+  "categorical_choices": [],
+  "starred": false,
+  "tags": []
+}
+```
+
+#### Example 10: Using Pre-built Template (Optional)
+
+**Request:**
+
+```json
+{
+  "name": "Template-based LLM Evaluator",
+  "evaluator_slug": "template_llm_eval",
+  "type": "llm",
+  "score_value_type": "numerical",
+  "eval_class": "keywordsai_custom_llm",
+  "description": "Uses pre-built LLM evaluator template",
+  "configurations": {
+    "evaluator_definition": "Evaluate response accuracy and helpfulness.\n<llm_input>{{llm_input}}</llm_input>\n<llm_output>{{llm_output}}</llm_output>",
+    "scoring_rubric": "Score from 1-10 based on accuracy and helpfulness",
+    "llm_engine": "gpt-4o",
+    "min_score": 1.0,
+    "max_score": 10.0
+  }
+}
+```
+
+---
+
+#### Configuration Fields by Type
+
+**For `type: "llm"` evaluators:**
+
+- `evaluator_definition` (string): The evaluation prompt/instruction. **Must include `{{input}}` and `{{output}}` template variables**. Legacy `{{llm_input}}` and `{{llm_output}}` are also supported for backward compatibility.
+- `scoring_rubric` (string): Description of the scoring criteria
+- `llm_engine` (string): LLM model to use (e.g., "gpt-4o-mini", "gpt-4o")
+- `model_options` (object, optional): LLM parameters like temperature, max_tokens
+- `min_score` (number, optional): Minimum possible score
+- `max_score` (number, optional): Maximum possible score
+- `passing_score` (number, optional): Score threshold for passing
+
+**For `type: "code"` evaluators:**
+
+- `eval_code_snippet` (string): Python code with evaluate() function that returns the score
+
+**For `type: "human"` evaluators:**
+
+- No specific configuration fields required
+- Use `categorical_choices` field when `score_value_type` is `"categorical"`
+
+**For `score_value_type: "categorical"`:**
+
+- `categorical_choices` (array): List of choice objects with `name` and `value` properties
+  ```json
+  [
+    { "name": "Excellent", "value": 5 },
+    { "name": "Good", "value": 4 }
+  ]
+  ```
+
+---
+
+### List Evaluators
+
+**GET** `/api/evaluators/`
+
+Returns a paginated list of evaluators for your organization.
+
+**Response (200 OK):**
+
+```json
+{
+  "results": [
+    {
+      "id": "0f4325f9-55ef-4c20-8abe-376694419947",
+      "name": "Response Quality Evaluator",
+      "evaluator_slug": "response_quality_v1",
+      "type": "llm",
+      "score_value_type": "numerical",
+      "eval_class": "",
+      "description": "Evaluates response quality on a 1-5 scale",
+      "created_by": {
+        "first_name": "Keywords AI",
+        "last_name": "Team",
+        "email": "admin@keywordsai.co"
+      },
+      "updated_by": {
+        "first_name": "Keywords AI",
+        "last_name": "Team",
+        "email": "admin@keywordsai.co"
+      },
+      "created_at": "2025-09-11T09:43:55.858321Z",
+      "updated_at": "2025-09-11T09:43:55.858331Z",
+      "custom_required_fields": [],
+      "categorical_choices": null,
+      "starred": false,
+      "organization": 2,
+      "tags": []
+    },
+    {
+      "id": "cat-eval-123",
+      "name": "Content Quality Assessment",
+      "evaluator_slug": "content_quality_categorical",
+      "type": "human",
+      "score_value_type": "categorical",
+      "eval_class": "",
+      "description": "Human assessment of content quality with predefined categories",
+      "created_by": {
+        "first_name": "Keywords AI",
+        "last_name": "Team",
+        "email": "admin@keywordsai.co"
+      },
+      "updated_by": {
+        "first_name": "Keywords AI",
+        "last_name": "Team",
+        "email": "admin@keywordsai.co"
+      },
+      "created_at": "2025-09-11T09:44:00.000000Z",
+      "updated_at": "2025-09-11T09:44:00.000000Z",
+      "custom_required_fields": [],
+      "categorical_choices": [
+        { "name": "Excellent", "value": 5 },
+        { "name": "Good", "value": 4 },
+        { "name": "Average", "value": 3 },
+        { "name": "Poor", "value": 2 },
+        { "name": "Very Poor", "value": 1 }
+      ],
+      "starred": false,
+      "organization": 2,
+      "tags": []
+    }
+  ],
+  "count": 2,
+  "previous": null,
+  "next": null,
+  "current_filters": {}
+}
+```
+
+---
+
+### Get Evaluator Details
+
+**GET** `/api/evaluators/{evaluator_id}/`
+
+Retrieves detailed information about a specific evaluator, including full configuration.
+
+**Response (200 OK):**
+
+```json
+{
+  "id": "0f4325f9-55ef-4c20-8abe-376694419947",
+  "name": "Response Quality Evaluator",
+  "evaluator_slug": "response_quality_v1",
+  "type": "llm",
+  "score_value_type": "numerical",
+  "eval_class": "",
+  "description": "Evaluates response quality on a 1-5 scale",
+  "configurations": {
+    "evaluator_definition": "Rate the response quality based on accuracy, relevance, and completeness.\n<llm_input>{{llm_input}}</llm_input>\n<llm_output>{{llm_output}}</llm_output>",
+    "scoring_rubric": "1=Poor, 2=Fair, 3=Good, 4=Very Good, 5=Excellent",
+    "llm_engine": "gpt-4o-mini",
+    "model_options": {
+      "temperature": 0.1,
+      "max_tokens": 200
+    },
+    "min_score": 1.0,
+    "max_score": 5.0,
+    "passing_score": 3.0
+  },
+  "created_by": {
+    "first_name": "Keywords AI",
+    "last_name": "Team",
+    "email": "admin@keywordsai.co"
+  },
+  "updated_by": {
+    "first_name": "Keywords AI",
+    "last_name": "Team",
+    "email": "admin@keywordsai.co"
+  },
+  "created_at": "2025-09-11T09:43:55.858321Z",
+  "updated_at": "2025-09-11T09:43:55.858331Z",
+  "custom_required_fields": [],
+  "categorical_choices": null,
+  "starred": false,
+  "tags": []
+}
+```
+
+---
+
+### Update Evaluator (Partial)
+
+**PATCH** `/api/evaluators/{evaluator_id}/`
+
+Updates specific fields of an evaluator. Supports partial updates of configuration fields.
+
+**Request:**
+
+```json
+{
+  "configurations": {
+    "evaluator_definition": "Updated: Evaluate response quality with enhanced criteria focusing on accuracy, relevance, completeness, and clarity."
+  }
+}
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "id": "0f4325f9-55ef-4c20-8abe-376694419947",
+  "configurations": {
+    "llm_engine": "gpt-4o-mini",
+    "model_options": {
+      "max_tokens": 500,
+      "temperature": 0.1
+    },
+    "evaluator_definition": "Updated: Evaluate response quality with enhanced criteria focusing on accuracy, relevance, completeness, and clarity.",
+    "scoring_rubric": "1-3 scale: 1=Poor (inaccurate/irrelevant), 2=Good (mostly accurate), 3=Excellent (highly accurate and relevant)",
+    "min_score": 1.0,
+    "max_score": 3.0,
+    "passing_score": 2.0
+  },
+  "type": "llm",
+  "eval_class": "keywordsai_custom_llm",
+  "evaluator_slug": "custom_llm_quality_v1",
+  "name": "Custom LLM Response Quality Evaluator",
+  "description": "Evaluates response quality using custom LLM criteria",
+  "created_at": "2025-09-11T09:43:55.858321Z",
+  "updated_at": "2025-09-11T09:43:55.930792Z",
+  "custom_required_fields": [],
+  "categorical_choices": [],
+  "starred": false,
+  "tags": []
+}
+```
+
+**Notes:**
+
+- Only provide the fields you want to update
+- Configuration fields are merged with existing values
+- Non-null values take precedence over existing null values
+
+---
+
+### Delete Evaluator
+
+**DELETE** `/api/evaluators/{evaluator_id}/`
+
+Permanently deletes an evaluator.
+
+**Response (204 No Content)**
+
+---
+
+### Run Evaluator
+
+**POST** `/api/evaluators/{evaluator_id}/run/`
+
+Executes an evaluator against provided input/output data for testing purposes.
+
+**Request:**
+
+```json
+{
+  "inputs": {
+    "input": "What is the capital of France?",
+    "output": "The capital of France is Paris. Paris is located in the north-central part of France and is the country's largest city and political center.",
+    "metadata": { "context": "Geography question about European capitals" }
+  }
+}
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "id": "eval-result-id",
+  "score": 3.0,
+  "evaluation_result": "Excellent response with accurate and comprehensive information",
+  "evaluator_id": "0f4325f9-55ef-4c20-8abe-376694419947",
+  "created_at": "2025-09-11T09:45:00.000000Z"
+}
+```
+
+---
+
+## Using Evaluators in LLM Calls
+
+Once created, evaluators can be applied to LLM calls using the `evaluation_params` section:
+
+```json
+{
+  "model": "gpt-4o-mini",
+  "messages": [
+    {
+      "role": "user",
+      "content": "What is the capital of France?"
+    }
+  ],
+  "evaluation_params": {
+    "evaluators": [
+      {
+        "evaluator_slug": "custom_llm_quality_v1"
+      }
+    ],
+    "extra_params": {
+      "context": "Geography question about European capitals"
+    },
+    "last_n_messages": 1
+  }
+}
+```
+
+The evaluator will automatically run on the LLM response and results will be available in the log details.
+
+---
+
+## Error Responses
+
+### 400 Bad Request
+
+```json
+{
+  "configurations": [
+    "Configuration validation failed: 1 validation error for KeywordsAICustomLLMEvaluatorType\nscoring_rubric\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]"
+  ]
+}
+```
+
+### 401 Unauthorized
+
+```json
+{
+  "detail": "Your API key is invalid or expired, please check your API key at https://platform.keywordsai.co/platform/api/api-keys"
+}
+```
+
+### 404 Not Found
+
+```json
+{
+  "detail": "Not found."
+}
+```
+
+---
+
+## Summary of New API Structure
+
+### Key Changes
+
+- **`type`** and **`score_value_type`** are now **required** fields
+- **`eval_class`** is now **optional** and only used for pre-built templates
+- **`categorical_choices`** provides a user-friendly alias for categorical evaluations
+- Supports flexible evaluation approaches: LLM, human, and code-based
+
+### Migration from Old API
+
+If you were using the old API structure, here's how to migrate:
+
+**Old Structure:**
+
+```json
+{
+  "eval_class": "keywordsai_custom_llm",  // Required
+  "configurations": { ... }
+}
+```
+
+**New Structure:**
+
+```json
+{
+  "type": "llm",                          // Required
+  "score_value_type": "numerical",        // Required
+  "eval_class": "keywordsai_custom_llm",  // Optional
+  "configurations": { ... }
+}
+```
+
+### Backward Compatibility
+
+The API maintains backward compatibility with legacy type values:
+
+- `"human_numerical"` → `"type": "human", "score_value_type": "numerical"`
+- `"human_boolean"` → `"type": "human", "score_value_type": "boolean"`
+- `"human_categorical"` → `"type": "human", "score_value_type": "categorical"`
+- `"function"` → `"type": "code"`
+
+---
+
+## Best Practices
+
+1. **Use descriptive names and slugs** for easy identification
+2. **Test evaluators** using the run endpoint before deploying
+3. **Specify both type and score_value_type** explicitly for clarity
+4. **Use categorical_choices** for human evaluations with predefined options
+5. **Keep evaluation prompts specific** for consistent LLM-based results
+6. **Set appropriate score ranges** that match your use case
+7. **Use model_options** to control LLM behavior (temperature, max_tokens)
+
+---
+
+## Rate Limits
+
+- API key authentication: Standard rate limits apply
+- Evaluator execution: May have additional limits based on LLM usage
+
+For more information, visit the [Keywords AI Platform](https://platform.keywordsai.co).
+
+Why are we cloning a dataset for an annotation?
+
+- Separate feature for less confusion

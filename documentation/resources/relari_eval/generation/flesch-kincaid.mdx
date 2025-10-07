@@ -1,0 +1,32 @@
+---
+title: "Flesch-Kincaid readability"
+---
+
+The Flesch–Kincaid measures how easy it is to understand an by considering factors like sentence length and word complexity. There are two main types: the Flesch Reading Ease, which rates texts on a scale from easy to difficult, and the Flesch–Kincaid Grade Level, which estimates the U.S. school grade level needed to comprehend the text.
+
+**Flesch Reading Ease** higher scores indicate material that is easier to read; lower numbers mark passages that are more difficult to read.
+
+**Flesch–Kincaid Grade Level** corresponds to a U.S. grade level. For example, a score of 8.0 suggests that the text should be understandable by an 8th grader. Higher scores indicate material that is more complex and thus requires a higher level of education to understand.
+
+You can read more about the Flesch-Kincaid in [Relari AI](https://docs.relari.ai/metrics/Generation/Deterministic/flesch_kincaid_readability).
+
+## Settings and parameters
+
+1. Go to Keywords AI (on top of the left nav bar) > Evaluation > Text generation > Flesch–Kincaid
+<img src="/images/evaluation/generation/flesch-kincaid-settings.png"/>
+
+2. Click on the `Flesch–Kincaid` card to create the setting:
+<img src="/images/evaluation/generation/flesch-kincaid-modal.png"/>
+- Click the enable switch to turn on the evaluation
+- Pick which method you want to use:
+    - Flesch-Kincaid Reading Ease
+    - Flesch–Kincaid Grade Level
+
+
+3. Make an API call, and the evaluation will be run based on the [`Ramdom sampling`](/features/evaluation/overview#sampling) setting.
+
+4. Check results in the [requests log](https://platform.keywordsai.co/platform/requests)
+
+<img src="/images/evaluation/check-results.png" />
+
+

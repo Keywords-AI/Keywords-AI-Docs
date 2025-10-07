@@ -1,0 +1,236 @@
+---
+title: "Get Evaluator"
+api: "GET https://api.keywordsai.co/api/evaluators/{evaluator_id}/"
+---
+
+Retrieves detailed information about a specific evaluator, including full configuration.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `evaluator_id` | string | The unique ID of the evaluator |
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+evaluator_id = "0f4325f9-55ef-4c20-8abe-376694419947"
+url = f"https://api.keywordsai.co/api/evaluators/{evaluator_id}/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-376694419947/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Response
+
+**Status: 200 OK**
+
+### LLM Evaluator Response
+
+```json
+{
+  "id": "0f4325f9-55ef-4c20-8abe-376694419947",
+  "name": "Response Quality Evaluator",
+  "evaluator_slug": "response_quality_v1",
+  "type": "llm",
+  "score_value_type": "numerical",
+  "eval_class": "",
+  "description": "Evaluates response quality on a 1-5 scale",
+  "configurations": {
+    "evaluator_definition": "Rate the response quality based on accuracy, relevance, and completeness.\n<llm_input>{{llm_input}}</llm_input>\n<llm_output>{{llm_output}}</llm_output>",
+    "scoring_rubric": "1=Poor, 2=Fair, 3=Good, 4=Very Good, 5=Excellent",
+    "llm_engine": "gpt-4o-mini",
+    "model_options": {
+      "temperature": 0.1,
+      "max_tokens": 200
+    },
+    "min_score": 1.0,
+    "max_score": 5.0,
+    "passing_score": 3.0
+  },
+  "created_by": {
+    "first_name": "Keywords AI",
+    "last_name": "Team",
+    "email": "admin@keywordsai.co"
+  },
+  "updated_by": {
+    "first_name": "Keywords AI",
+    "last_name": "Team",
+    "email": "admin@keywordsai.co"
+  },
+  "created_at": "2025-09-11T09:43:55.858321Z",
+  "updated_at": "2025-09-11T09:43:55.858331Z",
+  "custom_required_fields": [],
+  "categorical_choices": null,
+  "starred": false,
+  "organization": 2,
+  "tags": []
+}
+```
+
+### Human Categorical Evaluator Response
+
+```json
+{
+  "id": "cat-eval-123",
+  "name": "Content Quality Assessment",
+  "evaluator_slug": "content_quality_categorical",
+  "type": "human",
+  "score_value_type": "categorical",
+  "eval_class": "",
+  "description": "Human assessment of content quality with predefined categories",
+  "configurations": {},
+  "categorical_choices": [
+    { "name": "Excellent", "value": 5 },
+    { "name": "Good", "value": 4 },
+    { "name": "Average", "value": 3 },
+    { "name": "Poor", "value": 2 },
+    { "name": "Very Poor", "value": 1 }
+  ],
+  "created_by": {
+    "first_name": "Keywords AI",
+    "last_name": "Team",
+    "email": "admin@keywordsai.co"
+  },
+  "updated_by": {
+    "first_name": "Keywords AI",
+    "last_name": "Team",
+    "email": "admin@keywordsai.co"
+  },
+  "created_at": "2025-09-11T09:44:00.000000Z",
+  "updated_at": "2025-09-11T09:44:00.000000Z",
+  "custom_required_fields": [],
+  "starred": false,
+  "organization": 2,
+  "tags": []
+}
+```
+
+### Code Evaluator Response
+
+```json
+{
+  "id": "bool-eval-456",
+  "name": "Response Length Checker",
+  "evaluator_slug": "length_checker_boolean",
+  "type": "code",
+  "score_value_type": "boolean",
+  "eval_class": "",
+  "description": "Checks if response meets minimum length requirement",
+  "configurations": {
+    "eval_code_snippet": "def evaluate(llm_input, llm_output, **kwargs):\n    '''\n    Check if response meets minimum length requirement\n    Returns True if length >= 50 characters, False otherwise\n    '''\n    if not llm_output:\n        return False\n    \n    return len(llm_output.strip()) >= 50"
+  },
+  "created_by": {
+    "first_name": "Keywords AI",
+    "last_name": "Team",
+    "email": "admin@keywordsai.co"
+  },
+  "updated_by": {
+    "first_name": "Keywords AI",
+    "last_name": "Team",
+    "email": "admin@keywordsai.co"
+  },
+  "created_at": "2025-09-11T09:45:00.000000Z",
+  "updated_at": "2025-09-11T09:45:00.000000Z",
+  "custom_required_fields": [],
+  "categorical_choices": [],
+  "starred": false,
+  "organization": 2,
+  "tags": ["automation", "validation"]
+}
+```
+
+## Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique evaluator identifier |
+| `name` | string | Display name of the evaluator |
+| `evaluator_slug` | string | URL-friendly identifier |
+| `type` | string | Evaluator type: `llm`, `human`, or `code` |
+| `score_value_type` | string | Score format: `numerical`, `boolean`, `categorical`, or `comment` |
+| `eval_class` | string | Pre-built template class (if used) |
+| `description` | string | Description of the evaluator |
+| `configurations` | object | Type-specific configuration settings |
+| `categorical_choices` | array | Choices for categorical evaluators (null for non-categorical) |
+| `created_by` | object | User who created the evaluator |
+| `updated_by` | object | User who last updated the evaluator |
+| `created_at` | string | ISO timestamp of creation |
+| `updated_at` | string | ISO timestamp of last update |
+| `custom_required_fields` | array | Additional required fields |
+| `starred` | boolean | Whether the evaluator is starred |
+| `organization` | integer | Organization ID |
+| `tags` | array | Tags associated with the evaluator |
+
+## Configuration Fields by Type
+
+### LLM Evaluators (`type: "llm"`)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `evaluator_definition` | string | The evaluation prompt/instruction with template variables |
+| `scoring_rubric` | string | Description of the scoring criteria |
+| `llm_engine` | string | LLM model to use (e.g., "gpt-4o-mini", "gpt-4o") |
+| `model_options` | object | LLM parameters like temperature, max_tokens |
+| `min_score` | number | Minimum possible score |
+| `max_score` | number | Maximum possible score |
+| `passing_score` | number | Score threshold for passing |
+
+### Code Evaluators (`type: "code"`)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `eval_code_snippet` | string | Python code with evaluate() function |
+
+### Human Evaluators (`type: "human"`)
+
+- No specific configuration fields
+- Use `categorical_choices` field when `score_value_type` is `"categorical"`
+
+## Error Responses
+
+### 404 Not Found
+
+```json
+{
+  "detail": "Not found."
+}
+```
+
+### 401 Unauthorized
+
+```json
+{
+  "detail": "Your API key is invalid or expired, please check your API key at https://platform.keywordsai.co/platform/api/api-keys"
+}
+```
+
+### 403 Forbidden
+
+```json
+{
+  "detail": "You do not have permission to access this evaluator."
+}
+```

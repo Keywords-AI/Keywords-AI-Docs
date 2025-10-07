@@ -1,0 +1,114 @@
+---
+title: "Experiments API Overview"
+description: "Design, run, and analyze experiments with the Keywords AI Experiments API"
+---
+
+## Overview
+
+The Experiments API allows you to design, execute, and analyze experiments to test different prompts, models, or configurations. This enables data-driven decision making and systematic improvement of your AI applications.
+
+## Key Features
+
+- **Experiment Design**: Create structured experiments with multiple variants
+- **A/B Testing**: Compare different prompts, models, or configurations
+- **Statistical Analysis**: Get statistically significant results
+- **Performance Tracking**: Monitor key metrics and outcomes
+- **Result Analysis**: Detailed insights and recommendations
+
+## Quick Start
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Create a new experiment
+experiment = client.experiments.create(
+    name="Greeting Prompt A/B Test",
+    description="Testing formal vs casual greeting styles",
+    variants=[
+        {"name": "formal", "prompt_id": "prompt_123"},
+        {"name": "casual", "prompt_id": "prompt_456"}
+    ]
+)
+
+# Start the experiment
+client.experiments.start(experiment_id=experiment['id'])
+
+# Get experiment results
+results = client.experiments.get_results(experiment_id=experiment['id'])
+```
+
+## Available Methods
+
+### Synchronous Methods
+- `create()` - Create a new experiment
+- `list()` - List experiments with filtering
+- `get()` - Retrieve a specific experiment
+- `update()` - Update experiment configuration
+- `delete()` - Delete an experiment
+- `start()` - Start running an experiment
+- `stop()` - Stop a running experiment
+- `get_results()` - Get experiment results and analysis
+
+### Asynchronous Methods
+All methods are also available in asynchronous versions using `AsyncKeywordsAI`.
+
+## Experiment Structure
+
+An experiment typically contains:
+
+- `id`: Unique identifier
+- `name`: Human-readable name
+- `description`: Experiment description
+- `variants`: List of experiment variants to test
+- `metrics`: Key metrics to track
+- `status`: Current status (draft, running, completed, stopped)
+- `traffic_split`: How traffic is distributed between variants
+- `start_date`: When the experiment started
+- `end_date`: When the experiment ended
+- `results`: Statistical results and analysis
+
+## Experiment Lifecycle
+
+1. **Design**: Create experiment with variants and metrics
+2. **Configure**: Set traffic split and success criteria
+3. **Start**: Begin collecting data
+4. **Monitor**: Track progress and early results
+5. **Analyze**: Review statistical significance
+6. **Conclude**: Stop experiment and implement winner
+
+## Common Use Cases
+
+- **Prompt Optimization**: Test different prompt variations
+- **Model Comparison**: Compare different AI models
+- **Feature Testing**: Test new features or configurations
+- **Performance Optimization**: Optimize for specific metrics
+- **User Experience**: Test different interaction patterns
+
+## Best Practices
+
+- Define clear success metrics before starting
+- Ensure sufficient sample size for statistical significance
+- Run experiments for appropriate duration
+- Avoid multiple simultaneous experiments on same traffic
+- Document experiment hypotheses and learnings
+
+## Error Handling
+
+```python
+try:
+    experiment = client.experiments.create(
+        name="Test Experiment",
+        variants=[{"name": "control", "prompt_id": "prompt_123"}]
+    )
+except Exception as e:
+    print(f"Error creating experiment: {e}")
+```
+
+## Next Steps
+
+- [Create an Experiment](./create) - Learn how to design experiments
+- [Start Experiments](./start) - Begin running your experiments
+- [Analyze Results](./get-results) - Understand experiment outcomes
+- [Manage Experiments](./list) - Browse and organize

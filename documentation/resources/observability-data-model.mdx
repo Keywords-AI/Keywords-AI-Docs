@@ -1,0 +1,339 @@
+---
+title: "Data model"
+description: "Understanding the core concepts behind Keywords AI's observability features"
+og:title: "Keywords AI Data Model"
+---
+
+Keywords AI provides two main types of observability: **Traces** for agent workflows and **Logs** for LLM calls, plus a comprehensive **Evaluation** framework.
+
+## Traces vs Logs
+
+<CardGroup cols={2}>
+<Card title="Logs" icon="file">
+  **LLM call logging** - Individual requests and responses to language models
+</Card>
+<Card title="Traces" icon="route">
+  **Agent tracking** - Complete workflows with multiple steps
+</Card>
+</CardGroup>
+
+### Logs
+<Info>
+Logs record individual LLM API calls and responses
+</Info>
+
+- Single request/response pairs
+- Token usage and costs
+- Model performance metrics
+- Error tracking
+- Response latency
+
+<AccordionGroup>
+  <Accordion title="Log Parameters" icon="sliders">
+    <AccordionGroup>
+      <Accordion title="Content Types">
+        - Text
+        - Chat
+        - Completion
+        - Response
+        - Embedding
+        - Transcription
+        - Speech
+        - Workflow
+        - Task
+        - Tool
+        - Agent
+        - Handoff
+        - Guardrail
+        - Function
+        - Custom
+        - Generation
+      </Accordion>
+      <Accordion title="Filtering Metrics">
+        - Status (Error, Success)
+        - Time
+        - Trace ID
+        - Workflow name
+        - Customer ID
+        - Span count
+        - Error count
+        - Input token count
+        - Output token count
+        - Total tokens
+        - Duration
+      </Accordion>
+    </AccordionGroup>
+  </Accordion>
+</AccordionGroup>
+
+### Traces
+<Info>
+Traces capture the full execution flow of agent workflows
+</Info>
+
+- Multi-step agent processes
+- Tool calls and function executions
+- Decision-making steps
+- Hierarchical workflow visualization
+- Agent reasoning and planning
+
+<AccordionGroup>
+  <Accordion title="Trace Parameters" icon="sliders">
+    <AccordionGroup>
+      <Accordion title="Filtering Metrics">
+        - Thread ID
+        - Customer ID
+        - API key
+        - Input tokens
+        - Output tokens
+        - All tokens
+        - Cost
+        - Generation
+        - Number of Rows
+      </Accordion>
+    </AccordionGroup>
+  </Accordion>
+</AccordionGroup>
+
+## Trace Data Model
+
+### Trace Structure
+
+```mermaid
+graph TD
+    T[Trace: trace_unique_id] --> RS[Root Span: WORKFLOW<br/>span_workflow_name]
+    RS --> S1[Span 1: CHAT<br/>span_parent_id → Root]
+    RS --> S2[Span 2: TASK<br/>span_parent_id → Root]
+    RS --> S3[Span 3: EMBEDDING<br/>span_parent_id → Root]
+    
+    S1 --> S1A[Span 1A: GENERATION<br/>span_parent_id → Span 1]
+    S1 --> S1B[Span 1B: FUNCTION<br/>span_parent_id → Span 1]
+    
+    S2 --> S2A[Span 2A: GUARDRAIL<br/>span_parent_id → Span 2]
+    
+    style T fill:#e1f5fe
+    style RS fill:#f3e5f5
+    style S1 fill:#e8f5e8
+    style S2 fill:#fff3e0
+    style S3 fill:#fce4ec
+    style S1A fill:#e8f5e8
+    style S1B fill:#e8f5e8
+    style S2A fill:#fff3e0
+```
+
+### Multi-Trace Workflow Grouping
+
+```mermaid
+graph TD
+    TG[trace_group_identifier: workflow-group-456] --> T1[Trace A: trace-123]
+    TG --> T2[Trace B: trace-124]
+    
+    T1 --> T1RS[Root: WORKFLOW<br/>Parallel Process 1]
+    T1RS --> T1S1[CHAT Span]
+    T1RS --> T1S2[TASK Span]
+    
+    T2 --> T2RS[Root: WORKFLOW<br/>Parallel Process 2]
+    T2RS --> T2S1[EMBEDDING Span]
+    T2RS --> T2S2[SPEECH Span]
+    
+    style TG fill:#ffecb3
+    style T1 fill:#e1f5fe
+    style T2 fill:#e1f5fe
+    style T1RS fill:#f3e5f5
+    style T2RS fill:#f3e5f5
+```
+
+## Organization Data Model
+
+### Single Team Setup (Initial Onboarding)
+```mermaid
+graph TD
+    U[User: sarah@docai.com] --> R1[Role: Owner]
+    R1 --> O1[Team: DocAI Assistant<br/>org-001]
+    O1 --> K1[API Key: docai-prod]
+    O1 --> K2[API Key: docai-test]
+    
+    style U fill:#e1f5fe
+    style O1 fill:#e8f5e8
+```
+
+### Multi-Team Setup (After Scaling)
+```mermaid
+graph TD
+    U[User: sarah@docai.com] --> CR[Company Role: Admin]
+    CR --> CO[Company: DocAI Inc<br/>company-001]
+    
+    CO --> O1[Team 1: Document Assistant<br/>org-001]
+    CO --> O2[Team 2: Code Generator<br/>org-002]
+    
+    U --> R1[Role: Owner] --> O1
+    U --> R2[Role: Admin] --> O2
+    
+    O1 --> K1[API Key: docai-prod]
+    O1 --> K2[API Key: docai-test]
+    O2 --> K3[API Key: codegen-prod]
+    O2 --> K4[API Key: codegen-test]
+    
+    style U fill:#e1f5fe
+    style CO fill:#ffecb3
+    style O1 fill:#e8f5e8
+    style O2 fill:#e8f5e8
+```
+
+### User Journey
+
+```mermaid
+flowchart TD
+    A[User Signs Up] --> B[Creates First Team/Organization]
+    B --> C[Single Team Setup]
+    C --> D{Needs Multiple Teams?}
+    D -->|No| E[Continue with Single Team]
+    D -->|Yes| F[Creates Second Team]
+    F --> G[Auto-creates Company Organization]
+    G --> H[Groups All Teams Under Company]
+    H --> I[Shared Billing & Management]
+    
+    style G fill:#e1f5fe
+    style H fill:#e8f5e8
+```
+
+## User Data
+
+<Info>
+User data provides insights into customer usage patterns and activity
+</Info>
+
+<AccordionGroup>
+  <Accordion title="User Parameters" icon="user">
+    - Customer ID
+    - Name
+    - Email
+    - Requests
+    - Total tokens
+    - Total cost
+    - Active for
+  </Accordion>
+</AccordionGroup>
+
+## Testsets
+
+<Info>
+Testsets allow systematic evaluation of model performance
+</Info>
+
+<AccordionGroup>
+  <Accordion title="Testset Parameters" icon="vial">
+    - Testset ID
+    - Name
+    - Created At
+    - Updated At
+    - Row Count
+    - Column Count
+    - Starred
+  </Accordion>
+</AccordionGroup>
+
+## Evaluation Framework
+
+The evaluation system helps you assess and improve LLM performance through systematic testing.
+
+### Testsets
+<Tip>
+Curated collections of examples for evaluation
+</Tip>
+
+- Input/output pairs
+- Expected responses
+- Evaluation criteria
+- Test case metadata
+
+### Evaluators
+<Tip>
+Tools that assess LLM output quality
+</Tip>
+
+**Types of evaluators:**
+- **LLM Evaluators**: AI-powered assessment
+- **Human Evaluators**: Manual review
+- **Rule-based**: Automated validation
+- **Custom Metrics**: Domain-specific scoring
+
+### Experiments
+<Tip>
+Comparative testing of different configurations
+</Tip>
+
+- A/B testing of prompts
+- Model comparisons
+- Performance benchmarking
+- Cost analysis
+
+### Scores
+<Tip>
+Quantitative and qualitative assessment results
+</Tip>
+
+<AccordionGroup>
+  <Accordion title="Score Types">
+    - **Numerical values**: Ratings on scales (1-5, 1-10, percentages)
+    - **Boolean values**: Pass/fail assessments
+    - **String values**: Textual feedback and classifications
+  </Accordion>
+  
+  <Accordion title="Score Properties">
+    - Unique per evaluator per log
+    - Includes creation timestamp
+    - Can be managed via API
+    - Automatically enriches log data
+  </Accordion>
+  
+  <Accordion title="Score Relationships">
+    - Connected to specific logs via `log_id`
+    - Associated with evaluators via `evaluator_id` or `evaluator_slug`
+    - Can be part of test sets via `dataset_id`
+    - Provides context through `type` and `environment` fields
+  </Accordion>
+</AccordionGroup>
+
+## Data Flow
+
+```mermaid
+graph TD
+    A[LLM Application] --> B[Logs]
+    A --> C[Traces]
+    B --> D[Testsets]
+    C --> D
+    D --> E[Evaluators]
+    E --> F[Experiments]
+    F --> G[Scores]
+    B -.-> G[Scores]
+    E -.-> G[Scores]
+```
+
+<Info>
+Important terminology notes:
+- "testsets" is one word in our product
+- A "log" is actually a type of "trace" in our system
+</Info>
+
+## Score Integration
+
+Scores are integrated throughout the Keywords AI platform:
+
+<AccordionGroup>
+  <Accordion title="Log Enrichment" icon="file-circle-plus">
+    Scores automatically appear in log details under the `scores` field
+  </Accordion>
+  
+  <Accordion title="Evaluation Results" icon="chart-simple">
+    Scores provide quantitative metrics for evaluating model performance
+  </Accordion>
+  
+  <Accordion title="API Access" icon="code">
+    Create, retrieve, update, and delete scores programmatically
+  </Accordion>
+  
+  <Accordion title="Filtering" icon="filter">
+    Filter logs and test results based on score values
+  </Accordion>
+</AccordionGroup>

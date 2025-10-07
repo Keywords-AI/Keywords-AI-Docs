@@ -1,0 +1,42 @@
+---
+title: "OpenRouter"
+description: "Track and monitor your OpenRouter API requests with Keywords AI logging"
+---
+
+## Log OpenRouter requests
+
+Monitor your OpenRouter API calls by logging requests and responses asynchronously. Track metrics like cost, duration, and performance for all models available through OpenRouter.
+
+```python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "model": "openai/gpt-4o",
+    "prompt_messages": [
+        {
+            "role": "user",
+            "content": "Explain quantum computing"
+        }
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Quantum computing is a revolutionary computing paradigm that leverages quantum mechanics..."
+    },
+    "cost": 0.002,
+    "generation_time": 3.1,
+    "customer_params": {
+        "customer_identifier": "user_789"
+    }
+}
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, headers=headers, json=payload)
+```
+
+<Card title="Get Started with Logging" icon="rocket" href="/documentation/products/logs/quickstart">
+  Learn how to set up comprehensive logging for all your LLM requests
+</Card>

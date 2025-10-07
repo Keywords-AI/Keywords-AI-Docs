@@ -1,0 +1,81 @@
+---
+title: Evaluations
+api: POST https://api.keywordsai.co/api/run-evaluations/
+---
+
+You can run batch evaluations on specific metrics using this endpoint. Instead of running evaluations manually in the front-end, you could just set up `evaluations_identifier` in the request body and run evaluations on the logs.
+
+## Parameters
+
+<ParamField path="evaluations_identifier" type="string">
+When you are making a call to the chat/completions endpoint, you will need to pass in the evaluation_identifier to mark the logs you want to run evals on:
+<AccordionGroup>
+<Accordion title="Example">
+```json
+{
+"evaluation_identifier":"test_eval"
+}
+```
+```python ChatCompletions
+url = "https://api.keywordsai.co/api/chat/completions"
+headers = {
+    "Authorization": f"Bearer {api_key}",
+}
+api_key = "YOUR_API_KEY"
+body = {
+    ...other params...
+    "evalutation_identifier":"some_identifier" # you need to pass this in the body!
+}
+
+```
+</Accordion>
+</AccordionGroup>
+</ParamField>
+
+<ParamField path="evals_to_run" type="object">
+A list of the names of the params you defined in the [custom evals page](https://platform.keywordsai.co/platform/api/evaluations) that you want to run, the one in the example looks like this in the UI
+
+<img height="200" width="500"  src="/images/eval.jpg"/>
+<AccordionGroup>
+<Accordion title="Example">
+```json
+{
+"evals_to_run": ["Conciseness"]
+}
+```
+</Accordion>
+</AccordionGroup>
+</ParamField>
+
+<RequestExample>
+```python Example
+from requests import post
+
+url = "https://api.keywordsai.co/api/run-evaluations/"
+body = {
+    "evals_to_run": ["Conciseness"], # replace this with the name of your own eval
+    "evaluation_identifier":"test_eval"
+}
+api_key = "YOUR_API_KEY"
+headers = {
+    "Authorization": f"Bearer {api_key}",
+}
+
+response = post(url, json=body, headers=headers)
+print(response.json())
+```
+```python ChatCompletions
+
+url = "https://api.keywordsai.co/api/chat/completions"
+headers = {
+    "Authorization": f"Bearer {api_key}",
+}
+api_key = "YOUR_API_KEY"
+body = {
+    ...other params...
+    "evalutation_identifier":"some_identifier" # you need to pass this in the body!
+}
+```
+
+</RequestExample>
+

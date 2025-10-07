@@ -1,0 +1,283 @@
+---
+title: "Use prompt in gateway"
+description: "Deploy a prompt to your codebase and understand override modes."
+---
+
+After you create a prompt, you can deploy it to your codebase and call it through the API. Keywords AI provides two powerful override modes to give you complete control over your prompts.
+
+## Find the prompt ID
+You should first find the Prompt ID of the prompt you want to deploy. You can find the Prompt ID in the Overview panel on the [Prompts page](https://platform.keywordsai.co/platform/prompts).
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/prompt-id.png" alt="Prompt ID" />
+</Frame>
+
+## Connect the prompt to codebase
+
+<Tabs>
+<Tab title="OpenAI Python SDK">
+```python {13-18}
+from openai import OpenAI
+
+client = OpenAI(
+  base_url="https://api.keywordsai.co/api/", # switch to the Keywords AI base URL
+  api_key="YOUR_API_KEY", # switch to your Keywords AI API key
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "user", "content": "Tell me a long story"}
+    ],
+    extra_body={"prompt": {"prompt_id":"042f5f",
+                "variables":{"task_description":"Square a number", "specific_library":"math"},
+                "override": True,
+                }
+    }
+)
+```
+<Note>
+**Mode 1: Prompt Overrides OpenAI Parameters**  
+Setting `override: True` tells Keywords AI to ignore the `model` and `messages` fields in your request and use the configuration from your saved prompt instead.
+</Note>
+</Tab>
+<Tab title="OpenAI TypeScript SDK">
+In OpenAI TypeScript SDK, you should add a `// @ts-expect-error` before the `prompt` field.
+```typescript {12-18}
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-4o-mini",
+    // @ts-expect-error
+    prompt: {
+      prompt_id: "042f5f",
+      variables: { task_description: "Square a number", specific_library: "math" },
+      override: true,
+    }
+  })
+  .asResponse();
+
+console.log(await response.json());
+```
+<Note>
+**Mode 1: Prompt Overrides OpenAI Parameters**  
+Setting `override: true` tells Keywords AI to ignore the `model` and `messages` fields in your request and use the configuration from your saved prompt instead.
+</Note>
+</Tab>
+<Tab title="Standard API">
+```python Python {14-17}
+import requests
+def demo_call(token="YOUR_KEYWORDS_AI_API_KEY"):
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {token}',
+    }
+
+    data = {
+        'prompt': {
+            'prompt_id': '042f5f',
+            'variables': {'task_description': 'Square a number', 'specific_library': 'math'},
+        }
+    }
+
+    response = requests.post('https://api.keywordsai.co/api/chat/completions', headers=headers, json=data)
+    return response
+
+print(demo_call().json())
+```
+With the standard API, you don't need to pass `model` and `messages` fields since the prompt configuration is used automatically.
+</Tab>
+<Tab title="Other SDKs">
+We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/overview) for more information.
+</Tab>
+</Tabs>
+
+## Use specific prompt version
+Users can now specify a version of prompt they want to call. This prompt version does not need to be deployed and therefore this feature is very nice for testing a prompt through the gateway.
+```python {4}
+{
+    "prompt": {
+        "prompt_id": YOUR_PROMPT_ID,
+        "version":3,
+    }
+}
+```
+
+## Override prompt configuration (optional)
+
+You can dynamically override your saved prompt settings using `override_params` and `override_config`. This gives you runtime flexibility while keeping your base prompt template intact.
+
+### Override prompt messages
+
+<Tabs>
+<Tab title="Append Messages">
+```python {4-5}
+request_body = {
+    "prompt": {
+        "prompt_id": "042f5f",
+        "override_config": {"messages_override_mode": "append"},
+        "override_params": {"messages": [{"role": "user", "content": "Additional context"}]},
+    }
+}
+```
+This **adds** the new message to the end of your existing prompt messages.
+</Tab>
+
+<Tab title="Replace Messages">
+```python {4-5}
+request_body = {
+    "prompt": {
+        "prompt_id": "042f5f", 
+        "override_config": {"messages_override_mode": "override"},
+        "override_params": {"messages": [{"role": "user", "content": "Completely new conversation"}]},
+    }
+}
+```
+This **replaces** all existing prompt messages with the new ones.
+</Tab>
+</Tabs>
+
+### Override other parameters
+
+You can override any OpenAI parameter in your prompt:
+
+```python
+request_body = {
+    "prompt": {
+        "prompt_id": "042f5f",
+        "override_params": {
+            "temperature": 0.8,      # Override temperature
+            "max_tokens": 150,       # Override token limit
+            "model": "gpt-4o"         # Override model
+        }
+    }
+}
+```
+## View the logs with the prompt
+You can view the logs with the prompt by clicking a log on the [Logs page](https://platform.keywordsai.co/platform/logs) or filtering the logs with the prompt name.
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/prompt-logs.png" alt="View prompt" />
+</Frame>
+
+## Parameters Reference
+
+<ParamField path="prompt_id" type="string" required>
+  The unique identifier of your saved prompt template.
+</ParamField>
+
+<ParamField path="variables" type="object">
+  Variables to inject into your prompt template.
+```json
+{
+  "variables": {
+    "user_name": "John",
+    "task": "summarize"
+  }
+}
+```
+</ParamField>
+
+<ParamField path="override" type="boolean" default={false}>
+  **Mode 1**: When `true`, your prompt configuration overrides OpenAI SDK parameters like `model` and `messages`.
+```json
+{
+  "override": true
+}
+```
+</ParamField>
+
+<ParamField path="override_params" type="object">
+  **Mode 2**: Parameters that override your saved prompt configuration.
+```json
+{
+  "override_params": {
+    "temperature": 0.5,
+    "max_tokens": 100,
+    "messages": [{"role": "user", "content": "New message"}]
+  }
+}
+```
+</ParamField>
+
+<ParamField path="override_config" type="object">
+  **Mode 2**: Controls how override parameters are applied.
+<Accordion title="messages_override_mode">
+    - `append`: Add new messages to existing prompt messages
+    - `override`: Replace all existing messages with new ones
+</Accordion>
+</ParamField>
+
+<ParamField path="echo" type="boolean" default={false}>
+  When enabled, the response includes the final prompt messages used.
+```json
+{
+  "echo": true
+}
+```
+</ParamField>
+
+<Info>Check out [all Keywords AI supported params here](/api-endpoints/integration/chat-completions#keywords-ai-parameters).</Info>
+
+## Troubleshooting
+
+### Enable stream when you're using OpenAI SDK
+If you're using OpenAI SDK and want to connect with the prompt you created, you have to specify `stream=True` in the call body.
+
+<CodeGroup>
+```python OpenAI SDK Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[{"role":"user", "content":"Tell me a long story"}],
+    stream=True,
+    extra_body={
+      "prompt": {
+          "prompt_id": "prompt_id", # paste this from the prompt management page
+          "variables": {
+            "variable_name": "variable_value"
+          },
+          # "echo": true //optional parameter
+        }
+    }
+)
+```
+
+```typescript OpenAI SDK TS
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: process.env.KEYWORDS_AI_API_KEY,
+});
+
+const response = await client.chat.completions
+  .create({
+    messages: [{ role: "user", content: "Say this is a test" }],
+    model: "gpt-3.5-turbo",
+    stream: true,
+    // @ts-expect-error
+    prompt: {
+      prompt_id: "prompt_id", // paste this from the prompt management page
+      variables: {
+        variable_name: "variable_value",
+      },
+      // echo: true //optional parameter
+    },
+  })
+  .asResponse();
+
+console.log(await response.json());
+```
+</CodeGroup>

@@ -1,0 +1,291 @@
+---
+title: Vercel AI SDK
+description: Log LLM requests with Keywords AI gateway
+og:title: 'Vercel AI SDK with Keywords AI'
+---
+<Note> This integration is for the **Keywords AI gateway**. </Note>
+With this integration, your LLM requests will go through **the Keywords AI gateway**, and the requests will be **automatically logged to Keywords AI**. 
+
+
+## 1. Get Keywords AI API key
+
+After you create an account on [Keywords AI](https://platform.keywordsai.co), you can get your API key from the [API keys page](https://platform.keywordsai.co/platform/api/api-keys).
+
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/api-keys.png" alt="Create API key placeholder" />
+
+
+## 2. Add provider credentials
+You have to add your own credentials to activate AI gateway otherwise your LLM calls will cause errors. We will use your credentials to call LLMs on your behalf.
+
+We **won't use your credentials** for any other purposes and no extra charges will be applied.
+
+Go to the [Providers page](https://platform.keywordsai.co/platform/api/providers) to add your credentials. 
+<Frame>
+<img className="block dark:hidden" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg" alt="Providers page"/>
+<img className="hidden dark:block" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers-dark.jpg" alt="Providers page"/>
+</Frame>
+
+<Tip>Learn how to add credentials to a specific provider [here](/integration/own-api-keys).</Tip>
+
+---
+
+## 3. Compatibility at a glance
+
+| SDK helper          | Works via Keywords AI?        | Switch models? |
+| ------------------- | ----------------------------- | -------------- |
+| `@ai-sdk/openai`    | ✅ Yes                     |  ✅ Yes      |
+| `@ai-sdk/anthropic` | ✅ Yes (Anthropic models only) | ❌ No           |
+| `@ai-sdk/google`     | ✅ Yes                      | ✅ Yes       |
+
+<small>*Requires overriding `baseURL` and passing the provider key via `customer_credentials`.</small>
+
+---
+
+## 4. Integrate Keywords AI gateway
+
+<Tabs>
+<Tab title="OpenAI">
+Here's an example of how to use the Vercel AI SDK with OpenAI:
+<CodeGroup>
+```TypeScript OpenAI.tsx
+import { createOpenAI, OpenAIProvider } from '@ai-sdk/openai'
+import { streamText, streamObject } from 'ai'
+
+async function main() {
+  // Initialize OpenAI with Keywords gateways
+  const client: OpenAIProvider = createOpenAI({
+    baseURL: 'https://api.keywordsai.co',
+    apiKey: 'YOUR_KEYWORDS_AI_API_KEY',
+    compatibility: 'strict',
+  })
+
+
+  const requestParamsDefault: Parameters<typeof streamText>[0] = {
+    model: client.chat('gpt-3.5-turbo'),
+    messages: [
+      {
+        role: 'user',
+        content: 'Hello! How are you doing today?',
+      },
+    ],
+    temperature: 0.5,
+  }
+
+  try {
+    console.log('Calling OpenAI with Keywords proxy...')
+
+    const { textStream: proxyTextStream } = await streamText(requestParamsDefault)
+    for await (const textPart of proxyTextStream) {
+      console.log('Keywords Proxy Response:', textPart)
+    }
+  } catch (error) {
+    console.error('Error:', error)
+  }
+}
+
+main()
+```
+</CodeGroup>
+</Tab>
+<Tab title="Anthropic">
+Here's an example of how to use the Vercel AI SDK with Anthropic:
+<CodeGroup>
+```TypeScript Anthropic.tsx
+import { createAnthropic } from '@ai-sdk/anthropic';
+import { streamText, convertToCoreMessages } from 'ai';
+
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
+
+export const anthropic: AnthropicProvider = createAnthropic({
+  baseURL: "https://api.keywordsai.co/api/anthropic/v1",
+  apiKey: process.env.KEYWORDS_AI_API_KEY,
+});
+   
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+
+  const result = await streamText({
+    model: anthropic('claude-3-5-sonnet-20240620'), // choose any model
+    messages: convertToCoreMessages(messages),
+  });
+
+  return result.toDataStreamResponse();
+}
+```
+</CodeGroup>
+</Tab>
+
+<Tab title="Google Gemini">
+Here's an example of how to use the Vercel AI SDK with Google Gemini:
+```TypeScript Google Gemini.tsx
+import {
+  createGoogleGenerativeAI,
+  GoogleGenerativeAIProviderOptions,
+} from "@ai-sdk/google";
+import { generateText, streamText } from "ai";
+
+
+const url = `https://api.keywordsai.co/api/google/`;
+
+const google = createGoogleGenerativeAI({
+  // custom settings
+  baseURL: url,
+  apiKey: process.env.KEYWORDSAI_API_KEY,
+  
+});
+
+const { text } = await generateText({
+  model: google("gemini-2.0-flash"),
+  providerOptions: {
+    google: {
+      responseModalities: ["TEXT", "IMAGE"],
+    } satisfies GoogleGenerativeAIProviderOptions,
+  },
+  prompt: "Hello, how are you?",
+  temperature: 0.5,
+});
+```
+</Tab>
+
+</Tabs>
+
+{/* ## Vercel AI SDK Core Functions:
+
+<ParamField path="generateText" type="function">
+Generates text and tool calls. This function is ideal for non-interactive use cases such as automation tasks where you need to write text (e.g. drafting email or summarizing web pages) and for agents that use tools.
+</ParamField>
+
+<ParamField path="streamText" type="function">
+    Stream text and tool calls. You can use the streamText function for interactive use cases such as chat bots and content streaming. You can also generate UI components with tools (see Generative UI).
+</ParamField>
+
+<ParamField path="generateObject" type="function">
+    Generates a typed, structured object that matches a [Zod](https://zod.dev/) schema. You can use this function to force the language model to return structured data, e.g. for information extraction, synthetic data generation, or classification tasks.
+</ParamField> */}
+
+## 5. Add Keywords AI parameters
+
+Adding Keywords AI parameters to the Vercel AI SDK is different than other frameworks. Here is an example of how to do it:
+
+<Steps>
+<Step title="Specify Keywords AI params in an object">
+You should create an object with the Keywords AI parameters you want to use. Add parameters you want to use as keys in the object.
+```typescript
+const keywordsAIHeaderContent = {
+    "customer_params": {
+        "customer_identifier": "customer_123",
+        "name": "Hendrix Liu", //optional
+        "email": "hendrix@keywordsai.co" //optional
+    }
+    // "cache_enabled": true or other parameters
+}
+```
+</Step>
+<Step title="Encode the object as a string">
+You should encode the object as a string and then you can send it as a header in your request.
+```typescript
+const encoded = Buffer.from(JSON.stringify(keywordsAIHeaderContent)).toString('base64');
+```
+</Step>
+<Step title="Add the header to your request">
+You should send it in the `X-Data-Keywordsai-Params` header.
+<CodeGroup>
+```typescript OpenAI
+const client = createOpenAI({
+  baseURL: process.env.KEYWORDSAI_ENDPOINT_LOCAL,
+  apiKey: process.env.KEYWORDSAI_API_KEY_TEST,
+  compatibility: "strict",
+  headers: {
+    "X-Data-Keywordsai-Params": encoded
+  }
+});
+```
+```typescript Anthropic
+const client = createAnthropic({
+  baseURL: process.env.KEYWORDSAI_ENDPOINT_LOCAL,
+  apiKey: process.env.KEYWORDSAI_API_KEY_TEST,
+  headers: {
+    "X-Data-Keywordsai-Params": encoded
+  }
+});
+```
+</CodeGroup>
+</Step>
+<Step title="Full example">
+<CodeGroup>
+```typescript OpenAI
+import { streamText, streamObject } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
+
+const keywordsAIHeaderContent = {
+    "customer_identifier": "test_customer_identifier_from_header"
+}
+const encoded = Buffer.from(JSON.stringify(keywordsAIHeaderContent)).toString('base64');
+
+const client = createOpenAI({
+  baseURL: process.env.KEYWORDSAI_ENDPOINT_LOCAL,
+  apiKey: process.env.KEYWORDSAI_API_KEY_TEST,
+  compatibility: "strict",
+  headers: {
+    "X-Data-Keywordsai-Params": encoded
+  }
+});
+
+const requestParamsDefault: Parameters<typeof streamText>[0] = {
+  model: client.chat("gpt-4o"),
+  messages: [
+    {
+      role: "user",
+      content: "Hello! How are you doing today?",
+    },
+  ],
+  temperature: 0.5,
+};
+
+try {
+  console.log("Calling OpenAI with Keywords proxy...");
+
+  const { textStream: proxyTextStream } = await streamText(
+    requestParamsDefault
+  );
+  for await (const textPart of proxyTextStream) {
+    console.log("Keywords Proxy Response:", textPart);
+  }
+} catch (error) {
+  console.error("Error:", error);
+}
+```
+```typescript Anthropic
+import { createAnthropic } from '@ai-sdk/anthropic';
+import { streamText, convertToCoreMessages } from 'ai';
+
+const keywordsAIHeaderContent = {
+    "customer_identifier": "test_customer_identifier_from_header"
+}
+const encoded = Buffer.from(JSON.stringify(keywordsAIHeaderContent)).toString('base64');
+
+const anthropic = createAnthropic({
+  baseURL: process.env.KEYWORDSAI_ENDPOINT_LOCAL,
+  apiKey: process.env.KEYWORDSAI_API_KEY_TEST,
+  headers: {
+    "X-Data-Keywordsai-Params": encoded
+  }
+});
+   
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+
+  const result = await streamText({
+    model: anthropic('claude-3-5-sonnet-20240620'), // choose any model
+    messages: convertToCoreMessages(messages),
+  });
+
+  return result.toDataStreamResponse();
+}
+```
+</CodeGroup>
+</Step>
+</Steps>

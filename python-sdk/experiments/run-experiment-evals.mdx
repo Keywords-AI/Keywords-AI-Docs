@@ -1,0 +1,82 @@
+---
+title: "Run Experiment Evaluations"
+description: "Run evaluations on experiment results"
+---
+
+## Overview
+
+Execute evaluation metrics on experiment results to assess model performance.
+
+## Method Signature
+
+```python
+# Synchronous
+client.experiments.run_experiment_evals(
+    experiment_id: str,
+    evaluator_ids: List[str],
+    run_id: Optional[str] = None
+) -> Dict[str, Any]
+
+# Asynchronous
+await client.experiments.run_experiment_evals(
+    experiment_id: str,
+    evaluator_ids: List[str],
+    run_id: Optional[str] = None
+) -> Dict[str, Any]
+```
+
+## Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The unique identifier of the experiment
+</ParamField>
+
+<ParamField path="evaluator_ids" type="List[str]" required>
+  List of evaluator IDs to run on the experiment results
+</ParamField>
+
+<ParamField path="run_id" type="string" optional>
+  Specific run ID to evaluate. If not provided, evaluates the latest run
+</ParamField>
+
+## Returns
+
+Returns a dictionary containing the evaluation results and metrics.
+
+## Example
+
+```python
+from keywordsai import KeywordsAI
+
+client = KeywordsAI(api_key="your-api-key")
+
+# Run evaluations on latest experiment run
+evaluator_ids = ["eval_accuracy", "eval_relevance"]
+
+result = client.experiments.run_experiment_evals(
+    experiment_id="exp_123",
+    evaluator_ids=evaluator_ids
+)
+
+print(f"Evaluation status: {result['status']}")
+print(f"Metrics: {result['metrics']}")
+
+# Run evaluations on specific run
+result = client.experiments.run_experiment_evals(
+    experiment_id="exp_123",
+    evaluator_ids=evaluator_ids,
+    run_id="run_456"
+)
+```
+
+## Error Handling
+
+```python
+try:
+    result = client.experiments.run_experiment_evals(
+        experiment_id="exp_123",
+        evaluator_ids=["eval_accuracy"]
+    )
+except Exception as e:
+    print(f"Error running evaluations: {e}")
+```

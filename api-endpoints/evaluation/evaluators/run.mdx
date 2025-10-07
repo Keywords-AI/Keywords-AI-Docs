@@ -1,0 +1,490 @@
+---
+title: "Run Evaluator"
+api: "POST https://api.keywordsai.co/api/evaluators/{evaluator_id}/run/"
+---
+
+Executes an evaluator against provided input/output data for testing purposes. This endpoint allows you to test your evaluator configuration before using it in production.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `evaluator_id` | string | The unique ID of the evaluator to run |
+
+## Unified Evaluator Inputs
+
+All evaluator runs now receive a single unified `inputs` object. This applies to all evaluator types (`llm`, `human`, `code`). The same fields are also recorded and visible on the Scores page for every evaluation.
+
+### Request Body Structure
+
+```json
+{
+  "inputs": {
+    "input": {},
+    "output": {},
+    "metrics": {},
+    "metadata": {},
+    "llm_input": "",
+    "llm_output": ""
+  }
+}
+```
+
+### Field Descriptions
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `inputs` | object | Yes | The unified input object containing all evaluation data |
+| `inputs.input` | any JSON | Yes | The request/input to be evaluated |
+| `inputs.output` | any JSON | Yes | The response/output being evaluated |
+| `inputs.metrics` | object | No | System-captured metrics (e.g., tokens, latency, cost) |
+| `inputs.metadata` | object | No | Context and custom properties you pass; also logged |
+| `inputs.llm_input` | string | No | Legacy convenience alias for input (maps to unified fields) |
+| `inputs.llm_output` | string | No | Legacy convenience alias for output (maps to unified fields) |
+
+**Notes:**
+- These fields are stored with each evaluation and shown in the Scores page alongside the resulting score
+- When running evaluators from LLM calls, `inputs` is auto-populated from the request/response and tracing data
+- Legacy `{{llm_input}}`/`{{llm_output}}` placeholders remain supported and transparently map to the unified fields
+- New templates should reference `{{input}}` and `{{output}}`
+
+## Examples
+
+### Test LLM Evaluator
+
+<CodeGroup>
+
+```python Python
+import requests
+
+evaluator_id = "0f4325f9-55ef-4c20-8abe-376694419947"
+url = f"https://api.keywordsai.co/api/evaluators/{evaluator_id}/run/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "inputs": {
+        "input": "What is the capital of France?",
+        "output": "The capital of France is Paris. It is located in the north-central part of the country and is known for its rich history, culture, and landmarks like the Eiffel Tower.",
+        "metadata": {
+            "context": "Geography question about European capitals",
+            "user_id": "user_123",
+            "session_id": "session_456"
+        },
+        "metrics": {
+            "total_request_tokens": 23,
+            "total_response_tokens": 45,
+            "latency": 0.85,
+            "cost": 0.0012
+        }
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-376694419947/run/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "inputs": {
+      "input": "What is the capital of France?",
+      "output": "The capital of France is Paris. It is located in the north-central part of the country and is known for its rich history, culture, and landmarks like the Eiffel Tower.",
+      "metadata": {
+        "context": "Geography question about European capitals",
+        "user_id": "user_123"
+      },
+      "metrics": {
+        "total_request_tokens": 23,
+        "total_response_tokens": 45,
+        "latency": 0.85
+      }
+    }
+  }'
+```
+
+</CodeGroup>
+
+### Test Code Evaluator
+
+<CodeGroup>
+
+```python Python
+# Test boolean code evaluator
+code_evaluator_id = "bool-eval-456"
+url = f"https://api.keywordsai.co/api/evaluators/{code_evaluator_id}/run/"
+
+data = {
+    "inputs": {
+        "input": "Write a brief explanation of photosynthesis.",
+        "output": "Photosynthesis is the process by which plants convert sunlight into energy.",
+        "metadata": {
+            "topic": "biology",
+            "difficulty": "basic"
+        }
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/evaluators/bool-eval-456/run/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "inputs": {
+      "input": "Write a brief explanation of photosynthesis.",
+      "output": "Photosynthesis is the process by which plants convert sunlight into energy.",
+      "metadata": {
+        "topic": "biology",
+        "difficulty": "basic"
+      }
+    }
+  }'
+```
+
+</CodeGroup>
+
+### Test Human Categorical Evaluator
+
+<CodeGroup>
+
+```python Python
+# Test categorical evaluator
+categorical_evaluator_id = "cat-eval-123"
+url = f"https://api.keywordsai.co/api/evaluators/{categorical_evaluator_id}/run/"
+
+data = {
+    "inputs": {
+        "input": {
+            "question": "Explain the benefits of renewable energy",
+            "context": "Environmental science discussion"
+        },
+        "output": {
+            "response": "Renewable energy sources like solar and wind power offer numerous benefits including reduced carbon emissions, energy independence, and long-term cost savings.",
+            "confidence": 0.95
+        },
+        "metadata": {
+            "evaluator_notes": "Well-structured response covering key points",
+            "evaluation_criteria": ["accuracy", "completeness", "clarity"]
+        }
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/evaluators/cat-eval-123/run/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "inputs": {
+      "input": {
+        "question": "Explain the benefits of renewable energy",
+        "context": "Environmental science discussion"
+      },
+      "output": {
+        "response": "Renewable energy sources offer numerous benefits including reduced carbon emissions and cost savings.",
+        "confidence": 0.95
+      },
+      "metadata": {
+        "evaluator_notes": "Well-structured response"
+      }
+    }
+  }'
+```
+
+</CodeGroup>
+
+### Legacy Format Support
+
+<CodeGroup>
+
+```python Python
+# Legacy format still supported for backward compatibility
+data = {
+    "inputs": {
+        "llm_input": "What is the capital of France?",
+        "llm_output": "The capital of France is Paris.",
+        "metadata": {
+            "note": "Using legacy field names"
+        }
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-376694419947/run/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "inputs": {
+      "llm_input": "What is the capital of France?",
+      "llm_output": "The capital of France is Paris."
+    }
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+### LLM Evaluator Response
+
+**Status: 200 OK**
+
+```json
+{
+  "score": 4.5,
+  "score_type": "numerical",
+  "evaluator_id": "0f4325f9-55ef-4c20-8abe-376694419947",
+  "evaluator_name": "Response Quality Evaluator",
+  "evaluation_result": {
+    "reasoning": "The response is accurate and provides good detail about Paris, including its location and notable landmarks. The answer is complete and well-structured.",
+    "score": 4.5,
+    "passed": true
+  },
+  "inputs": {
+    "input": "What is the capital of France?",
+    "output": "The capital of France is Paris. It is located in the north-central part of the country and is known for its rich history, culture, and landmarks like the Eiffel Tower.",
+    "metadata": {
+      "context": "Geography question about European capitals",
+      "user_id": "user_123",
+      "session_id": "session_456"
+    },
+    "metrics": {
+      "total_request_tokens": 23,
+      "total_response_tokens": 45,
+      "latency": 0.85,
+      "cost": 0.0012
+    }
+  },
+  "execution_time": 1.23,
+  "timestamp": "2025-09-11T10:30:45.123456Z"
+}
+```
+
+### Code Evaluator Response
+
+```json
+{
+  "score": true,
+  "score_type": "boolean",
+  "evaluator_id": "bool-eval-456",
+  "evaluator_name": "Response Length Checker",
+  "evaluation_result": {
+    "result": true,
+    "details": "Response meets minimum length requirement (15 words >= 10 words)"
+  },
+  "inputs": {
+    "input": "Write a brief explanation of photosynthesis.",
+    "output": "Photosynthesis is the process by which plants convert sunlight into energy.",
+    "metadata": {
+      "topic": "biology",
+      "difficulty": "basic"
+    }
+  },
+  "execution_time": 0.05,
+  "timestamp": "2025-09-11T10:30:45.123456Z"
+}
+```
+
+### Human Categorical Evaluator Response
+
+```json
+{
+  "score": ["Good"],
+  "score_type": "categorical",
+  "evaluator_id": "cat-eval-123",
+  "evaluator_name": "Content Quality Assessment",
+  "evaluation_result": {
+    "selected_choices": ["Good"],
+    "choice_values": [4],
+    "note": "This evaluator requires human annotation. The response structure is validated but no actual evaluation is performed."
+  },
+  "inputs": {
+    "input": {
+      "question": "Explain the benefits of renewable energy",
+      "context": "Environmental science discussion"
+    },
+    "output": {
+      "response": "Renewable energy sources like solar and wind power offer numerous benefits including reduced carbon emissions, energy independence, and long-term cost savings.",
+      "confidence": 0.95
+    },
+    "metadata": {
+      "evaluator_notes": "Well-structured response covering key points",
+      "evaluation_criteria": ["accuracy", "completeness", "clarity"]
+    }
+  },
+  "execution_time": 0.02,
+  "timestamp": "2025-09-11T10:30:45.123456Z"
+}
+```
+
+## Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `score` | varies | The evaluation score (type depends on evaluator's `score_value_type`) |
+| `score_type` | string | The type of score: `numerical`, `boolean`, `categorical`, or `comment` |
+| `evaluator_id` | string | ID of the evaluator that was run |
+| `evaluator_name` | string | Name of the evaluator that was run |
+| `evaluation_result` | object | Detailed evaluation results and reasoning |
+| `inputs` | object | The input data that was evaluated (echoed back) |
+| `execution_time` | number | Time taken to execute the evaluation (in seconds) |
+| `timestamp` | string | ISO timestamp of when the evaluation was performed |
+
+## Score Types by Evaluator
+
+### Numerical Evaluators
+- **Score**: Number (e.g., `4.5`, `8.2`)
+- **Range**: Defined by evaluator's `min_score` and `max_score`
+- **Passing**: Determined by `passing_score` threshold
+
+### Boolean Evaluators
+- **Score**: Boolean (`true` or `false`)
+- **Passing**: `true` = passed, `false` = failed
+
+### Categorical Evaluators
+- **Score**: Array of selected category names (e.g., `["Good", "Accurate"]`)
+- **Values**: Corresponding numeric values from `categorical_choices`
+- **Note**: Human evaluators return placeholder values for testing
+
+### Comment Evaluators
+- **Score**: String with detailed feedback
+- **Content**: Varies based on evaluator configuration
+- **Length**: Can be extensive for detailed feedback
+
+## Error Responses
+
+### 400 Bad Request
+
+```json
+{
+  "detail": "Invalid input format: 'inputs' field is required"
+}
+```
+
+### 401 Unauthorized
+
+```json
+{
+  "detail": "Your API key is invalid or expired, please check your API key at https://platform.keywordsai.co/platform/api/api-keys"
+}
+```
+
+### 404 Not Found
+
+```json
+{
+  "detail": "Evaluator not found"
+}
+```
+
+### 422 Unprocessable Entity
+
+```json
+{
+  "inputs": {
+    "input": ["This field is required."]
+  }
+}
+```
+
+### 500 Internal Server Error
+
+```json
+{
+  "detail": "Evaluation failed: LLM service temporarily unavailable",
+  "error_code": "EVALUATION_EXECUTION_ERROR",
+  "retry_after": 30
+}
+```
+
+## Testing Best Practices
+
+### 1. Test with Realistic Data
+
+Use actual examples from your use case:
+
+```python Python
+# Good: Realistic test data
+test_data = {
+    "inputs": {
+        "input": "Actual user question from your application",
+        "output": "Actual LLM response you want to evaluate",
+        "metadata": {
+            "user_context": "Real context from your app"
+        }
+    }
+}
+```
+
+### 2. Test Edge Cases
+
+```python Python
+# Test with empty responses
+edge_case_data = {
+    "inputs": {
+        "input": "What is AI?",
+        "output": "",  # Empty response
+        "metadata": {"test_case": "empty_response"}
+    }
+}
+
+# Test with very long responses
+long_response_data = {
+    "inputs": {
+        "input": "Explain machine learning",
+        "output": "Very long response..." * 100,
+        "metadata": {"test_case": "long_response"}
+    }
+}
+```
+
+### 3. Validate Configuration
+
+Test your evaluator configuration before production use:
+
+```python Python
+# Test multiple examples to validate scoring consistency
+test_cases = [
+    {"input": "Good question", "output": "Excellent answer", "expected_range": (4, 5)},
+    {"input": "Basic question", "output": "Basic answer", "expected_range": (2, 4)},
+    {"input": "Complex question", "output": "Poor answer", "expected_range": (1, 2)}
+]
+
+for i, case in enumerate(test_cases):
+    response = requests.post(url, headers=headers, json={
+        "inputs": {
+            "input": case["input"],
+            "output": case["output"]
+        }
+    })
+    score = response.json()["score"]
+    expected_min, expected_max = case["expected_range"]
+    
+    if expected_min <= score <= expected_max:
+        print(f"Test case {i+1}: PASS (score: {score})")
+    else:
+        print(f"Test case {i+1}: FAIL (score: {score}, expected: {expected_min}-{expected_max})")
+```

@@ -1,0 +1,315 @@
+---
+title: Retrieve log list
+api: POST https://api.keywordsai.co/api/request-logs/list/
+---
+
+The Logs List endpoint allows you to get the past logs with specified filters.
+
+
+## Query params
+You can add these params to the **URL params**.
+For example:
+```
+"https://api.keywordsai.co/api/request-logs/list/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
+```
+<ParamField query="start_time" type="string" required>
+  The start time for filtering logs in ISO 8601 format. If not provided, defaults to 1 hour ago.
+  <Accordion title="Example">
+    ```json
+    {
+      "start_time": "2025-08-15T00:00:00" // ISO 8601 format
+    }
+    ```
+  </Accordion>
+</ParamField>
+
+<ParamField query="end_time" type="string" required>
+  The end time for filtering logs in ISO 8601 format. If not provided, defaults to current time.
+  <Accordion title="Example">
+    ```json
+    {
+      "end_time": "2025-08-16T00:00:00" // ISO 8601 format
+    }
+    ```
+  </Accordion>
+</ParamField>
+
+<ParamField query="sort_by" type="string" required>
+  The field to sort by. Default is `-id` (same as sort by `-timestamp`, but with better performance).
+  `-` is for descending order, if not provided, it will be in ascending order.
+  <AccordionGroup>
+    <Accordion title="Properties">
+        <ParamField body="id" type="string">
+            Sort by the ID of each request.
+        </ParamField>
+        <ParamField body="cost" type="string">
+            Sort by the cost of each request.
+        </ParamField>
+        <ParamField body="time_to_first_token" type="string">
+           TTFT - useful for Voice AI applications
+        </ParamField>
+        <ParamField body="latency" type="string">
+          Generation time of each request.
+        </ParamField>
+        <ParamField body="prompt_tokens" type="string">
+          Input / prompt tokens of each request.
+        </ParamField>
+        <ParamField body="completion_tokens" type="string">
+          Output / completion tokens of each request.
+        </ParamField>
+        <ParamField body="all_tokens" type="string">
+          Total tokens of each request.
+        </ParamField>
+    </Accordion>
+    <Accordion title="Example">
+    ```json
+    {
+      "sort_by": "cost" //sort by cost in ascending order.
+    }
+    ```
+    </Accordion>
+</AccordionGroup>
+</ParamField>
+<ParamField query="all_envs" type="string" default="false">
+  Whether to include logs from all environments. `is_test` parameter will override this parameter.
+  Options: `true`, `false`.
+</ParamField>
+
+<ParamField query="is_test" type="string" default="false">
+  Whether the log is a test call or not. This parameter will override the `all_envs` parameter.
+  Options: `true`, `false`.
+</ParamField>
+
+<ParamField query="fetch_filters" type="string" default="false">
+  Whether to retrieve the available filtering options. Enabling this could slow down the response time.
+  Options: `true`, `false`.
+</ParamField>
+
+<ParamField query="page_size" type="number" default={100}>
+  The number of logs to return per page. Maximum is 1000.
+</ParamField>
+
+<ParamField query="page" type="number" default={1}>
+  The page number of the current logs.
+</ParamField>
+
+<ParamField query="include_fields" type="string">
+  Comma separated fields to be included in the response logs. This parameter allows you to specify which fields should be returned to improve performance and reduce response size.
+  <Accordion title="Example">
+    ```
+    include_fields=custom_identifier,customer_identifier,id,latency
+    ```
+  </Accordion>
+</ParamField>
+
+## POST params
+You can add these params to the **body**:
+```python
+url = "https://api.keywordsai.co/api/request-logs/list/"
+headers = {
+    "Authorization": f"Api-Key {YOUR_KEYWORDS_AI_API_KEY}",
+}
+data = {
+    "filters":    {
+      "cost": {
+        "operator": "gt",
+        "value": [0.01]
+      },
+    }
+}
+response = requests.post(url, headers=headers, json=data)
+```
+
+<ParamField body="filters" type="object" default={{}}>
+  The filters be applied to the logs. For available options in the response body, use the `fetch_filters` parameter.
+
+<Note>If you want to filter your custom properties, you should add `metadata__`+ your custom property name. For example, if you want to filter your custom property `my_custom_property`, you should add `metadata__my_custom_property` to the filters.</Note>
+<Accordion title="Example">
+  ```json
+    {
+      "name_of_metric": {
+        "operator": "gt",
+        "value": [100]
+      },
+    }
+```
+
+  </Accordion>
+</ParamField>
+
+<ParamField body="operator" type="string" required>
+  Default is "" (equal).
+  <Accordion title="Properties">
+        <ParamField body=" " type="string">
+            Equal
+            <Accordion title="Example">
+            ```json
+            {
+              "name_of_metric": {
+                "operator": "", // equal
+                "value": [100]
+              },
+            }
+            ```
+            </Accordion>
+        </ParamField>
+        <ParamField body="iexact" type="string">
+            case insensitive equal
+        </ParamField>
+        <ParamField body="lt" type="string">
+           Less than
+        </ParamField>
+        <ParamField body="lte" type="string">
+           Less than or equal
+        </ParamField>
+        <ParamField body="gt" type="string">
+          Greater than
+        </ParamField>
+        <ParamField body="gte" type="string">
+          Greater than or equal
+        </ParamField>
+        <ParamField body="contains" type="string">
+          Contains
+        </ParamField>
+        <ParamField body="endswith" type="string">
+          Ends with
+        </ParamField>
+        <ParamField body="startswith" type="string">
+          Starts with
+        </ParamField>
+        <ParamField body="in" type="string">
+          Can be used in arrays or text
+        </ParamField>
+        <ParamField body="isnull" type="string">
+          Check if the field is null
+        </ParamField>
+        <ParamField body="icontains" type="string">
+          Case insensitive contains
+        </ParamField>
+        <ParamField body="not" type="string">
+          Not equal
+        </ParamField>
+    </Accordion>
+
+</ParamField>
+
+<RequestExample>
+
+```python Python
+url = "https://api.keywordsai.co/api/request-logs/list/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
+
+
+from urllib.parse import urlencode
+params = {
+    "page": 1,
+    "sort_by": "-id",
+    "is_test": "false",
+    "all_envs": "false",
+    "fetch_filters": "false",
+    "page_size": 1
+}
+url = f"https://api.keywordsai.co/api/request-logs/list/?{urlencode(params)}"
+headers = {
+    "Authorization": f"Api-Key {YOUR_KEYWORDS_AI_API_KEY}",
+}
+data = {
+    "filters": {}
+}
+response = requests.post(url, headers=headers, json=data)
+```
+
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/request-logs/list/';
+
+const params = new URLSearchParams({
+    page: '1',
+    sort_by: '-id',
+    is_test: 'false',
+    all_envs: 'false',
+    fetch_filters: 'false',
+    page_size: '1'
+}).toString();
+
+const fullUrl = `${url}?${params}`;
+
+const headers = {
+    'Authorization': `Api-Key ${YOUR_KEYWORDS_AI_API_KEY}`,
+    'Content-Type': 'application/json'
+};
+
+const data = {
+    filters: {}
+};
+
+fetch(fullUrl, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(data)
+})
+.then(response => response.json())
+.then(data => {
+    console.log(data);
+})
+```
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/request-logs/list/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1" \
+-H "Authorization: Api-Key YOUR_KEYWORDS_AI_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{"filters": {}}'
+
+```
+</RequestExample>
+<ResponseExample>
+```json
+{
+    "results": [
+       {
+        "unique_id": "xxxxx",
+        "organization_key__name": "Keywords AI Default",
+        "organization": "Keywords AI",
+        "user": "hendrix@keywordsai.co",
+        "is_example": false,
+        "status": "success",
+        "prompt_tokens": 452,
+        "completion_tokens": 89,
+        "cost": 0.0005869,
+        "prompt_messages": [
+                {
+                    "role": "system",
+                    "content": "You are a helpful assistant"
+                },
+                {
+                    "role": "user",
+                    "content": "What is Keywords AI?"
+                }
+        ],
+        "completion_message": {
+                "role": "assistant",
+                "content": "Keywords AI is a unified DevOps platform for AI products."
+        },
+        "latency": 1.2114145755767822,
+        "model": "gpt-3.5-turbo",
+        "foundation_model": "gpt-3.5-turbo",
+        "provider_id": "openai",
+        "tool_choice": null,
+        "tools": null,
+        "tool_calls": null,
+        "timestamp": "2024-06-24T21:33:06.601353Z",
+        "failed": false,
+        "time_to_first_token": null,
+        "routing_time": 0.0,
+        "metadata": {
+            // any params you want to pass in the request
+            },
+        "stream": false,
+        "status_code": 200,
+        "customer_identifier": "123456",
+        "customer_email": "",
+        "used_custom_credential": false,
+       // ... other models ... 
+       },
+    ]
+}
+
+```
+</ResponseExample>
