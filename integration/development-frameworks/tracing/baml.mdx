@@ -1,0 +1,112 @@
+---
+title: BAML
+description: Use BAML with Keywords AI tracing
+og:title: 'BAML with Keywords AI'
+---
+
+This tutorial shows how to set up Keywords AI tracing with BAML to automatically track LLM usage from your BAML client and view detailed spans in the Keywords AI platform.
+
+<Note>Import the instrumentation module before any other module imports <code>baml_client.b</code> to ensure all functions are decorated.</Note>
+
+## Setup
+
+### 1) Environment Variables
+Create a `.env` or environment variables in your runtime and set:
+
+```bash .env
+KEYWORDSAI_API_KEY=your-keywordsai-api-key
+KEYWORDSAI_BASE_URL=https://api.keywordsai.co
+```
+
+### 2) Create the Keywords AI BAML instrumentation module
+Create a module (for example `keywordsai_baml_tracing.py`) that decorates all callable BAML client functions. Import this module first in your app so every BAML call is traced.
+
+```python keywordsai_baml_tracing.py
+from collections.abc import Callable
+from functools import wraps
+
+from baml_client import b
+from baml_py import Collector
+from keywordsai_tracing.decorators import task
+from opentelemetry.semconv_ai import LLMRequestTypeValues, SpanAttributes
+from servicelib.errors import logger
+from servicelib.globals import kai_client
+
+@task(name="baml_usage")
+async def update_span_with_baml_usage(baml_function: Callable, *args, **kwargs):
+    baml_collector = Collector(name="baml_usage_collector")
+    kwargs.setdefault("baml_options", {})
+    kwargs["baml_options"]["collector"] = baml_collector
+
+    result = await baml_function(*args, **kwargs)
+
+    input_tokens = baml_collector.last.usage.input_tokens if baml_collector.last and baml_collector.last.usage.input_tokens else 0
+    output_tokens = baml_collector.last.usage.output_tokens if baml_collector.last and baml_collector.last.usage.output_tokens else 0
+
+    baml_model_name = (
+        baml_collector.last.selected_call.client_name
+        if baml_collector.last and baml_collector.last.selected_call
+        else None
+    )
+
+    attributes = {
+        SpanAttributes.LLM_USAGE_PROMPT_TOKENS: input_tokens,
+        SpanAttributes.LLM_USAGE_COMPLETION_TOKENS: output_tokens,
+        SpanAttributes.LLM_USAGE_TOTAL_TOKENS: input_tokens + output_tokens,
+        SpanAttributes.TRACELOOP_SPAN_KIND: LLMRequestTypeValues.CHAT.value,
+    }
+    if baml_model_name:
+        attributes[SpanAttributes.LLM_REQUEST_MODEL] = baml_model_name
+        attributes[SpanAttributes.LLM_RESPONSE_MODEL] = baml_model_name
+
+    kai_client.update_current_span(
+        keywordsai_params={"metadata": {"example": "baml"}},
+        attributes=attributes,
+        name="baml_usage.chat",
+    )
+    return result
+
+
+def keywordsai_baml_trace(func: Callable):
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        return await update_span_with_baml_usage(func, *args, **kwargs)
+    return wrapper
+
+
+def initialize_keywordsai_baml_tracing() -> tuple[int, int]:
+    """Apply keywordsai_baml_trace decorator to all callable BAML functions."""
+    decorated_count = 0
+    found_count = 0
+    logger.info("[BAML Tracing] Decorating BAML client with tracing...")
+    for attr_name in dir(b):
+        if not attr_name.startswith("_"):
+            attr = getattr(b, attr_name)
+            if callable(attr):
+                found_count += 1
+                setattr(b, attr_name, keywordsai_baml_trace(attr))
+                decorated_count += 1
+    logger.info(f"[BAML Tracing] Decorated {decorated_count} / {found_count} BAML functions")
+    return decorated_count, found_count
+
+# Initialize immediately when this module is imported
+_decorated_count, _found_count = initialize_keywordsai_baml_tracing()
+
+# Export the decorated BAML client for other modules to use
+__all__ = ["b"]
+```
+
+### 3) Use the decorated BAML client
+Import the decorated `b` from your instrumentation module and use it like your normal BAML client:
+
+```python app.py
+from keywordsai_baml_tracing import b
+
+async def main():
+    # Call any BAML client function; usage will be traced automatically
+    result = await b.some_function(arg1="value")
+    print(result)
+```
+
+## Observability
+Once configured, you can view your traces and analytics in the Keywords AI platform under Signals → Traces.
