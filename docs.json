@@ -330,7 +330,8 @@
           {
             "group": "Logs",
             "pages": [
-              "api-endpoints/async-endpoints/logs-list-endpoint"
+              "api-endpoints/async-endpoints/logs-list-endpoint",
+              "api-endpoints/async-endpoints/traces-ingest-from-logs"
             ]
           },
           {
@@ -406,6 +407,23 @@
                 ]
               },
               {
+                "group": "Dataset",
+                "pages": [
+                  "api-endpoints/evaluation/dataset/get",
+                  "api-endpoints/evaluation/dataset/list",
+                  "api-endpoints/evaluation/dataset/patch",
+                  "api-endpoints/evaluation/dataset/delete",
+                  "api-endpoints/evaluation/dataset/logs-add",
+                  "api-endpoints/evaluation/dataset/logs-list",
+                  "api-endpoints/evaluation/dataset/logs-list-post",
+                  "api-endpoints/evaluation/dataset/logs-get",
+                  "api-endpoints/evaluation/dataset/logs-put",
+                  "api-endpoints/evaluation/dataset/logs-patch",
+                  "api-endpoints/evaluation/dataset/logs-delete",
+                  "api-endpoints/evaluation/dataset/logs-remove"
+                ]
+              },
+              {
                 "group": "Scores",
                 "pages": [
                   "api-endpoints/evaluation/scores/create",
@@ -416,7 +434,7 @@
                 ]
               },
               {
-                "group": "Log Score Management",
+                "group": "Log score management",
                 "pages": [
                   "api-endpoints/evaluation/log-scores/create",
                   "api-endpoints/evaluation/log-scores/get",

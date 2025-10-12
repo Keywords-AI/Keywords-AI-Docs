@@ -1,0 +1,38 @@
+---
+title: "Remove logs from dataset"
+api: "DELETE https://api.keywordsai.co/api/datasets/{dataset_id}/logs/delete/"
+---
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+Request body:
+
+- is_deleting_all_logs (boolean, required if no filters; default false)
+- filters (object, required unless `is_deleting_all_logs` is true)
+
+Request (filters) example:
+
+```json
+{
+  "filters": { "status_code": { "operator": "eq", "value": 500 } }
+}
+```
+
+Request (delete all) example:
+
+```json
+{ "is_deleting_all_logs": true }
+```
+
+Response (200 OK):
+
+```json
+{ "message": "Logs are being removed from dataset in the background" }
+```
+
+Errors:
+
+- 400 Bad Request — neither `is_deleting_all_logs` nor `filters` provided
+- 404 Not Found — dataset not found or not in your organization

@@ -1,0 +1,378 @@
+# Datasets API
+
+The Datasets API lets you create datasets from your logs, list datasets, retrieve/update/delete a dataset, and add/remove logs to a dataset.
+
+- Public-facing; supports API Key
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Endpoints
+
+### 1) List Datasets
+
+`GET /api/datasets/list/`
+
+Response (200 OK):
+
+```json
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": "6d0b2c7e-3a6a-4c09-9c7e-1f2d9e2d3f0a",
+      "organization_id": 123,
+      "updated_by": {
+        "first_name": "Ann",
+        "last_name": "Lee",
+        "email": "ann@example.com"
+      },
+      "log_count": 250,
+      "name": "Support Conversations - July",
+      "log_ids": ["..."],
+      "description": "Sampled support chats for July",
+      "type": "sampling",
+      "status": "ready",
+      "created_at": "2025-07-26T00:00:00Z",
+      "updated_at": "2025-07-27T08:10:00Z",
+      "completed_annotation_count": 0,
+      "running_status": "pending",
+      "running_progress": 0
+    }
+  ]
+}
+```
+
+### 2) Get Dataset
+
+`GET /api/datasets/{dataset_id}/`
+`PATCH /api/datasets/{dataset_id}/`
+`DELETE /api/datasets/{dataset_id}/`
+
+Get dataset (200 OK):
+
+```json
+{
+  "id": "6d0b2c7e-3a6a-4c09-9c7e-1f2d9e2d3f0a",
+  "name": "Support Conversations - July",
+  "type": "sampling",
+  "description": "Sampled support chats for July",
+  "created_at": "2025-07-26T00:00:00Z",
+  "updated_at": "2025-07-27T08:10:00Z",
+  "organization": 123,
+  "initial_log_filters": { "status_code": { "operator": "eq", "value": 200 } },
+  "unique_organization_ids": [],
+  "timestamps": [],
+  "log_count": 250,
+  "evaluator": null,
+  "status": "ready",
+  "running_status": "pending",
+  "running_progress": 0,
+  "running_at": null,
+  "completed_annotation_count": 0
+}
+```
+
+Update (PATCH) example:
+
+```json
+{
+  "name": "Support Conversations - July (v2)",
+  "description": "Renamed"
+}
+```
+
+### 3) List Logs in a Dataset
+
+`GET /api/datasets/{dataset_id}/logs/list/`
+`POST /api/datasets/{dataset_id}/logs/list/` (for complex filtering)
+
+This endpoint retrieves the logs that have been added to a dataset. It supports pagination, filtering, and ordering.
+
+Query Parameters:
+
+- page (integer, optional): Page number for pagination (default: 1)
+- page_size (integer, optional): Number of results per page (default: varies based on pagination settings)
+- order_by (string, optional): Field to order results by (default: unique_id)
+
+Request example (GET):
+
+```bash
+GET /api/datasets/{dataset_id}/logs/list/?page=1&page_size=10
+```
+
+Request example (POST with filters):
+
+```json
+{
+  "filters": {
+    "status_code": {
+      "operator": "eq",
+      "value": 200
+    },
+    "model": {
+      "operator": "eq",
+      "value": "gpt-4"
+    }
+  }
+}
+```
+
+Response (200 OK):
+
+```json
+{
+  "count": 250,
+  "next": "https://api.keywordsai.co/api/datasets/{dataset_id}/logs/list/?page=2&page_size=10",
+  "previous": null,
+  "results": [
+    {
+      "id": "abc123...",
+      "organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
+      "environment": "prod",
+      "timestamp": "2025-10-06T02:40:29.250313Z",
+      "start_time": "2025-10-06T02:40:29.250313Z",
+      "prompt_tokens": 2020,
+      "completion_tokens": 25,
+      "total_request_tokens": 2045,
+      "cost": 0.0010475,
+      "model": "gpt-3.5-turbo",
+      "latency": 0.516,
+      "status_code": 200,
+      "status": "success",
+      "prompt": "Hi, this is Taylor calling from HONK...",
+      "completion": "Alright, so that's about 120 minutes...",
+      "dataset_id": "6dee217e-18c6-468e-ab6d-7b97e2115752",
+      "annotation_status": "completed",
+      "annotation_completed_by": {
+        "first_name": "",
+        "last_name": "",
+        "email": ""
+      },
+      "scores": [...]
+    }
+  ],
+  "filter_options": {
+    "status_code": {...},
+    "model": {...},
+    ...
+  }
+}
+```
+
+Response Fields:
+
+- count (integer): Total number of logs in the dataset matching the filters
+- next (string|null): URL for the next page of results
+- previous (string|null): URL for the previous page of results
+- results (array): Array of log objects with their details
+- filter_options (object): Available filter options for the dataset logs
+- Each log includes:
+  - Basic log metadata (id, timestamp, tokens, cost, latency, etc.)
+  - Model information
+  - Prompt and completion text (if available)
+  - dataset_id: The dataset this log belongs to
+  - annotation_status: Status of human annotation (pending, completed, etc.)
+  - annotation_completed_by: User who completed the annotation
+  - scores: Array of evaluation scores for this log
+
+Errors:
+
+- 401 Unauthorized — Missing/invalid authentication
+- 404 Not Found — Dataset not found or not in your organization
+
+Notes:
+
+- Both GET and POST methods are supported; POST is useful when you need to send complex filter objects
+- Logs are returned with enriched data including annotation status and evaluation scores
+- The endpoint supports the same filter structure as other log listing endpoints
+- Results are paginated automatically
+
+### 4) Get Single Log
+
+`GET /api/datasets/{dataset_id}/logs/{log_id}/`
+`PUT /api/datasets/{dataset_id}/logs/{log_id}/` (update log)
+`PATCH /api/datasets/{dataset_id}/logs/{log_id}/` (partial update)
+`DELETE /api/datasets/{dataset_id}/logs/{log_id}/` (remove from dataset)
+
+This endpoint retrieves the complete object for a single log within a dataset, including all prompt/completion text and metadata.
+
+Request example:
+
+```bash
+GET /api/datasets/{dataset_id}/logs/{log_id}/
+```
+
+Response (200 OK):
+
+```json
+{
+  "id": "888d342383e844e185e9cd80b63e4eb1",
+  "organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
+  "organization_key_id": "h5vo0ju3.sha512$$...",
+  "environment": "prod",
+  "timestamp": "2025-10-06T02:17:58.639822Z",
+  "start_time": "2025-10-06T02:17:58.639822Z",
+  "prompt_id": "",
+  "prompt_name": "",
+  "trace_unique_id": "",
+  "customer_identifier": "test_customer_identifier",
+  "thread_identifier": "thread_id_num_1",
+  "custom_identifier": "",
+  "unique_organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
+  "log_type": "text",
+  "prompt_tokens": 415,
+  "completion_tokens": 12,
+  "total_request_tokens": 427,
+  "cost": 0.0002285,
+  "model": "gpt-3.5-turbo",
+  "latency": 0.451,
+  "tokens_per_second": 26.60753880266075,
+  "time_to_first_token": 0.29,
+  "routing_time": 0.0,
+  "status_code": 200,
+  "status": "success",
+  "blurred": false,
+  "metadata": {
+    "call_id": "thread_id_num_1",
+    "agent_id": "agent_5b91562cab41dd0038499773c6",
+    "provider": "azure_openai",
+    "use_case": "response"
+  },
+  "system": "## Identity\nYou are Jordan, a helpful dispatcher...",
+  "prompt": "Full prompt text here...",
+  "completion": "Full completion text here...",
+  "messages": [...],
+  "dataset_id": "6dee217e-18c6-468e-ab6d-7b97e2115752"
+}
+```
+
+Update Log (PUT/PATCH):
+
+You can update a log's content by sending a PUT or PATCH request with the modified log data:
+
+```json
+{
+  "prompt": "Updated prompt text",
+  "completion": "Updated completion text",
+  "metadata": {
+    "custom_field": "custom_value"
+  }
+}
+```
+
+Response (200 OK):
+
+```json
+{
+  "message": "Log updated successfully",
+  "unique_id": "888d342383e844e185e9cd80b63e4eb1"
+}
+```
+
+Delete Log (DELETE):
+
+Remove a log from the dataset:
+
+```bash
+DELETE /api/datasets/{dataset_id}/logs/{log_id}/
+```
+
+Response (204 No Content)
+
+Errors:
+
+- 401 Unauthorized — Missing/invalid authentication
+- 404 Not Found — Log not found in the dataset or dataset not found
+- 400 Bad Request — Invalid update data
+
+Notes:
+
+- This endpoint returns the complete log object, including full prompt and completion text
+- Updates preserve the log's unique identifiers
+- The endpoint uses JWT authentication (not API key)
+
+### 5) Add Logs to Dataset
+
+`POST /api/datasets/{dataset_id}/logs/create/`
+
+Request body:
+
+- start_time (string, required, ISO 8601)
+- end_time (string, required, ISO 8601)
+- filters (object, optional; key name is `filters`)
+- sampling_percentage (integer, optional, default 100)
+
+Request example:
+
+```json
+{
+  "start_time": "2025-07-01T00:00:00Z",
+  "end_time": "2025-07-31T23:59:59Z",
+  "filters": { "status_code": { "operator": "eq", "value": 200 } },
+  "sampling_percentage": 40
+}
+```
+
+Response (200 OK):
+
+```json
+{ "message": "Logs are being added to dataset in the background" }
+```
+
+Errors:
+
+- 400 Bad Request — invalid/missing `start_time`/`end_time`, or exceeds plan limit
+- 404 Not Found — dataset not found or not in your organization
+
+### 6) Remove Logs from Dataset
+
+`DELETE /api/datasets/{dataset_id}/logs/delete/`
+
+Request body:
+
+- is_deleting_all_logs (boolean, required if no filters; default false)
+- filters (object, required unless `is_deleting_all_logs` is true)
+
+Request (filters) example:
+
+```json
+{
+  "filters": { "status_code": { "operator": "eq", "value": 500 } }
+}
+```
+
+Request (delete all) example:
+
+```json
+{ "is_deleting_all_logs": true }
+```
+
+Response (200 OK):
+
+```json
+{ "message": "Logs are being removed from dataset in the background" }
+```
+
+Errors:
+
+- 400 Bad Request — neither `is_deleting_all_logs` nor `filters` provided
+- 404 Not Found — dataset not found or not in your organization
+
+## Error Codes
+
+- 200 OK — Successful GET/PATCH/DELETE acknowledgement
+- 201 Created — Successful dataset creation
+- 400 Bad Request — Invalid payload or exceeds plan limit
+- 401 Unauthorized — Missing/invalid auth
+- 404 Not Found — Dataset not found/forbidden
+
+## Tips
+
+- Time fields must be valid ISO 8601. Both `start_time` and `end_time` are required for create and add-logs.
+- Use `filters` to target subsets of logs. The filter object follows the platform-standard structure (operator/value pairs).
+- `sampling` on create and `sampling_percentage` on add provide control over inclusion rate.
+- Adding/removing logs is asynchronous; poll dataset detail to observe progress/status.

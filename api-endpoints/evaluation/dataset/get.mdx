@@ -1,0 +1,37 @@
+---
+title: "Get dataset"
+api: "GET https://api.keywordsai.co/api/datasets/{dataset_id}/"
+---
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+Response (200 OK):
+
+```json
+{
+  "id": "6d0b2c7e-3a6a-4c09-9c7e-1f2d9e2d3f0a",
+  "name": "Support Conversations - July",
+  "type": "sampling",
+  "description": "Sampled support chats for July",
+  "created_at": "2025-07-26T00:00:00Z",
+  "updated_at": "2025-07-27T08:10:00Z",
+  "organization": 123,
+  "initial_log_filters": { "status_code": { "operator": "eq", "value": 200 } },
+  "unique_organization_ids": [],
+  "timestamps": [],
+  "log_count": 250,
+  "evaluator": null,
+  "status": "ready",
+  "running_status": "pending",
+  "running_progress": 0,
+  "running_at": null,
+  "completed_annotation_count": 0
+}
+```
+
+Errors:
+
+- 401 Unauthorized — Missing/invalid authentication
+- 404 Not Found — Dataset not found or not in your organization

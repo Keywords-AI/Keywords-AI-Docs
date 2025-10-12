@@ -1,0 +1,15 @@
+---
+title: "Delete dataset"
+api: "DELETE https://api.keywordsai.co/api/datasets/{dataset_id}/"
+---
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+Response (204 No Content)
+
+Errors:
+
+- 401 Unauthorized — Missing/invalid authentication
+- 404 Not Found — Dataset not found or not in your organization

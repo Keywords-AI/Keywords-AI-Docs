@@ -1,0 +1,91 @@
+---
+title: "List logs in a dataset"
+api: "GET https://api.keywordsai.co/api/datasets/{dataset_id}/logs/list/"
+---
+
+This endpoint retrieves the logs that have been added to a dataset. It supports pagination, filtering, and ordering.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+Query Parameters:
+
+- page (integer, optional): Page number for pagination (default: 1)
+- page_size (integer, optional): Number of results per page (default: varies based on pagination settings)
+- order_by (string, optional): Field to order results by (default: unique_id)
+
+Request example:
+
+```bash
+GET /api/datasets/{dataset_id}/logs/list/?page=1&page_size=10
+```
+
+Response (200 OK):
+
+```json
+{
+  "count": 250,
+  "next": "https://api.keywordsai.co/api/datasets/{dataset_id}/logs/list/?page=2&page_size=10",
+  "previous": null,
+  "results": [
+    {
+      "id": "abc123...",
+      "organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
+      "environment": "prod",
+      "timestamp": "2025-10-06T02:40:29.250313Z",
+      "start_time": "2025-10-06T02:40:29.250313Z",
+      "prompt_tokens": 2020,
+      "completion_tokens": 25,
+      "total_request_tokens": 2045,
+      "cost": 0.0010475,
+      "model": "gpt-3.5-turbo",
+      "latency": 0.516,
+      "status_code": 200,
+      "status": "success",
+      "prompt": "Hi, this is Taylor calling from HONK...",
+      "completion": "Alright, so that's about 120 minutes...",
+      "dataset_id": "6dee217e-18c6-468e-ab6d-7b97e2115752",
+      "annotation_status": "completed",
+      "annotation_completed_by": {
+        "first_name": "",
+        "last_name": "",
+        "email": ""
+      },
+      "scores": [...]
+    }
+  ],
+  "filter_options": {
+    "status_code": {...},
+    "model": {...},
+    ...
+  }
+}
+```
+
+Response Fields:
+
+- count (integer): Total number of logs in the dataset matching the filters
+- next (string|null): URL for the next page of results
+- previous (string|null): URL for the previous page of results
+- results (array): Array of log objects with their details
+- filter_options (object): Available filter options for the dataset logs
+- Each log includes:
+  - Basic log metadata (id, timestamp, tokens, cost, latency, etc.)
+  - Model information
+  - Prompt and completion text (if available)
+  - dataset_id: The dataset this log belongs to
+  - annotation_status: Status of human annotation (pending, completed, etc.)
+  - annotation_completed_by: User who completed the annotation
+  - scores: Array of evaluation scores for this log
+
+Errors:
+
+- 401 Unauthorized — Missing/invalid authentication
+- 404 Not Found — Dataset not found or not in your organization
+
+Notes:
+
+- Logs are returned with enriched data including annotation status and evaluation scores
+- The endpoint supports the same filter structure as other log listing endpoints
+- Results are paginated automatically
