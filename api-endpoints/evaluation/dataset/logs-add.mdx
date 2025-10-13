@@ -1,0 +1,37 @@
+---
+title: "Add logs to dataset"
+api: "POST https://api.keywordsai.co/api/datasets/{dataset_id}/logs/create/"
+---
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+Request body:
+
+- start_time (string, required, ISO 8601)
+- end_time (string, required, ISO 8601)
+- filters (object, optional; key name is `filters`)
+- sampling_percentage (integer, optional, default 100)
+
+Request example:
+
+```json
+{
+  "start_time": "2025-07-01T00:00:00Z",
+  "end_time": "2025-07-31T23:59:59Z",
+  "filters": { "status_code": { "operator": "eq", "value": 200 } },
+  "sampling_percentage": 40
+}
+```
+
+Response (200 OK):
+
+```json
+{ "message": "Logs are being added to dataset in the background" }
+```
+
+Errors:
+
+- 400 Bad Request — invalid/missing `start_time`/`end_time`, or exceeds plan limit
+- 404 Not Found — dataset not found or not in your organization

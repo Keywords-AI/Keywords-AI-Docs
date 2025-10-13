@@ -1,0 +1,305 @@
+---
+title: Ingest traces from logs
+api: POST https://api.keywordsai.co/v1/traces/ingest
+---
+Ingest a batch of span logs to construct one or more traces. Use this to import historical data or programmatically build traces when SDK instrumentation isn't feasible.
+
+<Info>
+If you're starting fresh, we recommend using an SDK/integration (e.g., OpenAI Agents SDK) to capture traces automatically. This endpoint is best for bulk import and migration workflows.
+</Info>
+
+<Tip>Example project: [Github Link](https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/example_scripts/python/logs_to_trace)</Tip>
+
+
+## Body
+
+<ParamField path="body" type="array" required>
+Array of span log objects. Each object corresponds to a span within a trace. Spans with the same `trace_unique_id` are grouped into a single trace. Parent-child relationships are inferred via `span_parent_id`. Aligns with the sample payload in the logs_to_trace example.
+
+<ParamField body="trace_unique_id" type="string" required={true}>
+Unique identifier for the trace. All spans with this value are grouped together.
+</ParamField>
+<ParamField body="span_unique_id" type="string" required={true}>
+Unique identifier for the span.
+</ParamField>
+<ParamField body="span_parent_id" type="string">
+Parent span ID; omit or set null for root spans.
+</ParamField>
+<ParamField body="span_name" type="string">
+Name of the span (e.g., "openai.chat", "workflow.start").
+</ParamField>
+<ParamField body="span_workflow_name" type="string">
+Nearest parent workflow name.
+</ParamField>
+<ParamField body="span_path" type="string">
+Nested path within the workflow (e.g., "joke_creation.store_joke").
+</ParamField>
+<ParamField body="start_time" type="string">
+RFC3339 UTC start timestamp.
+</ParamField>
+<ParamField body="timestamp" type="string">
+RFC3339 UTC end/event timestamp.
+</ParamField>
+<ParamField body="latency" type="number">
+Latency in seconds for the span operation.
+</ParamField>
+<ParamField body="input" type="string">
+Raw input string or JSON serialized string used by the span.
+</ParamField>
+<ParamField body="output" type="string">
+Raw output string or JSON serialized string produced by the span.
+</ParamField>
+<ParamField body="model" type="string">
+Model name used by the span (e.g., "gpt-3.5-turbo", "gpt-4o-mini").
+</ParamField>
+<ParamField body="encoding_format" type="string">
+Embedding encoding format for spans that generate embeddings (e.g., "float").
+</ParamField>
+<ParamField body="provider_id" type="string">
+LLM or service provider ID (e.g., "openai").
+</ParamField>
+<ParamField body="prompt_tokens" type="integer">
+Number of prompt tokens used (if applicable).
+</ParamField>
+<ParamField body="completion_tokens" type="integer">
+Number of completion tokens used (if applicable).
+</ParamField>
+<ParamField body="cost" type="float">
+Cost associated with the span (if applicable).
+</ParamField>
+<ParamField body="metadata" type="object">
+Custom attributes as a key-value object.
+</ParamField>
+<ParamField body="warnings" type="string">
+Warnings or notes captured during span execution.
+</ParamField>
+<ParamField body="disable_log" type="boolean">
+Set true to disable logging for the span in observability system.
+</ParamField>
+<ParamField body="disable_fallback" type="boolean">
+Disable fallback behavior for the span if supported.
+</ParamField>
+<ParamField body="keywordsai_params" type="object">
+Additional Keywords AI parameters (e.g., has_webhook, environment).
+</ParamField>
+<ParamField body="temperature" type="number">
+Controls randomness for LLM spans; typical range 0.0–1.0.
+</ParamField>
+<ParamField body="presence_penalty" type="number">
+Presence penalty parameter used in some LLM requests.
+</ParamField>
+<ParamField body="frequency_penalty" type="number">
+Frequency penalty parameter used in some LLM requests.
+</ParamField>
+<ParamField body="max_tokens" type="integer">
+Maximum tokens requested for completion/embedding generations.
+</ParamField>
+<ParamField body="stream" type="boolean">
+Whether streaming was enabled for the span.
+</ParamField>
+<ParamField body="prompt_messages" type="array">
+Array of messages sent to the LLM (each with role and content). Present for chat spans.
+</ParamField>
+<ParamField body="completion_message" type="object">
+Assistant message returned by the LLM (role/content). Present for chat spans.
+</ParamField>
+
+</ParamField>
+
+<RequestExample>
+
+```python Python
+import requests
+
+URL = "https://api.keywordsai.co/v1/traces/ingest"
+headers = {
+    "Authorization": f"Bearer {YOUR_KEYWORDS_AI_API_KEY}",
+    "Content-Type": "application/json",
+}
+
+payload = [
+    {
+        "trace_unique_id": "a-trace-id",
+        "span_unique_id": "root-span-id",
+        "span_name": "pirate_joke_plus_audience_reactions.workflow",
+        "span_parent_id": None,
+        "timestamp": "2025-09-08T07:46:19.041835Z",
+        "start_time": "2025-09-08T07:46:14.007279Z",
+        "span_workflow_name": "pirate_joke_plus_audience_reactions",
+        "span_path": "",
+        "provider_id": "",
+        "model": "python",
+        "input": "{\"args\": [], \"kwargs\": {}}",
+        "output": "\"python\"",
+        "encoding_format": "float",
+        "latency": 5.034556,
+        "keywordsai_params": {"has_webhook": false, "environment": "prod"},
+        "disable_log": false
+    },
+    {
+        "trace_unique_id": "a-trace-id",
+        "span_unique_id": "child-span-id",
+        "span_name": "openai.chat",
+        "span_parent_id": "root-span-id",
+        "timestamp": "2025-09-08T07:46:14.617987Z",
+        "start_time": "2025-09-08T07:46:14.007452Z",
+        "span_workflow_name": "pirate_joke_generator",
+        "span_path": "joke_creation",
+        "provider_id": "openai",
+        "model": "gpt-3.5-turbo",
+        "input": "[{\"role\": \"assistant\", \"content\": \"Why did the opentelemetry developer go broke?\\n\\n\"}, {\"role\": \"user\", \"content\": \"Tell me a joke about opentelemetry\"}]",
+        "output": "{\"role\": \"assistant\", \"content\": \"Why did the opentelemetry developer go broke?\\n\\n\"}",
+        "prompt_messages": [
+            {"role": "assistant", "content": "Why did the opentelemetry developer go broke?\\n\\n"},
+            {"role": "user", "content": "Tell me a joke about opentelemetry"}
+        ],
+        "completion_message": {"role": "assistant", "content": "Why did the opentelemetry developer go broke?\\n\\n"},
+        "encoding_format": "float",
+        "prompt_tokens": 15,
+        "completion_tokens": 10,
+        "cost": 2.25e-05,
+        "latency": 0.610535,
+        "keywordsai_params": {"has_webhook": false, "environment": "prod"},
+        "disable_log": false
+    }
+]
+
+resp = requests.post(URL, json=payload, headers=headers)
+print(resp.status_code)
+print(resp.text)
+```
+
+```typescript TypeScript
+const URL = "https://api.keywordsai.co/v1/traces/ingest";
+const headers = {
+  Authorization: `Bearer ${YOUR_KEYWORDS_AI_API_KEY}`,
+  "Content-Type": "application/json",
+};
+
+const payload = [
+  {
+    trace_unique_id: "a-trace-id",
+    span_unique_id: "root-span-id",
+    span_name: "pirate_joke_plus_audience_reactions.workflow",
+    span_parent_id: null,
+    timestamp: "2025-09-08T07:46:19.041835Z",
+    start_time: "2025-09-08T07:46:14.007279Z",
+    span_workflow_name: "pirate_joke_plus_audience_reactions",
+    span_path: "",
+    provider_id: "",
+    model: "python",
+    input: "{\"args\": [], \"kwargs\": {}}",
+    output: "\"python\"",
+    encoding_format: "float",
+    latency: 5.034556,
+    keywordsai_params: { has_webhook: false, environment: "prod" },
+    disable_log: false
+  },
+  {
+    trace_unique_id: "a-trace-id",
+    span_unique_id: "child-span-id",
+    span_name: "openai.chat",
+    span_parent_id: "root-span-id",
+    timestamp: "2025-09-08T07:46:14.617987Z",
+    start_time: "2025-09-08T07:46:14.007452Z",
+    span_workflow_name: "pirate_joke_generator",
+    span_path: "joke_creation",
+    provider_id: "openai",
+    model: "gpt-3.5-turbo",
+    input: "[{\"role\": \"assistant\", \"content\": \"Why did the opentelemetry developer go broke?\\n\\n\"}, {\"role\": \"user\", \"content\": \"Tell me a joke about opentelemetry\"}]",
+    output: "{\"role\": \"assistant\", \"content\": \"Why did the opentelemetry developer go broke?\\n\\n\"}",
+    prompt_messages: [
+      { role: "assistant", content: "Why did the opentelemetry developer go broke?\\n\\n" },
+      { role: "user", content: "Tell me a joke about opentelemetry" }
+    ],
+    completion_message: { role: "assistant", content: "Why did the opentelemetry developer go broke?\\n\\n" },
+    encoding_format: "float",
+    prompt_tokens: 15,
+    completion_tokens: 10,
+    cost: 2.25e-05,
+    latency: 0.610535,
+    keywordsai_params: { has_webhook: false, environment: "prod" },
+    disable_log: false
+  }
+];
+
+fetch(URL, {
+  method: "POST",
+  headers,
+  body: JSON.stringify(payload),
+})
+  .then((r) => r.json())
+  .then((d) => console.log(d))
+  .catch((e) => console.error(e));
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/v1/traces/ingest" \
+  -H "Authorization: Bearer YOUR_KEYWORDS_AI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '[
+    {
+      "trace_unique_id": "a-trace-id",
+      "span_unique_id": "root-span-id",
+      "span_name": "pirate_joke_plus_audience_reactions.workflow",
+      "span_parent_id": null,
+      "timestamp": "2025-09-08T07:46:19.041835Z",
+      "start_time": "2025-09-08T07:46:14.007279Z",
+      "span_workflow_name": "pirate_joke_plus_audience_reactions",
+      "span_path": "",
+      "provider_id": "",
+      "model": "python",
+      "input": "{\"args\": [], \"kwargs\": {}}",
+      "output": "\"python\"",
+      "encoding_format": "float",
+      "latency": 5.034556,
+      "keywordsai_params": { "has_webhook": false, "environment": "prod" },
+      "disable_log": false
+    },
+    {
+      "trace_unique_id": "a-trace-id",
+      "span_unique_id": "child-span-id",
+      "span_name": "openai.chat",
+      "span_parent_id": "root-span-id",
+      "timestamp": "2025-09-08T07:46:14.617987Z",
+      "start_time": "2025-09-08T07:46:14.007452Z",
+      "span_workflow_name": "pirate_joke_generator",
+      "span_path": "joke_creation",
+      "provider_id": "openai",
+      "model": "gpt-3.5-turbo",
+      "input": "[{\"role\": \"assistant\", \"content\": \"Why did the opentelemetry developer go broke?\\n\\n\"}, {\"role\": \"user\", \"content\": \"Tell me a joke about opentelemetry\"}]",
+      "output": "{\"role\": \"assistant\", \"content\": \"Why did the opentelemetry developer go broke?\\n\\n\"}",
+      "prompt_messages": [
+        { "role": "assistant", "content": "Why did the opentelemetry developer go broke?\\n\\n" },
+        { "role": "user", "content": "Tell me a joke about opentelemetry" }
+      ],
+      "completion_message": { "role": "assistant", "content": "Why did the opentelemetry developer go broke?\\n\\n" },
+      "encoding_format": "float",
+      "prompt_tokens": 15,
+      "completion_tokens": 10,
+      "cost": 0.0000225,
+      "latency": 0.610535,
+      "keywordsai_params": { "has_webhook": false, "environment": "prod" },
+      "disable_log": false
+    }
+  ]'
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "status": "ok",
+  "ingested_spans": 2,
+  "created_traces": 1,
+  "trace_ids": ["a-trace-id"],
+  "errors": []
+}
+```
+</ResponseExample>
+
+<Info>
+Prerequisites for successful ingestion:
+- Accurate timestamps for each span (start_time and/or timestamp) to preserve relative timing within a trace.
+- Properly assigned trace and span IDs that reflect the correct parent-child relationships (trace_unique_id groups spans into a single trace; span_parent_id links children to their parents).
+</Info>

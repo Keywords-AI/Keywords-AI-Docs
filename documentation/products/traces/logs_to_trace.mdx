@@ -1,129 +1,156 @@
 ---
-title: "Create trace from logs"
-description: "Learn how to create a trace by properly formatting a list of logs"
+title: "Ingest traces from logs"
+description: "Import logs or programmatically construct traces by posting a list of span logs to the ingestion endpoint."
 ---
+<Tip>Example project: <a href="https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/example_scripts/python/logs_to_trace" target="_blank" rel="noopener noreferrer">Logs to trace example</a></Tip>
 
-This example demonstrates how to send trace logs to Keywords AI while avoiding ID collisions by processing existing trace data.
+This guide shows how to create traces by sending a list of span logs to the Keywords AI ingestion endpoint.
 
-## Overview
+## Step 1: Prerequisites
 
-As long as the following conditions are met, a list of logs will be aggregated into a trace automatically upon ingestion:
+- API key with access to your workspace
+- Environment variables:
+  - `KEYWORDSAI_API_KEY`
+  - `KEYWORDSAI_BASE_URL`
 
-- Tracing proper timestamps of each span
-- Assigning proper trace and span IDs that represent the correct parent-child relationship
+## Step 2: Understand the payload
 
-## How It Works
+Send an array of JSON objects, each representing a span (log item). Spans with the same `trace_unique_id` are grouped into a single trace. Parent-child relationships are inferred via `span_parent_id`.
 
-The example code:
+Key fields:
+- `trace_unique_id` (string, required) — groups spans into a single trace
+- `span_unique_id` (string, required) — unique ID for the span
+- `span_parent_id` (string, optional) — omit or set `null` for root spans
+- `span_name` (string, optional) — e.g., "openai.chat", "workflow.start"
+- `span_workflow_name` (string, optional) — nearest parent workflow name (not a top-level grouping field)
+- `span_path` (string, optional) — nested path within the workflow
+- `start_time` (RFC3339 UTC, optional)
+- `timestamp` (RFC3339 UTC, optional)
+- `provider_id`, `model`, `input`, `output`, `metadata`, `keywordsai_params`, etc. (optional)
 
-1. Loads sample trace data from a JSON file
-2. Shifts timestamps to current time while preserving relative timing
-3. Remaps trace and span IDs to prevent conflicts with existing traces
-4. Sends processed logs to Keywords AI traces endpoint
+## Step 3: Make the request
 
-## Code Example
+- Endpoint: `{KEYWORDSAI_BASE_URL}/v1/traces/ingest`
+- Authentication: `Authorization: Bearer ${KEYWORDSAI_API_KEY}`
 
-You can find the complete example code in our [GitHub repository](https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/example_scripts/python/logs_to_trace).
+Note: If your organization uses a different ingestion path (e.g., an integration-specific endpoint), use that endpoint instead. TBD
 
-```python
-# Sample code snippet (simplified)
-import json
-import os
-import time
-import uuid
-import requests
-from datetime import datetime, timedelta
+## Payload overview
 
-# Load sample trace data
-with open('trace_logs.json', 'r') as f:
-    logs = json.load(f)
+Send an array of JSON objects. Each object represents a span (log item) that will be assembled into one or more traces.
 
-# Shift timestamps to current time
-current_time = datetime.now()
-base_time = datetime.fromisoformat(logs[0]['timestamp'].replace('Z', '+00:00'))
-time_diff = current_time - base_time
+Field definitions (to be confirmed):
 
-# Generate new trace ID to prevent collisions
-new_trace_id = str(uuid.uuid4())
-id_mapping = {}
+- trace_unique_id: string — groups spans into a single trace. Required
+- span_unique_id: string — unique ID for the span. Required
+- span_parent_id: string — parent span’s unique ID; omit or set null for root. Optional
+- span_name: string — name of the span (e.g., "openai.chat"). Optional
+- span_workflow_name: string — name of the workflow or top-level process. Optional
+- span_path: string — nested function/path of the workflow. Optional
+- timestamp: ISO 8601 / RFC3339 (UTC) — event/end time. Required?
+- start_time: ISO 8601 / RFC3339 (UTC) — start time. Required?
+- input/output: string or JSON. Optional
+- provider_id: string — e.g., "openai". Optional
+- latency: number (seconds). Optional
+- metadata: object — custom attributes. Optional
+- keywordsai_params: object — additional Keywords AI params. Optional
 
-# Process each log
-for log in logs:
-    # Update timestamp
-    log_time = datetime.fromisoformat(log['timestamp'].replace('Z', '+00:00'))
-    new_time = log_time + time_diff
-    log['timestamp'] = new_time.isoformat()
-    
-    # Remap IDs
-    old_span_id = log['span_id']
-    if old_span_id not in id_mapping:
-        id_mapping[old_span_id] = str(uuid.uuid4())
-    log['span_id'] = id_mapping[old_span_id]
-    
-    # Update trace ID
-    log['trace_id'] = new_trace_id
-    
-    # Update parent span ID if present
-    if 'parent_span_id' in log and log['parent_span_id']:
-        old_parent_id = log['parent_span_id']
-        if old_parent_id not in id_mapping:
-            id_mapping[old_parent_id] = str(uuid.uuid4())
-        log['parent_span_id'] = id_mapping[old_parent_id]
+Validation and construction rules (to be confirmed):
 
-# Send logs to Keywords AI
-api_key = os.environ.get('KEYWORDSAI_API_KEY')
-base_url = os.environ.get('KEYWORDSAI_BASE_URL', 'https://api.keywordsai.co')
+- Spans with the same `trace_unique_id` will be grouped into a single trace.
+- Hierarchy is inferred from `span_parent_id` relationships.
+- Timestamps should be in UTC using a Z suffix or timezone offset.
+- Span IDs should be unique across a trace; avoid collisions with existing traces. TBD
+- Maximum payload size, rate limits, and ordering requirements. TBD
 
-headers = {
-    'Authorization': f'Bearer {api_key}',
-    'Content-Type': 'application/json'
-}
-
-response = requests.post(
-    f"{base_url}/api/traces/",
-    headers=headers,
-    json=logs
-)
-
-print(f"Response: {response.status_code}")
-print(response.json())
+## Minimal request example
+<CodeGroup>
+```bash Bash
+curl -X POST "$KEYWORDSAI_BASE_URL/v1/traces/ingest" \
+  -H "Authorization: Bearer $KEYWORDSAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '[
+    {
+      "trace_unique_id": "a-trace-id",
+      "span_unique_id": "root-span-id",
+      "span_name": "workflow.start",
+      "span_parent_id": null,
+      "timestamp": "2025-09-08T07:46:14.007279Z",
+      "start_time": "2025-09-08T07:46:14.007279Z"
+    },
+    {
+      "trace_unique_id": "a-trace-id",
+      "span_unique_id": "child-span-id",
+      "span_name": "openai.chat",
+      "span_parent_id": "root-span-id",
+      "timestamp": "2025-09-08T07:46:19.041835Z",
+      "start_time": "2025-09-08T07:46:18.037942Z"
+    }
+  ]'
 ```
+```python Python
+import os
+import requests
 
-## Setup
+BASE_URL = os.getenv("KEYWORDSAI_BASE_URL")
+API_KEY = os.getenv("KEYWORDSAI_API_KEY")
 
-To run this example:
+payload = [
+    {
+        "trace_unique_id": "a-trace-id",
+        "span_unique_id": "root-span-id",
+        "span_name": "workflow.start",
+        "span_parent_id": None,
+        "timestamp": "2025-09-08T07:46:14.007279Z",
+        "start_time": "2025-09-08T07:46:14.007279Z",
+    },
+    {
+        "trace_unique_id": "a-trace-id",
+        "span_unique_id": "child-span-id",
+        "span_name": "openai.chat",
+        "span_parent_id": "root-span-id",
+        "timestamp": "2025-09-08T07:46:19.041835Z",
+        "start_time": "2025-09-08T07:46:18.037942Z",
+    },
+]
 
-1. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+resp = requests.post(
+    f"{BASE_URL}/v1/traces/ingest",
+    json=payload,
+    headers={"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"},
+)
+print("Status:", resp.status_code)
+print("Body:", resp.text)
+```
+```typescript Typescript
+const URL = `${process.env.KEYWORDSAI_BASE_URL}/v1/traces/ingest`;
+const headers = {
+  Authorization: `Bearer ${process.env.KEYWORDSAI_API_KEY}`,
+  "Content-Type": "application/json",
+};
 
-2. Set environment variables:
-   ```bash
-   # Windows
-   set KEYWORDSAI_API_KEY=your_api_key
-   set KEYWORDSAI_BASE_URL=https://api.keywordsai.co
-   
-   # Linux/Mac
-   export KEYWORDSAI_API_KEY=your_api_key
-   export KEYWORDSAI_BASE_URL=https://api.keywordsai.co
-   ```
+const payload = [
+  {
+    trace_unique_id: "a-trace-id",
+    span_unique_id: "root-span-id",
+    span_name: "workflow.start",
+    span_parent_id: null,
+    timestamp: "2025-09-08T07:46:14.007279Z",
+    start_time: "2025-09-08T07:46:14.007279Z",
+  },
+  {
+    trace_unique_id: "a-trace-id",
+    span_unique_id: "child-span-id",
+    span_name: "openai.chat",
+    span_parent_id: "root-span-id",
+    timestamp: "2025-09-08T07:46:19.041835Z",
+    start_time: "2025-09-08T07:46:18.037942Z",
+  },
+];
 
-3. Run the example:
-   ```bash
-   python main.py
-   ```
-
-## Key Concepts
-
-### Trace and Span IDs
-
-Each trace has a unique `trace_id` that groups all related spans together. Each individual operation within the trace has its own `span_id`. Parent-child relationships are established using the `parent_span_id` field.
-
-### Timestamps
-
-Accurate timestamps are crucial for proper trace visualization. Each span must have a timestamp that reflects when it occurred, and the relative timing between spans must be preserved.
-
-### Automatic Trace Construction
-
-When properly formatted logs are sent to Keywords AI, the system automatically constructs the trace based on the IDs and timestamps. This allows you to visualize the flow and timing of your application's operations.
+fetch(URL, { method: "POST", headers, body: JSON.stringify(payload) })
+  .then((r) => r.json())
+  .then((d) => console.log(d))
+  .catch((e) => console.error(e));
+```
+</CodeGroup>

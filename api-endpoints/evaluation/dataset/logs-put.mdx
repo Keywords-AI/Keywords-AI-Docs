@@ -1,0 +1,99 @@
+---
+title: "Update log"
+api: "PUT https://api.keywordsai.co/api/datasets/{dataset_id}/logs/{log_id}/"
+---
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+Request body:
+
+```json
+{
+  "messages": [
+    {
+      "role": "user",
+      "content": "What is the capital of France?"
+    },
+    {
+      "role": "assistant", 
+      "content": "The capital of France is Paris."
+    }
+  ],
+  "model": "gpt-4",
+  "parameters": {
+    "temperature": 0.7,
+    "max_tokens": 150
+  },
+  "metadata": {
+    "user_id": "user123",
+    "session_id": "session456"
+  }
+}
+```
+
+Request example:
+
+```bash
+curl -X PUT "https://api.keywordsai.co/api/datasets/{dataset_id}/logs/{log_id}/" \
+  -H "Authorization: Bearer <API key>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      {
+        "role": "user",
+        "content": "What is the capital of France?"
+      },
+      {
+        "role": "assistant",
+        "content": "The capital of France is Paris."
+      }
+    ],
+    "model": "gpt-4",
+    "parameters": {
+      "temperature": 0.7,
+      "max_tokens": 150
+    },
+    "metadata": {
+      "user_id": "user123",
+      "session_id": "session456"
+    }
+  }'
+```
+
+Response (200 OK):
+
+```json
+{
+  "id": "log_12345",
+  "dataset_id": "dataset_67890",
+  "messages": [
+    {
+      "role": "user",
+      "content": "What is the capital of France?"
+    },
+    {
+      "role": "assistant",
+      "content": "The capital of France is Paris."
+    }
+  ],
+  "model": "gpt-4",
+  "parameters": {
+    "temperature": 0.7,
+    "max_tokens": 150
+  },
+  "metadata": {
+    "user_id": "user123",
+    "session_id": "session456"
+  },
+  "created_at": "2024-01-15T10:30:00Z",
+  "updated_at": "2024-01-15T11:45:00Z"
+}
+```
+
+Errors:
+
+- 401 Unauthorized — Missing/invalid authentication
+- 404 Not Found — Dataset or log not found
+- 400 Bad Request — Invalid request body

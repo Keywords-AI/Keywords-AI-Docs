@@ -1,0 +1,70 @@
+---
+title: "Get single log"
+api: "GET https://api.keywordsai.co/api/datasets/{dataset_id}/logs/{log_id}/"
+---
+
+This endpoint retrieves the complete object for a single log within a dataset, including all prompt/completion text and metadata.
+
+## Authentication
+
+- JWT: `Authorization: Bearer <JWT token>`
+
+Request example:
+
+```bash
+GET /api/datasets/{dataset_id}/logs/{log_id}/
+```
+
+Response (200 OK):
+
+```json
+{
+  "id": "888d342383e844e185e9cd80b63e4eb1",
+  "organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
+  "organization_key_id": "h5vo0ju3.sha512$$...",
+  "environment": "prod",
+  "timestamp": "2025-10-06T02:17:58.639822Z",
+  "start_time": "2025-10-06T02:17:58.639822Z",
+  "prompt_id": "",
+  "prompt_name": "",
+  "trace_unique_id": "",
+  "customer_identifier": "test_customer_identifier",
+  "thread_identifier": "thread_id_num_1",
+  "custom_identifier": "",
+  "unique_organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
+  "log_type": "text",
+  "prompt_tokens": 415,
+  "completion_tokens": 12,
+  "total_request_tokens": 427,
+  "cost": 0.0002285,
+  "model": "gpt-3.5-turbo",
+  "latency": 0.451,
+  "tokens_per_second": 26.60753880266075,
+  "time_to_first_token": 0.29,
+  "routing_time": 0.0,
+  "status_code": 200,
+  "status": "success",
+  "blurred": false,
+  "metadata": {
+    "call_id": "thread_id_num_1",
+    "agent_id": "agent_5b91562cab41dd0038499773c6",
+    "provider": "azure_openai",
+    "use_case": "response"
+  },
+  "system": "## Identity\nYou are Jordan, a helpful dispatcher...",
+  "prompt": "Full prompt text here...",
+  "completion": "Full completion text here...",
+  "messages": [...],
+  "dataset_id": "6dee217e-18c6-468e-ab6d-7b97e2115752"
+}
+```
+
+Errors:
+
+- 401 Unauthorized — Missing/invalid authentication
+- 404 Not Found — Log not found in the dataset or dataset not found
+
+Notes:
+
+- This endpoint returns the complete log object, including full prompt and completion text
+- The endpoint uses JWT authentication (not API key)

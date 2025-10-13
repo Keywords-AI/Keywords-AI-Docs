@@ -1,0 +1,44 @@
+---
+title: "List datasets"
+api: "GET https://api.keywordsai.co/api/datasets/list/"
+---
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+Response (200 OK):
+
+```json
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": "6d0b2c7e-3a6a-4c09-9c7e-1f2d9e2d3f0a",
+      "organization_id": 123,
+      "updated_by": {
+        "first_name": "Ann",
+        "last_name": "Lee",
+        "email": "ann@example.com"
+      },
+      "log_count": 250,
+      "name": "Support Conversations - July",
+      "log_ids": ["..."],
+      "description": "Sampled support chats for July",
+      "type": "sampling",
+      "status": "ready",
+      "created_at": "2025-07-26T00:00:00Z",
+      "updated_at": "2025-07-27T08:10:00Z",
+      "completed_annotation_count": 0,
+      "running_status": "pending",
+      "running_progress": 0
+    }
+  ]
+}
+```
+
+Errors:
+
+- 401 Unauthorized — Missing/invalid authentication
