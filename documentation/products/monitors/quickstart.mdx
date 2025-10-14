@@ -1,0 +1,71 @@
+---
+title: Quickstart 
+description: This is a guide for you to create a monitor on the platform. 
+---
+
+## What is a monitor? 
+A monitor is a tool that helps you to monitor your LLM applications. You can set up metrics and alerts to monitor system performance.
+
+## How to create a monitor?
+
+### 1. Create a condition
+
+Start by defining a **condition**, which specifies when an alert should be triggered.  
+Go to [Conditions](https://platform.keywordsai.co/platform/api/conditions).
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/conditions/create-condition.png"/>
+</Frame>
+
+You can choose one of the following **condition types**:
+- **Single log** – triggers when a specific log matches the rule.
+- **Aggregation** – triggers based on aggregated metrics over time.
+
+When selecting **Aggregation**, you’ll see the **Time step** option.  
+This defines the time interval used for metric aggregation (e.g., every 5 minutes).
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/conditions/condition-policy.png"/>
+</Frame>
+
+Next, configure the **policy** for the condition.  
+You can set the **policy type** to either `Alert` or `Warning`, and define it in **JSON** format.
+
+For example, the policy shown above triggers an alert when there are more than 10 HTTP errors (`400`, `401`, `403`, `404`, `500`) within a 5-minute window.
+
+---
+
+### 2. Create a notification
+
+After defining your condition, set up a **notification channel** to receive alerts.  
+Go to [Notifications](https://platform.keywordsai.co/platform/api/notifications).
+
+Currently supported channels:
+- **Email**
+- **Slack**
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/notifications/create-notification.png"/>
+</Frame>
+
+---
+
+### 3. Create a monitor
+
+Once your condition and notification are ready, navigate to [Monitors](https://platform.keywordsai.co/platform/monitors) and create a new **monitor**.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/monitors/create-monitor.png"/>
+</Frame>
+
+In the creation form:
+1. Select the **condition** you want to track.  
+2. Choose the **notification** method.  
+3. Set the **severity** level for the alert (e.g., Warning or Critical).
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/monitors/monitor-detail.png"/>
+</Frame>
+
+After saving, your monitor will appear in the [Monitors](https://platform.keywordsai.co/platform/monitors) list.  
+When the defined condition is met, alerts will automatically be sent through the selected notification channel.
