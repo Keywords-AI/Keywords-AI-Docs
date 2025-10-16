@@ -95,6 +95,9 @@ For example:
 
 <ParamField query="include_fields" type="string">
   Comma separated fields to be included in the response logs. This parameter allows you to specify which fields should be returned to improve performance and reduce response size.
+  <Note>
+    include_fields guarantees the listed fields will be present in each log item, but it does not enforce exclusivity. The API may still return additional fields required for the endpoint (e.g., identifiers, pagination-related fields, or internal metadata).
+  </Note>
   <Accordion title="Example">
     ```
     include_fields=custom_identifier,customer_identifier,id,latency
