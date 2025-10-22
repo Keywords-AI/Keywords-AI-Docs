@@ -25,7 +25,7 @@
             "group": "Get started",
             "pages": [
               "get-started/overview",
-                {
+              {
                 "group": "Quickstart",
                 "pages": [
                   "/get-started/quickstart/logging",
@@ -33,10 +33,9 @@
                   "/get-started/quickstart/gateway",
                   "/get-started/quickstart/prompt_management",
                   "/get-started/quickstart/evaluation"
-
                 ]
               },
-              "/get-started/observability_data_model"          
+              "/get-started/observability_data_model"
             ]
           },
           {
@@ -66,7 +65,7 @@
                   "documentation/products/logs/configuration/group_logs",
                   "documentation/products/logs/custom_model",
                   "documentation/products/logs/filters",
-                  "documentation/products/logs/sharing",                
+                  "documentation/products/logs/sharing",
                   {
                     "group": "Providers",
                     "pages": [
@@ -323,74 +322,81 @@
         "tab": "API reference",
         "groups": [
           {
-            "group": "Integration methods",
+            "group": "Observability",
             "pages": [
-              "api-endpoints/integration/request-logging-endpoint",
-              "api-endpoints/integration/chat-completions"
+              {
+                "group": "Logs",
+                "pages": [
+                  "api-endpoints/integration/request-logging-endpoint",
+                  "api-endpoints/async-endpoints/logs-list-endpoint",
+                  "api-endpoints/async-endpoints/traces-ingest-from-logs"
+                ]
+              },
+              {
+                "group": "Traces",
+                "pages": [
+                  "api-endpoints/trace/list",
+                  "api-endpoints/trace/get",
+                  "api-endpoints/trace/summary",
+                  "api-endpoints/async-endpoints/traces-ingest-from-logs"
+                ]
+              },
+              {
+                "group": "Threads",
+                "pages": [
+                  "api-endpoints/async-endpoints/thread-list-endpoint"
+                ]
+              },
+              {
+                "group": "Users",
+                "pages": [
+                  "api-endpoints/async-endpoints/user-creation-endpoint",
+                  "api-endpoints/async-endpoints/users-data-endpoint",
+                  "api-endpoints/async-endpoints/user-detail-endpoint",
+                  "api-endpoints/async-endpoints/user-update-endpoint"
+                ]
+              }
             ]
           },
           {
-            "group": "Logs",
+            "group": "Develop",
             "pages": [
-              "api-endpoints/async-endpoints/logs-list-endpoint",
-              "api-endpoints/async-endpoints/traces-ingest-from-logs"
-            ]
-          },
-          {
-            "group": "Threads",
-            "pages": [
-              "api-endpoints/async-endpoints/thread-list-endpoint"
-            ]
-          },
-          {
-            "group": "Prompts",
-            "pages": [
-              "api-endpoints/prompt-endpoints/create-prompts",
-              "api-endpoints/prompt-endpoints/get-prompts",
-              "api-endpoints/prompt-endpoints/update-prompt",
-              "api-endpoints/prompt-endpoints/delete-prompt"
-            ]
-          },
-          {
-            "group": "Prompt versions",
-            "pages": [
-              "api-endpoints/prompt-endpoints/create-prompt-version",
-              "api-endpoints/prompt-endpoints/get-prompt-versions",
-              "api-endpoints/prompt-endpoints/update-prompt-version",
-              "api-endpoints/prompt-endpoints/delete-prompt-version"
-            ]
-          },
-          {
-            "group": "Multimodal integrations",
-            "pages": [
-              "api-endpoints/integration/text-to-speech",
-              "api-endpoints/integration/speech-to-text",
-              "api-endpoints/integration/embeddings"
-            ]
-          },
-          {
-            "group": "User",
-            "pages": [
-              "api-endpoints/async-endpoints/user-creation-endpoint",
-              "api-endpoints/async-endpoints/users-data-endpoint",
-              "api-endpoints/async-endpoints/user-detail-endpoint",
-              "api-endpoints/async-endpoints/user-update-endpoint"
-            ]
-          },
-          {
-            "group": "Model",
-            "pages": [
-              "api-endpoints/data-endpoints/models-endpoint"
-            ]
-          },
-          {
-            "group": "API keys management",
-            "pages": [
-              "api-endpoints/temporary-api-keys/create-temporary-key",
-              "api-endpoints/temporary-api-keys/list-temporary-keys",
-              "api-endpoints/temporary-api-keys/retrieve-temporary-key",
-              "api-endpoints/temporary-api-keys/update-temporary-key",
-              "api-endpoints/temporary-api-keys/delete-temporary-key"
+              {
+                "group": "Gateway",
+                "pages": [
+                  "api-endpoints/integration/chat-completions",
+                  "api-endpoints/integration/embeddings",
+                  "api-endpoints/integration/speech-to-text",
+                  "api-endpoints/integration/text-to-speech"
+                ]
+              },
+              {
+                "group": "Multimodal",
+                "pages": [
+                  "api-endpoints/integration/embeddings",
+                  "api-endpoints/integration/speech-to-text",
+                  "api-endpoints/integration/text-to-speech"
+                ]
+              },
+              {
+                "group": "Prompts",
+                "pages": [
+                  "api-endpoints/prompt-endpoints/create-prompts",
+                  "api-endpoints/prompt-endpoints/get-prompts",
+                  "api-endpoints/prompt-endpoints/update-prompt",
+                  "api-endpoints/prompt-endpoints/delete-prompt",
+                  "api-endpoints/prompt-endpoints/create-prompt-version",
+                  "api-endpoints/prompt-endpoints/get-prompt-versions",
+                  "api-endpoints/prompt-endpoints/update-prompt-version",
+                  "api-endpoints/prompt-endpoints/delete-prompt-version"
+                ]
+              },
+              {
+                "group": "Models",
+                "pages": [
+                  "api-endpoints/data-endpoints/models-endpoint"
+                ]
+              }
             ]
           },
           {
@@ -409,7 +415,7 @@
                 ]
               },
               {
-                "group": "Dataset",
+                "group": "Datasets",
                 "pages": [
                   "api-endpoints/evaluation/dataset/get",
                   "api-endpoints/evaluation/dataset/list",
@@ -444,7 +450,27 @@
                   "api-endpoints/evaluation/log-scores/delete"
                 ]
               },
-              "api-endpoints/async-endpoints/evaluations"
+              {
+                "group": "Async jobs",
+                "pages": [
+                  "api-endpoints/async-endpoints/evaluations"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Manage",
+            "pages": [
+              {
+                "group": "API Keys",
+                "pages": [
+                  "api-endpoints/temporary-api-keys/create-temporary-key",
+                  "api-endpoints/temporary-api-keys/list-temporary-keys",
+                  "api-endpoints/temporary-api-keys/retrieve-temporary-key",
+                  "api-endpoints/temporary-api-keys/update-temporary-key",
+                  "api-endpoints/temporary-api-keys/delete-temporary-key"
+                ]
+              }
             ]
           }
         ]

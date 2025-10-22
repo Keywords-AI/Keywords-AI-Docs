@@ -1,0 +1,170 @@
+---
+title: "Get trace details"
+api: "GET https://api.keywordsai.co/api/traces/{trace_unique_id}/"
+---
+
+Retrieves detailed information about a specific trace, including the complete span tree with full input/output for all spans.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `trace_unique_id` | string | Yes | Unique trace identifier |
+
+## Query Parameters (Optional)
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `environment` | string | Filter by environment |
+| `timestamp` | ISO 8601 | Exact timestamp of the trace |
+| `start_time` | ISO 8601 | Start of time range |
+| `end_time` | ISO 8601 | End of time range |
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+trace_id = "trace_abc123"
+url = f"https://api.keywordsai.co/api/traces/{trace_id}/"
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/api/traces/trace_abc123/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "trace_abc123",
+  "trace_unique_id": "trace_abc123",
+  "start_time": "2024-01-15T10:30:00Z",
+  "end_time": "2024-01-15T10:30:02.5Z",
+  "duration": 2.5,
+  "span_count": 3,
+  "llm_call_count": 2,
+  "total_prompt_tokens": 150,
+  "total_completion_tokens": 75,
+  "total_tokens": 225,
+  "total_cost": 0.00345,
+  "error_count": 0,
+  "metadata": {"user_id": "user123"},
+  "customer_identifier": "user@example.com",
+  "environment": "production",
+  "span_tree": [
+    {
+      "id": "span_1",
+      "span_unique_id": "span_1",
+      "span_name": "chat_completion",
+      "span_parent_id": null,
+      "log_type": "CHAT",
+      "timestamp": "2024-01-15T10:30:02Z",
+      "start_time": "2024-01-15T10:30:00Z",
+      "latency": 2.0,
+      "trace_unique_id": "trace_abc123",
+      "input": {
+        "messages": [{"role": "user", "content": "Explain quantum computing"}],
+        "model": "gpt-4",
+        "temperature": 0.7
+      },
+      "output": {
+        "id": "chatcmpl-abc123",
+        "choices": [
+          {
+            "message": {"role": "assistant", "content": "Quantum computing is a revolutionary technology..."},
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {"prompt_tokens": 50, "completion_tokens": 75, "total_tokens": 125}
+      },
+      "model": "gpt-4",
+      "prompt_tokens": 50,
+      "completion_tokens": 75,
+      "cost": 0.00345,
+      "status": "success",
+      "status_code": 200,
+      "children": [
+        {
+          "span_unique_id": "span_2",
+          "span_name": "tool_call",
+          "span_parent_id": "span_1",
+          "log_type": "FUNCTION",
+          "start_time": "2024-01-15T10:30:00.5Z",
+          "timestamp": "2024-01-15T10:30:01Z",
+          "latency": 0.5,
+          "input": {"tool_name": "search", "query": "quantum computing basics"},
+          "output": {"results": ["Result 1", "Result 2"]},
+          "children": []
+        },
+        {
+          "span_unique_id": "span_3",
+          "span_name": "summarize",
+          "span_parent_id": "span_1",
+          "log_type": "TASK",
+          "start_time": "2024-01-15T10:30:01.5Z",
+          "timestamp": "2024-01-15T10:30:02Z",
+          "latency": 0.5,
+          "input": {"text": "Long text to summarize..."},
+          "output": {"summary": "Short summary"},
+          "children": []
+        }
+      ]
+    }
+  ]
+}
+```
+</ResponseExample>
+
+### Span Tree Structure
+
+The `span_tree` field contains an array of root-level spans. Each span can have nested `children` spans, forming a hierarchical tree structure.
+
+### Key Span Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `span_unique_id` | string | Unique span identifier |
+| `span_name` | string | Name of the operation |
+| `span_parent_id` | string/null | Parent span ID (null for root) |
+| `log_type` | string | Span type (CHAT, COMPLETION, FUNCTION, TASK, etc.) |
+| `start_time` | datetime | When the span started |
+| `timestamp` | datetime | When the span ended |
+| `latency` | float | Duration in seconds |
+| `input` | object | Full span input |
+| `output` | object | Full span output |
+| `model` | string | Model used (for LLM spans) |
+| `prompt_tokens` | integer | Input tokens |
+| `completion_tokens` | integer | Output tokens |
+| `cost` | float | Cost in USD |
+| `status` | string | Status (success, error) |
+| `status_code` | integer | HTTP-like status code |
+| `children` | array | Nested child spans |
+
+## Error Responses
+
+```json 404 Not Found
+{ "error": "Trace not found" }
+```
+
+```json 401 Unauthorized
+{ "detail": "Your API key is invalid or expired, please check your API key at https://platform.keywordsai.co/platform/api/api-keys" }
+```
