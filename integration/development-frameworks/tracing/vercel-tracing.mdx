@@ -111,7 +111,6 @@ export function register() {
 }
 ```
 
-
 ### Step 3: Configure Environment Variables
 Add your KeywordsAI credentials to your `.env.local` file:
 
@@ -137,23 +136,25 @@ export const maxDuration = 30;
 export async function POST(req: Request) {
   const { messages, id } = await req.json();
 
-  console.log('chat id', id);
-
   const result = streamText({
     model: openai('gpt-4o'),
     messages,
-    async onFinish({ text, toolCalls, toolResults, usage, finishReason }) {
-      // implement your own logic here, e.g. for storing messages
-      // or recording token usage
-    },
     experimental_telemetry: {
-      isEnabled: true,  // <---- Enable telemetry tracking
+      isEnabled: true,
+      // Pass custom metadata to KeywordsAI
+      metadata: {
+        customer_identifier: 'customer_from_metadata',
+        prompt_unit_price: 10000, // customize based on your pricing needs
+      },
     },
   });
 
   return result.toDataStreamResponse();
 }
 ```
+
+Here is the example on how to set parameters for tracing when using vercel AI sdk: [Github](https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/vercel_ai_next_openai/app/api/chat)
+
 
 ### Step 5: Test Your Setup
 1. Start your development server:
