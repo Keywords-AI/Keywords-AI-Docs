@@ -1,0 +1,183 @@
+---
+title: "List traces"
+api: "POST https://api.keywordsai.co/api/traces/list/"
+---
+
+Retrieves a paginated list of traces matching your filters. This endpoint supports both `POST` (recommended for complex filters) and `GET` for simple queries.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Query Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `start_time` | ISO 8601 | 1 hour ago | Start of time range |
+| `end_time` | ISO 8601 | Current time | End of time range |
+| `page` | integer | 1 | Page number |
+| `page_size` | integer | 50 | Results per page (max 1000) |
+| `sort_by` | string | `-timestamp` | Sort field (prefix `-` for descending) |
+| `environment` | string | All | Filter by environment |
+
+### Supported Sort Fields
+
+- `timestamp`, `start_time`, `end_time`, `duration`
+- `total_cost`, `total_tokens`, `total_prompt_tokens`, `total_completion_tokens`
+- `span_count`, `llm_call_count`, `error_count`
+
+## Request Body (POST)
+
+Use filters to refine results server-side. See the [Filters API Reference](/api-endpoints/shared/filters_api_reference) for operators and format.
+
+<RequestExample>
+```json Request
+{
+  "filters": {
+    "total_cost": {
+      "operator": "gte",
+      "value": [0.01]
+    },
+    "customer_identifier": {
+      "operator": "",
+      "value": ["user@example.com"]
+    }
+  }
+}
+```
+</RequestExample>
+
+### Available Filter Fields
+
+- `trace_unique_id`, `customer_identifier`, `environment`
+- `span_count`, `llm_call_count`, `error_count`
+- `total_cost`, `total_tokens`, `total_prompt_tokens`, `total_completion_tokens`
+- `duration`, `workflow_name` (span_workflow_name)
+- Custom metadata via `metadata__your_field`
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/traces/list/"
+headers = {"Authorization": "Bearer YOUR_API_KEY", "Content-Type": "application/json"}
+params = {
+    "start_time": "2024-01-15T00:00:00Z",
+    "end_time": "2024-01-15T23:59:59Z",
+    "page_size": 20,
+    "sort_by": "-total_cost"
+}
+
+body = {
+    "filters": {
+        "environment": {"operator": "", "value": ["production"]},
+        "total_cost": {"operator": "gte", "value": [0.01]}
+    }
+}
+
+response = requests.post(url, headers=headers, params=params, json=body)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/traces/list/?start_time=2024-01-15T00:00:00Z&end_time=2024-01-15T23:59:59Z&page_size=20&sort_by=-total_cost" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filters": {
+      "total_cost": {"operator": "gte", "value": [0.01]},
+      "environment": {"operator": "", "value": ["production"]}
+    }
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "count": 150,
+  "next": "https://api.keywordsai.co/api/traces/list/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "id": "trace_abc123",
+      "trace_unique_id": "trace_abc123",
+      "start_time": "2024-01-15T10:30:00Z",
+      "end_time": "2024-01-15T10:30:02.5Z",
+      "duration": 2.5,
+      "span_count": 5,
+      "llm_call_count": 2,
+      "total_prompt_tokens": 150,
+      "total_completion_tokens": 75,
+      "total_tokens": 225,
+      "total_cost": 0.00345,
+      "error_count": 0,
+      "input": {
+        "messages": [{"role": "user", "content": "Explain quantum computing"}]
+      },
+      "output": {
+        "choices": [
+          {
+            "message": {"role": "assistant", "content": "Quantum computing is..."}
+          }
+        ]
+      },
+      "metadata": {"user_id": "user123", "session_id": "session456"},
+      "customer_identifier": "user@example.com",
+      "environment": "production",
+      "trace_group_identifier": "workflow_v1",
+      "name": "chat_completion",
+      "model": "gpt-4"
+    }
+  ]
+}
+```
+</ResponseExample>
+
+### Field Descriptions
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `trace_unique_id` | string | Unique trace identifier |
+| `start_time` | datetime | When the trace started |
+| `end_time` | datetime | When the trace ended |
+| `duration` | float | Total duration in seconds |
+| `span_count` | integer | Total spans in the trace |
+| `llm_call_count` | integer | Number of LLM calls |
+| `total_prompt_tokens` | integer | Sum of input tokens |
+| `total_completion_tokens` | integer | Sum of output tokens |
+| `total_tokens` | integer | Total tokens used |
+| `total_cost` | float | Total cost in USD |
+| `error_count` | integer | Number of errors |
+| `input` | object | Root span's input (full object) |
+| `output` | object | Root span's output (full object) |
+| `metadata` | object | Custom metadata |
+| `customer_identifier` | string | Customer/user identifier |
+| `environment` | string | Environment (e.g., production, test) |
+| `trace_group_identifier` | string | Workflow group identifier |
+| `name` | string | Root span name |
+| `model` | string | Primary model used |
+
+## Error Responses
+
+```json 400 Bad Request
+{ "detail": "Invalid parameters or filters" }
+```
+
+```json 401 Unauthorized
+{ "detail": "Your API key is invalid or expired, please check your API key at https://platform.keywordsai.co/platform/api/api-keys" }
+```
+
+```json 500 Internal Server Error
+{ "detail": "Server error" }
+```

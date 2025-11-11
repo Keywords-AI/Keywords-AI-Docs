@@ -1,0 +1,108 @@
+---
+title: "Get traces summary"
+api: "POST https://api.keywordsai.co/clickhouse/traces/summary/"
+---
+
+Retrieves aggregated summary statistics for traces matching your filters.
+
+Note: This endpoint is currently available at `/clickhouse/traces/summary/`. A version under `/api/` (`/api/traces/summary/`) is planned.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Query Parameters
+
+Same as the List Traces endpoint.
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `start_time` | ISO 8601 | 1 hour ago | Start of time range |
+| `end_time` | ISO 8601 | Current time | End of time range |
+| `environment` | string | All | Filter by environment |
+
+## Request Body (POST)
+
+Use filters to refine results server-side. See the [Filters API Reference](/api-endpoints/shared/filters_api_reference) for operators and format.
+
+<RequestExample>
+```json Request
+{
+  "filters": {
+    "environment": {
+      "operator": "",
+      "value": ["production"]
+    }
+  }
+}
+```
+</RequestExample>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/clickhouse/traces/summary/"
+headers = {"Authorization": "Bearer YOUR_API_KEY", "Content-Type": "application/json"}
+params = {"start_time": "2024-01-15T00:00:00Z", "end_time": "2024-01-15T23:59:59Z"}
+body = {"filters": {"environment": {"operator": "", "value": ["production"]}}}
+
+response = requests.post(url, headers=headers, params=params, json=body)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/clickhouse/traces/summary/?start_time=2024-01-15T00:00:00Z&end_time=2024-01-15T23:59:59Z" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filters": {
+      "environment": {"operator": "", "value": ["production"]}
+    }
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "total_count": 150,
+  "total_cost": 52.45,
+  "total_prompt_tokens": 125000,
+  "total_completion_tokens": 67500,
+  "total_tokens": 192500,
+  "average_cost": 0.3497,
+  "average_prompt_tokens": 833,
+  "average_completion_tokens": 450,
+  "average_tokens": 1283,
+  "total_duration": 450.5,
+  "average_duration": 3.003,
+  "total_span_count": 525,
+  "average_span_count": 3.5,
+  "total_llm_call_count": 300,
+  "average_llm_call_count": 2.0,
+  "total_error_count": 5,
+  "error_rate": 0.033
+}
+```
+</ResponseExample>
+
+## Error Responses
+
+```json 400 Bad Request
+{ "detail": "Invalid parameters or filters" }
+```
+
+```json 401 Unauthorized
+{ "detail": "Your API key is invalid or expired, please check your API key at https://platform.keywordsai.co/platform/api/api-keys" }
+```

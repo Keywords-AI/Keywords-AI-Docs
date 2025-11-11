@@ -543,6 +543,13 @@ This parameter specifies the cache options. Currently we support `cache_by_custo
 ```
 </ParamField>
 
+<Note>
+- OpenAI-style responses surface cached prompt tokens in `usage.prompt_tokens_details.cached_tokens`. When cache entries are created, `usage.prompt_tokens_details.cache_creation_tokens` may be present.
+- Anthropic-style responses also include `usage.cache_read_input_tokens` (tokens read from cache) and `usage.cache_creation_input_tokens` (tokens added to cache). Depending on the model/provider, you may see both the `prompt_tokens_details` and `cache_*` fields.
+- If caching didn’t occur for a call, these values are `0` or may be omitted by the provider.
+</Note>
+
+
 <ParamField body="prompt" type="object">
   The prompt template to use for the completion. You can build and deploy prompts in the [Prompt](/features/prompt/prompt-management).
 <AccordionGroup>
@@ -553,9 +560,12 @@ This parameter specifies the cache options. Currently we support `cache_by_custo
     <ParamField body="variables" type="object">
       The variables to replace in the prompt template.
     </ParamField>
-    {/* <ParamField body="version" type="number">
-      The version of the prompt to use. If not specified, the latest version will be used.
-    </ParamField> */}
+    <ParamField body="version" type="number or string">
+      The prompt version to use.
+      - Omit to use the deployed live version.
+      - Set to a specific number (e.g., 3) to pin that version.
+      - Use the reserved keyword "latest" to use the most recent draft version (not deployed). Useful for testing.
+    </ParamField>
 <ParamField body="echo" type="boolean" default={true}>
   With echo on, the response body will have an extra field. This is an optional parameter.
 ```json
@@ -940,3 +950,49 @@ You can pass in a dictionary of your customer's API keys for specific models. If
   </Accordion>
 </ParamField>
 
+## Response
+
+Below is an example response payload with the `usage` object. This helps you reconcile token accounting across providers and caching scenarios.
+
+```json
+{
+  "id": "chatcmpl-e1b9665b-c354-41c5-bbe5-178bd0b69773",
+  "object": "chat.completion",
+  "created": 1761546960,
+  "model": "claude-sonnet-4-5-20250929",
+  "choices": [
+    {
+      "index": 0,
+      "finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "I'm doing well, thank you for asking! How can I help you today?"
+      }
+    }
+  ],
+  "usage": {
+    "completion_tokens": 20,
+    "prompt_tokens": 2619,
+    "total_tokens": 2639,
+
+    // Details mirrors OpenAI-style fields
+    "completion_tokens_details": {
+      "accepted_prediction_tokens": 0,
+      "audio_tokens": 0,
+      "reasoning_tokens": 0,
+      "rejected_prediction_tokens": 0
+    },
+
+    // Where cached prompt tokens are reported
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 2601,
+      "cache_creation_tokens": 0
+    },
+
+    // Anthropic-style cache counters (present when applicable)
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 2601
+  }
+}
+```

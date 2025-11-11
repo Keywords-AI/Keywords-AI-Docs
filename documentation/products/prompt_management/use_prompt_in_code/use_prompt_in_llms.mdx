@@ -99,15 +99,21 @@ We also support adding credentials in other SDKs or languages, please check out 
 </Tabs>
 
 ## Use specific prompt version
-Users can now specify a version of prompt they want to call. This prompt version does not need to be deployed and therefore this feature is very nice for testing a prompt through the gateway.
+You can pin a prompt version for reproducibility and testing.
+- Omit `version` to use the deployed live version.
+- Set `version` to a specific number (e.g., 3) to pin that version.
 ```python {4}
 {
     "prompt": {
         "prompt_id": YOUR_PROMPT_ID,
-        "version":3,
+        "version": 3,
     }
 }
 ```
+<Note>
+
+You can also use the reserved keyword `"version": "latest"` to use the most recent draft version (not deployed). This is useful for testing changes before deployment.
+</Note>
 
 ## Override prompt configuration (optional)
 
