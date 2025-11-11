@@ -1,0 +1,52 @@
+---
+title: "Override Span Input/Output"
+description: "Explicitly control what appears as a span’s input/output in the trace UI."
+---
+
+Use OpenTelemetry AI semconv attributes on the current span, inside your `@workflow`-decorated function.
+
+- Set `SpanAttributes.TRACELOOP_ENTITY_INPUT` and/or `SpanAttributes.TRACELOOP_ENTITY_OUTPUT`.
+- Pass these via the `attributes` argument of `update_current_span` (not `keywordsai_params`).
+- Values must be JSON‑serializable strings, so use `json.dumps(...)`.
+- Keep any custom metadata in `keywordsai_params["metadata"]` as needed.
+
+<CodeGroup>
+```python Python
+import json
+from opentelemetry.semconv_ai import SpanAttributes
+from keywordsai_tracing.main import KeywordsAITelemetry
+from keywordsai_tracing.decorators import workflow
+
+k_tl = KeywordsAITelemetry()
+client = k_tl.get_client()
+
+@workflow(name="update_attributes_test")
+def update_attributes_test(input: str):
+    # Override what is shown as the span input (and optionally output)
+    force_set_attributes = {
+        SpanAttributes.TRACELOOP_ENTITY_INPUT: json.dumps({
+            "args": [],
+            "kwargs": {"text": "hiiiiiii"}
+        }),
+        # Optional: also override output
+        # SpanAttributes.TRACELOOP_ENTITY_OUTPUT: json.dumps("Some desired output")
+    }
+
+    client.update_current_span(
+        attributes=force_set_attributes,
+        name="update_attributes_test",  # optionally rename the current span
+        # Keep metadata here if you need it in the trace
+        keywordsai_params={"metadata": {"test": "test"}},
+    )
+
+    some_desired_output = "Some desired output"
+    return some_desired_output
+
+if __name__ == "__main__":
+    update_attributes_test("Some input")
+```
+</CodeGroup>
+
+<Note>
+Use `update_current_span(attributes=...)` to override the span’s displayed input/output. `keywordsai_params` do not map `input` or `output` to span attributes; they’re for metadata and KeywordsAI-specific options. After overriding, the trace view will display your custom values for the selected span.
+</Note>
