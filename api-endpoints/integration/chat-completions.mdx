@@ -553,9 +553,12 @@ This parameter specifies the cache options. Currently we support `cache_by_custo
     <ParamField body="variables" type="object">
       The variables to replace in the prompt template.
     </ParamField>
-    {/* <ParamField body="version" type="number">
-      The version of the prompt to use. If not specified, the latest version will be used.
-    </ParamField> */}
+    <ParamField body="version" type="number or string">
+      The prompt version to use.
+      - Omit to use the deployed live version.
+      - Set to a specific number (e.g., 3) to pin that version.
+      - Use the reserved keyword "latest" to use the most recent draft version (not deployed). Useful for testing.
+    </ParamField>
 <ParamField body="echo" type="boolean" default={true}>
   With echo on, the response body will have an extra field. This is an optional parameter.
 ```json
