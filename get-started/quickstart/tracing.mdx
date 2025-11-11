@@ -8,16 +8,15 @@ og:title: 'LLM tracing'
 Traces are a chained collection of workflows and tasks. You can use tree views and waterfalls to better track dependencies and latency.
 
 <Frame className="rounded-md">
-<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/overview/traces.png" alt="Traces example" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/get-started/trace_start_tree_v0.png" alt="Traces example" />
 </Frame>
 
 ## Use agent tracing
 ### 1. Get your Keywords AI API key
 
 After you create an account on [Keywords AI](https://platform.keywordsai.co), you can get your API key from the [API keys page](https://platform.keywordsai.co/platform/api/api-keys).
-
 <Frame className="rounded-md">
-<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/api-keys.png" alt="Create API key placeholder" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/admin/kai_create_api_key_v0.png"/>
 </Frame>
 
 ### 2. Keywords AI Native (OpenTelemetry)
@@ -157,10 +156,24 @@ main().catch(console.error);
 
 </Tabs>
 
+<Note>
+Optional HTTP instrumentation
+If you see logs like:
+<Code>
+ERROR:root:Failed to initialize Requests instrumentation
+ERROR:root:Failed to initialize urllib3 instrumentation
+</Code>
+install the OpenTelemetry instrumentations to enable and silence these messages:
+```bash
+pip install opentelemetry-instrumentation-requests opentelemetry-instrumentation-urllib3
+```
+This is optional; tracing works without them. Add only if your app uses `requests` or `urllib3`.
+</Note>
+
 ### 3. View your traces
 You can now see your traces in the [Traces](https://platform.keywordsai.co/platform/traces).
 <Frame className="rounded-md">
-<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/overview/traces.png" alt="Traces example" />
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/get-started/trace_start_tree_v0.png" alt="Traces example" />
 </Frame>
 
 ## Integrate with your existing AI framework
