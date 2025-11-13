@@ -94,6 +94,7 @@
                   "documentation/products/traces/configuration/pass_keywordsai_parameters",
                   "documentation/products/traces/configuration/group_traces",
                   "documentation/products/traces/configuration/customer_identifier",
+                  "documentation/products/traces/override-span-input-output",
                   "documentation/products/traces/filters",
                   "documentation/products/traces/logs_to_trace"
                 ]
