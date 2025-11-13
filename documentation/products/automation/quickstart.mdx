@@ -1,12 +1,12 @@
 ---
 title: Quickstart 
-description: This is a guide for you to create a monitor on the platform. 
+description: This is a guide for you to create a automation on the platform. 
 ---
 
-## What is a monitor? 
-A monitor is a tool that helps you to monitor your LLM applications. You can set up metrics and alerts to monitor system performance.
+## What is an automation? 
+An automation is a tool that helps you to monitor your LLM applications. You can set up metrics and alerts to monitor system performance.
 
-## How to create a monitor?
+## How to create an automation?
 
 ### 1. Create a condition
 
@@ -28,9 +28,6 @@ This defines the time interval used for metric aggregation (e.g., every 5 minute
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/conditions/condition-policy.png"/>
 </Frame>
 
-Next, configure the **policy** for the condition.  
-You can set the **policy type** to either `Alert` or `Warning`, and define it in **JSON** format.
-
 For example, the policy shown above triggers an alert when there are more than 10 HTTP errors (`400`, `401`, `403`, `404`, `500`) within a 5-minute window.
 
 ---
@@ -50,9 +47,9 @@ Currently supported channels:
 
 ---
 
-### 3. Create a monitor
+### 3. Create a automation
 
-Once your condition and notification are ready, navigate to [Monitors](https://platform.keywordsai.co/platform/monitors) and create a new **monitor**.
+Once your condition and notification are ready, navigate to [Automations](https://platform.keywordsai.co/platform/monitors) and create a new **automation**.
 
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/monitors/create-monitor.png"/>
@@ -61,11 +58,31 @@ Once your condition and notification are ready, navigate to [Monitors](https://p
 In the creation form:
 1. Select the **condition** you want to track.  
 2. Choose the **notification** method.  
-3. Set the **severity** level for the alert (e.g., Warning or Critical).
+3. Set the **severity** level for the alert (e.g., Urgent or Low).
 
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/monitors/monitor-detail.png"/>
 </Frame>
 
-After saving, your monitor will appear in the [Monitors](https://platform.keywordsai.co/platform/monitors) list.  
-When the defined condition is met, alerts will automatically be sent through the selected notification channel.
+After saving, your automation will appear in the [Automations](https://platform.keywordsai.co/platform/monitors) list.  
+When the defined condition is met, alerts will automatically be sent through the selected notification method.
+
+---
+
+### 4. Customize automation notification message
+
+You can customize the message that gets sent each time an automation is triggered. 
+Choose from several predefined choices:
+- severity
+- triggered time range
+- ...
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/monitors/create-monitor.png"/>
+</Frame>
+
+A real-time preview shows exactly what will be delivered via email or webhook before you save your changes.
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/monitors/monitor-detail.png"/>
+</Frame>
