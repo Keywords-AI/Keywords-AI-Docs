@@ -1,0 +1,55 @@
+---
+title: "workflow decorator"
+description: "Wrap a function or class method as a traced workflow"
+---
+
+## Overview
+
+Use `workflow(name: str, method_name: Optional[str] = None)` to mark an end-to-end run. All nested tasks are captured under this workflow.
+
+## Function usage
+
+```python
+from keywordsai_tracing.decorators import workflow, task
+
+@workflow(name="data_pipeline")
+def data_pipeline():
+    @task(name="extract")
+    def extract():
+        return {"records": [1, 2, 3]}
+
+    @task(name="transform")
+    def transform(data):
+        return [x * 2 for x in data["records"]]
+
+    return transform(extract())
+
+print(data_pipeline())
+```
+
+## Class usage
+
+```python
+from keywordsai_tracing.decorators import workflow, task
+
+@workflow(name="analysis_workflow", method_name="run")
+class Analyzer:
+    @task(name="analyze")
+    def analyze(self, nums):
+        return sum(nums)
+
+    def run(self):
+        return self.analyze([1, 2, 3])
+
+print(Analyzer().run())
+```
+
+## Parameters
+
+- `name`: workflow display name
+- `method_name` (optional): required when decorating a class; name of the method to execute
+
+## Best practices
+
+- Use descriptive workflow names for easy navigation
+- Keep workflows coarse-grained; use tasks for internal steps

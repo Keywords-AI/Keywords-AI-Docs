@@ -1,0 +1,24 @@
+---
+title: "set_context_value()"
+description: "Set a value in the current OpenTelemetry context"
+---
+
+## Overview
+
+```python
+set_context_value(key: str, value: Any) -> bool
+```
+
+## Example
+
+```python
+from keywordsai_tracing import workflow, get_client
+
+@workflow(name="set_context")
+def set_context():
+    client = get_client()
+    client.set_context_value("custom.key", "value")
+    return True
+
+print(set_context())
+```

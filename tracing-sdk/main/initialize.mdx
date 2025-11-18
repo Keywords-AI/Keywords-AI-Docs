@@ -1,0 +1,36 @@
+---
+title: "Initialize KeywordsAITelemetry"
+description: "Set up the tracing client and environment configuration"
+---
+
+## Initialize client
+
+```python
+import os
+from keywordsai_tracing import KeywordsAITelemetry
+
+os.environ["KEYWORDSAI_API_KEY"] = "your-api-key"
+os.environ["KEYWORDSAI_BASE_URL"] = "https://api.keywordsai.co/api"
+
+k_tl = KeywordsAITelemetry()
+```
+
+## Environment variables
+
+- `KEYWORDSAI_API_KEY`: required API key
+- `KEYWORDSAI_BASE_URL`: service base URL; default `https://api.keywordsai.co/api`
+
+## Usage with decorators
+
+```python
+from keywordsai_tracing.decorators import workflow, task
+
+@workflow(name="pipeline")
+def pipeline():
+    @task(name="step")
+    def step():
+        return "ok"
+    return step()
+
+print(pipeline())
+```

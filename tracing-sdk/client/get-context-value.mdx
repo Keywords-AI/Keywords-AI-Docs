@@ -1,0 +1,24 @@
+---
+title: "get_context_value()"
+description: "Read a value from the current OpenTelemetry context"
+---
+
+## Overview
+
+```python
+get_context_value(key: str) -> Any
+```
+
+## Example
+
+```python
+from opentelemetry.semconv_ai import SpanAttributes
+from keywordsai_tracing import workflow, get_client
+
+@workflow(name="context_demo")
+def context_demo():
+    client = get_client()
+    return client.get_context_value(SpanAttributes.TRACELOOP_ENTITY_NAME)
+
+print(context_demo())
+```

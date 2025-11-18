@@ -1,0 +1,26 @@
+---
+title: "keywordsai_span_attributes()"
+description: "Context manager to set KeywordsAI-specific span attributes"
+---
+
+## Overview
+
+Use `keywordsai_span_attributes(params)` to attach KeywordsAI attributes (including metadata) to the active span.
+
+## Example
+
+```python
+from keywordsai_tracing.contexts.span import keywordsai_span_attributes
+from keywordsai_tracing import workflow
+
+@workflow(name="annotate")
+def annotate():
+    with keywordsai_span_attributes({
+        "customer_identifier": "cust-1",
+        "trace_group_identifier": "grp-a",
+        "metadata": {"team": "search"}
+    }):
+        return "ok"
+
+print(annotate())
+```

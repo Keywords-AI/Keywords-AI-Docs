@@ -1,0 +1,32 @@
+---
+title: "get_span_buffer()"
+description: "Buffer spans in a context and export them manually"
+---
+
+## Overview
+
+Returns a `SpanBuffer` context that routes spans into a local queue for manual export and inspection.
+
+## Example
+
+```python
+from keywordsai_tracing import get_client
+
+client = get_client()
+collected_spans = []
+
+with client.get_span_buffer("trace-123") as buffer:
+    buffer.create_span("step1", {"status": "completed"})
+    buffer.create_span("step2", {"status": "completed"})
+    collected_spans = buffer.get_all_spans()
+
+client.export_spans(collected_spans)
+```
+
+## Buffer methods
+
+- `create_span(name, attributes=None, kind=None)`
+- `get_all_spans()`
+- `get_span_count()`
+- `export_spans()`
+- `clear_spans()`
