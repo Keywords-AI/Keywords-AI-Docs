@@ -152,6 +152,7 @@
                     "pages": [
                       "documentation/products/evaluation/experiments/overview",
                       "documentation/products/evaluation/experiments/experiments",
+                      "documentation/products/evaluation/experiments/api-tutorial",
                       "documentation/products/evaluation/experiments/experiments-images"
                     ]
                   }
@@ -419,6 +420,7 @@
                 "group": "Datasets",
                 "pages": [
                   "api-endpoints/evaluation/dataset/get",
+                  "api-endpoints/evaluation/dataset/create",
                   "api-endpoints/evaluation/dataset/list",
                   "api-endpoints/evaluation/dataset/patch",
                   "api-endpoints/evaluation/dataset/delete",
@@ -449,6 +451,17 @@
                   "api-endpoints/evaluation/log-scores/get",
                   "api-endpoints/evaluation/log-scores/update",
                   "api-endpoints/evaluation/log-scores/delete"
+                ]
+              },
+              {
+                "group": "Experiments",
+                "pages": [
+                  "api-endpoints/experiments/create",
+                  "api-endpoints/experiments/list-logs",
+                  "api-endpoints/experiments/summary",
+                  "api-endpoints/experiments/retrieve",
+                  "api-endpoints/experiments/submit-results",
+                  "api-endpoints/experiments/export"
                 ]
               },
               {

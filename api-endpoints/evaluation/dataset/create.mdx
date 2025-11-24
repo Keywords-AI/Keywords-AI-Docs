@@ -1,0 +1,90 @@
+---
+title: "Create dataset"
+api: "POST https://api.keywordsai.co/api/datasets/"
+---
+
+Creates a new dataset from your logs. You can specify filters and sampling rate to select which logs to include.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Parameters
+
+<ParamField body="name" type="string" required>
+  The name of the dataset.
+</ParamField>
+
+<ParamField body="description" type="string">
+  A description of the dataset.
+</ParamField>
+
+<ParamField body="type" type="string" default="sampling">
+  The type of dataset creation. currently supports `sampling`.
+</ParamField>
+
+<ParamField body="sampling" type="integer">
+  The number of logs to sample.
+</ParamField>
+
+<ParamField body="start_time" type="string">
+  The start time for filtering logs (ISO format).
+</ParamField>
+
+<ParamField body="end_time" type="string">
+  The end_time time for filtering logs (ISO format).
+</ParamField>
+
+<ParamField body="initial_log_filters" type="object">
+  Filters to apply to select logs for the dataset.
+  <Accordion title="Example">
+    ```json
+    {
+      "id": {
+        "operator": "in",
+        "value": ["log_id_1", "log_id_2"]
+      }
+    }
+    ```
+  </Accordion>
+</ParamField>
+
+## Request Example
+
+```python Python
+import requests
+import json
+
+url = "https://api.keywordsai.co/api/datasets/"
+
+payload = json.dumps({
+  "name": "My Dataset",
+  "description": "Dataset for evaluation",
+  "type": "sampling",
+  "sampling": 50,
+  "start_time": "2024-01-01T00:00:00Z",
+  "end_time": "2024-01-31T23:59:59Z",
+  "initial_log_filters": {
+    "id": {
+      "operator": "in",
+      "value": [
+        "log_id_1",
+        "log_id_2"
+      ]
+    }
+  }
+})
+headers = {
+  'Authorization': 'Bearer YOUR_API_KEY',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+```
+

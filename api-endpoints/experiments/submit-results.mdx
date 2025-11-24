@@ -1,0 +1,67 @@
+---
+title: "Submit Custom Workflow Results"
+api: "PATCH https://api.keywordsai.co/api/v2/experiments/{experiment_id}/logs/{trace_id}/"
+---
+
+Updates a placeholder trace with your custom workflow results. The system will automatically run configured evaluators on your submitted output.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Parameters
+
+<ParamField body="input" type="any">
+  The input data for the trace. Can be string, object, or array.
+</ParamField>
+
+<ParamField body="output" type="any">
+  The output data/result of your custom workflow. Can be string, object, or array.
+</ParamField>
+
+<ParamField body="name" type="string">
+  Name of the trace.
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Custom metadata for the trace.
+</ParamField>
+
+## Response
+
+```json
+{
+  "id": "551ba4023fc646b4859993a31665bff2",
+  "name": "Processed Dataset Entry 1",
+  "input": "[{\"role\": \"system\", \"content\": \"You are a helpful assistant\"}, {\"role\": \"user\", \"content\": \"What is the capital of France?\"}]",
+  "output": "{\"answer\": \"The capital of France is Paris...\"}",
+  "status": "completed",
+  "span_count": 3,
+  "duration": 2500,
+  "created_at": "2025-11-18T10:01:00Z",
+  "updated_at": "2025-11-18T10:05:00Z",
+  "metadata": {
+    "processing_time": 2.5,
+    "model_used": "custom-llm-v1",
+    "confidence": 0.95
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X PATCH "https://api.keywordsai.co/api/v2/experiments/experiment-123/logs/551ba4023fc646b4859993a31665bff2/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "input": "[{\"role\": \"user\", \"content\": \"What is AI?\"}]",
+    "output": "{\"response\": \"AI is artificial intelligence...\", \"confidence\": 0.95}",
+    "metadata": {"processing_time": 2.1}
+  }'
+```
+

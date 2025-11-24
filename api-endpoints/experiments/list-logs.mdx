@@ -1,0 +1,99 @@
+---
+title: "List Experiment Logs"
+api: "GET https://api.keywordsai.co/api/v2/experiments/{experiment_id}/logs/"
+---
+
+Retrieves logs/traces for an experiment. For custom workflows, this returns placeholder traces containing the dataset inputs you need to process.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Parameters
+
+### Query Parameters
+
+<ParamField query="page" type="integer" default={1}>
+  Page number.
+</ParamField>
+
+<ParamField query="page_size" type="integer" default={100}>
+  Number of results per page.
+</ParamField>
+
+<ParamField query="sort_by" type="string">
+  Sort field (e.g., `-cost`, `-start_time`, `name`).
+</ParamField>
+
+<ParamField query="start_time" type="string">
+  Filter start time (ISO format).
+</ParamField>
+
+<ParamField query="end_time" type="string">
+  Filter end time (ISO format).
+</ParamField>
+
+<ParamField query="detail" type="boolean">
+  Include full span tree (1 or true).
+</ParamField>
+
+<ParamField query="export" type="boolean">
+  Export results to CSV/Excel (1 or true).
+</ParamField>
+
+### Body Parameters (Optional)
+
+For advanced filtering, you can send a POST request with filters in the body.
+
+<ParamField body="filters" type="array">
+  List of filters to apply.
+  <Accordion title="Properties">
+    <ParamField body="field" type="string">Field to filter by.</ParamField>
+    <ParamField body="operator" type="string">Operator (`=`, `!=`, `>`, `>=`, `<`, `<=`, `contains`, `startsWith`, `endsWith`, `in`, `not_in`).</ParamField>
+    <ParamField body="value" type="any">Value to compare against.</ParamField>
+  </Accordion>
+</ParamField>
+
+## Response
+
+```json
+{
+  "results": [
+    {
+      "id": "551ba4023fc646b4859993a31665bff2",
+      "name": "Dataset Entry 1",
+      "input": "[{\"role\": \"system\", \"content\": \"You are a helpful assistant\"}, {\"role\": \"user\", \"content\": \"What is the capital of France?\"}]",
+      "output": "{\"message\": \"Awaiting custom workflow result submission\", \"status\": \"pending_custom_submission\"}",
+      "status": "pending_custom_submission",
+      "span_count": 1,
+      "duration": null,
+      "created_at": "2025-11-18T10:01:00Z"
+    }
+  ],
+  "count": 1,
+  "previous": null,
+  "next": null
+}
+```
+
+## Example
+
+```bash
+curl -X POST "https://api.keywordsai.co/api/v2/experiments/experiment-123/logs/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filters": [
+      {
+        "field": "status",
+        "operator": "=",
+        "value": "pending_custom_submission"
+      }
+    ]
+  }'
+```
+

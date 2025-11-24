@@ -1,0 +1,38 @@
+---
+title: "Export Experiment Logs"
+api: "GET https://api.keywordsai.co/api/v2/experiments/{experiment_id}/logs/?export=1"
+---
+
+Exports experiment logs to CSV/Excel format. The export is processed asynchronously and a download link is sent to your email.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Parameters
+
+<ParamField query="export" type="boolean" required>
+  Set to `true` or `1` to trigger export.
+</ParamField>
+
+(All other filtering parameters from List Logs endpoint are supported)
+
+## Response (202 Accepted)
+
+```json
+{
+  "message": "Exporting experiment logs. Check your email for the download link."
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.keywordsai.co/api/v2/experiments/experiment-123/logs/?export=1" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
