@@ -1,0 +1,21 @@
+---
+title: "get_current_span_id()"
+description: "Return the active span ID as hex string"
+---
+
+## Overview
+
+Returns the current span ID or `None` when no span is active.
+
+## Example
+
+```python
+from keywordsai_tracing import get_client, task
+
+@task(name="span_demo")
+def span_demo():
+    client = get_client()
+    return client.get_current_span_id()
+
+print(span_demo())
+```

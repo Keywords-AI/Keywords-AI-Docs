@@ -1,0 +1,17 @@
+---
+title: "flush()"
+description: "Force flush pending spans"
+---
+
+## Overview
+
+Flushes the tracer’s processors/exporter. Available on `KeywordsAITelemetry` and `KeywordsAIClient`.
+
+## Example
+
+```python
+from keywordsai_tracing import KeywordsAITelemetry, get_client
+
+KeywordsAITelemetry().flush()
+get_client().flush()
+```

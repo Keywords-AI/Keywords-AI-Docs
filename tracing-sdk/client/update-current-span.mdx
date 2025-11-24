@@ -1,0 +1,40 @@
+---
+title: "update_current_span()"
+description: "Update name, status, attributes, and KeywordsAI params on the current span"
+---
+
+## Overview
+
+```python
+update_current_span(
+  keywordsai_params: Dict | KeywordsAIParams = None,
+  attributes: Dict = None,
+  status: Status | StatusCode = None,
+  status_description: str = None,
+  name: str = None,
+) -> bool
+```
+
+## Example
+
+```python
+from keywordsai_tracing import workflow, get_client
+from opentelemetry.trace import StatusCode
+
+@workflow(name="process")
+def process(user_id: str):
+    client = get_client()
+    client.update_current_span(
+        keywordsai_params={
+            "customer_identifier": user_id,
+            "trace_group_identifier": "pipeline-a",
+            "metadata": {"env": "dev"},
+        },
+        attributes={"custom.step": "validation"},
+        status=StatusCode.OK,
+        name="process.success",
+    )
+    return "ok"
+
+print(process("user-123"))
+```

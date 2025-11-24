@@ -1,0 +1,52 @@
+---
+title: "Keywords AI Tracing Overview"
+description: "Observe and debug LLM workflows using the keywordsai-tracing Python SDK"
+---
+
+## Overview
+
+Keywords AI Tracing captures telemetry for your LLM applications. It records workflows and tasks, tracks timings and errors, and sends traces to Keywords AI so you can visualize and debug runs.
+
+## Core Concepts
+
+- Workflows represent an end-to-end agent run
+- Tasks are operations within a workflow (LLM calls, tools, steps)
+- Traces are sent to Keywords AI for visualization and analysis
+
+## Components
+
+- Decorators: `workflow`, `task`, `agent`, `tool`
+- Client: `KeywordsAITelemetry` and `get_client()`
+- Contexts: `keywordsai_span_attributes()`
+- Instrumentation: `Instruments` enum and configuration
+
+## Example
+
+```python
+import os
+from keywordsai_tracing import KeywordsAITelemetry
+from keywordsai_tracing.decorators import workflow, task
+
+os.environ["KEYWORDSAI_API_KEY"] = "your-api-key"
+os.environ["KEYWORDSAI_BASE_URL"] = "https://api.keywordsai.co/api"
+
+k_tl = KeywordsAITelemetry()
+
+@workflow(name="my_workflow")
+def my_workflow():
+    @task(name="my_task")
+    def my_task():
+        return "done"
+    return my_task()
+
+result = my_workflow()
+print(result)
+```
+
+## Next Steps
+
+- Start with the [Quickstart](/tracing-sdk/quickstart)
+- Use [workflow](/tracing-sdk/decorators/workflow), [task](/tracing-sdk/decorators/task), [agent](/tracing-sdk/decorators/agent), [tool](/tracing-sdk/decorators/tool)
+- Explore [Client API](/tracing-sdk/client/get-client)
+- Configure [Instrumentation](/tracing-sdk/instrumentation/overview)
+- Use [Contexts](/tracing-sdk/contexts/keywordsai-span-attributes)

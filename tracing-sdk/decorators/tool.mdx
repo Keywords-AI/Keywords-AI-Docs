@@ -1,0 +1,51 @@
+---
+title: "tool decorator"
+description: "Trace a tool execution within an agent or workflow"
+---
+
+## Overview
+
+Use `tool(name: Optional[str] = None, version: Optional[int] = None, method_name: Optional[str] = None)` to mark a tool operation. Tool spans inherit the current entity path and appear under the nearest agent/workflow/task.
+
+## Function usage
+
+```python
+from keywordsai_tracing.decorators import workflow, task, tool
+
+@workflow(name="document_workflow")
+def document_workflow():
+    @tool(name="summarize")
+    def summarize(text: str):
+        return text[:50]
+
+    @task(name="process")
+    def process(text: str):
+        return summarize(text)
+
+    return process("Tracing with KeywordsAI is straightforward.")
+
+print(document_workflow())
+```
+
+## Class usage
+
+```python
+from keywordsai_tracing.decorators import agent, tool
+
+@agent(name="analysis", method_name="run")
+class Analyzer:
+    @tool(name="tokenize")
+    def tokenize(self, text: str):
+        return text.split()
+
+    def run(self):
+        return self.tokenize("keywords ai tracing")
+
+print(Analyzer().run())
+```
+
+## Parameters
+
+- `name`: tool name
+- `version`: optional integer version
+- `method_name`: for class decoration, the method to wrap

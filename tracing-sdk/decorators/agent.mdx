@@ -1,0 +1,50 @@
+---
+title: "agent decorator"
+description: "Wrap a function or class method as a traced agent"
+---
+
+## Overview
+
+Use `agent(name: Optional[str] = None, version: Optional[int] = None, method_name: Optional[str] = None)` to mark an agent run. Tasks and tools executed inside the agent are captured beneath this span.
+
+## Function usage
+
+```python
+from keywordsai_tracing.decorators import agent, task
+
+@agent(name="support_agent")
+def support_agent():
+    @task(name="answer")
+    def answer(question: str):
+        return f"Answering: {question}"
+    return answer("How to trace?")
+
+print(support_agent())
+```
+
+## Class usage
+
+```python
+from keywordsai_tracing.decorators import agent, task
+
+@agent(name="assistant", method_name="run")
+class Assistant:
+    @task(name="respond")
+    def respond(self, input_text: str):
+        return f"Echo: {input_text}"
+
+    def run(self):
+        return self.respond("Hello")
+
+print(Assistant().run())
+```
+
+## Parameters
+
+- `name`: agent display name; defaults to function/class name
+- `version`: optional integer version
+- `method_name`: when decorating a class, the method to wrap
+
+## Notes
+
+- Agent spans set the workflow name context for nested spans
