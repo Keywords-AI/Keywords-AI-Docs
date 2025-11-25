@@ -126,36 +126,28 @@
                 ]
               },
               {
-                "group": "Evaluations",
+                "group": "Evaluators",
                 "pages": [
-                  "documentation/products/evaluation/overview",
-                  "documentation/products/evaluation/scores",
-                  {
-                    "group": "Evaluators",
-                    "pages": [
-                      "documentation/products/evaluation/llm-evals/llm-evaluator",
-                      "documentation/products/evaluation/llm-evals/run-evaluator-code",
-                      "documentation/products/evaluation/llm-evals/run-evaluator-ui",
-                      "documentation/products/evaluation/human-evals/human-evals-setup",
-                      "documentation/products/evaluation/human-evals/human-annotation"
-                    ]
-                  },
-                  {
-                    "group": "Testsets",
-                    "pages": [
-                      "documentation/products/evaluation/experiments/testsets",
-                      "documentation/products/evaluation/experiments/upload-testsets"
-                    ]
-                  },
-                  {
-                    "group": "Experiments",
-                    "pages": [
-                      "documentation/products/evaluation/experiments/overview",
-                      "documentation/products/evaluation/experiments/experiments",
-                      "documentation/products/evaluation/experiments/api-tutorial",
-                      "documentation/products/evaluation/experiments/experiments-images"
-                    ]
-                  }
+                  "documentation/products/evaluation/llm-evals/llm-evaluator",
+                  "documentation/products/evaluation/llm-evals/run-evaluator-code",
+                  "documentation/products/evaluation/llm-evals/run-evaluator-ui",
+                  "documentation/products/evaluation/human-evals/human-evals-setup",
+                  "documentation/products/evaluation/human-evals/human-annotation"
+                ]
+              },
+              {
+                "group": "Testsets",
+                "pages": [
+                  "documentation/products/evaluation/experiments/testsets",
+                  "documentation/products/evaluation/experiments/upload-testsets"
+                ]
+              },
+              {
+                "group": "Experiments",
+                "pages": [
+                  "documentation/products/evaluation/experiments/experiments",
+                  "documentation/products/evaluation/experiments/api-tutorial",
+                  "documentation/products/evaluation/experiments/experiments-images"
                 ]
               },
               {
