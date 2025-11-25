@@ -19,7 +19,7 @@ This is only a pass-through integration. So with this integration, some features
 - **Use Claude's `Thinking` Feature**: You can use the `Thinking` feature from `Claude 3.7 Sonnet` or Claude 4 models.
 
 ### Cons
-- **No Direct Prompt Access**: You can't fetch prompts stored in Keywords AI directly. You'll need to use the [Prompts API](/api-endpoints/prompt-endpoints/create-prompts) instead.
+- **No Direct Prompt Access**: You can't fetch prompts stored in Keywords AI directly. You'll need to use the [Prompts API](/api-endpoints/develop/prompts/create-prompts) instead.
 - **Limited Gateway Features**: You can't use features like [fallbacks](/features/generation/fallbacks) or [load balancing](/features/generation/load-balancing). 
 
 
@@ -148,6 +148,6 @@ console.log(msg);
 
 ## Keywords AI parameters
 
-To use [Keywords AI parameters](/api-endpoints/proxy-endpoints/chat-completions#keywords-ai-parameters), you can pass them in the `metadata` parameter. In the above example, `customer_identifier` is a Keywords AI parameter. These parameters will take precedence over the Anthropic parameters if they are conflicting.
+To use [Keywords AI parameters](/api-endpoints/develop/gateway/chat-completions#keywords-ai-parameters), you can pass them in the `metadata` parameter. In the above example, `customer_identifier` is a Keywords AI parameter. These parameters will take precedence over the Anthropic parameters if they are conflicting.
 
 

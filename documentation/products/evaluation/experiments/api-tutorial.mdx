@@ -14,7 +14,7 @@ This tutorial guides you through the process of running experiments using the Ke
 
 First, you need to have logs in the system to create a dataset. You can log your LLM requests using the Request Logging endpoint.
 
-Use the [Log ingestion](/api-endpoints/integration/request-logging-endpoint) endpoint to send your LLM request data to Keywords AI.
+Use the [Log ingestion](/api-endpoints/observe/logs/request-logging-endpoint) endpoint to send your LLM request data to Keywords AI.
 
 ```python
 import requests
@@ -35,7 +35,7 @@ response = requests.post(url, headers=headers, json=payload)
 
 ## Step 2: Retrieve Logs for Dataset
 
-Once you have logs, you might want to filter them to create a dataset. Use the [Retrieve log list](/api-endpoints/async-endpoints/logs-list-endpoint) endpoint to find the specific logs you want to include (e.g., by time range or metadata).
+Once you have logs, you might want to filter them to create a dataset. Use the [Retrieve log list](/api-endpoints/observe/logs/logs-list-endpoint) endpoint to find the specific logs you want to include (e.g., by time range or metadata).
 
 ```python
 url = "https://api.keywordsai.co/api/request-logs/list/"
@@ -46,7 +46,7 @@ url = "https://api.keywordsai.co/api/request-logs/list/"
 
 Create a dataset from your logs. You can filter logs by ID, time range, or sample a percentage of them.
 
-Refer to the [Create dataset](/api-endpoints/evaluation/dataset/create) endpoint for more details.
+Refer to the [Create dataset](/api-endpoints/evaluate/datasets/create) endpoint for more details.
 
 ```python
 import requests
@@ -83,7 +83,7 @@ print(response.text)
 
 Define how you want to evaluate your experiments. You can create an LLM-based evaluator, a code-based evaluator, or a human evaluator.
 
-See [Create Evaluator](/api-endpoints/evaluation/evaluators/create) for options.
+See [Create Evaluator](/api-endpoints/evaluate/evaluators/create) for options.
 
 ```python
 url = "https://api.keywordsai.co/api/evaluators/"
@@ -106,7 +106,7 @@ payload = {
 
 Now, create an experiment using your dataset and evaluator.
 
-If you are running a **Custom Workflow** (where you process inputs yourself and submit results), follow the [Experiment V2 API](/api-endpoints/experiments/create).
+If you are running a **Custom Workflow** (where you process inputs yourself and submit results), follow the [Experiment V2 API](/api-endpoints/develop/experiments-v2/create).
 
 ```python
 url = "https://api.keywordsai.co/api/v2/experiments/"
@@ -125,9 +125,9 @@ payload = {
 ```
 
 For custom workflows, the system creates placeholder traces. You then:
-1. [List the logs](/api-endpoints/experiments/list-logs) to get the inputs.
+1. [List the logs](/api-endpoints/develop/experiments-v2/logs-list) to get the inputs.
 2. Process the inputs with your model/logic.
-3. [Submit the results](/api-endpoints/experiments/submit-results) back to the experiment.
+3. [Submit the results](/api-endpoints/develop/experiments-v2/logs-update) back to the experiment.
 4. The evaluators will run automatically.
 
 ```python
