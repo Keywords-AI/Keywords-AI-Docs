@@ -316,13 +316,6 @@
         "tab": "API reference",
         "groups": [
           {
-            "group": "Quickstarts",
-            "pages": [
-              "api-endpoints/integration/request-logging-endpoint",
-              "api-endpoints/integration/chat-completions"
-            ]
-          },
-          {
             "group": "Observe",
             "pages": [
               {
@@ -369,12 +362,7 @@
               {
                 "group": "Gateway",
                 "pages": [
-                  "api-endpoints/integration/chat-completions"
-                ]
-              },
-              {
-                "group": "Multimodal",
-                "pages": [
+                  "api-endpoints/integration/chat-completions",
                   "api-endpoints/integration/embeddings",
                   "api-endpoints/integration/speech-to-text",
                   "api-endpoints/integration/text-to-speech",
@@ -494,7 +482,6 @@
                   "api-endpoints/evaluation/dataset/list",
                   "api-endpoints/evaluation/dataset/patch",
                   "api-endpoints/evaluation/dataset/delete",
-                  "api-endpoints/evaluation/dataset/create-with-logs",
                   {
                     "group": "Dataset Logs",
                     "pages": [
