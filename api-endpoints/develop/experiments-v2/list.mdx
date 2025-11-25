@@ -1,0 +1,51 @@
+---
+title: "List experiments (V2)"
+api: "GET https://api.keywordsai.co/api/v2/experiments/list"
+---
+
+List all experiments using the V2 API.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/v2/experiments/list"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/api/v2/experiments/list" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "count": 1,
+  "results": [
+    {
+      "id": "experiment_id_123",
+      "name": "My Experiment V2",
+      "dataset_id": "dataset_id_123"
+    }
+  ]
+}
+```
+</ResponseExample>
+

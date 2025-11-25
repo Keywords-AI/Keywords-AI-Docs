@@ -1,0 +1,48 @@
+---
+title: "Delete testset"
+api: "DELETE https://api.keywordsai.co/api/testsets/{testset_id}"
+---
+
+Delete a testset.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Path Parameters
+
+<ParamField path="testset_id" type="string" required>
+  The ID of the testset to delete.
+</ParamField>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+testset_id = "testset_id_123"
+url = f"https://api.keywordsai.co/api/testsets/{testset_id}"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.delete(url, headers=headers)
+print(response.status_code)
+```
+
+```bash cURL
+curl -X DELETE "https://api.keywordsai.co/api/testsets/{testset_id}" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 204 No Content
+```
+</ResponseExample>
+

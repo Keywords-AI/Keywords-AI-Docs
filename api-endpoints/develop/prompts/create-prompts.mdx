@@ -1,0 +1,55 @@
+---
+title: "Create prompt"
+api: "POST https://api.keywordsai.co/api/prompts/"
+---
+
+You can create a prompt by sending a POST request to the prompts endpoint. The request should include the name of the prompt and an optional description.
+
+After you created a prompt, you can create versions of the prompt by sending a POST request to the[ prompt versions endpoint](/api-endpoints/develop/prompts/create-prompt-version).
+
+<ParamField body="name" type="string" required={true}>
+    The name of the prompt.
+</ParamField>
+
+<ParamField body="description" type="string">
+    Description of the prompt
+</ParamField>
+
+
+<RequestExample>
+```Python Python
+import requests
+
+url = "https://api.keywordsai.co/api/prompts/"
+api_key = "YOUR_KEYWORDS_AI_API_KEY" # Replace with your actual Keywords AI API key
+data = {
+    "name": "Your Prompt Name",
+    "description": "Your Prompt Description"
+}
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```TypeScript TypeScript
+// Define the function with TypeScript
+
+fetch('https://api.keywordsai.co/api/prompts/', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY'
+    },
+    body: JSON.stringify({
+        name: "Your Prompt Name",
+        description: "Your Prompt Description"
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+</RequestExample>

@@ -1,0 +1,106 @@
+---
+title: Update logs
+api: PATCH https://api.keywordsai.co/api/request-logs/batch-update/
+---
+
+You may want to update logs to add more information or correct the existing information. In order to protect the integrity of the logs, you can only update the metadata and notes of the logs.
+
+
+
+<ParamField path="unique_id" type="string">
+You can get a log's `unique_id` from the [Logs list endpoint](/api-endpoints/observe/logs/logs-list-endpoint). Then pass this `unique_id` to update the log.
+```json
+{
+    "unique_id": "xxxxxx"
+}
+```
+
+</ParamField>
+
+<ParamField path="metadata" type="dict">
+You can update the log's metadata with this parameter.
+<Accordion title="Example">
+```json
+{
+  "metadata": {
+    "metadata_key": "updated_value"
+  }
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField path="note" type="string">
+You can also update a log's note
+<Accordion title="Example">
+```json
+{
+    "note": "updated note"
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField path="positive_feedback" type="boolean">
+Update the log's positive_feedback field.
+<Accordion title="Example">
+```json
+{
+    "positive_feedback": true
+}
+```
+</Accordion>
+</ParamField>
+
+
+<RequestExample>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/batch-update/"
+api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
+data = {
+    "logs": [
+        {   "unique_id": "xxxxxx",
+            "metadata": {
+                "metadata_key": "updated_value"
+            },
+            "note": "updated note"
+        }
+        # other logs to update
+    ]
+}
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+```typescript TypeScript
+// Define the function with TypeScript
+fetch("https://api.keywordsai.co/api/request-logs/batch-update/", {
+  method: 'PATCH',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer Your_Keywords_AI_API_Key '
+  },
+    body: JSON.stringify({
+        logs: [
+            {   unique_id: "xxxxxx",
+                metadata: {
+                    metadata_key: "updated_value"
+                },
+                note: "updated note"
+            }
+            // other logs to update
+        ]
+    })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+</RequestExample>

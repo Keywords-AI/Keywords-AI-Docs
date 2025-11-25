@@ -1,0 +1,90 @@
+---
+title: "Create Experiment"
+api: "POST https://api.keywordsai.co/api/v2/experiments/"
+---
+
+Creates a new experiment with custom workflows. The system will create placeholder traces for each dataset entry, which you can then update with your custom workflow results.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Parameters
+
+<ParamField body="name" type="string" required>
+  The name of the experiment.
+</ParamField>
+
+<ParamField body="description" type="string">
+  Description of the experiment.
+</ParamField>
+
+<ParamField body="dataset_id" type="string" required>
+  The ID of the dataset to run the experiment on.
+</ParamField>
+
+<ParamField body="workflows" type="array" required>
+  List of workflow configurations.
+  <Accordion title="Properties">
+    <ParamField body="type" type="string">
+      Type of workflow. Set to `custom` for custom workflows.
+    </ParamField>
+    <ParamField body="config" type="object">
+      Configuration for the workflow.
+      <Accordion title="Properties">
+        <ParamField body="name" type="string">Name of the workflow step.</ParamField>
+        <ParamField body="description" type="string">Description of the workflow step.</ParamField>
+      </Accordion>
+    </ParamField>
+  </Accordion>
+</ParamField>
+
+<ParamField body="evaluator_slugs" type="array">
+  List of evaluator slugs to run on the experiment results.
+</ParamField>
+
+## Response
+
+```json
+{
+  "id": "experiment-123",
+  "name": "My Custom Workflow Experiment",
+  "description": "Testing custom workflow implementation",
+  "dataset_id": "your-dataset-id",
+  "workflows": [
+    {
+      "type": "custom",
+      "config": {
+        "name": "Custom Processing Workflow",
+        "description": "User-defined workflow for custom processing"
+      }
+    }
+  ],
+  "evaluator_slugs": [
+    "response_quality_v1",
+    "factual_accuracy"
+  ],
+  "status": "running",
+  "created_at": "2025-11-18T10:00:00Z",
+  "updated_at": "2025-11-18T10:00:00Z"
+}
+```
+
+## Example
+
+```bash
+curl -X POST "https://api.keywordsai.co/api/v2/experiments/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Custom Processing Experiment",
+    "dataset_id": "dataset-123",
+    "workflows": [{"type": "custom", "config": {"name": "My Custom Workflow"}}],
+    "evaluator_slugs": ["response_quality_v1"]
+  }'
+```
+

@@ -1,0 +1,57 @@
+---
+title: "AssemblyAI Integration"
+api: "GET https://api.keywordsai.co/api/assemblyai/v2/transcript/{transcript_id}"
+---
+
+Use Keywords AI gateway to call and log AssemblyAI speech-to-text models.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+X-Assemblyai-Api-Key: YOUR_ASSEMBLYAI_API_KEY
+```
+
+## Path Parameters
+
+<ParamField path="transcript_id" type="string" required>
+  The AssemblyAI transcript ID to retrieve.
+</ParamField>
+
+## Headers
+
+<ParamField header="X-Assemblyai-Api-Key" type="string" required>
+  Your AssemblyAI API key for authentication with AssemblyAI services.
+</ParamField>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/assemblyai/v2/transcript/{transcript_id}"
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDSAI_API_KEY",
+    "X-Assemblyai-Api-Key": "YOUR_ASSEMBLYAI_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/api/assemblyai/v2/transcript/{transcript_id}" \
+  -H "Authorization: Bearer YOUR_KEYWORDSAI_API_KEY" \
+  -H "X-Assemblyai-Api-Key: YOUR_ASSEMBLYAI_API_KEY"
+```
+
+</CodeGroup>
+
+<Note>
+For more details on using AssemblyAI with Keywords AI, see the [AssemblyAI integration guide](/integration/providers/assemblyai).
+</Note>
+

@@ -1,0 +1,89 @@
+---
+title: "Create testset"
+api: "POST https://api.keywordsai.co/api/testsets"
+---
+
+Create a new testset for evaluation.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Request Body
+
+<RequestExample>
+```json Request
+{
+  "name": "Test API Key Dataset",
+  "description": "Dataset for testing new features",
+  "column_definitions": [
+    {
+      "field": "input"
+    },
+    {
+      "field": "expected_output"
+    }
+  ],
+  "starred": false
+}
+```
+</RequestExample>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/testsets"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "name": "Test API Key Dataset",
+    "description": "Dataset for testing new features",
+    "column_definitions": [
+        {"field": "input"},
+        {"field": "expected_output"}
+    ],
+    "starred": False
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/testsets" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Test API Key Dataset",
+    "column_definitions": [
+      {"field": "input"},
+      {"field": "expected_output"}
+    ]
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "testset_id_123",
+  "name": "Test API Key Dataset",
+  "description": "Dataset for testing new features",
+  "column_definitions": [
+    {"field": "input"},
+    {"field": "expected_output"}
+  ]
+}
+```
+</ResponseExample>
+

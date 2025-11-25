@@ -249,9 +249,60 @@ Each evaluator can only have one score per log, ensuring data integrity and prev
 
 ### Score value types
 
+<Warning>
+**Critical: Use the correct value field based on evaluator's `score_value_type`**
+</Warning>
+
 Scores support four different value types based on the evaluator's `score_value_type`:
 
-- **`numerical_value`**: Numeric scores (e.g., 4.5, 0.85, 92) used when `score_value_type` is `"numerical"` - for rating scales, confidence scores, and similarity metrics
-- **`boolean_value`**: True/false evaluations used when `score_value_type` is `"boolean"` - for pass/fail checks and binary classifications  
-- **`categorical_value`**: Array of predefined categories (e.g., ["coherent", "relevant", "helpful"]) used when `score_value_type` is `"categorical"` - for multi-label classifications and tag systems
-- **`string_value`**: Free-form text feedback used when `score_value_type` is `"comment"` - for detailed comments and explanations
+| Evaluator's `score_value_type` | Use This Field | Data Type | Example |
+|--------------------------------|----------------|-----------|---------|
+| `numerical` | `numerical_value` | number | `4.5` |
+| `boolean` | `boolean_value` | boolean | `true` |
+| `categorical` | `categorical_value` | array of strings | `["excellent", "coherent"]` |
+| `comment` | `string_value` | string | `"Good response quality"` |
+
+#### Detailed descriptions
+
+**Numerical Scores**
+- **Use case**: Ratings, confidence scores, quality metrics
+- **Range**: Defined by evaluator's `min_score` and `max_score`
+- **Example**: Rating response quality from 1-5
+
+**Boolean Scores**
+- **Use case**: Pass/fail evaluations, binary classifications
+- **Values**: `true` or `false`
+- **Example**: Content safety check
+
+**Categorical Scores**
+- **Use case**: Multi-choice classifications
+- **Values**: Array of predefined choices from evaluator's `categorical_choices`
+- **Example**: `["relevant", "accurate", "helpful"]`
+
+**Comment Scores**
+- **Use case**: Qualitative feedback, explanations
+- **Values**: Free-form text
+- **Example**: Detailed evaluation reasoning
+
+### Evaluator types
+
+Scores are created by evaluators, which come in three types:
+
+**LLM Evaluators (`type: "llm"`)**
+- AI-powered evaluation using language models
+- Requires `evaluator_definition` prompt
+- Supports all score value types
+
+**Human Evaluators (`type: "human"`)**
+- Manual evaluation by human reviewers
+- Often used with categorical or comment scores
+- Requires predefined choices for categorical
+
+**Code Evaluators (`type: "code"`)**
+- Programmatic evaluation using custom code
+- Requires `eval_code_snippet`
+- Most flexible for complex logic
+
+<Note>
+Legacy fields (`llm_input`, `llm_output`) are normalized to `input`/`output` when reading the `inputs` field.
+</Note>

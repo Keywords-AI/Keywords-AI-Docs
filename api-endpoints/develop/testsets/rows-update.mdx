@@ -1,0 +1,90 @@
+---
+title: "Update testset row"
+api: "PATCH https://api.keywordsai.co/api/testsets/{testset_id}/rows/{row_index}"
+---
+
+Update a specific row in a testset.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Path Parameters
+
+<ParamField path="testset_id" type="string" required>
+  The ID of the testset.
+</ParamField>
+
+<ParamField path="row_index" type="integer" required>
+  The index of the row to update.
+</ParamField>
+
+## Request Body
+
+<RequestExample>
+```json Request
+{
+  "row_data": {
+    "name": "Alice",
+    "variable1": "",
+    "first_name": "raymond",
+    "object_var": { "some_key": "some_var" },
+    "variable_1": "the_row_with_object"
+  }
+}
+```
+</RequestExample>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+testset_id = "testset_id_123"
+row_index = 0
+url = f"https://api.keywordsai.co/api/testsets/{testset_id}/rows/{row_index}"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "row_data": {
+        "name": "Alice",
+        "first_name": "raymond"
+    }
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/testsets/{testset_id}/rows/{row_index}" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "row_data": {
+      "name": "Alice"
+    }
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "row_index": 0,
+  "row_data": {
+    "name": "Alice",
+    "first_name": "raymond"
+  }
+}
+```
+</ResponseExample>
+

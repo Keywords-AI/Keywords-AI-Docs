@@ -1,0 +1,58 @@
+---
+title: "List experiment logs (V2)"
+api: "GET https://api.keywordsai.co/api/v2/experiments/{experiment_id}/logs/list/"
+---
+
+List all logs for an experiment using the V2 API.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Path Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The ID of the experiment to list logs for.
+</ParamField>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+experiment_id = "experiment_id_123"
+url = f"https://api.keywordsai.co/api/v2/experiments/{experiment_id}/logs/list/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/api/v2/experiments/{experiment_id}/logs/list/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "count": 1,
+  "results": [
+    {
+      "id": "log_id_123",
+      "input": {},
+      "output": {}
+    }
+  ]
+}
+```
+</ResponseExample>
+

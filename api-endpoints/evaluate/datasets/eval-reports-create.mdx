@@ -1,0 +1,73 @@
+---
+title: "Run eval on dataset"
+api: "POST https://api.keywordsai.co/api/datasets/{dataset_id}/eval-reports/create"
+---
+
+Run evaluators on all logs in a dataset to generate evaluation reports.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Path Parameters
+
+<ParamField path="dataset_id" type="string" required>
+  The ID of the dataset to run evaluations on.
+</ParamField>
+
+## Request Body
+
+<RequestExample>
+```json Request
+{
+  "evaluator_slugs": ["char_count_eval", "quality_eval"]
+}
+```
+</RequestExample>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+dataset_id = "6d0b2c7e-3a6a-4c09-9c7e-1f2d9e2d3f0a"
+url = f"https://api.keywordsai.co/api/datasets/{dataset_id}/eval-reports/create"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "evaluator_slugs": ["char_count_eval", "quality_eval"]
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/datasets/{dataset_id}/eval-reports/create" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "evaluator_slugs": ["char_count_eval", "quality_eval"]
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "report_id_123",
+  "dataset_id": "6d0b2c7e-3a6a-4c09-9c7e-1f2d9e2d3f0a",
+  "status": "running",
+  "evaluator_slugs": ["char_count_eval", "quality_eval"]
+}
+```
+</ResponseExample>
+

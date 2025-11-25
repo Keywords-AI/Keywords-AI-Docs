@@ -1,0 +1,75 @@
+---
+title: "Remove experiment rows"
+api: "DELETE https://api.keywordsai.co/api/experiments/{experiment_id}/rows"
+---
+
+Remove rows from an experiment.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Path Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The ID of the experiment to remove rows from.
+</ParamField>
+
+## Request Body
+
+<RequestExample>
+```json Request
+{
+  "rows": [
+    "a27d9880d1654c11ac87c61281298b85",
+    "807f07a6e5c7456d88c2dc2a8561090f"
+  ]
+}
+```
+</RequestExample>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+experiment_id = "experiment_id_123"
+url = f"https://api.keywordsai.co/api/experiments/{experiment_id}/rows"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "rows": [
+        "a27d9880d1654c11ac87c61281298b85"
+    ]
+}
+
+response = requests.delete(url, headers=headers, json=data)
+print(response.status_code)
+```
+
+```bash cURL
+curl -X DELETE "https://api.keywordsai.co/api/experiments/{experiment_id}/rows" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "rows": ["row_id_1", "row_id_2"]
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "removed": 2
+}
+```
+</ResponseExample>
+
