@@ -1,0 +1,4609 @@
+{
+	"info": {
+		"_postman_id": "edb67b8f-bd8d-45d0-969c-4ae988b07d67",
+		"name": "Keywords AI Public API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44844843",
+		"_collection_link": "https://crimson-moon-966890.postman.co/workspace/Keywords-AI-Team-Workspace~d7a4ac50-1b59-42dc-92ba-4e57ff680e7a/collection/29370939-edb67b8f-bd8d-45d0-969c-4ae988b07d67?action=share&source=collection_link&creator=44844843"
+	},
+	"item": [
+		{
+			"name": "Quickstarts",
+			"item": [
+				{
+					"name": "Async Logging",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{raymod_key_local}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"model\": \"gpt-4\",\n    \"prompt_messages\": [\n        {\n          \"role\": \"user\",\n          \"content\": \"Hi\"\n        },\n        {\n          \"role\": \"assistant\",\n          \"content\": null,\n          \"tool_calls\": [\n            {\n              \"id\": \"xxxx\",\n              \"type\": \"function\",\n              \"function\": {\n                \"name\": \"get_current_weather\",\n                \"arguments\": \"{\\n\\\"location\\\": \\\"Boston, MA\\\"\\n}\" \n              }\n            }\n          ]\n        }\n    ],\n    \"completion_message\": {\n        \"role\": \"assistant\",\n        \"content\": \"Hi, how can I assist you today?\"\n    },\n    \"tool_choice\": {\n        \"type\": \"function\",\n        \"function\": {\n            \"name\": \"get_current_weather\"\n        }\n    },\n    \"tools\":[\n      {\n        \"type\": \"function\",\n        \"function\": {\n          \"name\": \"get_current_weather\",\n          \"description\": \"Get the current weather in a given location\",\n          \"parameters\": {\n            \"type\": \"object\",\n            \"properties\": {\n              \"location\": {\n                \"type\": \"string\",\n                \"description\": \"The city and state, e.g. San Francisco, CA\"\n              },\n              \"unit\": {\"type\": \"string\", \"enum\": [\"celsius\", \"fahrenheit\"]}\n            },\n            \"required\": [\"location\"]\n          }\n        }\n      }\n    ],\n    \"prompt_tokens\": 8,\n    \"completion_tokens\": 16,\n    \"cost\": 0.00042,\n    \"generation_time\": 0.0,\n    \"timestamp\": \"2024-12-15T08:30:37.721313Z\",\n    \"ttft\": 0.0,\n    \"metadata\": {},\n    \"stream\": false,\n    \"status_code\": 200,\n    \"warnings\": \"\",\n    \"error_message\": \"\",\n    \"customer_params\": {\n        \"customer_identifier\": \"customer_123\",\n        \"name\": \"Hendrix Liu\", \n        \"email\": \"hendrix@keywordsai.co\" \n    },\n    \"type\":\"text\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/request-logs/create/",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"request-logs",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Proxy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"model\": \"gpt-3.5-turbo\",\n    \"messages\": [\n        {\"role\": \"user\", \"content\": \"Tell me a story\"}\n    ],\n    \"stream\": true,\n    \"extra_body\": {\n        \"customer_identifier\": \"customer_11\"\n    }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.keywordsai.co/api/chat/completions",
+							"protocol": "https",
+							"host": [
+								"api",
+								"keywordsai",
+								"co"
+							],
+							"path": [
+								"api",
+								"chat",
+								"completions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GenAI passthrough",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"model\": \"gpt-3.5-turbo\",\n    \"messages\": [\n        {\"role\": \"user\", \"content\": \"Tell me a story\"}\n    ],\n    \"stream\": true,\n    \"extra_body\": {\n        \"customer_identifier\": \"customer_11\"\n    }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.keywordsai.co/api/chat/completions",
+							"protocol": "https",
+							"host": [
+								"api",
+								"keywordsai",
+								"co"
+							],
+							"path": [
+								"api",
+								"chat",
+								"completions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Logs",
+			"item": [
+				{
+					"name": "Create log",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							},
+							{
+								"key": "x-keywordsai-params",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"model\": \"gpt-5-mini\",\n    \"input\": [\n        {\n            \"role\": \"system\",\n            \"content\": \"You are a helpful assistant.\"\n        },\n        {\n            \"role\": \"user\",\n            \"content\": \"This is going to be a test input entry to the dataset\"\n        }\n    ],\n    \"output\": {\n        \"role\": \"assistant\",\n        \"content\": \"How can I assist you today?\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/request-logs/create",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"request-logs",
+								"create"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create log Copy",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{api_key1}}",
+										"type": "text"
+									},
+									{
+										"key": "x-keywordsai-params",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"model\": \"gpt-5-mini\",\n    \"input\": [\n        {\n            \"role\": \"system\",\n            \"content\": \"You are a helpful assistant.\"\n        },\n        {\n            \"role\": \"user\",\n            \"content\": \"This is going to be a test input entry to the dataset\"\n        }\n    ],\n    \"output\": {\n        \"role\": \"assistant\",\n        \"content\": \"How can I assist you today?\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local}}/api/request-logs/create",
+									"host": [
+										"{{local}}"
+									],
+									"path": [
+										"api",
+										"request-logs",
+										"create"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Create log (custom_eval_workflow)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							},
+							{
+								"key": "x-keywordsai-params",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"model\": \"gpt-5-mini\",\n    \"input\": [\n        {\n            \"role\": \"system\",\n            \"content\": \"You are a helpful assistant.\"\n        },\n        {\n            \"role\": \"user\",\n            \"content\": \"This is going to be a test input entry to the dataset\"\n        }\n    ],\n    \"output\": {\n        \"role\": \"assistant\",\n        \"content\": \"How can I assist you today?\"\n    },\n    \"custom_identifier\":\"custom_workflow_eval_demo\",\n    \"span_name\": \"custom_eval\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/request-logs/create",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"request-logs",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List logs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"unique_id\", pm.response.json().results[0].unique_id)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{raymod_key_local}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}api/request-logs/",
+							"host": [
+								"{{local}}api"
+							],
+							"path": [
+								"request-logs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve log",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{raymod_key_local}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}api/request-logs/{{unique_id}}/",
+							"host": [
+								"{{local}}api"
+							],
+							"path": [
+								"request-logs",
+								"{{unique_id}}",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Prompts",
+			"item": [
+				{
+					"name": "Create prompt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"prompt_pk\", pm.response.json().prompt_id)"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Test Prompt\",\n    \"description\": \"Test prompt creation\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/prompts/",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"prompts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List prompts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const first_prompt_id = pm.response.json().results[0].id",
+									"pm.environment.set(\"prompt_pk\", first_prompt_id)",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/api/prompts/list",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"prompts",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve prompt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/prompts/{{prompt_pk}}/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"prompts",
+								"{{prompt_pk}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve prompt (prod)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key_prod}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{prod}}/api/prompts/{{prod_prompt_pk}}/",
+							"host": [
+								"{{prod}}"
+							],
+							"path": [
+								"api",
+								"prompts",
+								"{{prod_prompt_pk}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update prompt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"deploy\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/prompts/{{prompt_pk}}/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"prompts",
+								"{{prompt_pk}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete prompt",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/api/prompts/{{prompt_pk}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"prompts",
+								"{{prompt_pk}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create prompt version",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.globals.get(\"variable_key\");",
+									"pm.environment.get(\"variable_key\");"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"access_token\", pm.response.json().access);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"created_at\": \"2020-08-07T04:49:16.908164Z\",\r\n    \"updated_at\": \"2020-08-07T04:49:16.908164Z\",\r\n    \"parent_prompt\": \"dfsfsaf\",\r\n    \"prompt_version_id\": \"somerandomshift\",\r\n    \"messages\": [\r\n        {\r\n            \"role\": \"user\",\r\n            \"content\": \"Hi there\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/prompts/{{prompt_pk}}/versions",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"prompts",
+								"{{prompt_pk}}",
+								"versions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List versions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"prompt_version_number\", pm.response.json()[0].version)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/prompts/{{prompt_pk}}/versions/",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"prompts",
+								"{{prompt_pk}}",
+								"versions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve version",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/api/prompts/{{prompt_pk}}/versions/{{prompt_version_number}}/",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"prompts",
+								"{{prompt_pk}}",
+								"versions",
+								"{{prompt_version_number}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update version",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"some_id\",\n    \"prompt_version_id\": \"other_id_blabla\",\n    \"readonly\": true,\n    \"version\": 22,\n    \"created_at\": \"2020-08-07T05:48:47.844729Z\",\n    \"updated_at\": \"2020-08-07T05:48:47.844729Z\",\n    \"edited_by\":4,\n    \"deploy\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/prompts/{{prompt_pk}}/versions/{{prompt_version_number}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"prompts",
+								"{{prompt_pk}}",
+								"versions",
+								"{{prompt_version_number}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Multimodal integration",
+			"item": [
+				{
+					"name": "Text to speech",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"model\": \"tts-1\",\n    \"input\": \"Today is a wonderful day to build something people love!\",\n    \"voice\": \"alloy\",\n    \"customer_identifier\": \"customer_11\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.keywordsai.co/api/audio/speech",
+							"protocol": "https",
+							"host": [
+								"api",
+								"keywordsai",
+								"co"
+							],
+							"path": [
+								"api",
+								"audio",
+								"speech"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Speech to text",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "model",
+									"value": "whisper-1",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "customer_identifier",
+									"value": "customer_11",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://api.keywordsai.co/api/audio/transcriptions",
+							"protocol": "https",
+							"host": [
+								"api",
+								"keywordsai",
+								"co"
+							],
+							"path": [
+								"api",
+								"audio",
+								"transcriptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assembly AI Integration",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"content-type": true,
+							"accept": true,
+							"accept-encoding": true,
+							"content-length": true,
+							"host": true,
+							"user-agent": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{api_key1}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Assemblyai-Api-Key",
+								"value": "0874e7408c884985ba16ecae619ce837",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api_key\": \"0874e7408c884985ba16ecae619ce837\",\n    \"audio_url\": \"https://storage.googleapis.com/aai-web-samples/espn-bears.m4a\"\n}"
+						},
+						"url": {
+							"raw": "{{local}}api/assemblyai/v2/transcript/1dac2a53-af84-45e0-b288-d3a455726553",
+							"host": [
+								"{{local}}api"
+							],
+							"path": [
+								"assemblyai",
+								"v2",
+								"transcript",
+								"1dac2a53-af84-45e0-b288-d3a455726553"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Embeddings",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"model\": \"text-embedding-3-small\",\n    \"input\": \"Your text string goes here\",\n    \"extra_body\": {\n        \"customer_identifier\": \"customer_11\"\n    }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.keywordsai.co/api/embeddings",
+							"protocol": "https",
+							"host": [
+								"api",
+								"keywordsai",
+								"co"
+							],
+							"path": [
+								"api",
+								"embeddings"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "User creation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"period_budget\": 30,\n    \"customer_identifier\": \"new_customer_identifier\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/users",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/users/list?page_size=100",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page_size",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User detail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.keywordsai.co/api/user/detail/some_customer_identifier1",
+							"protocol": "https",
+							"host": [
+								"api",
+								"keywordsai",
+								"co"
+							],
+							"path": [
+								"api",
+								"user",
+								"detail",
+								"some_customer_identifier1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"period_budget\": 300,\n    \"period_start\": \"2025-10-30 00:00:00\",\n    \"period_end\": \"2025-11-30 00:00:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/user/detail/youjinA",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"detail",
+								"youjinA"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Models",
+			"item": [
+				{
+					"name": "Model list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.keywordsai.co/api/models/public",
+							"protocol": "https",
+							"host": [
+								"api",
+								"keywordsai",
+								"co"
+							],
+							"path": [
+								"api",
+								"models",
+								"public"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Experiments",
+			"item": [
+				{
+					"name": "Create experiment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const experiment = pm.response.json();",
+									"pm.environment.set(\"experiment_id\", experiment.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"columns\": [\n        {\n            \"id\": \"68a8b20d-f00b-4c10-9ae1-d64424da6e15\",\n            \"model\": \"gpt-3.5-turbo\",\n            \"name\": \"Prompt version generation - AAA\",\n            \"temperature\": 0.7,\n            \"max_completion_tokens\": 256,\n            \"top_p\": 1,\n            \"frequency_penalty\": 0,\n            \"reasoning_effort\": \"low\",\n            \"presence_penalty\": 0,\n            \"prompt_messages\": [\n                {\n                    \"role\": \"system\",\n                    \"content\": [\n                        {\n                            \"text\": \"You are tasked to write commit messages for a prompt versioning software. The commit messages need to be super concise and description, and start with action verbs in present tense. You should try to limit this commit message to 72 characters. You should be using comma to separate action items if there are 3, you should use \\\"and\\\" to group action items if there are \\n2. DO NOT specify version numbers. You should not use more than 3 action verbs. DO NOT include \\\"-\\\" and just start directly with a character.\\n\\nPlease highlight additions and removals of instructions and be very specific about the exact changes. For example, if the new version adds an example you should mention \\\"add example for...\\\"; if the new version adds a new \\\"do not\\\" instruction you should mention \\\"disable...\\\". You should be giving a summary of the change of instructions.\\n\\nBad example: \\\"Refine prompt format, clarify instructions, enhance version comparison\\\"\\nGood example: \\\"Limit output to 72 characters and require present tense\\\"\",\n                            \"type\": \"text\"\n                        }\n                    ]\n                },\n                {\n                    \"role\": \"user\",\n                    \"content\": [\n                        {\n                            \"text\": \"{% if is_first_version %} Generate a concise and descriptive commit message for the initial version of this prompt: {{current_prompt_version}} Please provide a summary of what this prompt does and its main features. {% else %} Generate a concise and descriptive commit message for this prompt version update: Changes from previous version: {{prompt_versions_diff}} Please highlight the key changes and improvements made in this version compared to the previous one. {% endif %}\",\n                            \"type\": \"text\"\n                        }\n                    ]\n                }\n            ],\n            \"tools\": [],\n            \"tool_choice\": \"auto\",\n            \"response_format\": {\n                \"type\": \"text\"\n            }\n        },\n        {\n            \"id\": \"68a8b20d-f00b-4c10-9ae1-d64424da6e15\",\n            \"model\": \"gpt-3.5-turbo\",\n            \"name\": \"Prompt version generation - AAA\",\n            \"temperature\": 0.7,\n            \"max_completion_tokens\": 256,\n            \"top_p\": 1,\n            \"frequency_penalty\": 0,\n            \"reasoning_effort\": \"low\",\n            \"presence_penalty\": 0,\n            \"prompt_messages\": [\n                {\n                    \"role\": \"system\",\n                    \"content\": [\n                        {\n                            \"text\": \"You are tasked to write commit messages for a prompt versioning software. The commit messages need to be super concise and description, and start with action verbs in present tense. You should try to limit this commit message to 72 characters. You should be using comma to separate action items if there are 3, you should use \\\"and\\\" to group action items if there are \\n2. DO NOT specify version numbers. You should not use more than 3 action verbs. DO NOT include \\\"-\\\" and just start directly with a character.\\n\\nPlease highlight additions and removals of instructions and be very specific about the exact changes. For example, if the new version adds an example you should mention \\\"add example for...\\\"; if the new version adds a new \\\"do not\\\" instruction you should mention \\\"disable...\\\". You should be giving a summary of the change of instructions.\\n\\nBad example: \\\"Refine prompt format, clarify instructions, enhance version comparison\\\"\\nGood example: \\\"Limit output to 72 characters and require present tense\\\"\",\n                            \"type\": \"text\"\n                        }\n                    ]\n                },\n                {\n                    \"role\": \"user\",\n                    \"content\": [\n                        {\n                            \"text\": \"{% if is_first_version %} Generate a concise and descriptive commit message for the initial version of this prompt: {{current_prompt_version}} Please provide a summary of what this prompt does and its main features. {% else %} Generate a concise and descriptive commit message for this prompt version update: Changes from previous version: {{prompt_versions_diff}} Please highlight the key changes and improvements made in this version compared to the previous one. {% endif %}\",\n                            \"type\": \"text\"\n                        }\n                    ]\n                }\n            ],\n            \"tools\": [],\n            \"tool_choice\": \"auto\",\n            \"response_format\": {\n                \"type\": \"text\"\n            }\n        }\n    ],\n    \"rows\": [\n        {\n            \"input\": {\n                \"current_prompt_version\": \"v1\",\n                \"prompt_versions_diff\": \"some_diff\"\n            },\n            \"results\": [\n                {\n                    \"output\": {\n                        \"something\": \"output\"\n                    }\n                }\n            ]\n        }\n    ],\n    \"name\": \"ABCDE\",\n    \"description\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/experiments/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"experiments",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List experiments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"columns\": [\n        {\n            \"id\": \"68a8b20d-f00b-4c10-9ae1-d64424da6e15\",\n            \"model\": \"gpt-3.5-turbo\",\n            \"name\": \"Prompt version generation - AAA\",\n            \"temperature\": 0.7,\n            \"max_completion_tokens\": 256,\n            \"top_p\": 1,\n            \"frequency_penalty\": 0,\n            \"reasoning_effort\": \"low\",\n            \"presence_penalty\": 0,\n            \"prompt_messages\": [\n                {\n                    \"role\": \"system\",\n                    \"content\": [\n                        {\n                            \"text\": \"You are tasked to write commit messages for a prompt versioning software. The commit messages need to be super concise and description, and start with action verbs in present tense. You should try to limit this commit message to 72 characters. You should be using comma to separate action items if there are 3, you should use \\\"and\\\" to group action items if there are \\n2. DO NOT specify version numbers. You should not use more than 3 action verbs. DO NOT include \\\"-\\\" and just start directly with a character.\\n\\nPlease highlight additions and removals of instructions and be very specific about the exact changes. For example, if the new version adds an example you should mention \\\"add example for...\\\"; if the new version adds a new \\\"do not\\\" instruction you should mention \\\"disable...\\\". You should be giving a summary of the change of instructions.\\n\\nBad example: \\\"Refine prompt format, clarify instructions, enhance version comparison\\\"\\nGood example: \\\"Limit output to 72 characters and require present tense\\\"\",\n                            \"type\": \"text\"\n                        }\n                    ]\n                },\n                {\n                    \"role\": \"user\",\n                    \"content\": [\n                        {\n                            \"text\": \"{% if is_first_version %} Generate a concise and descriptive commit message for the initial version of this prompt: {{current_prompt_version}} Please provide a summary of what this prompt does and its main features. {% else %} Generate a concise and descriptive commit message for this prompt version update: Changes from previous version: {{prompt_versions_diff}} Please highlight the key changes and improvements made in this version compared to the previous one. {% endif %}\",\n                            \"type\": \"text\"\n                        }\n                    ]\n                }\n            ],\n            \"tools\": [],\n            \"tool_choice\": \"auto\",\n            \"response_format\": {\n                \"type\": \"text\"\n            }\n        }\n    ],\n    \"name\": \"jjj\",\n    \"description\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/experiments/list",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"experiments",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve experiment",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/experiments/{{experiment_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"experiments",
+								"{{experiment_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update experiment",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/experiments/{{experiment_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"experiments",
+								"{{experiment_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add experiment rows",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rows\": [\n        {\n            \"input\": {\n                \"current_prompt_version\": \"v2\",\n                \"prompt_versions_diff\": \"some_other_diff\"\n            }\n        },\n        {\n            \"input\": {\n                \"current_prompt_version\": \"v3\",\n                \"prompt_versions_diff\": \"more_diffs\"\n            }\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/experiments/{{experiment_id}}/rows",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"experiments",
+								"{{experiment_id}}",
+								"rows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove experiment rows",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rows\": [\n        \"a27d9880d1654c11ac87c61281298b85\",\n        \"807f07a6e5c7456d88c2dc2a8561090f\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/experiments/{{experiment_id}}/rows",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"experiments",
+								"{{experiment_id}}",
+								"rows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update experiment rows",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rows\": [\n        {\n            \"id\": \"074ca0b7b28c447996ad7447204b5910\",\n            \"input\": {\n                \"current_prompt_version\": \"v2\",\n                \"prompt_versions_diff\": \"come on, some big diff here\"\n            }\n        },\n        {\n            \"input\": {\n                \"current_prompt_version\": \"v3\",\n                \"prompt_versions_diff\": \"more_diffs\"\n            }\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/experiments/{{experiment_id}}/rows",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"experiments",
+								"{{experiment_id}}",
+								"rows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add experiment column",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"columns\": [\n        {\n            \"id\": \"68a8b20d-f00b-4c10-9ae1-d64424da6e15\",\n            \"model\": \"gpt-3.5-turbo\",\n            \"name\": \"Prompt version generation - AAA\",\n            \"temperature\": 0.7,\n            \"max_completion_tokens\": 256,\n            \"top_p\": 1,\n            \"frequency_penalty\": 0,\n            \"reasoning_effort\": \"low\",\n            \"presence_penalty\": 0,\n            \"prompt_messages\": [\n                {\n                    \"role\": \"system\",\n                    \"content\": [\n                        {\n                            \"text\": \"You are tasked to write commit messages for a prompt versioning software. The commit messages need to be super concise and description, and start with action verbs in present tense. You should try to limit this commit message to 72 characters. You should be using comma to separate action items if there are 3, you should use \\\"and\\\" to group action items if there are \\n2. DO NOT specify version numbers. You should not use more than 3 action verbs. DO NOT include \\\"-\\\" and just start directly with a character.\\n\\nPlease highlight additions and removals of instructions and be very specific about the exact changes. For example, if the new version adds an example you should mention \\\"add example for...\\\"; if the new version adds a new \\\"do not\\\" instruction you should mention \\\"disable...\\\". You should be giving a summary of the change of instructions.\\n\\nBad example: \\\"Refine prompt format, clarify instructions, enhance version comparison\\\"\\nGood example: \\\"Limit output to 72 characters and require present tense\\\"\",\n                            \"type\": \"text\"\n                        }\n                    ]\n                },\n                {\n                    \"role\": \"user\",\n                    \"content\": [\n                        {\n                            \"text\": \"{% if is_first_version %} Generate a concise and descriptive commit message for the initial version of this prompt: {{current_prompt_version}} Please provide a summary of what this prompt does and its main features. {% else %} Generate a concise and descriptive commit message for this prompt version update: Changes from previous version: {{prompt_versions_diff}} Please highlight the key changes and improvements made in this version compared to the previous one. {% endif %}\",\n                            \"type\": \"text\"\n                        }\n                    ]\n                }\n            ],\n            \"tools\": [],\n            \"tool_choice\": \"auto\",\n            \"response_format\": {\n                \"type\": \"text\"\n            }\n        }\n    ],\n    \"name\": \"jjj\",\n    \"description\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/experiments/{{experiment_id}}/columns",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"experiments",
+								"{{experiment_id}}",
+								"columns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove experiment column",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"columns\": [\n        \"074ca0b7b28c447996ad7447204b5910\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/experiments/{{experiment_id}}/columns",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"experiments",
+								"{{experiment_id}}",
+								"columns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update experiment column",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"columns\": [\n        {\n            \"model\": \"gpt-4o\",\n            \"name\": \"Prompt version generation - AAA\",\n            \"temperature\": 0.7,\n            \"max_completion_tokens\": 256,\n            \"top_p\": 1,\n            \"frequency_penalty\": 0,\n            \"reasoning_effort\": \"low\",\n            \"presence_penalty\": 0,\n            \"prompt_messages\": [\n                {\n                    \"role\": \"system\",\n                    \"content\": \"Hello\"\n                },\n                {\n                    \"role\": \"user\",\n                    \"content\": \"Hi\"\n                }\n            ],\n            \"tools\": [],\n            \"tool_choice\": \"auto\",\n            \"response_format\": {\n                \"type\": \"text\"\n            }\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/experiments/{{experiment_id}}/columns",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"experiments",
+								"{{experiment_id}}",
+								"columns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Run experiment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"columns\": [\n        {\n            \"model\": \"gpt-4o\",\n            \"name\": \"Prompt version generation - AAA\",\n            \"temperature\": 0.7,\n            \"max_completion_tokens\": 256,\n            \"top_p\": 1,\n            \"frequency_penalty\": 0,\n            \"reasoning_effort\": \"low\",\n            \"presence_penalty\": 0,\n            \"prompt_messages\": [\n                {\n                    \"role\": \"system\",\n                    \"content\": \"Hello\"\n                },\n                {\n                    \"role\": \"user\",\n                    \"content\": \"Hi\"\n                }\n            ],\n            \"tools\": [],\n            \"tool_choice\": \"auto\",\n            \"response_format\": {\n                \"type\": \"text\"\n            }\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/experiments/{{experiment_id}}/run",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"experiments",
+								"{{experiment_id}}",
+								"run"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Run experiment evals",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"evaluator_slugs\":[\n        \"is_english\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/experiments/{{experiment_id}}/run-evals",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"experiments",
+								"{{experiment_id}}",
+								"run-evals"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Datasets",
+			"item": [
+				{
+					"name": "List logs for dataset creation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const log_ids = pm.response.json().results.map((log) => `\"${log.id}\"`)",
+									"pm.environment.set(\"log_ids\", log_ids)"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/request-logs/list?start_time=2025-07-30 00:00:00&end_time=2025-08-01 00:00:00&page_size=50",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"request-logs",
+								"list"
+							],
+							"query": [
+								{
+									"key": "start_time",
+									"value": "2025-07-30 00:00:00"
+								},
+								{
+									"key": "end_time",
+									"value": "2025-08-01 00:00:00"
+								},
+								{
+									"key": "page_size",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List logs for dataset creation (custom_eval_workflow)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const log_ids = pm.response.json().results.map((log) => `\"${log.id}\"`)",
+									"pm.environment.set(\"log_ids\", log_ids)"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/request-logs/list?page_size=50",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"request-logs",
+								"list"
+							],
+							"query": [
+								{
+									"key": "start_time",
+									"value": "2025-07-30 00:00:00",
+									"disabled": true
+								},
+								{
+									"key": "end_time",
+									"value": "2025-08-01 00:00:00",
+									"disabled": true
+								},
+								{
+									"key": "page_size",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create dataset",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(",
+									"    \"dataset_id\",",
+									"    pm.response.json().id",
+									")"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer XoupxjS8.PlAnWQO7MakArGZc17EQRTj6Sw15D0Po",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"TEST\",\n    \"description\": \"\",\n    \"type\": \"sampling\",\n    \"sampling\": 50,\n    \"start_time\": \"2025-07-04T22:55:38.818Z\",\n    \"end_time\": \"2025-07-13T22:55:38.818Z\",\n    \"initial_log_filters\": {\n        \"deployment_name\": {\n            \"value\": [\n                \"hihi's openai deployment\"\n            ],\n            \"operator\": \"\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/datasets/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"datasets",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create dataset with specified logs (custom_eval_workflow)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(",
+									"    \"dataset_id\",",
+									"    pm.response.json().id",
+									")"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{custom_eval_demo_name}}\",\n    \"description\": \"\",\n    \"type\": \"sampling\",\n    \"sampling\": 50,\n    \"start_time\": \"{{start_time}}\",\n    \"end_time\": \"{{end_time}}\",\n    \"initial_log_filters\": {\n        \"id\": {\n            \"operator\": \"in\",\n            \"value\": [\"{{log_id_to_include}}\"]\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/datasets",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"datasets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add logs to dataset",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"start_time\": \"2025-07-31 00:00:00\",\n    \"end_time\": \"2025-08-01 00:00:00\",\n    \"filters\": {\n        \"id\": {\n            \"value\": [\n                {{log_ids}}\n            ],\n            \"operator\": \"in\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/datasets/{{dataset_id}}/logs/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"datasets",
+								"{{dataset_id}}",
+								"logs",
+								"create"
+							],
+							"query": [
+								{
+									"key": "start_time",
+									"value": "2025-07-30 00:00:00",
+									"disabled": true
+								},
+								{
+									"key": "end_time",
+									"value": "2025-08-01 00:00:00",
+									"disabled": true
+								},
+								{
+									"key": "page_size",
+									"value": "50",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove logs from dataset",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"start_time\": \"2025-07-31 00:00:00\",\n    \"end_time\": \"2025-08-01 00:00:00\",\n    \"filters\": {\n        \"id\": {\n            \"value\": [\n                {{log_ids}}\n            ],\n            \"operator\": \"in\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/datasets/{{dataset_id}}/logs/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"datasets",
+								"{{dataset_id}}",
+								"logs",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "start_time",
+									"value": "2025-07-30 00:00:00",
+									"disabled": true
+								},
+								{
+									"key": "end_time",
+									"value": "2025-08-01 00:00:00",
+									"disabled": true
+								},
+								{
+									"key": "page_size",
+									"value": "50",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List datasets",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"test_ds\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/datasets/list",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"datasets",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve dataset",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"test_ds\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/datasets/{{dataset_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"datasets",
+								"{{dataset_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update dataset",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"test_ds\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/datasets/{{dataset_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"datasets",
+								"{{dataset_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete dataset",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"test_ds\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/datasets/{{dataset_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"datasets",
+								"{{dataset_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List dataset logs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"test_ds\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/datasets/{{dataset_id}}/logs/list",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"datasets",
+								"{{dataset_id}}",
+								"logs",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve dataset log",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"test_ds\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/datasets/{{dataset_id}}/logs/{{log_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"datasets",
+								"{{dataset_id}}",
+								"logs",
+								"{{log_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update dataset log",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"input\": \"Anthoer different\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/datasets/{{dataset_id}}/logs/{{log_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"datasets",
+								"{{dataset_id}}",
+								"logs",
+								"{{log_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List evaluators",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"test_ds\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/evaluators/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"evaluators",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Run eval on dataset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"evaluator_slugs\": [\"char_count_eval\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/datasets/{{dataset_id}}/eval-reports/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"datasets",
+								"{{dataset_id}}",
+								"eval-reports",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List eval runs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"sss\",\n    \"description\": \"\",\n    \"type\": \"sampling\",\n    \"sampling\": 50,\n    \"start_time\": \"2025-07-04T22:55:38.818Z\",\n    \"end_time\": \"2025-07-13T22:55:38.818Z\",\n    \"initial_log_filters\": {\n        \"deployment_name\": {\n            \"value\": [\n                \"hihi's openai deployment\"\n            ],\n            \"operator\": \"\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/datasets/{{dataset_id}}/eval-reports/list/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"datasets",
+								"{{dataset_id}}",
+								"eval-reports",
+								"list",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Evaluators",
+			"item": [
+				{
+					"name": "Create LLM numerical evaluator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const evaluator_id = pm.response.json().id;",
+									"",
+									"pm.environment.set(\"evaluator_id\", evaluator_id);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Response Quality Evaluator\",\n    \"type\": \"llm\",\n    \"score_value_type\": \"numerical\",\n    \"description\": \"Evaluates response quality on a 1-5 scale\",\n    \"configurations\": {\n        \"evaluator_definition\": \"Rate the response quality based on accuracy, relevance, and completeness. <llm_input>{{llm_input}}</llm_input><llm_output>{{llm_output}}</llm_output>\",\n        \"scoring_rubric\": \"1=Poor, 2=Fair, 3=Good, 4=Very Good, 5=Excellent\",\n        \"llm_engine\": \"gpt-4o-mini\",\n        \"model_options\": {\n            \"temperature\": 0.1,\n            \"max_tokens\": 200\n        },\n        \"min_score\": 1.0,\n        \"max_score\": 5.0,\n        \"passing_score\": 3.0\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create LLM numerical evaluator (custom_eval_workflow)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const evaluator_id = pm.response.json().id;",
+									"",
+									"pm.environment.set(\"evaluator_id\", evaluator_id);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{custom_eval_demo_name}}\",\n    \"type\": \"llm\",\n    \"score_value_type\": \"numerical\",\n    \"description\": \"Evaluates response quality on a 1-5 scale\",\n    \"configurations\": {\n        \"evaluator_definition\": \"Rate the response quality based on accuracy, relevance, and completeness. <llm_input>{{llm_input}}</llm_input><llm_output>{{llm_output}}</llm_output>\",\n        \"scoring_rubric\": \"1=Poor, 2=Fair, 3=Good, 4=Very Good, 5=Excellent\",\n        \"llm_engine\": \"gpt-4o-mini\",\n        \"model_options\": {\n            \"temperature\": 0.1,\n            \"max_tokens\": 200\n        },\n        \"min_score\": 1.0,\n        \"max_score\": 5.0,\n        \"passing_score\": 3.0\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create human multi select evaluator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const evaluator_id = pm.response.json().id;",
+									"",
+									"pm.environment.set(\"evaluator_id\", evaluator_id);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Content Attributes (Multi)\",\n  \"evaluator_slug\": \"content_attributes_multi\",\n  \"type\": \"human\",\n  \"score_value_type\": \"multi_select\",\n  \"description\": \"Select all attributes that apply\",\n  \"configurations\": {},\n  \"categorical_choices\": [\n    { \"name\": \"Helpful\", \"value\": \"helpful\" },\n    { \"name\": \"Accurate\", \"value\": \"accurate\" },\n    { \"name\": \"Concise\", \"value\": \"concise\" },\n    { \"name\": \"Comprehensive\", \"value\": \"comprehensive\" }\n  ],\n  \"custom_required_fields\": [],\n  \"starred\": false,\n  \"tags\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create human single choice evaluator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const evaluator_id = pm.response.json().id;",
+									"",
+									"pm.environment.set(\"evaluator_id\", evaluator_id);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Content Quality Assessment (Single select)\",\n    \"evaluator_slug\": \"content_quality_categorical\",\n    \"type\": \"human\",\n    \"score_value_type\": \"single_select\",\n    \"description\": \"Human assessment of content quality with predefined categories\",\n    \"categorical_choices\": [\n        {\n            \"name\": \"Excellent\",\n            \"value\": 5\n        },\n        {\n            \"name\": \"Good\",\n            \"value\": 4\n        },\n        {\n            \"name\": \"Average\",\n            \"value\": 3\n        },\n        {\n            \"name\": \"Poor\",\n            \"value\": 2\n        },\n        {\n            \"name\": \"Very Poor\",\n            \"value\": 1\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create code bolean evaluator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const evaluator_id = pm.response.json().id;",
+									"",
+									"pm.environment.set(\"evaluator_id\", evaluator_id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Response Length Checker\",\n    \"evaluator_slug\": \"length_checker_boolean\",\n    \"type\": \"code\",\n    \"score_value_type\": \"boolean\",\n    \"description\": \"Checks if response meets minimum length requirement\",\n    \"configurations\": {\n        \"eval_code_snippet\": \"def evaluate(llm_input, llm_output, **kwargs):\\n    '''\\n    Check if response meets minimum length requirement\\n    Returns True if length >= 50 characters, False otherwise\\n    '''\\n    if not llm_output:\\n        return False\\n    \\n    return len(llm_output.strip()) >= 50\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create LLM boolean evalautor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const evaluator_id = pm.response.json().id;",
+									"",
+									"pm.environment.set(\"evaluator_id\", evaluator_id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"LLM Factual Accuracy Check\",\n  \"evaluator_slug\": \"llm_factual_accuracy\",\n  \"type\": \"llm\",\n  \"score_value_type\": \"boolean\",\n  \"description\": \"LLM-based evaluator that checks if response is factually accurate\",\n  \"configurations\": {\n    \"evaluator_definition\": \"Determine if the response is factually accurate and contains no misinformation.\",\n    \"scoring_rubric\": \"Return True if factually accurate, False if contains errors or misinformation\",\n    \"llm_engine\": \"gpt-4o-mini\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create LLM categorical evaluator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const evaluator_id = pm.response.json().id;",
+									"",
+									"pm.environment.set(\"evaluator_id\", evaluator_id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"LLM Response Tone Classifier\",\n  \"evaluator_slug\": \"llm_tone_classifier\",\n  \"type\": \"llm\",\n  \"score_value_type\": \"categorical\",\n  \"description\": \"LLM classifies response tone into predefined categories\",\n  \"configurations\": {\n    \"evaluator_definition\": \"Classify the tone of the response into one of the predefined categories.\",\n    \"scoring_rubric\": \"Analyze the language, word choice, and overall sentiment to determine tone\",\n    \"llm_engine\": \"gpt-4o-mini\"\n  },\n  \"categorical_choices\": [\n    {\"name\": \"Professional\", \"value\": \"professional\"},\n    {\"name\": \"Friendly\", \"value\": \"friendly\"},\n    {\"name\": \"Casual\", \"value\": \"casual\"},\n    {\"name\": \"Formal\", \"value\": \"formal\"}\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create LLM comment evaluator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const evaluator_id = pm.response.json().id;",
+									"",
+									"pm.environment.set(\"evaluator_id\", evaluator_id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"LLM Detailed Feedback\",\n    \"evaluator_slug\": \"llm_detailed_feedback\",\n    \"type\": \"llm\",\n    \"score_value_type\": \"comment\",\n    \"description\": \"LLM provides detailed written feedback on response quality\",\n    \"configurations\": {\n        \"evaluator_definition\": \"Provide detailed written feedback on the response, highlighting strengths and areas for improvement.\",\n        \"scoring_rubric\": \"Give constructive feedback covering accuracy, clarity, completeness, and suggestions for improvement\",\n        \"llm_engine\": \"gpt-4o\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create human numerical evaluator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const evaluator_id = pm.response.json().id;",
+									"",
+									"pm.environment.set(\"evaluator_id\", evaluator_id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Human Quality Rating\",\n    \"evaluator_slug\": \"human_quality_rating\",\n    \"type\": \"human\",\n    \"score_value_type\": \"numerical\",\n    \"description\": \"Human evaluators rate response quality on a numerical scale\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create human boolean evaluator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const evaluator_id = pm.response.json().id;",
+									"",
+									"pm.environment.set(\"evaluator_id\", evaluator_id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Human Appropriateness Check\",\n  \"evaluator_slug\": \"human_appropriateness\",\n  \"type\": \"human\",\n  \"score_value_type\": \"boolean\",\n  \"description\": \"Human evaluators determine if response is appropriate for the context\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create human comment evalautor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const evaluator_id = pm.response.json().id;",
+									"",
+									"pm.environment.set(\"evaluator_id\", evaluator_id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Human Detailed Review\",\n  \"evaluator_slug\": \"human_detailed_review\",\n  \"type\": \"human\",\n  \"score_value_type\": \"comment\",\n  \"description\": \"Human evaluators provide detailed written feedback and comments\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List evaluators",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/api/evaluators/list",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve evaluator",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators/{{evaluator_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators",
+								"{{evaluator_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List logs for evaluator run",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const logForEvaluatorRun = pm.response.json().results[0]",
+									"",
+									"if (logForEvaluatorRun) {",
+									"    pm.environment.set(\"log_id_for_evaluator_run\", logForEvaluatorRun.id)",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/request-logs/list?start_time=2025-08-25 00:00:00&end_time=2025-08-27 00:00:00&page_size=50",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"request-logs",
+								"list"
+							],
+							"query": [
+								{
+									"key": "start_time",
+									"value": "2025-08-25 00:00:00"
+								},
+								{
+									"key": "end_time",
+									"value": "2025-08-27 00:00:00"
+								},
+								{
+									"key": "page_size",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Run evaluator",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"inputs\": {\n        \"llm_input\": \"What is an apple\",\n        \"llm_output\": \"It is a fuit that grows on a tree, it looks rounded and it tastes sweet.\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators/{{evaluator_id}}/run",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators",
+								"{{evaluator_id}}",
+								"run"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update evaluator",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"configurations\": {\n        \"evaluator_definition\": \"Based on the input <llm_input> {{llm_input}}</llm_input>, is the output <llm_output>{{llm_output}}</llm_output> correct? Be fair\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators/{{evaluator_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators",
+								"{{evaluator_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete evaluator",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/evaluators/{{evaluator_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"evaluators",
+								"{{evaluator_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Testsets",
+			"item": [
+				{
+					"name": "Create testset",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const testSetID = pm.response.json().id;",
+									"",
+									"pm.environment.set(\"testset_id\", testSetID);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test API Key Dataset\",\r\n    \"description\": \"Dataset for testing new features\",\r\n    \"column_definitions\": [\r\n        {\r\n            \"field\": \"input\"\r\n        },\r\n        {\r\n            \"field\": \"expected_output\"\r\n        }\r\n    ],\r\n    \"starred\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/testsets",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"testsets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List testsets",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"filters\": {\n        \"name\": {\n            \"value\": \"E\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/testsets/list",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"testsets",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve testset",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/api/testsets/{{testset_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"testsets",
+								"{{testset_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update testset",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Updated Test API Dataset\",\r\n    \"starred\": false,\r\n    \"description\": \"Updated description for the dataset\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/testsets/{{testset_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"testsets",
+								"{{testset_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create testset rows",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"row_data\": {\r\n            \"input\": \"sdf\"\r\n        }\r\n    },\r\n    {\r\n        \"row_data\": {\r\n            \"expected_output\": \"ccc\"\r\n        }\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/testsets/{{testset_id}}/rows",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"testsets",
+								"{{testset_id}}",
+								"rows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List testset rows",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const row = pm.response.json().results.slice(-1)[0];",
+									"pm.environment.set(\"row_index\", row.row_index);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/api/testsets/{{testset_id}}/rows",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"testsets",
+								"{{testset_id}}",
+								"rows"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update testset row",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"row_data\": {\r\n                \"name\": \"Alice\",\r\n                \"variable1\": \"\",\r\n                \"first_name\": \"raymond\",\r\n                \"object_var\": { \"some_key\": \"some_var\"},\r\n                \"variable_1\": \"the_row_with_object\"\r\n            }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/testsets/{{testset_id}}/rows/{{row_index}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"testsets",
+								"{{testset_id}}",
+								"rows",
+								"{{row_index}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete testset",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/api/testsets/{{testset_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"testsets",
+								"{{testset_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete testset rows",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"row_indexes\":[\n        1, 2, 3\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/testsets/{{testset_id}}/rows",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"testsets",
+								"{{testset_id}}",
+								"rows"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Scores",
+			"item": [
+				{
+					"name": "Create score",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"log_id\": \"some_log_id\",\n    \"numerical_score\": 11,\n    \"evaluator_id\": \"{{evaluator_id}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/scores",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"scores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List scores",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/api/scores/list?start_time=2025-09-06 00:00:00",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"scores",
+								"list"
+							],
+							"query": [
+								{
+									"key": "start_time",
+									"value": "2025-09-06 00:00:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve score",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/api/scores/{{score_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"scores",
+								"{{score_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update score",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"numerical_value\": 100,\n    \"evaluator_slug\":\"custom_score\",\n    \"evaluator_name\": \"Custom score\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/scores/{{score_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"scores",
+								"{{score_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete score",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/api/scores/{{score_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"scores",
+								"{{score_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add score in log",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"evaluator_slug\":\"ssssss\",\n    \"numerical_value\":69\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/logs/{{log_id}}/scores",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{log_id}}",
+								"scores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List scores in log",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"evaluator_slug\":\"custom_score\",\n    \"numerical_value\":69\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/logs/{{log_id}}/scores",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{log_id}}",
+								"scores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add score in log (prod)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{prod_api_key}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"evaluator_slug\":\"custom_score\",\n    \"numerical_value\":100\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{prod}}/api/logs/{{prod_log_id}}/scores",
+							"host": [
+								"{{prod}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{prod_log_id}}",
+								"scores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List scores in log (prod)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key_prod}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{prod}}/api/logs/{{prod_log_id}}/scores",
+							"host": [
+								"{{prod}}"
+							],
+							"path": [
+								"api",
+								"logs",
+								"{{prod_log_id}}",
+								"scores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete score (prod)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{prod_api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{prod}}/api/scores/{{prod_score_id}}",
+							"host": [
+								"{{prod}}"
+							],
+							"path": [
+								"api",
+								"scores",
+								"{{prod_score_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Traces",
+			"item": [
+				{
+					"name": "Ingest trace as logs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"id\": \"dddd836934d94415a40dcdcfd479d592\",\n        \"organization_key_name\": \"Keywords AI Test (DO NOT DELETE)\",\n        \"status_in_eval_set\": \"\",\n        \"full_unique_id\": \"dddd836934d94415a40dcdcfd479d592\",\n        \"unique_organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"full_request\": {},\n        \"unique_id\": \"dddd836\",\n        \"thread_message_pairs\": [],\n        \"tool_calls\": [],\n        \"organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"warnings\": \"\",\n        \"full_response\": {},\n        \"metadata\": {},\n        \"tools\": [],\n        \"prompt_messages\": [],\n        \"completion_message\": {},\n        \"input\": \"{\\\"args\\\": [], \\\"kwargs\\\": {}}\",\n        \"output\": \"\\\"python\\\"\",\n        \"input_words\": 0,\n        \"output_words\": 0,\n        \"input_chars\": 0,\n        \"output_chars\": 0,\n        \"blurred\": false,\n        \"start_time\": \"2025-09-08T07:46:14.007279Z\",\n        \"timestamp\": \"2025-09-08T07:46:19.041835Z\",\n        \"organization_key_id\": \"h5vo0ju3.sha512$$04f7c240124d742993a49b3fe21a62831a9bcf7a682f5990d0e8f97bf2ae95b63f9455c6605e9015155c3c1b40d5ef95f82c11335264c346e77277f9a681b395\",\n        \"user_email\": \"admin@keywordsai.co\",\n        \"provider_id\": \"\",\n        \"cache_bit\": 0,\n        \"cache_miss_bit\": 0,\n        \"latency\": 5.034556,\n        \"status\": \"success\",\n        \"has_tool_calls\": false,\n        \"log_method\": \"python_tracing\",\n        \"log_type\": \"workflow\",\n        \"environment\": \"prod\",\n        \"completion_message_count\": 1,\n        \"trace_unique_id\": \"4fd81b946f97464789a28b50dd253a90\",\n        \"span_unique_id\": \"ac5ec3a7346012f0\",\n        \"span_name\": \"pirate_joke_plus_audience_reactions.workflow\",\n        \"span_workflow_name\": \"pirate_joke_plus_audience_reactions\",\n        \"storage_object_key\": \"local-logs-sorted-by-org/8264a3f4-40c7-476a-97d1-96908127ea21/2025-09-08T00:00:00+00:00/5c99dff510574c9e9ff419bfb5c7077c.idx\",\n        \"period_start\": \"2025-08-08T02:51:03+00:00\",\n        \"period_end\": \"2025-09-08T02:51:03+00:00\"\n    },\n    {\n        \"id\": \"93059975fd2a4acdaee5c1d4f0be01f5\",\n        \"organization_key_name\": \"Keywords AI Test (DO NOT DELETE)\",\n        \"status_in_eval_set\": \"\",\n        \"full_unique_id\": \"93059975fd2a4acdaee5c1d4f0be01f5\",\n        \"unique_organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"keywordsai_params\": {\n            \"has_webhook\": false,\n            \"environment\": \"prod\"\n        },\n        \"full_request\": {},\n        \"unique_id\": \"9305997\",\n        \"thread_message_pairs\": [],\n        \"tool_calls\": [],\n        \"organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"warnings\": \"\",\n        \"full_response\": {},\n        \"metadata\": {},\n        \"tools\": [],\n        \"prompt_messages\": [\n            {\n                \"role\": \"assistant\",\n                \"content\": \"Why did the opentelemetry developer go broke?\\n\\n\"\n            },\n            {\n                \"role\": \"user\",\n                \"content\": \"Tell me a joke about opentelemetry\"\n            }\n        ],\n        \"completion_message\": {\n            \"role\": \"assistant\",\n            \"content\": \"Why did the opentelemetry developer go broke?\\n\\n\"\n        },\n        \"input\": \"[{\\\"role\\\": \\\"assistant\\\", \\\"content\\\": \\\"Why did the opentelemetry developer go broke?\\\\n\\\\n\\\"}, {\\\"role\\\": \\\"user\\\", \\\"content\\\": \\\"Tell me a joke about opentelemetry\\\"}]\",\n        \"output\": \"{\\\"role\\\": \\\"assistant\\\", \\\"content\\\": \\\"Why did the opentelemetry developer go broke?\\\\n\\\\n\\\"}\",\n        \"input_words\": 13,\n        \"output_words\": 7,\n        \"input_chars\": 81,\n        \"output_chars\": 47,\n        \"temperature\": 0.5,\n        \"max_tokens\": 100,\n        \"frequency_penalty\": 0.5,\n        \"presence_penalty\": 0.5,\n        \"blurred\": false,\n        \"start_time\": \"2025-09-08T07:46:14.007452Z\",\n        \"timestamp\": \"2025-09-08T07:46:14.617987Z\",\n        \"prompt_tokens\": 15,\n        \"completion_tokens\": 10,\n        \"total_request_tokens\": 25,\n        \"cost\": 2.2499999999999998e-05,\n        \"organization_key_id\": \"h5vo0ju3.sha512$$04f7c240124d742993a49b3fe21a62831a9bcf7a682f5990d0e8f97bf2ae95b63f9455c6605e9015155c3c1b40d5ef95f82c11335264c346e77277f9a681b395\",\n        \"user_email\": \"admin@keywordsai.co\",\n        \"model\": \"gpt-3.5-turbo\",\n        \"provider_id\": \"openai\",\n        \"cache_bit\": 0,\n        \"cache_miss_bit\": 0,\n        \"latency\": 0.610535,\n        \"tokens_per_second\": 40.94769341642985,\n        \"status\": \"success\",\n        \"has_tool_calls\": false,\n        \"log_method\": \"python_tracing\",\n        \"log_type\": \"chat\",\n        \"environment\": \"prod\",\n        \"stream\": false,\n        \"prompt_message_count\": 2,\n        \"completion_message_count\": 1,\n        \"trace_unique_id\": \"4fd81b946f97464789a28b50dd253a90\",\n        \"span_unique_id\": \"fd42d3240b42d119\",\n        \"span_name\": \"openai.chat\",\n        \"span_parent_id\": \"36d4966299788194\",\n        \"span_workflow_name\": \"pirate_joke_generator\",\n        \"storage_object_key\": \"local-logs-sorted-by-org/8264a3f4-40c7-476a-97d1-96908127ea21/2025-09-08T00:00:00+00:00/e2460682f8c74eefaa65aa198358dbbd.idx\",\n        \"period_start\": \"2025-08-08T02:51:03+00:00\",\n        \"period_end\": \"2025-09-08T02:51:03+00:00\"\n    }\n{\n        \"id\": \"7d30ee7ae41644758ead7e37fee9eaae\",\n        \"organization_key_name\": \"Keywords AI Test (DO NOT DELETE)\",\n        \"status_in_eval_set\": \"\",\n        \"full_unique_id\": \"7d30ee7ae41644758ead7e37fee9eaae\",\n        \"unique_organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"keywordsai_params\": {\n            \"has_webhook\": false,\n            \"environment\": \"prod\"\n        },\n        \"full_request\": {},\n        \"unique_id\": \"7d30ee7\",\n        \"thread_message_pairs\": [],\n        \"tool_calls\": [],\n        \"organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"warnings\": \"\",\n        \"full_response\": {},\n        \"metadata\": {},\n        \"tools\": [],\n        \"prompt_messages\": [],\n        \"completion_message\": {},\n        \"input\": \"Why did the opentelemetry developer go broke?\\n\\n\",\n        \"input_words\": 0,\n        \"output_words\": 0,\n        \"input_chars\": 0,\n        \"output_chars\": 0,\n        \"blurred\": false,\n        \"start_time\": \"2025-09-08T07:46:14.618669Z\",\n        \"timestamp\": \"2025-09-08T07:46:15.119796Z\",\n        \"prompt_tokens\": 10,\n        \"total_request_tokens\": 10,\n        \"organization_key_id\": \"h5vo0ju3.sha512$$04f7c240124d742993a49b3fe21a62831a9bcf7a682f5990d0e8f97bf2ae95b63f9455c6605e9015155c3c1b40d5ef95f82c11335264c346e77277f9a681b395\",\n        \"user_email\": \"admin@keywordsai.co\",\n        \"model\": \"text-embedding-3-small\",\n        \"provider_id\": \"openai\",\n        \"cache_bit\": 0,\n        \"cache_miss_bit\": 0,\n        \"latency\": 0.501127,\n        \"status\": \"success\",\n        \"has_tool_calls\": false,\n        \"log_method\": \"python_tracing\",\n        \"log_type\": \"embedding\",\n        \"environment\": \"prod\",\n        \"completion_message_count\": 1,\n        \"trace_unique_id\": \"4fd81b946f97464789a28b50dd253a90\",\n        \"span_unique_id\": \"5cf51d67951d52cc\",\n        \"span_name\": \"openai.embeddings\",\n        \"span_parent_id\": \"38cef2aa65fe2994\",\n        \"span_workflow_name\": \"pirate_joke_generator\",\n        \"storage_object_key\": \"local-logs-sorted-by-org/8264a3f4-40c7-476a-97d1-96908127ea21/2025-09-08T00:00:00+00:00/e2460682f8c74eefaa65aa198358dbbd.idx\",\n        \"period_start\": \"2025-08-08T02:51:03+00:00\",\n        \"period_end\": \"2025-09-08T02:51:03+00:00\"\n    }\n{\n        \"id\": \"5e3afc2403d847739e669e6e73a27efa\",\n        \"organization_key_name\": \"Keywords AI Test (DO NOT DELETE)\",\n        \"status_in_eval_set\": \"\",\n        \"full_unique_id\": \"5e3afc2403d847739e669e6e73a27efa\",\n        \"unique_organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"keywordsai_params\": {\n            \"has_webhook\": false,\n            \"environment\": \"prod\"\n        },\n        \"full_request\": {},\n        \"unique_id\": \"5e3afc2\",\n        \"thread_message_pairs\": [],\n        \"tool_calls\": [],\n        \"organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"warnings\": \"\",\n        \"full_response\": {},\n        \"metadata\": {},\n        \"tools\": [],\n        \"prompt_messages\": [\n            {\n                \"role\": \"assistant\",\n                \"content\": \"Why did the scallywag opentelemetry developer lose all 'is doubloons?\"\n            },\n            {\n                \"role\": \"user\",\n                \"content\": \"translate the joke to pirate language:\\n\\nWhy did the opentelemetry developer go broke?\\n\\n\"\n            }\n        ],\n        \"completion_message\": {\n            \"role\": \"assistant\",\n            \"content\": \"Why did the scallywag opentelemetry developer lose all 'is doubloons?\"\n        },\n        \"input\": \"[{\\\"role\\\": \\\"assistant\\\", \\\"content\\\": \\\"Why did the scallywag opentelemetry developer lose all 'is doubloons?\\\"}, {\\\"role\\\": \\\"user\\\", \\\"content\\\": \\\"translate the joke to pirate language:\\\\n\\\\nWhy did the opentelemetry developer go broke?\\\\n\\\\n\\\"}]\",\n        \"output\": \"{\\\"role\\\": \\\"assistant\\\", \\\"content\\\": \\\"Why did the scallywag opentelemetry developer lose all 'is doubloons?\\\"}\",\n        \"input_words\": 23,\n        \"output_words\": 10,\n        \"input_chars\": 156,\n        \"output_chars\": 69,\n        \"blurred\": false,\n        \"start_time\": \"2025-09-08T07:46:15.120677Z\",\n        \"timestamp\": \"2025-09-08T07:46:15.885545Z\",\n        \"prompt_tokens\": 25,\n        \"completion_tokens\": 19,\n        \"total_request_tokens\": 44,\n        \"cost\": 1.5149999999999999e-05,\n        \"organization_key_id\": \"h5vo0ju3.sha512$$04f7c240124d742993a49b3fe21a62831a9bcf7a682f5990d0e8f97bf2ae95b63f9455c6605e9015155c3c1b40d5ef95f82c11335264c346e77277f9a681b395\",\n        \"user_email\": \"admin@keywordsai.co\",\n        \"model\": \"gpt-4o-mini\",\n        \"provider_id\": \"openai\",\n        \"cache_bit\": 0,\n        \"cache_miss_bit\": 0,\n        \"latency\": 0.764868,\n        \"tokens_per_second\": 57.52626597007588,\n        \"status\": \"success\",\n        \"has_tool_calls\": false,\n        \"log_method\": \"python_tracing\",\n        \"log_type\": \"chat\",\n        \"environment\": \"prod\",\n        \"stream\": false,\n        \"prompt_message_count\": 2,\n        \"completion_message_count\": 1,\n        \"trace_unique_id\": \"4fd81b946f97464789a28b50dd253a90\",\n        \"span_unique_id\": \"2c1defef40b2608c\",\n        \"span_name\": \"openai.chat\",\n        \"span_parent_id\": \"476ba185d83bed21\",\n        \"span_workflow_name\": \"pirate_joke_generator\",\n        \"storage_object_key\": \"local-logs-sorted-by-org/8264a3f4-40c7-476a-97d1-96908127ea21/2025-09-08T00:00:00+00:00/e2460682f8c74eefaa65aa198358dbbd.idx\",\n        \"period_start\": \"2025-08-08T02:51:03+00:00\",\n        \"period_end\": \"2025-09-08T02:51:03+00:00\"\n    }\n{\n        \"id\": \"50621e766c08417f88629c5005a2cb5b\",\n        \"organization_key_name\": \"Keywords AI Test (DO NOT DELETE)\",\n        \"status_in_eval_set\": \"\",\n        \"full_unique_id\": \"50621e766c08417f88629c5005a2cb5b\",\n        \"unique_organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"keywordsai_params\": {\n            \"has_webhook\": false,\n            \"environment\": \"prod\"\n        },\n        \"full_request\": {},\n        \"unique_id\": \"50621e7\",\n        \"thread_message_pairs\": [],\n        \"tool_calls\": [],\n        \"organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"warnings\": \"\",\n        \"full_response\": {},\n        \"metadata\": {},\n        \"tools\": [],\n        \"prompt_messages\": [\n            {\n                \"role\": \"assistant\",\n                \"content\": \"Because he couldn't find his OTEL map! \\n-Swashbucklingly yours, [Your Name]\"\n            },\n            {\n                \"role\": \"user\",\n                \"content\": \"add a signature to the joke:\\n\\nWhy did the scallywag opentelemetry developer lose all 'is doubloons?\"\n            }\n        ],\n        \"completion_message\": {\n            \"role\": \"assistant\",\n            \"content\": \"Because he couldn't find his OTEL map! \\n-Swashbucklingly yours, [Your Name]\"\n        },\n        \"input\": \"[{\\\"role\\\": \\\"assistant\\\", \\\"content\\\": \\\"Because he couldn't find his OTEL map! \\\\n-Swashbucklingly yours, [Your Name]\\\"}, {\\\"role\\\": \\\"user\\\", \\\"content\\\": \\\"add a signature to the joke:\\\\n\\\\nWhy did the scallywag opentelemetry developer lose all 'is doubloons?\\\"}]\",\n        \"output\": \"{\\\"role\\\": \\\"assistant\\\", \\\"content\\\": \\\"Because he couldn't find his OTEL map! \\\\n-Swashbucklingly yours, [Your Name]\\\"}\",\n        \"input_words\": 27,\n        \"output_words\": 11,\n        \"input_chars\": 174,\n        \"output_chars\": 75,\n        \"blurred\": false,\n        \"start_time\": \"2025-09-08T07:46:15.885853Z\",\n        \"timestamp\": \"2025-09-08T07:46:16.339037Z\",\n        \"prompt_tokens\": 33,\n        \"completion_tokens\": 23,\n        \"total_request_tokens\": 56,\n        \"cost\": 5.1e-05,\n        \"organization_key_id\": \"h5vo0ju3.sha512$$04f7c240124d742993a49b3fe21a62831a9bcf7a682f5990d0e8f97bf2ae95b63f9455c6605e9015155c3c1b40d5ef95f82c11335264c346e77277f9a681b395\",\n        \"user_email\": \"admin@keywordsai.co\",\n        \"model\": \"gpt-3.5-turbo\",\n        \"provider_id\": \"openai\",\n        \"cache_bit\": 0,\n        \"cache_miss_bit\": 0,\n        \"latency\": 0.453184,\n        \"tokens_per_second\": 123.57011721508262,\n        \"status\": \"success\",\n        \"has_tool_calls\": false,\n        \"log_method\": \"python_tracing\",\n        \"log_type\": \"chat\",\n        \"environment\": \"prod\",\n        \"stream\": false,\n        \"prompt_message_count\": 2,\n        \"completion_message_count\": 1,\n        \"trace_unique_id\": \"4fd81b946f97464789a28b50dd253a90\",\n        \"span_unique_id\": \"5e9f5844809bdd23\",\n        \"span_name\": \"openai.chat\",\n        \"span_parent_id\": \"a94667c04d93a0f0\",\n        \"span_workflow_name\": \"pirate_joke_generator\",\n        \"storage_object_key\": \"local-logs-sorted-by-org/8264a3f4-40c7-476a-97d1-96908127ea21/2025-09-08T00:00:00+00:00/e2460682f8c74eefaa65aa198358dbbd.idx\",\n        \"period_start\": \"2025-08-08T02:51:03+00:00\",\n        \"period_end\": \"2025-09-08T02:51:03+00:00\"\n    }\n{\n        \"id\": \"7dd66de94aec4a619c374e31a288d671\",\n        \"organization_key_name\": \"Keywords AI Test (DO NOT DELETE)\",\n        \"status_in_eval_set\": \"\",\n        \"full_unique_id\": \"7dd66de94aec4a619c374e31a288d671\",\n        \"unique_organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"keywordsai_params\": {\n            \"has_webhook\": false,\n            \"environment\": \"prod\"\n        },\n        \"full_request\": {},\n        \"unique_id\": \"7dd66de\",\n        \"thread_message_pairs\": [],\n        \"tool_calls\": [],\n        \"organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"warnings\": \"\",\n        \"full_response\": {},\n        \"metadata\": {},\n        \"tools\": [],\n        \"prompt_messages\": [\n            {\n                \"role\": \"assistant\",\n                \"content\": \"Hahahahaha! That's a good one\"\n            },\n            {\n                \"role\": \"user\",\n                \"content\": \"This joke:\\n\\nWhy did the scallywag opentelemetry developer lose all 'is doubloons?Because he couldn't find his OTEL map! \\n-Swashbucklingly yours, [Your Name] is funny, say hahahahaha\"\n            }\n        ],\n        \"completion_message\": {\n            \"role\": \"assistant\",\n            \"content\": \"Hahahahaha! That's a good one\"\n        },\n        \"input\": \"[{\\\"role\\\": \\\"assistant\\\", \\\"content\\\": \\\"Hahahahaha! That's a good one\\\"}, {\\\"role\\\": \\\"user\\\", \\\"content\\\": \\\"This joke:\\\\n\\\\nWhy did the scallywag opentelemetry developer lose all 'is doubloons?Because he couldn't find his OTEL map! \\\\n-Swashbucklingly yours, [Your Name] is funny, say hahahahaha\\\"}]\",\n        \"output\": \"{\\\"role\\\": \\\"assistant\\\", \\\"content\\\": \\\"Hahahahaha! That's a good one\\\"}\",\n        \"input_words\": 31,\n        \"output_words\": 5,\n        \"input_chars\": 210,\n        \"output_chars\": 29,\n        \"max_tokens\": 10,\n        \"blurred\": false,\n        \"start_time\": \"2025-09-08T07:46:16.339617Z\",\n        \"timestamp\": \"2025-09-08T07:46:17.114145Z\",\n        \"prompt_tokens\": 60,\n        \"completion_tokens\": 10,\n        \"total_request_tokens\": 70,\n        \"cost\": 4.4999999999999996e-05,\n        \"organization_key_id\": \"h5vo0ju3.sha512$$04f7c240124d742993a49b3fe21a62831a9bcf7a682f5990d0e8f97bf2ae95b63f9455c6605e9015155c3c1b40d5ef95f82c11335264c346e77277f9a681b395\",\n        \"user_email\": \"admin@keywordsai.co\",\n        \"model\": \"gpt-3.5-turbo\",\n        \"provider_id\": \"openai\",\n        \"cache_bit\": 0,\n        \"cache_miss_bit\": 0,\n        \"latency\": 0.774528,\n        \"tokens_per_second\": 90.37762353330028,\n        \"status\": \"success\",\n        \"has_tool_calls\": false,\n        \"log_method\": \"python_tracing\",\n        \"log_type\": \"chat\",\n        \"environment\": \"prod\",\n        \"stream\": false,\n        \"prompt_message_count\": 2,\n        \"completion_message_count\": 1,\n        \"trace_unique_id\": \"4fd81b946f97464789a28b50dd253a90\",\n        \"span_unique_id\": \"47db4455a3aa429e\",\n        \"span_name\": \"openai.chat\",\n        \"span_parent_id\": \"1d5a50a4e9ea8f14\",\n        \"span_workflow_name\": \"audience_reaction\",\n        \"storage_object_key\": \"local-logs-sorted-by-org/8264a3f4-40c7-476a-97d1-96908127ea21/2025-09-08T00:00:00+00:00/e2460682f8c74eefaa65aa198358dbbd.idx\",\n        \"period_start\": \"2025-08-08T02:51:03+00:00\",\n        \"period_end\": \"2025-09-08T02:51:03+00:00\"\n    }\n{\n        \"id\": \"fa956534c4e44f5bb1c396bd114a7d00\",\n        \"organization_key_name\": \"Keywords AI Test (DO NOT DELETE)\",\n        \"status_in_eval_set\": \"\",\n        \"full_unique_id\": \"fa956534c4e44f5bb1c396bd114a7d00\",\n        \"unique_organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"keywordsai_params\": {\n            \"has_webhook\": false,\n            \"environment\": \"prod\"\n        },\n        \"full_request\": {},\n        \"unique_id\": \"fa95653\",\n        \"thread_message_pairs\": [],\n        \"tool_calls\": [],\n        \"organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"warnings\": \"\",\n        \"full_response\": {},\n        \"metadata\": {},\n        \"tools\": [],\n        \"prompt_messages\": [\n            {\n                \"role\": \"assistant\",\n                \"content\": \"*clap*\"\n            },\n            {\n                \"role\": \"user\",\n                \"content\": \"Clap once\"\n            }\n        ],\n        \"completion_message\": {\n            \"role\": \"assistant\",\n            \"content\": \"*clap*\"\n        },\n        \"input\": \"[{\\\"role\\\": \\\"assistant\\\", \\\"content\\\": \\\"*clap*\\\"}, {\\\"role\\\": \\\"user\\\", \\\"content\\\": \\\"Clap once\\\"}]\",\n        \"output\": \"{\\\"role\\\": \\\"assistant\\\", \\\"content\\\": \\\"*clap*\\\"}\",\n        \"input_words\": 3,\n        \"output_words\": 1,\n        \"input_chars\": 15,\n        \"output_chars\": 6,\n        \"max_tokens\": 5,\n        \"blurred\": false,\n        \"start_time\": \"2025-09-08T07:46:17.114510Z\",\n        \"timestamp\": \"2025-09-08T07:46:17.585258Z\",\n        \"prompt_tokens\": 10,\n        \"completion_tokens\": 4,\n        \"total_request_tokens\": 14,\n        \"cost\": 1.1e-05,\n        \"organization_key_id\": \"h5vo0ju3.sha512$$04f7c240124d742993a49b3fe21a62831a9bcf7a682f5990d0e8f97bf2ae95b63f9455c6605e9015155c3c1b40d5ef95f82c11335264c346e77277f9a681b395\",\n        \"user_email\": \"admin@keywordsai.co\",\n        \"model\": \"gpt-3.5-turbo\",\n        \"provider_id\": \"openai\",\n        \"cache_bit\": 0,\n        \"cache_miss_bit\": 0,\n        \"latency\": 0.470748,\n        \"tokens_per_second\": 29.73990330282869,\n        \"status\": \"success\",\n        \"has_tool_calls\": false,\n        \"log_method\": \"python_tracing\",\n        \"log_type\": \"chat\",\n        \"environment\": \"prod\",\n        \"stream\": false,\n        \"prompt_message_count\": 2,\n        \"completion_message_count\": 1,\n        \"trace_unique_id\": \"4fd81b946f97464789a28b50dd253a90\",\n        \"span_unique_id\": \"927bea972b5a530e\",\n        \"span_name\": \"openai.chat\",\n        \"span_parent_id\": \"9eecb96ee2df5910\",\n        \"span_workflow_name\": \"audience_reaction\",\n        \"storage_object_key\": \"local-logs-sorted-by-org/8264a3f4-40c7-476a-97d1-96908127ea21/2025-09-08T00:00:00+00:00/e2460682f8c74eefaa65aa198358dbbd.idx\",\n        \"period_start\": \"2025-08-08T02:51:03+00:00\",\n        \"period_end\": \"2025-09-08T02:51:03+00:00\"\n    }\n{\n        \"id\": \"8daba2d724214774a76f46f46a6c881b\",\n        \"organization_key_name\": \"Keywords AI Test (DO NOT DELETE)\",\n        \"status_in_eval_set\": \"\",\n        \"full_unique_id\": \"8daba2d724214774a76f46f46a6c881b\",\n        \"unique_organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"keywordsai_params\": {\n            \"has_webhook\": false,\n            \"environment\": \"prod\"\n        },\n        \"full_request\": {},\n        \"unique_id\": \"8daba2d\",\n        \"thread_message_pairs\": [],\n        \"tool_calls\": [],\n        \"organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"warnings\": \"\",\n        \"full_response\": {},\n        \"metadata\": {},\n        \"tools\": [],\n        \"prompt_messages\": [\n            {\n                \"role\": \"assistant\",\n                \"content\": \"Thank you, thank you! *bows*\"\n            },\n            {\n                \"role\": \"user\",\n                \"content\": \"Applaud to the joke, clap clap! *clap*\"\n            }\n        ],\n        \"completion_message\": {\n            \"role\": \"assistant\",\n            \"content\": \"Thank you, thank you! *bows*\"\n        },\n        \"input\": \"[{\\\"role\\\": \\\"assistant\\\", \\\"content\\\": \\\"Thank you, thank you! *bows*\\\"}, {\\\"role\\\": \\\"user\\\", \\\"content\\\": \\\"Applaud to the joke, clap clap! *clap*\\\"}]\",\n        \"output\": \"{\\\"role\\\": \\\"assistant\\\", \\\"content\\\": \\\"Thank you, thank you! *bows*\\\"}\",\n        \"input_words\": 12,\n        \"output_words\": 5,\n        \"input_chars\": 66,\n        \"output_chars\": 28,\n        \"max_tokens\": 10,\n        \"blurred\": false,\n        \"start_time\": \"2025-09-08T07:46:17.585343Z\",\n        \"timestamp\": \"2025-09-08T07:46:18.037410Z\",\n        \"prompt_tokens\": 21,\n        \"completion_tokens\": 9,\n        \"total_request_tokens\": 30,\n        \"cost\": 2.4e-05,\n        \"organization_key_id\": \"h5vo0ju3.sha512$$04f7c240124d742993a49b3fe21a62831a9bcf7a682f5990d0e8f97bf2ae95b63f9455c6605e9015155c3c1b40d5ef95f82c11335264c346e77277f9a681b395\",\n        \"user_email\": \"admin@keywordsai.co\",\n        \"model\": \"gpt-3.5-turbo\",\n        \"provider_id\": \"openai\",\n        \"cache_bit\": 0,\n        \"cache_miss_bit\": 0,\n        \"latency\": 0.452067,\n        \"tokens_per_second\": 66.36184459383233,\n        \"status\": \"success\",\n        \"has_tool_calls\": false,\n        \"log_method\": \"python_tracing\",\n        \"log_type\": \"chat\",\n        \"environment\": \"prod\",\n        \"stream\": false,\n        \"prompt_message_count\": 2,\n        \"completion_message_count\": 1,\n        \"trace_unique_id\": \"4fd81b946f97464789a28b50dd253a90\",\n        \"span_unique_id\": \"b6c77fa955fc7e2d\",\n        \"span_name\": \"openai.chat\",\n        \"span_parent_id\": \"758bc34bd0732f6e\",\n        \"span_workflow_name\": \"audience_reaction\",\n        \"storage_object_key\": \"local-logs-sorted-by-org/8264a3f4-40c7-476a-97d1-96908127ea21/2025-09-08T00:00:00+00:00/e2460682f8c74eefaa65aa198358dbbd.idx\",\n        \"period_start\": \"2025-08-08T02:51:03+00:00\",\n        \"period_end\": \"2025-09-08T02:51:03+00:00\"\n    }\n{\n        \"id\": \"ff18915348af4db6b06d183999bdb189\",\n        \"organization_key_name\": \"Keywords AI Test (DO NOT DELETE)\",\n        \"status_in_eval_set\": \"\",\n        \"full_unique_id\": \"ff18915348af4db6b06d183999bdb189\",\n        \"unique_organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"keywordsai_params\": {\n            \"has_webhook\": false,\n            \"environment\": \"prod\"\n        },\n        \"full_request\": {},\n        \"unique_id\": \"ff18915\",\n        \"thread_message_pairs\": [],\n        \"tool_calls\": [],\n        \"organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"warnings\": \"\",\n        \"full_response\": {},\n        \"metadata\": {},\n        \"tools\": [],\n        \"prompt_messages\": [],\n        \"completion_message\": {},\n        \"input\": \"{\\\"args\\\": [], \\\"kwargs\\\": {}}\",\n        \"output\": \"\\\"Why did the scallywag opentelemetry developer lose all 'is doubloons?Because he couldn't find his OTEL map! \\\\n-Swashbucklingly yours, [Your Name]\\\"\",\n        \"input_words\": 0,\n        \"output_words\": 0,\n        \"input_chars\": 0,\n        \"output_chars\": 0,\n        \"blurred\": false,\n        \"start_time\": \"2025-09-08T07:46:14.007354Z\",\n        \"timestamp\": \"2025-09-08T07:46:16.339218Z\",\n        \"organization_key_id\": \"h5vo0ju3.sha512$$04f7c240124d742993a49b3fe21a62831a9bcf7a682f5990d0e8f97bf2ae95b63f9455c6605e9015155c3c1b40d5ef95f82c11335264c346e77277f9a681b395\",\n        \"user_email\": \"admin@keywordsai.co\",\n        \"provider_id\": \"\",\n        \"cache_bit\": 0,\n        \"cache_miss_bit\": 0,\n        \"latency\": 2.331864,\n        \"status\": \"success\",\n        \"has_tool_calls\": false,\n        \"log_method\": \"python_tracing\",\n        \"log_type\": \"workflow\",\n        \"environment\": \"prod\",\n        \"completion_message_count\": 1,\n        \"trace_unique_id\": \"4fd81b946f97464789a28b50dd253a90\",\n        \"span_unique_id\": \"8b561c84d52341c4\",\n        \"span_name\": \"pirate_joke_generator.workflow\",\n        \"span_parent_id\": \"ac5ec3a7346012f0\",\n        \"span_workflow_name\": \"pirate_joke_generator\",\n        \"storage_object_key\": \"local-logs-sorted-by-org/8264a3f4-40c7-476a-97d1-96908127ea21/2025-09-08T00:00:00+00:00/e2460682f8c74eefaa65aa198358dbbd.idx\",\n        \"period_start\": \"2025-08-08T02:51:03+00:00\",\n        \"period_end\": \"2025-09-08T02:51:03+00:00\"\n    }\n{\n        \"id\": \"b6ae46ae957d4135bd22b87ac6fad210\",\n        \"organization_key_name\": \"Keywords AI Test (DO NOT DELETE)\",\n        \"status_in_eval_set\": \"\",\n        \"full_unique_id\": \"b6ae46ae957d4135bd22b87ac6fad210\",\n        \"unique_organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"keywordsai_params\": {\n            \"has_webhook\": false,\n            \"environment\": \"prod\"\n        },\n        \"full_request\": {},\n        \"unique_id\": \"b6ae46a\",\n        \"thread_message_pairs\": [],\n        \"tool_calls\": [],\n        \"organization_id\": \"8264a3f4-40c7-476a-97d1-96908127ea21\",\n        \"warnings\": \"\",\n        \"full_response\": {},\n        \"metadata\": {},\n        \"tools\": [],\n        \"prompt_messages\": [],\n        \"completion_message\": {},\n        \"input\": \"{\\\"args\\\": [], \\\"kwargs\\\": {\\\"joke\\\": \\\"Why did the scallywag opentelemetry developer lose all 'is doubloons?Because he couldn't find his OTEL map! \\\\n-Swashbucklingly yours, [Your Name]\\\"}}\",\n        \"output\": \"\\\"Hahahahaha! That's a good oneThank you, thank you! *bows*\\\"\",\n        \"input_words\": 0,\n        \"output_words\": 0,\n        \"input_chars\": 0,\n        \"output_chars\": 0,\n        \"blurred\": false,\n        \"start_time\": \"2025-09-08T07:46:16.339384Z\",\n        \"timestamp\": \"2025-09-08T07:46:18.037641Z\",\n        \"organization_key_id\": \"h5vo0ju3.sha512$$04f7c240124d742993a49b3fe21a62831a9bcf7a682f5990d0e8f97bf2ae95b63f9455c6605e9015155c3c1b40d5ef95f82c11335264c346e77277f9a681b395\",\n        \"user_email\": \"admin@keywordsai.co\",\n        \"provider_id\": \"\",\n        \"cache_bit\": 0,\n        \"cache_miss_bit\": 0,\n        \"latency\": 1.698257,\n        \"status\": \"success\",\n        \"has_tool_calls\": false,\n        \"log_method\": \"python_tracing\",\n        \"log_type\": \"workflow\",\n        \"environment\": \"prod\",\n        \"completion_message_count\": 1,\n        \"trace_unique_id\": \"4fd81b946f97464789a28b50dd253a90\",\n        \"span_unique_id\": \"4f7cc7798b129bdd\",\n        \"span_name\": \"audience_reaction.workflow\",\n        \"span_parent_id\": \"ac5ec3a7346012f0\",\n        \"span_workflow_name\": \"audience_reaction\",\n        \"storage_object_key\": \"local-logs-sorted-by-org/8264a3f4-40c7-476a-97d1-96908127ea21/2025-09-08T00:00:00+00:00/e2460682f8c74eefaa65aa198358dbbd.idx\",\n        \"period_start\": \"2025-08-08T02:51:03+00:00\",\n        \"period_end\": \"2025-09-08T02:51:03+00:00\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List traces",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const firstTraceId = pm.response.json().results[0].id",
+									"",
+									"pm.environment.set(\"trace_id\", firstTraceId)",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/api/traces/list?start_time=2025-11-02 00:00:00",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"traces",
+								"list"
+							],
+							"query": [
+								{
+									"key": "start_time",
+									"value": "2025-11-02 00:00:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve trace",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local}}/api/traces/{{trace_id}}?start_time=2025-10-19 00:00:00",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"traces",
+								"{{trace_id}}"
+							],
+							"query": [
+								{
+									"key": "start_time",
+									"value": "2025-10-19 00:00:00"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Temporary API key",
+			"item": [
+				{
+					"name": "Create temporary API key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"temporary_api_key_id\", pm.response.json().id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Keywords AI temporary key 1\", // Name of the Key\n    // \"expiry_date\": \"2025-03-15T01:19:33.263343Z\", // ISO format string\n    \"max_usage\": -1, // Number of times this key can be used for logging. -1 being default, means infinite times\n    \"rate_limit\": null, // Calls per minute. This is going to be overridden by the plan's rate limit\n    \"spending_limit\": null, // Spending with proxy. In US dollars\n    \"is_test\": false // Is this a test key or a prod key\n}\n\n// Response:\n// {\n//     \"id\": \"vcjRcdm8...\",\n//     \"api_key\": \"vcjRcdm8.5hSZiXrA698O6KAiWX5CJj8Zrbp0H6gV\", // This is the only time this will show, KEEP IT SOME WHERE SAFE\n//     \"prefix\": \"vcjRcdm8\",\n//     \"created\": \"2025-03-16T01:19:17.074170Z\",\n//     \"name\": \"Keywords AI temporary key\",\n//     \"revoked\": false,\n//     \"expiry_date\": \"2025-03-15T01:19:33.263343Z\",\n//     \"key_usage\": 0,\n//     \"max_usage\": -1,\n//     \"last_used\": \"1970-01-01T00:00:00Z\",\n//     \"rate_limit\": null,\n//     \"spending_limit\": null,\n//     \"spending_in_period\": 0.0,\n//     \"is_test\": false,\n//     \"is_temporary\": true\n// }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/temporary-keys/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"temporary-keys",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List temporary API keys",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"temporary_api_key_id\", pm.response.json().results[0].id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/temporary-keys/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"temporary-keys",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve temporary API key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8000/api/temporary-keys/{{temporary_api_key_id}}/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"temporary-keys",
+								"{{temporary_api_key_id}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update temporary API key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"hello world\",\n    \"expiry_date\": \"2025-03-15T01:19:33.263343Z\",\n    \"is_test\":true,\n    \"prefix\":\"some_random_id_duhaaa\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/temporary-keys/{{temporary_api_key_id}}/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"temporary-keys",
+								"{{temporary_api_key_id}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete temporary API key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/temporary-keys/{{temporary_api_key_id}}/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"temporary-keys",
+								"{{temporary_api_key_id}}",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Experiment V2",
+			"item": [
+				{
+					"name": "Create experiment (custom_eval_workflow)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"experiment_id\", pm.response.json().id);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dataset_id\": \"{{dataset_id}}\",\n    \"name\": \"{{custom_eval_demo_name}}\",\n    \"description\": \"Testing experiment creation\",\n    \"workflows\": [\n        {\n            \"type\": \"{{workflow_type}}\",\n            \"config\": {\n        }\n        }\n    ],\n    \"evaluator_slugs\": [\n        \"{{evaluator_slug}}\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/v2/experiments",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"experiments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List experiments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"pm.environment.set(\"experiment_id\", response.results[0].id);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/v2/experiments/list",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"experiments",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search experiment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"pm.environment.set(\"experiment_id\", response.results[0].id);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"filters\": {\n        \"name\": {\n            \"operator\":\"startswith\",\n            \"value\": \"K\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/v2/experiments/list",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"experiments",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve experiment",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"model\": \"gpt-3.5-turbo\",\n    \"n\":1,\n    \"messages\": [\n        {\n\n            \"role\": \"user\",\n            \"content\": \"Hi, how are you?\"\n        }\n    ],\n    \"max_tokens\": 30,\n    \"customer_identifier\": \"a_model_customer\",\n    \"stream\": true,\n    \"cache_enabled\":true,\n    \"cache_ttl\":600\n}"
+						},
+						"url": {
+							"raw": "{{local}}/api/v2/experiments/{{experiment_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"experiments",
+								"{{experiment_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List experiment logs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const traceID = pm.response.json().results[0].id;",
+									"pm.environment.set(\"experiment_log_id\", traceID);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/v2/experiments/{{experiment_id}}/logs/list/",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"experiments",
+								"{{experiment_id}}",
+								"logs",
+								"list",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete experiment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const traceID = pm.response.json().results[0].id;",
+									"pm.environment.set(\"experiment_log_id\", traceID);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/v2/experiments/{{experiment_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"experiments",
+								"{{experiment_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search experiment logs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"filters\": {\n        \"comparison_key\": {\n            \"operator\": \"in\",\n            \"value\": [\"b7c84ae535cf66aef2f862eb260a14bd1aa9310220076cf196fec40860ac0d11\"]\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/v2/experiments/{{experiment_id}}/logs/list",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"experiments",
+								"{{experiment_id}}",
+								"logs",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve experiment log",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const input = pm.response.json().input;",
+									"pm.environment.set(\"input\", input);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"model\": \"gpt-3.5-turbo\",\n    \"n\":1,\n    \"messages\": [\n        {\n\n            \"role\": \"user\",\n            \"content\": \"Hi, how are you?\"\n        }\n    ],\n    \"max_tokens\": 30,\n    \"customer_identifier\": \"a_model_customer\",\n    \"stream\": true,\n    \"cache_enabled\":true,\n    \"cache_ttl\":600\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/v2/experiments/{{experiment_id}}/logs/{{experiment_log_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"experiments",
+								"{{experiment_id}}",
+								"logs",
+								"{{experiment_log_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update experiment log",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{api_key1}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"output\": {{output}} // -> {\"output\": \"This is the output of the custom workflow\"}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/api/v2/experiments/{{experiment_id}}/logs/{{experiment_log_id}}",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"experiments",
+								"{{experiment_id}}",
+								"logs",
+								"{{experiment_log_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

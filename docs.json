@@ -316,13 +316,16 @@
         "tab": "API reference",
         "groups": [
           {
-            "group": "Observability",
+            "group": "Observe",
             "pages": [
               {
                 "group": "Logs",
                 "pages": [
                   "api-endpoints/integration/request-logging-endpoint",
+                  "api-endpoints/async-endpoints/batch-logging-endpoint",
                   "api-endpoints/async-endpoints/logs-list-endpoint",
+                  "api-endpoints/async-endpoints/get-log-endpoint",
+                  "api-endpoints/async-endpoints/logs-update-endpoint",
                   "api-endpoints/async-endpoints/traces-ingest-from-logs"
                 ]
               },
@@ -332,7 +335,8 @@
                   "api-endpoints/trace/list",
                   "api-endpoints/trace/get",
                   "api-endpoints/trace/summary",
-                  "api-endpoints/async-endpoints/traces-ingest-from-logs"
+                  "api-endpoints/async-endpoints/traces-ingest-from-logs",
+                  "api-endpoints/trace/ingest"
                 ]
               },
               {
@@ -361,15 +365,8 @@
                   "api-endpoints/integration/chat-completions",
                   "api-endpoints/integration/embeddings",
                   "api-endpoints/integration/speech-to-text",
-                  "api-endpoints/integration/text-to-speech"
-                ]
-              },
-              {
-                "group": "Multimodal",
-                "pages": [
-                  "api-endpoints/integration/embeddings",
-                  "api-endpoints/integration/speech-to-text",
-                  "api-endpoints/integration/text-to-speech"
+                  "api-endpoints/integration/text-to-speech",
+                  "api-endpoints/integration/assemblyai"
                 ]
               },
               {
@@ -379,24 +376,93 @@
                   "api-endpoints/prompt-endpoints/get-prompts",
                   "api-endpoints/prompt-endpoints/update-prompt",
                   "api-endpoints/prompt-endpoints/delete-prompt",
-                  "api-endpoints/prompt-endpoints/create-prompt-version",
-                  "api-endpoints/prompt-endpoints/get-prompt-versions",
-                  "api-endpoints/prompt-endpoints/update-prompt-version",
-                  "api-endpoints/prompt-endpoints/delete-prompt-version"
+                  {
+                    "group": "Prompt Versions",
+                    "pages": [
+                      "api-endpoints/prompt-endpoints/create-prompt-version",
+                      "api-endpoints/prompt-endpoints/get-prompt-versions",
+                      "api-endpoints/prompt-endpoints/update-prompt-version",
+                      "api-endpoints/prompt-endpoints/delete-prompt-version"
+                    ]
+                  }
                 ]
               },
               {
-                "group": "Models",
+                "group": "Testsets",
                 "pages": [
-                  "api-endpoints/data-endpoints/models-endpoint"
+                  "api-endpoints/evaluation/testsets/create",
+                  "api-endpoints/evaluation/testsets/list",
+                  "api-endpoints/evaluation/testsets/get",
+                  "api-endpoints/evaluation/testsets/update",
+                  "api-endpoints/evaluation/testsets/delete",
+                  {
+                    "group": "Testset Rows",
+                    "pages": [
+                      "api-endpoints/evaluation/testsets/rows-create",
+                      "api-endpoints/evaluation/testsets/rows-list",
+                      "api-endpoints/evaluation/testsets/rows-update",
+                      "api-endpoints/evaluation/testsets/rows-delete"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Experiments",
+                "pages": [
+                  "api-endpoints/evaluation/experiments/create",
+                  "api-endpoints/evaluation/experiments/list",
+                  "api-endpoints/evaluation/experiments/get",
+                  "api-endpoints/evaluation/experiments/update",
+                  "api-endpoints/evaluation/experiments/delete",
+                  {
+                    "group": "Experiment Rows",
+                    "pages": [
+                      "api-endpoints/evaluation/experiments/rows-add",
+                      "api-endpoints/evaluation/experiments/rows-remove",
+                      "api-endpoints/evaluation/experiments/rows-update"
+                    ]
+                  },
+                  {
+                    "group": "Experiment Columns",
+                    "pages": [
+                      "api-endpoints/evaluation/experiments/columns-add",
+                      "api-endpoints/evaluation/experiments/columns-remove",
+                      "api-endpoints/evaluation/experiments/columns-update"
+                    ]
+                  },
+                  {
+                    "group": "Experiment Actions",
+                    "pages": [
+                      "api-endpoints/evaluation/experiments/run",
+                      "api-endpoints/evaluation/experiments/run-evals"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Experiments V2",
+                "pages": [
+                  "api-endpoints/evaluation/experiments-v2/create",
+                  "api-endpoints/evaluation/experiments-v2/list",
+                  "api-endpoints/evaluation/experiments-v2/search",
+                  "api-endpoints/evaluation/experiments-v2/get",
+                  "api-endpoints/evaluation/experiments-v2/delete",
+                  {
+                    "group": "Experiment V2 Logs",
+                    "pages": [
+                      "api-endpoints/evaluation/experiments-v2/logs-list",
+                      "api-endpoints/evaluation/experiments-v2/logs-search",
+                      "api-endpoints/evaluation/experiments-v2/logs-get",
+                      "api-endpoints/evaluation/experiments-v2/logs-update"
+                    ]
+                  }
                 ]
               }
             ]
           },
           {
-            "group": "Evaluation",
+            "group": "Evaluate",
             "pages": [
-              "api-endpoints/evaluation/types",
               {
                 "group": "Evaluators",
                 "pages": [
@@ -416,30 +482,43 @@
                   "api-endpoints/evaluation/dataset/list",
                   "api-endpoints/evaluation/dataset/patch",
                   "api-endpoints/evaluation/dataset/delete",
-                  "api-endpoints/evaluation/dataset/logs-add",
-                  "api-endpoints/evaluation/dataset/logs-list",
-                  "api-endpoints/evaluation/dataset/logs-list-post",
-                  "api-endpoints/evaluation/dataset/logs-get",
-                  "api-endpoints/evaluation/dataset/logs-put",
-                  "api-endpoints/evaluation/dataset/logs-patch",
-                  "api-endpoints/evaluation/dataset/logs-delete",
-                  "api-endpoints/evaluation/dataset/logs-remove"
+                  {
+                    "group": "Dataset Logs",
+                    "pages": [
+                      "api-endpoints/evaluation/dataset/logs-add",
+                      "api-endpoints/evaluation/dataset/logs-list",
+                      "api-endpoints/evaluation/dataset/logs-list-post",
+                      "api-endpoints/evaluation/dataset/logs-get",
+                      "api-endpoints/evaluation/dataset/logs-put",
+                      "api-endpoints/evaluation/dataset/logs-patch",
+                      "api-endpoints/evaluation/dataset/logs-delete",
+                      "api-endpoints/evaluation/dataset/logs-remove"
+                    ]
+                  },
+                  {
+                    "group": "Dataset Evaluations",
+                    "pages": [
+                      "api-endpoints/evaluation/dataset/eval-reports-create",
+                      "api-endpoints/evaluation/dataset/eval-reports-list"
+                    ]
+                  }
                 ]
               },
               {
                 "group": "Scores",
                 "pages": [
                   "api-endpoints/evaluation/scores/create",
+                  "api-endpoints/evaluation/scores/list",
                   "api-endpoints/evaluation/scores/get",
                   "api-endpoints/evaluation/scores/update",
-                  "api-endpoints/evaluation/scores/delete",
-                  "api-endpoints/evaluation/scores/list"
+                  "api-endpoints/evaluation/scores/delete"
                 ]
               },
               {
-                "group": "Log score management",
+                "group": "Log Scores",
                 "pages": [
                   "api-endpoints/evaluation/log-scores/create",
+                  "api-endpoints/evaluation/log-scores/list",
                   "api-endpoints/evaluation/log-scores/get",
                   "api-endpoints/evaluation/log-scores/update",
                   "api-endpoints/evaluation/log-scores/delete"
@@ -462,13 +541,20 @@
                   "api-endpoints/async-endpoints/evaluations"
                 ]
               }
+              "api-endpoints/async-endpoints/evaluations"
             ]
           },
           {
             "group": "Manage",
             "pages": [
               {
-                "group": "API Keys",
+                "group": "Models",
+                "pages": [
+                  "api-endpoints/data-endpoints/models-endpoint"
+                ]
+              },
+              {
+                "group": "Temporary API Keys",
                 "pages": [
                   "api-endpoints/temporary-api-keys/create-temporary-key",
                   "api-endpoints/temporary-api-keys/list-temporary-keys",
