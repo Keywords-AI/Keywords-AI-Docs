@@ -1,6 +1,6 @@
 ---
 title: "Python"
-description: "Build multi-agent workflows with the OpenAI Agents SDK and Keywords AI."
+description: "Build multi-agent workflows with the OpenAI Agents SDK and send traces to Keywords AI."
 ---
 <Note>This integration is only for **Agent tracing**. If you are looking for the OpenAI integration with the AI gateway, please see the [OpenAI integration](/integration/development-frameworks/llm_framework/openai/openai-sdk).</Note>
 
@@ -8,9 +8,8 @@ description: "Build multi-agent workflows with the OpenAI Agents SDK and Keyword
 
 The [OpenAI Agents SDK](https://github.com/openai/openai-agents-python?tab=readme-ov-file) is a lightweight yet powerful framework for building multi-agent workflows.
 
-<Frame caption="Keywords AI agent tracing with OpenAI Agents SDK.">
-<img width="100%" className="block dark:hidden" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/agents-sdk-tracing-light.jpg" />
-<img width="100%" className="hidden dark:block" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/agents-sdk-tracing-dark.jpg" />
+<Frame className="rounded-md">
+<img width="100%" src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/get-started/trace_start_tree_v0.png" alt="Agent tracing visualization" />
 </Frame>
 
 ## Core concepts:
@@ -21,7 +20,7 @@ The [OpenAI Agents SDK](https://github.com/openai/openai-agents-python?tab=readm
 
 ## Quickstart
 
-When you install OpenAI Agents SDK and Keywords AI exporter, implement `KeywordsAISpanExporter` in your code to send traces from the OpenAI Agents SDK to Keywords AI.
+Install the OpenAI Agents SDK and the Keywords AI exporter, then configure the exporter to send traces from the Agents SDK to Keywords AI.
 
 ### Prerequisites
 
@@ -33,7 +32,7 @@ pip install openai-agents
 pip install keywordsai-exporter-openai-agents
 ```
 
-**Please use the specific endpoint for the OpenAI Agents SDK.**
+**Use the specific endpoint for the OpenAI Agents SDK.**
 
 ```bash
 https://api.keywordsai.co/api/openai/v1/traces/ingest
@@ -43,7 +42,7 @@ https://api.keywordsai.co/api/openai/v1/traces/ingest
 
 ### Hello World example
 
-```python Python
+```python
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
@@ -53,11 +52,11 @@ import asyncio
 import os
 from agents import Agent, Runner
 from agents.tracing import set_trace_processors, trace
-from keywordsai_exporter_openai_agents import KeywordsAISpanExporter
+from keywordsai_exporter_openai_agents import KeywordsAITraceProcessor
 
 set_trace_processors(
     [
-        KeywordsAISpanExporter(
+        KeywordsAITraceProcessor(
             api_key=os.getenv("KEYWORDSAI_API_KEY"),
             endpoint=os.getenv("KEYWORDSAI_OAIA_TRACING_ENDPOINT"),
         ),
@@ -86,18 +85,18 @@ if __name__ == "__main__":
 
 ### Handoffs example
 
-```python Python
+```python
 from agents import Agent, Runner
 import asyncio
-from keywordsai_exporter_openai_agents import KeywordsAISpanExporter
+from keywordsai_exporter_openai_agents import KeywordsAITraceProcessor
 from agents.tracing import set_trace_processors
 import os
 
 set_trace_processors(
     [
-        KeywordsAISpanExporter(
+        KeywordsAITraceProcessor(
             api_key=os.getenv("KEYWORDSAI_API_KEY"),
-            endpoint="https://api.keywordsai.co/api/openai/v1/traces/ingest",
+            endpoint=os.getenv("KEYWORDSAI_OAIA_TRACING_ENDPOINT"),
         ),
     ]
 )
@@ -131,19 +130,19 @@ if __name__ == "__main__":
 
 ### Functions example
 
-```python Python
+```python
 import asyncio
 
 from agents import Agent, Runner, function_tool
-from keywordsai_exporter_openai_agents import KeywordsAISpanExporter
+from keywordsai_exporter_openai_agents import KeywordsAITraceProcessor
 from agents.tracing import set_trace_processors
 import os
 
 set_trace_processors(
     [
-        KeywordsAISpanExporter(
+        KeywordsAITraceProcessor(
             api_key=os.getenv("KEYWORDSAI_API_KEY"),
-            endpoint="https://api.keywordsai.co/api/openai/v1/traces/ingest",
+            endpoint=os.getenv("KEYWORDSAI_OAIA_TRACING_ENDPOINT"),
         ),
     ]
 )

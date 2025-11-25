@@ -482,66 +482,123 @@
         ]
       },
       {
-        "tab": "Python SDK",
+        "tab": "Python SDKs",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "Tracing SDK",
             "pages": [
-              "python-sdk/quickstart",
-              "python-sdk/examples"
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "tracing-sdk/quickstart",
+                  "tracing-sdk/examples"
+                ]
+              },
+              {
+                "group": "Decorators",
+                "pages": [
+                  "tracing-sdk/decorators/workflow",
+                  "tracing-sdk/decorators/task",
+                  "tracing-sdk/decorators/agent",
+                  "tracing-sdk/decorators/tool"
+                ]
+              },
+              {
+                "group": "Client API",
+                "pages": [
+                  "tracing-sdk/main/initialize",
+                  "tracing-sdk/client/get-client",
+                  "tracing-sdk/client/get-current-trace-id",
+                  "tracing-sdk/client/get-current-span-id",
+                  "tracing-sdk/client/update-current-span",
+                  "tracing-sdk/client/add-event",
+                  "tracing-sdk/client/record-exception",
+                  "tracing-sdk/client/get-context-value",
+                  "tracing-sdk/client/set-context-value",
+                  "tracing-sdk/client/is-recording",
+                  "tracing-sdk/client/get-tracer",
+                  "tracing-sdk/client/flush",
+                  "tracing-sdk/client/get-span-buffer",
+                  "tracing-sdk/client/export-spans"
+                ]
+              },
+              {
+                "group": "Contexts",
+                "pages": [
+                  "tracing-sdk/contexts/keywordsai-span-attributes"
+                ]
+              },
+              {
+                "group": "Instrumentation",
+                "pages": [
+                  "tracing-sdk/instrumentation/overview"
+                ]
+              }
             ]
           },
           {
-            "group": "Logs",
+            "group": "Keywords AI SDK",
             "pages": [
-              "python-sdk/logs/overview",
-              "python-sdk/logs/create",
-              "python-sdk/logs/list"
-            ]
-          },
-          {
-            "group": "Prompts",
-            "pages": [
-              "python-sdk/prompts/overview",
-              "python-sdk/prompts/create",
-              "python-sdk/prompts/list",
-              "python-sdk/prompts/get",
-              "python-sdk/prompts/update",
-              "python-sdk/prompts/delete",
-              "python-sdk/prompts/create-version",
-              "python-sdk/prompts/list-versions",
-              "python-sdk/prompts/get-version",
-              "python-sdk/prompts/update-version"
-            ]
-          },
-          {
-            "group": "Experiments",
-            "pages": [
-              "python-sdk/experiments/overview",
-              "python-sdk/experiments/create",
-              "python-sdk/experiments/list",
-              "python-sdk/experiments/get",
-              "python-sdk/experiments/update",
-              "python-sdk/experiments/delete",
-              "python-sdk/experiments/add-rows",
-              "python-sdk/experiments/remove-rows",
-              "python-sdk/experiments/update-rows",
-              "python-sdk/experiments/add-columns",
-              "python-sdk/experiments/remove-columns",
-              "python-sdk/experiments/update-columns",
-              "python-sdk/experiments/run-experiment",
-              "python-sdk/experiments/run-experiment-evals"
-            ]
-          },
-          {
-            "group": "Evaluators",
-            "pages": [
-              "python-sdk/evaluators/overview",
-              "python-sdk/evaluators/create",
-              "python-sdk/evaluators/list",
-              "python-sdk/evaluators/get",
-              "python-sdk/evaluators/update",
-              "python-sdk/evaluators/delete"
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "python-sdk/quickstart",
+                  "python-sdk/examples"
+                ]
+              },
+              {
+                "group": "Logs",
+                "pages": [
+                  "python-sdk/logs/overview",
+                  "python-sdk/logs/create",
+                  "python-sdk/logs/list"
+                ]
+              },
+              {
+                "group": "Prompts",
+                "pages": [
+                  "python-sdk/prompts/overview",
+                  "python-sdk/prompts/create",
+                  "python-sdk/prompts/list",
+                  "python-sdk/prompts/get",
+                  "python-sdk/prompts/update",
+                  "python-sdk/prompts/delete",
+                  "python-sdk/prompts/create-version",
+                  "python-sdk/prompts/list-versions",
+                  "python-sdk/prompts/get-version",
+                  "python-sdk/prompts/update-version"
+                ]
+              },
+              {
+                "group": "Experiments",
+                "pages": [
+                  "python-sdk/experiments/overview",
+                  "python-sdk/experiments/create",
+                  "python-sdk/experiments/list",
+                  "python-sdk/experiments/get",
+                  "python-sdk/experiments/update",
+                  "python-sdk/experiments/delete",
+                  "python-sdk/experiments/add-rows",
+                  "python-sdk/experiments/remove-rows",
+                  "python-sdk/experiments/update-rows",
+                  "python-sdk/experiments/add-columns",
+                  "python-sdk/experiments/remove-columns",
+                  "python-sdk/experiments/update-columns",
+                  "python-sdk/experiments/run-experiment",
+                  "python-sdk/experiments/run-experiment-evals"
+                ]
+              },
+              {
+                "group": "Evaluators",
+                "pages": [
+                  "python-sdk/evaluators/overview",
+                  "python-sdk/evaluators/create",
+                  "python-sdk/evaluators/list",
+                  "python-sdk/evaluators/get",
+                  "python-sdk/evaluators/update",
+                  "python-sdk/evaluators/delete"
+                ]
+              }
             ]
           }
         ]

@@ -1,0 +1,21 @@
+---
+title: "is_recording()"
+description: "Check if the current span is recording"
+---
+
+## Overview
+
+Returns `True` if there is an active recording span, otherwise `False`.
+
+## Example
+
+```python
+from keywordsai_tracing import task, get_client
+
+@task(name="record_state")
+def record_state():
+    client = get_client()
+    return client.is_recording()
+
+print(record_state())
+```

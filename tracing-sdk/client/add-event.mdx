@@ -1,0 +1,24 @@
+---
+title: "add_event()"
+description: "Add an event to the current span"
+---
+
+## Overview
+
+```python
+add_event(name: str, attributes: Dict = None, timestamp: int = None) -> bool
+```
+
+## Example
+
+```python
+from keywordsai_tracing import task, get_client
+
+@task(name="compute")
+def compute():
+    client = get_client()
+    client.add_event("compute_started", {"records": 42})
+    return 1 + 1
+
+print(compute())
+```

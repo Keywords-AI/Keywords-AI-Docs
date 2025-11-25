@@ -1,0 +1,24 @@
+---
+title: "export_spans()"
+description: "Export spans collected from a SpanBuffer or a list of ReadableSpan"
+---
+
+## Overview
+
+```python
+export_spans(spans: SpanBuffer | List[ReadableSpan]) -> bool
+```
+
+Exports spans with the configured exporter. Returns `True` on success.
+
+## Example
+
+```python
+from keywordsai_tracing import get_client
+
+client = get_client()
+with client.get_span_buffer("trace-xyz") as buffer:
+    buffer.create_span("task", {"success": True})
+spans = buffer.get_all_spans()
+client.export_spans(spans)
+```

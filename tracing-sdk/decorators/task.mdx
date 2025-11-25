@@ -1,0 +1,55 @@
+---
+title: "task decorator"
+description: "Trace a single operation within a workflow"
+---
+
+## Overview
+
+Use `task(name: str, method_name: Optional[str] = None)` to mark a task inside a workflow. Tasks can wrap LLM calls, tool executions, or custom steps.
+
+## Function usage
+
+```python
+from keywordsai_tracing.decorators import workflow, task
+
+@workflow(name="math_workflow")
+def math_workflow():
+    @task(name="add")
+    def add(a, b):
+        return a + b
+
+    @task(name="square")
+    def square(x):
+        return x * x
+
+    return square(add(2, 3))
+
+print(math_workflow())
+```
+
+## Class usage
+
+```python
+from keywordsai_tracing.decorators import workflow, task
+
+@workflow(name="agent_run", method_name="run")
+class Agent:
+    @task(name="respond")
+    def respond(self, prompt: str):
+        return f"Echo: {prompt}"
+
+    def run(self):
+        return self.respond("Hello")
+
+print(Agent().run())
+```
+
+## Parameters
+
+- `name`: task display name
+- `method_name` (optional): required when decorating a class method to indicate the entrypoint
+
+## Tips
+
+- Keep tasks small and focused
+- Use task names to reflect intent, not implementation details

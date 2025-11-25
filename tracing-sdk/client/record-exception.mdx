@@ -1,0 +1,27 @@
+---
+title: "record_exception()"
+description: "Record an exception on the current span and set error status"
+---
+
+## Overview
+
+```python
+record_exception(exception: Exception, attributes: Dict = None, timestamp: int = None, escaped: bool = False) -> bool
+```
+
+## Example
+
+```python
+from keywordsai_tracing import task, get_client
+
+@task(name="fail_demo")
+def fail_demo():
+    client = get_client()
+    try:
+        raise ValueError("bad input")
+    except Exception as e:
+        client.record_exception(e, {"phase": "validation"})
+        return "handled"
+
+print(fail_demo())
+```

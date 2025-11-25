@@ -1,0 +1,38 @@
+---
+title: "Instrumentation"
+description: "Configure auto-instrumentation via Instruments and KeywordsAITelemetry"
+---
+
+## Overview
+
+Auto-instrumentation captures spans from supported libraries. Control it with `KeywordsAITelemetry` parameters.
+
+## Configure
+
+```python
+from keywordsai_tracing import KeywordsAITelemetry, Instruments
+
+# Enable specific instruments
+KeywordsAITelemetry(instruments={Instruments.OPENAI, Instruments.ANTHROPIC})
+
+# Block instruments
+KeywordsAITelemetry(block_instruments={Instruments.REQUESTS, Instruments.URLLIB3})
+
+# Disable all auto-instrumentation
+KeywordsAITelemetry(instruments=set())
+```
+
+## Instruments
+
+- AI/ML: `OPENAI`, `ANTHROPIC`, `COHERE`, `MISTRAL`, `OLLAMA`, `GROQ`, `TOGETHER`, `REPLICATE`, `TRANSFORMERS`
+- Cloud: `BEDROCK`, `SAGEMAKER`, `VERTEXAI`, `GOOGLE_GENERATIVEAI`, `WATSONX`, `ALEPHALPHA`
+- Vector DBs: `PINECONE`, `QDRANT`, `CHROMA`, `MILVUS`, `WEAVIATE`, `LANCEDB`, `MARQO`
+- Frameworks: `LANGCHAIN`, `LLAMA_INDEX`, `HAYSTACK`, `CREW`, `MCP`
+- Infra: `REDIS`, `REQUESTS`, `URLLIB3`, `PYMYSQL`, `THREADING`
+
+## Environment
+
+- `KEYWORDSAI_API_KEY`
+- `KEYWORDSAI_BASE_URL` (default `https://api.keywordsai.co/api`)
+- `KEYWORDSAI_LOG_LEVEL` (`DEBUG`|`INFO`|`WARNING`|`ERROR`|`CRITICAL`)
+- `KEYWORDSAI_BATCHING_ENABLED` (`true`|`false`)

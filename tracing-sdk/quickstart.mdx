@@ -1,0 +1,70 @@
+---
+title: "Quickstart"
+description: "Get started with the keywordsai-tracing Python SDK"
+---
+
+## Installation
+
+```bash
+pip install keywordsai-tracing
+```
+
+## Configure credentials
+
+```python
+import os
+from keywordsai_tracing import KeywordsAITelemetry
+
+os.environ["KEYWORDSAI_API_KEY"] = "your-api-key"
+os.environ["KEYWORDSAI_BASE_URL"] = "https://api.keywordsai.co/api"
+
+k_tl = KeywordsAITelemetry()
+```
+
+## Trace a workflow and task
+
+```python
+from keywordsai_tracing.decorators import workflow, task
+
+@workflow(name="hello_world")
+def hello_world():
+    @task(name="compute")
+    def compute():
+        return "Hello Tracing"
+    return compute()
+
+print(hello_world())
+```
+
+## Class methods usage
+
+```python
+from openai import OpenAI
+from keywordsai_tracing import KeywordsAITelemetry
+from keywordsai_tracing.decorators import workflow, task
+
+k_tl = KeywordsAITelemetry()
+client = OpenAI()
+
+@workflow(name="joke_agent", method_name="run")
+class JokeAgent:
+    @task(name="joke_creation")
+    def create_joke(self):
+        completion = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": "Tell me a joke about tracing"}],
+        )
+        return completion.choices[0].message.content
+
+    def run(self):
+        return self.create_joke()
+
+print(JokeAgent().run())
+```
+
+## Next Steps
+
+- Learn the [workflow decorator](/tracing-sdk/decorators/workflow)
+- Learn the [task decorator](/tracing-sdk/decorators/task)
+- Explore the [Client API](/tracing-sdk/client/get-client)
+- Configure [Instrumentation](/tracing-sdk/instrumentation/overview)
