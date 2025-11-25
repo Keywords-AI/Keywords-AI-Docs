@@ -1,0 +1,76 @@
+---
+title: "Update testset"
+api: "PATCH https://api.keywordsai.co/api/testsets/{testset_id}"
+---
+
+Update a testset's metadata.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Path Parameters
+
+<ParamField path="testset_id" type="string" required>
+  The ID of the testset to update.
+</ParamField>
+
+## Request Body
+
+<RequestExample>
+```json Request
+{
+  "name": "Updated Test API Dataset",
+  "starred": false,
+  "description": "Updated description for the dataset"
+}
+```
+</RequestExample>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+testset_id = "testset_id_123"
+url = f"https://api.keywordsai.co/api/testsets/{testset_id}"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "name": "Updated Test API Dataset",
+    "description": "Updated description for the dataset"
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/testsets/{testset_id}" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Updated Test API Dataset",
+    "description": "Updated description"
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "testset_id_123",
+  "name": "Updated Test API Dataset",
+  "description": "Updated description for the dataset"
+}
+```
+</ResponseExample>
+

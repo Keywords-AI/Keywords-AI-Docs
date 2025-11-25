@@ -1,0 +1,82 @@
+---
+title: "List testsets"
+api: "POST https://api.keywordsai.co/api/testsets/list"
+---
+
+List all testsets with optional filtering.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Request Body
+
+<RequestExample>
+```json Request
+{
+  "filters": {
+    "name": {
+      "value": "E"
+    }
+  }
+}
+```
+</RequestExample>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/testsets/list"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "filters": {
+        "name": {
+            "value": "E"
+        }
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/testsets/list" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filters": {
+      "name": {
+        "value": "E"
+      }
+    }
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "count": 1,
+  "results": [
+    {
+      "id": "testset_id_123",
+      "name": "Example Testset",
+      "description": "Example description"
+    }
+  ]
+}
+```
+</ResponseExample>
+

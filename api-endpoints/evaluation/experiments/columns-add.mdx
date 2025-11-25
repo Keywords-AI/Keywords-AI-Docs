@@ -1,0 +1,97 @@
+---
+title: "Add experiment column"
+api: "POST https://api.keywordsai.co/api/experiments/{experiment_id}/columns"
+---
+
+Add columns to an experiment.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Path Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The ID of the experiment to add columns to.
+</ParamField>
+
+## Request Body
+
+<RequestExample>
+```json Request
+{
+  "columns": [
+    {
+      "id": "68a8b20d-f00b-4c10-9ae1-d64424da6e15",
+      "model": "gpt-3.5-turbo",
+      "name": "Prompt version generation - AAA",
+      "temperature": 0.7,
+      "max_completion_tokens": 256,
+      "prompt_messages": [
+        {
+          "role": "system",
+          "content": [{"text": "You are a helpful assistant", "type": "text"}]
+        },
+        {
+          "role": "user",
+          "content": [{"text": "{{input}}", "type": "text"}]
+        }
+      ]
+    }
+  ]
+}
+```
+</RequestExample>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+experiment_id = "experiment_id_123"
+url = f"https://api.keywordsai.co/api/experiments/{experiment_id}/columns"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "columns": [
+        {
+            "model": "gpt-3.5-turbo",
+            "name": "Test Column",
+            "prompt_messages": [
+                {"role": "user", "content": [{"text": "{{input}}", "type": "text"}]}
+            ]
+        }
+    ]
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/experiments/{experiment_id}/columns" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "columns": [{"model": "gpt-3.5-turbo", "name": "Test"}]
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "added": 1,
+  "columns": []
+}
+```
+</ResponseExample>
+

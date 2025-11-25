@@ -1,0 +1,96 @@
+---
+title: "Run experiment"
+api: "POST https://api.keywordsai.co/api/experiments/{experiment_id}/run"
+---
+
+Run an experiment to execute all columns against all rows.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Path Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The ID of the experiment to run.
+</ParamField>
+
+## Request Body
+
+<RequestExample>
+```json Request
+{
+  "columns": [
+    {
+      "model": "gpt-4o",
+      "name": "Prompt version generation - AAA",
+      "temperature": 0.7,
+      "max_completion_tokens": 256,
+      "prompt_messages": [
+        {
+          "role": "system",
+          "content": "Hello"
+        },
+        {
+          "role": "user",
+          "content": "Hi"
+        }
+      ]
+    }
+  ]
+}
+```
+</RequestExample>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+experiment_id = "experiment_id_123"
+url = f"https://api.keywordsai.co/api/experiments/{experiment_id}/run"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "columns": [
+        {
+            "model": "gpt-4o",
+            "name": "Test Column",
+            "prompt_messages": [
+                {"role": "user", "content": "Hi"}
+            ]
+        }
+    ]
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/experiments/{experiment_id}/run" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "columns": [{"model": "gpt-4o", "name": "Test"}]
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "status": "running",
+  "experiment_id": "experiment_id_123"
+}
+```
+</ResponseExample>
+

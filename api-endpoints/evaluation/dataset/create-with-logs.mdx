@@ -1,0 +1,95 @@
+---
+title: "Create dataset with specified logs"
+api: "POST https://api.keywordsai.co/api/datasets/"
+---
+
+Create a dataset and specify which logs to include using filters.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Request Body
+
+<RequestExample>
+```json Request
+{
+  "name": "My Dataset",
+  "description": "Dataset description",
+  "type": "sampling",
+  "sampling": 50,
+  "start_time": "2025-07-30T00:00:00Z",
+  "end_time": "2025-08-01T00:00:00Z",
+  "initial_log_filters": {
+    "id": {
+      "operator": "in",
+      "value": ["log_id_1", "log_id_2"]
+    }
+  }
+}
+```
+</RequestExample>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/datasets/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "name": "My Dataset",
+    "description": "Dataset with specific logs",
+    "type": "sampling",
+    "sampling": 50,
+    "start_time": "2025-07-30T00:00:00Z",
+    "end_time": "2025-08-01T00:00:00Z",
+    "initial_log_filters": {
+        "id": {
+            "operator": "in",
+            "value": ["log_id_1", "log_id_2"]
+        }
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/datasets/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "My Dataset",
+    "initial_log_filters": {
+      "id": {
+        "operator": "in",
+        "value": ["log_id_1", "log_id_2"]
+      }
+    }
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "6d0b2c7e-3a6a-4c09-9c7e-1f2d9e2d3f0a",
+  "name": "My Dataset",
+  "type": "sampling",
+  "status": "ready",
+  "log_count": 2
+}
+```
+</ResponseExample>
+

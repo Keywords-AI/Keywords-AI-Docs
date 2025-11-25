@@ -1,0 +1,53 @@
+---
+title: "Delete testset row"
+api: "DELETE https://api.keywordsai.co/api/testsets/{testset_id}/rows/{row_index}"
+---
+
+Delete a specific row from a testset.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Path Parameters
+
+<ParamField path="testset_id" type="string" required>
+  The ID of the testset.
+</ParamField>
+
+<ParamField path="row_index" type="integer" required>
+  The index of the row to delete.
+</ParamField>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+testset_id = "testset_id_123"
+row_index = 0
+url = f"https://api.keywordsai.co/api/testsets/{testset_id}/rows/{row_index}"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.delete(url, headers=headers)
+print(response.status_code)
+```
+
+```bash cURL
+curl -X DELETE "https://api.keywordsai.co/api/testsets/{testset_id}/rows/{row_index}" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 204 No Content
+```
+</ResponseExample>
+

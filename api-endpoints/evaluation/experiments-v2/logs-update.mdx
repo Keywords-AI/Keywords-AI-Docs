@@ -1,0 +1,85 @@
+---
+title: "Update experiment log (V2)"
+api: "PATCH https://api.keywordsai.co/api/v2/experiments/{experiment_id}/logs/{log_id}"
+---
+
+Update a specific log in an experiment using the V2 API.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Path Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The ID of the experiment.
+</ParamField>
+
+<ParamField path="log_id" type="string" required>
+  The ID of the log to update.
+</ParamField>
+
+## Request Body
+
+<RequestExample>
+```json Request
+{
+  "output": {
+    "output": "This is the output of the custom workflow"
+  }
+}
+```
+</RequestExample>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+experiment_id = "experiment_id_123"
+log_id = "log_id_123"
+url = f"https://api.keywordsai.co/api/v2/experiments/{experiment_id}/logs/{log_id}"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "output": {
+        "output": "This is the output of the custom workflow"
+    }
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/v2/experiments/{experiment_id}/logs/{log_id}" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "output": {
+      "output": "This is the output of the custom workflow"
+    }
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "log_id_123",
+  "input": {},
+  "output": {
+    "output": "This is the output of the custom workflow"
+  }
+}
+```
+</ResponseExample>
+

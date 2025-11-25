@@ -1,0 +1,65 @@
+---
+title: "List testset rows"
+api: "GET https://api.keywordsai.co/api/testsets/{testset_id}/rows"
+---
+
+List all rows in a testset.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Path Parameters
+
+<ParamField path="testset_id" type="string" required>
+  The ID of the testset to list rows from.
+</ParamField>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+testset_id = "testset_id_123"
+url = f"https://api.keywordsai.co/api/testsets/{testset_id}/rows"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/api/testsets/{testset_id}/rows" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "count": 2,
+  "results": [
+    {
+      "row_index": 0,
+      "row_data": {
+        "input": "sdf"
+      }
+    },
+    {
+      "row_index": 1,
+      "row_data": {
+        "expected_output": "ccc"
+      }
+    }
+  ]
+}
+```
+</ResponseExample>
+

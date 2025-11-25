@@ -1,0 +1,85 @@
+---
+title: "Search experiment (V2)"
+api: "POST https://api.keywordsai.co/api/v2/experiments/list"
+---
+
+Search experiments using filters with the V2 API.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Request Body
+
+<RequestExample>
+```json Request
+{
+  "filters": {
+    "name": {
+      "operator": "startswith",
+      "value": "K"
+    }
+  }
+}
+```
+</RequestExample>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/v2/experiments/list"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "filters": {
+        "name": {
+            "operator": "startswith",
+            "value": "K"
+        }
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/v2/experiments/list" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filters": {
+      "name": {
+        "operator": "startswith",
+        "value": "K"
+      }
+    }
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "count": 1,
+  "results": [
+    {
+      "id": "experiment_id_123",
+      "name": "K Experiment",
+      "dataset_id": "dataset_id_123"
+    }
+  ]
+}
+```
+</ResponseExample>
+

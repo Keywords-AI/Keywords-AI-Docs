@@ -1,0 +1,57 @@
+---
+title: "Retrieve testset"
+api: "GET https://api.keywordsai.co/api/testsets/{testset_id}"
+---
+
+Retrieve a specific testset by ID.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Path Parameters
+
+<ParamField path="testset_id" type="string" required>
+  The ID of the testset to retrieve.
+</ParamField>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+testset_id = "testset_id_123"
+url = f"https://api.keywordsai.co/api/testsets/{testset_id}"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/api/testsets/{testset_id}" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "testset_id_123",
+  "name": "Test API Key Dataset",
+  "description": "Dataset for testing new features",
+  "column_definitions": [
+    {"field": "input"},
+    {"field": "expected_output"}
+  ]
+}
+```
+</ResponseExample>
+

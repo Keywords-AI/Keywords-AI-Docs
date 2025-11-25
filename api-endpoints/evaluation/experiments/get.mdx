@@ -1,0 +1,54 @@
+---
+title: "Retrieve experiment"
+api: "GET https://api.keywordsai.co/api/experiments/{experiment_id}"
+---
+
+Retrieve a specific experiment by ID.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Path Parameters
+
+<ParamField path="experiment_id" type="string" required>
+  The ID of the experiment to retrieve.
+</ParamField>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+experiment_id = "experiment_id_123"
+url = f"https://api.keywordsai.co/api/experiments/{experiment_id}"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/api/experiments/{experiment_id}" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "experiment_id_123",
+  "name": "My Experiment",
+  "columns": [],
+  "rows": []
+}
+```
+</ResponseExample>
+
