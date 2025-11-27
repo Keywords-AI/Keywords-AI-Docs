@@ -71,6 +71,10 @@ You now just finished writing your first version of the prompt.
 
 You can click on the `Commit` button and write a commit message, which is helpful for you to track the changes you made to your prompt.
 
+<Warning>
+**Avoid "Commit + deploy"**: The `Commit + deploy` button will both commit your changes and immediately deploy them to production, making them live instantly. Only use this button if you understand that your changes will go live immediately and have tested them thoroughly.
+</Warning>
+
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/get-started/prompt-commit.png" alt="Create prompt placeholder" />
 
 Congrats! You just created your first prompt on Keywords AI platform.
@@ -78,6 +82,10 @@ Congrats! You just created your first prompt on Keywords AI platform.
 </Step>
 <Step title="Deploy to production">
 Once you have committed your prompt, you can deploy it to production. Go to the `Deployments` tab and click on the `Deploy` button. You can choose the environment you want to deploy to.
+
+<Warning>
+**Immediate Live Effect**: Deploying a prompt will immediately reflect live in your production environment. All API calls using this prompt will start using the deployed version right away. Make sure you've tested your prompt thoroughly before deploying.
+</Warning>
 
 <Frame>
 <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/prompt/prompts-deploy.jpg" alt="Create prompt placeholder" />
