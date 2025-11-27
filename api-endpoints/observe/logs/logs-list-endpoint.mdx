@@ -110,7 +110,7 @@ You can add these params to the **body**:
 ```python
 url = "https://api.keywordsai.co/api/request-logs/list/"
 headers = {
-    "Authorization": f"Api-Key {YOUR_KEYWORDS_AI_API_KEY}",
+    "Authorization": f"Bearer {YOUR_KEYWORDS_AI_API_KEY}",
 }
 data = {
     "filters":    {
@@ -213,7 +213,7 @@ params = {
 }
 url = f"https://api.keywordsai.co/api/request-logs/list/?{urlencode(params)}"
 headers = {
-    "Authorization": f"Api-Key {YOUR_KEYWORDS_AI_API_KEY}",
+    "Authorization": f"Bearer {YOUR_KEYWORDS_AI_API_KEY}",
 }
 data = {
     "filters": {}
@@ -236,7 +236,7 @@ const params = new URLSearchParams({
 const fullUrl = `${url}?${params}`;
 
 const headers = {
-    'Authorization': `Api-Key ${YOUR_KEYWORDS_AI_API_KEY}`,
+    'Authorization': `Bearer ${YOUR_KEYWORDS_AI_API_KEY}`,
     'Content-Type': 'application/json'
 };
 
@@ -256,7 +256,7 @@ fetch(fullUrl, {
 ```
 ```bash cURL
 curl -X POST "https://api.keywordsai.co/api/request-logs/list/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1" \
--H "Authorization: Api-Key YOUR_KEYWORDS_AI_API_KEY" \
+-H "Authorization: Bearer YOUR_KEYWORDS_AI_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{"filters": {}}'
 
