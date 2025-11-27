@@ -42,10 +42,11 @@
             "group": "Features",
             "pages": [
               {
-                "group": "Dashboard",
+                "group": "Views",
                 "pages": [
                   "documentation/products/dashboard/quickstart",
-                  "documentation/products/dashboard/filter"
+                  "documentation/products/dashboard/filter",
+                  "documentation/products/dashboard/json_mode"
                 ]
               },
               {
