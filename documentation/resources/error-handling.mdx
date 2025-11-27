@@ -1,0 +1,91 @@
+---
+title: Error handling
+---
+
+When making API calls to Keywords AI, you may encounter errors from two sources:
+
+1. **Keywords AI errors** - Errors thrown by the Keywords AI platform itself
+2. **Provider errors** - Errors from the underlying LLM provider (e.g., OpenAI, Anthropic)
+
+## Keywords AI Exceptions
+
+When Keywords AI encounters an error, it will throw a `KeywordsAIException`. The error response will include details about what went wrong.
+
+### Common Keywords AI Error Responses
+
+#### 401 Unauthorized
+
+```json
+{
+  "detail": "Your API key is invalid or expired, please check your API key at https://platform.keywordsai.co/platform/api/api-keys"
+}
+```
+
+#### 400 Bad Request
+
+```json
+{
+  "detail": "Invalid request format"
+}
+```
+
+#### 422 Unprocessable Entity
+
+```json
+{
+  "detail": "Validation error",
+  "errors": {
+    "field_name": ["Error message"]
+  }
+}
+```
+
+#### 429 Too Many Requests
+
+```json
+{
+  "detail": "Rate limit exceeded",
+  "retry_after": 60
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "detail": "Internal server error",
+  "error_code": "INTERNAL_ERROR"
+}
+```
+
+## Provider Exceptions
+
+When an error originates from the underlying LLM provider (e.g., OpenAI, Anthropic), Keywords AI will surface the provider's error response directly. The exception type will match the provider's exception (e.g., `OpenAIException` for OpenAI errors).
+
+### OpenAI Errors
+
+When using OpenAI models, you may encounter `OpenAIException`. The error response will be in OpenAI's format:
+
+```json
+{
+  "error": {
+    "message": "Incorrect API key provided",
+    "type": "invalid_request_error",
+    "param": null,
+    "code": "invalid_api_key"
+  }
+}
+```
+
+### Anthropic Errors
+
+When using Anthropic models, you may encounter `AnthropicException`:
+
+```json
+{
+  "error": {
+    "type": "authentication_error",
+    "message": "Invalid API key"
+  }
+}
+```
