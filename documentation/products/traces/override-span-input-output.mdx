@@ -1,6 +1,9 @@
-# Override Span Input/Output
+---
+title: "Override span input & output"
+description: "Explicitly control what appears as a span’s input/output in the trace UI"
+---
 
-You can explicitly control what appears as a span’s input/output in the trace UI. Use OpenTelemetry AI semconv attributes on the current span, inside your `@workflow`-decorated function.
+Use OpenTelemetry AI semconv attributes on the current span, inside your `@workflow`-decorated function.
 
 - Set `SpanAttributes.TRACELOOP_ENTITY_INPUT` and/or `SpanAttributes.TRACELOOP_ENTITY_OUTPUT`.
 - Pass these via the `attributes` argument of `update_current_span` (not `keywordsai_params`).

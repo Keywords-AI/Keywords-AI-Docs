@@ -1,0 +1,37 @@
+---
+title: API rate limits
+description: Learn about rate limits for Keywords AI API endpoints and how to handle them.
+---
+
+## Ask for help?
+<Note>
+We are still updating our rate limit plan. Rate limits are subject to change as we adjust limits based on usage patterns and platform capacity.
+</Note>
+
+
+- **Join our [Discord community](https://discord.gg/n6ZPqGP6)** — Get help from the community and our team
+- **Request a demo** — [Contact us](https://platform.keywordsai.co) for better customer support and to discuss your specific needs
+
+---
+
+## Basics rate limits
+
+We apply per-endpoint rate limits to protect the platform and ensure fair usage across all organizations.
+
+| Endpoint Category | Rate Limit | Scope |
+|------------------|------------|-------|
+| Users API | 60 requests/minute | Per organization |
+| Other APIs (excluding Logs & Gateway) | 60 requests/minute | Per organization |
+
+## When Limits Are Exceeded
+
+When you exceed the rate limit, you'll receive an **HTTP 429 Too Many Requests** response:
+
+```json
+{
+  "detail": "Rate limit exceeded",
+  "retry_after": 30
+}
+```
+
+The `retry_after` field indicates the number of seconds you should wait before retrying.

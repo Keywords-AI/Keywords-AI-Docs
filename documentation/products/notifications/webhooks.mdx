@@ -47,6 +47,27 @@ compare_signature = hmac.new(secret_key.encode(), msg=stringify_data.encode(), d
 if compare_signature != signature:
     return Response({"message": "Webhook signature does not match."}, status=401)
 ```
+
+### Using Webhook Secrets
+
+Instead of using your API key for webhook signature verification, you can use a dedicated webhook secret. This provides better security by allowing you to use a separate secret specifically for webhook validation without exposing your API key.
+
+When creating or editing a webhook in the Keywords AI platform, you can copy the webhook secret and use it for signing the signature instead of using the API key.
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/products/notifications/webhooks/webhook_secret_v0.png" alt="webhook_secret_v0" />
+</Frame>
+
+To use the webhook secret, simply replace `YOUR_KEYWORDS_AI_API_KEY` with your webhook secret in the verification code:
+
+```Python
+secret_key = YOUR_WEBHOOK_SECRET  # Use webhook secret instead of API key
+signature = request.headers.get("x-keywordsai-signature")
+compare_signature = hmac.new(secret_key.encode(), msg=stringify_data.encode(), digestmod="sha256").hexdigest()
+
+if compare_signature != signature:
+    return Response({"message": "Webhook signature does not match."}, status=401)
+```
 ## Example for using Webhooks
 1. Define a webhook endpoint in your application.
 
@@ -85,7 +106,8 @@ class TestWebhook(APIView):
     3. Define the webhook URL. In this demo, it is `http://localhost:8000/api/webhook/`.
     4. Define the event type that triggers the webhook. In this demo, it is `New request log` (when an API call is logged).
     5. Define the API Key you want to associate this webhook with. In this demo, it is an admin development key.
-    6. Click on the "Create" button.
+    6. (Optional) Copy the webhook secret from the webhook settings if you want to use it instead of the API key for signature verification.
+    7. Click on the "Create" button.
 
 3. Make an [API call](/get-started/quick-start) to the [chat completion endpoint](/api-endpoints/develop/gateway/chat-completions)
 

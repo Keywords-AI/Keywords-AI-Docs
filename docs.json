@@ -42,10 +42,11 @@
             "group": "Features",
             "pages": [
               {
-                "group": "Dashboard",
+                "group": "Views",
                 "pages": [
                   "documentation/products/dashboard/quickstart",
-                  "documentation/products/dashboard/filter"
+                  "documentation/products/dashboard/filter",
+                  "documentation/products/dashboard/json_mode"
                 ]
               },
               {
@@ -217,10 +218,11 @@
           {
             "group": "Resources",
             "pages": [
-              "documentation/resources/observability-data-model",
               "documentation/resources/what-is-llm-observability-and-monitoring",
               "documentation/resources/automatic-retries",
-              "documentation/resources/streaming"
+              "documentation/resources/streaming",
+              "documentation/resources/error-handling",
+              "documentation/resources/api-rate-limits"
             ]
           },
           {
