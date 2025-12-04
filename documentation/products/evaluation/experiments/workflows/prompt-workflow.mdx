@@ -1,7 +1,7 @@
-# Prompt Workflow Guide
-
-> **Part of Experiment V2**  
-> See also: [API Reference](/api-endpoints/develop/experiments-v2/create) | [Workflows Overview](#)
+---
+title: "Prompt Workflow"
+description: "Load and render Jinja2 prompt templates with dataset variables for testing prompt variations."
+---
 
 ## Overview
 
@@ -402,6 +402,8 @@ Monthly salary: ${{ salary / 12 }}
 Full name: {{ first_name ~ ' ' ~ last_name }}
 ```
 
+See [Complete Jinja2 Example](../../../../tests/internal_api_tests/evaluation/experiment_v2/test_prompt_workflow.py#L234-L393) in test file.
+
 ---
 
 ## Complete Example
@@ -627,9 +629,10 @@ GET /api/datasets/{dataset_id}/logs/list/
 
 ## See Also
 
-- [API Reference](/api-endpoints/develop/experiments-v2/create) - Complete endpoint documentation
-- [Custom Workflow](/documentation/products/evaluation/experiments/workflows/custom-workflow) - Submit your own results
-- [Completion Workflow](/documentation/products/evaluation/experiments/workflows/completion-workflow) - Direct LLM completions
+- [API Reference](./api_reference.md) - Complete endpoint documentation
+- [Workflows Overview](./workflows_overview.md) - Compare workflow types
+- [Completion Workflow](./completion_workflow.md) - Direct LLM completions
+- [Complete Example Notebook](../../../../tests/internal_api_tests/evaluation/experiment_v2/demo/complete_prompt_workflow.ipynb)
 - [Jinja2 Documentation](https://jinja.palletsprojects.com/) - Official Jinja2 docs
 
 For more information, visit [Keywords AI Platform](https://platform.keywordsai.co).

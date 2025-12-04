@@ -1,7 +1,7 @@
-# Completion Workflow Guide
-
-> **Part of Experiment V2**  
-> See also: [API Reference](/api-endpoints/develop/experiments-v2/create) | [Workflows Overview](#)
+---
+title: "Completion Workflow"
+description: "Execute direct LLM completions with custom parameters on your dataset."
+---
 
 ## Overview
 
@@ -289,6 +289,8 @@ Final Output → Evaluators
 - **Filter → Process**: Data cleaning pipelines
 - **Draft → Refine**: Multiple revision passes
 
+See [Complete Chaining Example](../../../../tests/internal_api_tests/evaluation/experiment_v2/demo/complete_completion_experiment_workflow.ipynb).
+
 ---
 
 ## Input Format
@@ -572,9 +574,10 @@ Use smaller batch sizes and concurrency:
 
 ## See Also
 
-- [API Reference](/api-endpoints/develop/experiments-v2/create) - Complete endpoint documentation
-- [Custom Workflow](/documentation/products/evaluation/experiments/workflows/custom-workflow) - Submit your own results
-- [Prompt Workflow](/documentation/products/evaluation/experiments/workflows/prompt-workflow) - Use prompt templates
+- [API Reference](./api_reference.md) - Complete endpoint documentation
+- [Workflows Overview](./workflows_overview.md) - Compare workflow types
+- [Prompt Workflow](./prompt_workflow.md) - Use prompt templates
+- [Complete Example Notebook](../../../../tests/internal_api_tests/evaluation/experiment_v2/demo/complete_completion_experiment_workflow.ipynb)
 
 For more information, visit [Keywords AI Platform](https://platform.keywordsai.co).
 
