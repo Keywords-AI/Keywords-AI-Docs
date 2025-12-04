@@ -1,0 +1,309 @@
+---
+title: "Create Condition"
+api: "POST https://api.keywordsai.co/automation/conditions/"
+---
+
+Creates a new automation condition that defines which logs should trigger evaluations.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+**Note:** Use your API Key (not JWT token) for all requests. You can find your API keys in the Keywords AI platform under Settings > API Keys.
+
+## Required Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | Display name for the condition |
+| `condition_slug` | string | Unique identifier for the condition |
+| `condition_type` | string | Must be `"single_log"` for online eval |
+| `condition_policy` | object | JSON structure defining evaluation rules |
+
+## Optional Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `description` | string | Description of the condition |
+
+## Condition Policy Structure
+
+The `condition_policy` object contains:
+
+- **`rules`** (array): Array of rule objects, each with:
+  - `field` (string): Field to evaluate (e.g., `"status_code"`, `"latency"`, `"model"`)
+  - `operator` (string): Comparison operator (see available operators below)
+  - `value` (any): Value to compare against
+- **`connector`** (string): How to combine rules (`"AND"` or `"OR"`)
+
+## Available Operators
+
+- `equals`, `not_equals`
+- `greater_than`, `less_than`, `greater_than_or_equal`, `less_than_or_equal`
+- `contains`, `not_contains`
+- `in`, `not_in`
+
+## Available Fields
+
+- `status_code`: HTTP status code
+- `latency`: Request latency in seconds
+- `total_tokens`: Total token count
+- `input_tokens`: Input token count
+- `output_tokens`: Output token count
+- `cost`: Request cost
+- `model`: Model name
+- Any custom metadata field
+
+## Examples
+
+### Single Rule Condition
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/automation/conditions/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "name": "Successful Requests",
+    "condition_slug": "success_logs",
+    "condition_type": "single_log",
+    "description": "Matches logs with HTTP status code 200",
+    "condition_policy": {
+        "rules": [
+            {
+                "field": "status_code",
+                "operator": "equals",
+                "value": 200
+            }
+        ],
+        "connector": "AND"
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/automation/conditions/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Successful Requests",
+    "condition_slug": "success_logs",
+    "condition_type": "single_log",
+    "description": "Matches logs with HTTP status code 200",
+    "condition_policy": {
+      "rules": [
+        {
+          "field": "status_code",
+          "operator": "equals",
+          "value": 200
+        }
+      ],
+      "connector": "AND"
+    }
+  }'
+```
+
+</CodeGroup>
+
+### Multiple Rules Condition
+
+<CodeGroup>
+
+```python Python
+data = {
+    "name": "High Latency Errors",
+    "condition_slug": "high_latency_errors",
+    "condition_type": "single_log",
+    "condition_policy": {
+        "rules": [
+            {
+                "field": "status_code",
+                "operator": "greater_than_or_equal",
+                "value": 500
+            },
+            {
+                "field": "latency",
+                "operator": "greater_than",
+                "value": 2.0
+            }
+        ],
+        "connector": "AND"
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/automation/conditions/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "High Latency Errors",
+    "condition_slug": "high_latency_errors",
+    "condition_type": "single_log",
+    "condition_policy": {
+      "rules": [
+        {
+          "field": "status_code",
+          "operator": "greater_than_or_equal",
+          "value": 500
+        },
+        {
+          "field": "latency",
+          "operator": "greater_than",
+          "value": 2.0
+        }
+      ],
+      "connector": "AND"
+    }
+  }'
+```
+
+</CodeGroup>
+
+### Condition with Custom Metadata Field
+
+<CodeGroup>
+
+```python Python
+data = {
+    "name": "VIP Customer Requests",
+    "condition_slug": "vip_customer_logs",
+    "condition_type": "single_log",
+    "condition_policy": {
+        "rules": [
+            {
+                "field": "metadata.customer_tier",
+                "operator": "equals",
+                "value": "VIP"
+            },
+            {
+                "field": "status_code",
+                "operator": "equals",
+                "value": 200
+            }
+        ],
+        "connector": "AND"
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/automation/conditions/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "VIP Customer Requests",
+    "condition_slug": "vip_customer_logs",
+    "condition_type": "single_log",
+    "condition_policy": {
+      "rules": [
+        {
+          "field": "metadata.customer_tier",
+          "operator": "equals",
+          "value": "VIP"
+        },
+        {
+          "field": "status_code",
+          "operator": "equals",
+          "value": 200
+        }
+      ],
+      "connector": "AND"
+    }
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+**Status: 201 Created**
+
+<ResponseExample>
+```json
+{
+  "id": "cond-12345",
+  "name": "Successful Requests",
+  "condition_slug": "success_logs",
+  "condition_type": "single_log",
+  "description": "Matches logs with HTTP status code 200",
+  "condition_policy": {
+    "rules": [
+      {
+        "field": "status_code",
+        "operator": "equals",
+        "value": 200
+      }
+    ],
+    "connector": "AND"
+  },
+  "unique_organization_id": "org-abc123",
+  "created_at": "2025-01-15T10:00:00Z",
+  "updated_at": "2025-01-15T10:00:00Z"
+}
+```
+</ResponseExample>
+
+## Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique condition identifier (save this for creating automations) |
+| `name` | string | Display name of the condition |
+| `condition_slug` | string | URL-friendly identifier |
+| `condition_type` | string | Type of condition (`"single_log"`) |
+| `description` | string | Description of the condition |
+| `condition_policy` | object | The condition policy with rules and connector |
+| `unique_organization_id` | string | Organization identifier |
+| `created_at` | string | ISO timestamp of creation |
+| `updated_at` | string | ISO timestamp of last update |
+
+## Error Responses
+
+### 400 Bad Request
+
+```json
+{
+  "condition_policy": [
+    "Invalid operator 'invalid_op' for field 'status_code'"
+  ]
+}
+```
+
+### 401 Unauthorized
+
+```json
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+
+### 422 Unprocessable Entity
+
+```json
+{
+  "condition_type": [
+    "Condition type must be 'single_log' for online evaluation automations"
+  ]
+}
+```
+
