@@ -3,7 +3,6 @@ title: "Custom Workflow"
 description: "Submit your own workflow results via API with automatic evaluator execution."
 ---
 
-
 ## Overview
 
 Custom workflows give you complete control over processing logic while leveraging Keywords AI's evaluation infrastructure. You submit your own workflow results via API, and the system automatically runs evaluators on your outputs.
@@ -211,6 +210,32 @@ Update placeholder with your results. Evaluators run automatically.
 - `name`: Trace name
 - `customer_identifier`: Your identifier
 - `metadata`: Custom metadata object
+
+**⏱️ Accurate Timestamps (Recommended):**
+
+To get accurate latency metrics for your custom workflow execution, include `start_time` and `end_time` in the `metadata` field:
+
+```json
+{
+  "output": "Message length: 42 characters",
+  "metadata": {
+    "start_time": "2024-01-15T10:30:00.000Z",  // When your workflow started
+    "end_time": "2024-01-15T10:30:02.500Z",    // When it finished
+    "processor_version": "v1.0.0"              // Your custom fields
+  }
+}
+```
+
+**Benefits:**
+- **Accurate Latency**: Calculated from your actual execution time (2.5s in example above)
+- **Better Analytics**: Get meaningful performance metrics in experiment summaries
+- **Preserved Context**: Unknown fields (`processor_version`) stay in metadata for your use
+
+**Without timestamps:**
+- Latency = time between placeholder creation and result submission (inaccurate)
+- Typically shows much longer duration than actual workflow execution
+
+**Format:** ISO 8601 strings (e.g., `"2024-01-15T10:30:00.000Z"`)
 
 **Response (200):**
 ```json
