@@ -188,6 +188,13 @@
                   "documentation/products/notifications/subscribe_alerts",
                   "documentation/products/notifications/webhooks"
                 ]
+              },
+              {
+                "group": "Automation",
+                "pages": [
+                  "documentation/products/automation/quickstart",
+                  "documentation/products/automation/quickstart_online_eval"
+                ]
               }
             ]
           },
