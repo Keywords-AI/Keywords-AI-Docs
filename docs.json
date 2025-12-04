@@ -576,6 +576,25 @@
                 ]
               }
             ]
+          },
+          {
+            "group": "Automation",
+            "pages": [
+              {
+                "group": "Conditions",
+                "pages": [
+                  "api-endpoints/automation/conditions/create",
+                  "api-endpoints/automation/conditions/list"
+                ]
+              },
+              {
+                "group": "Automations",
+                "pages": [
+                  "api-endpoints/automation/automations/create",
+                  "api-endpoints/automation/automations/patch"
+                ]
+              }
+            ]
           }
         ]
       },

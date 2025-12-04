@@ -1,0 +1,363 @@
+---
+title: "Create Automation"
+api: "POST https://api.keywordsai.co/automation/automations/"
+---
+
+Creates an online evaluation automation that automatically runs evaluators on logs matching specified conditions.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+**Note:** Use your API Key (not JWT token) for all requests. You can find your API keys in the Keywords AI platform under Settings > API Keys.
+
+## Required Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `automation_slug` | string | Unique identifier for the automation |
+| `name` | string | Human-readable name for the automation |
+| `automation_type` | string | Must be `"online_eval"` for evaluation automations |
+| `condition` | string | ID of the condition (from Create Condition endpoint) |
+| `evaluator_ids` | array[string] | Array of evaluator UUIDs to run (from List Evaluators endpoint) |
+| `configuration.sampling_rate` | number | Sampling rate between 0.0-1.0 (e.g., 0.1 = 10%) |
+
+## Optional Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `is_enabled` | boolean | Whether automation is active (default: `false`) |
+
+## Validation Rules
+
+- `evaluator_ids` must not be empty
+- All evaluator IDs must exist and belong to your organization
+- `sampling_rate` must be between 0.0 and 1.0
+- `automation_type` must be `"online_eval"` for evaluation automations
+- Condition must be of type `"single_log"` (aggregation not yet supported)
+
+## Examples
+
+### Basic Automation (10% Sampling)
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/automation/automations/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "automation_slug": "prod_quality_monitor",
+    "name": "Production Quality Monitor",
+    "automation_type": "online_eval",
+    "condition": "cond-12345",
+    "evaluator_ids": [
+        "eval-quality-uuid",
+        "eval-safety-uuid"
+    ],
+    "is_enabled": True,
+    "configuration": {
+        "sampling_rate": 0.1
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/automation/automations/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "automation_slug": "prod_quality_monitor",
+    "name": "Production Quality Monitor",
+    "automation_type": "online_eval",
+    "condition": "cond-12345",
+    "evaluator_ids": [
+      "eval-quality-uuid",
+      "eval-safety-uuid"
+    ],
+    "is_enabled": true,
+    "configuration": {
+      "sampling_rate": 0.1
+    }
+  }'
+```
+
+</CodeGroup>
+
+### Cost-Effective Monitoring (1% Sampling)
+
+<CodeGroup>
+
+```python Python
+data = {
+    "automation_slug": "budget_eval",
+    "name": "Budget-Friendly Evaluation",
+    "automation_type": "online_eval",
+    "condition": "cond-12345",
+    "evaluator_ids": [
+        "eval-quality-uuid"
+    ],
+    "is_enabled": True,
+    "configuration": {
+        "sampling_rate": 0.01
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/automation/automations/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "automation_slug": "budget_eval",
+    "name": "Budget-Friendly Evaluation",
+    "automation_type": "online_eval",
+    "condition": "cond-12345",
+    "evaluator_ids": [
+      "eval-quality-uuid"
+    ],
+    "is_enabled": true,
+    "configuration": {
+      "sampling_rate": 0.01
+    }
+  }'
+```
+
+</CodeGroup>
+
+### Full Evaluation (100% Sampling)
+
+<CodeGroup>
+
+```python Python
+data = {
+    "automation_slug": "vip_customer_eval",
+    "name": "VIP Customer Evaluation",
+    "automation_type": "online_eval",
+    "condition": "cond-vip-customer",
+    "evaluator_ids": [
+        "eval-comprehensive-uuid"
+    ],
+    "is_enabled": True,
+    "configuration": {
+        "sampling_rate": 1.0
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/automation/automations/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "automation_slug": "vip_customer_eval",
+    "name": "VIP Customer Evaluation",
+    "automation_type": "online_eval",
+    "condition": "cond-vip-customer",
+    "evaluator_ids": [
+      "eval-comprehensive-uuid"
+    ],
+    "is_enabled": true,
+    "configuration": {
+      "sampling_rate": 1.0
+    }
+  }'
+```
+
+</CodeGroup>
+
+### Disabled Automation (Created but Not Active)
+
+<CodeGroup>
+
+```python Python
+data = {
+    "automation_slug": "test_automation",
+    "name": "Test Automation",
+    "automation_type": "online_eval",
+    "condition": "cond-12345",
+    "evaluator_ids": [
+        "eval-quality-uuid"
+    ],
+    "is_enabled": False,
+    "configuration": {
+        "sampling_rate": 0.1
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/automation/automations/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "automation_slug": "test_automation",
+    "name": "Test Automation",
+    "automation_type": "online_eval",
+    "condition": "cond-12345",
+    "evaluator_ids": [
+      "eval-quality-uuid"
+    ],
+    "is_enabled": false,
+    "configuration": {
+      "sampling_rate": 0.1
+    }
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+**Status: 201 Created**
+
+<ResponseExample>
+```json
+{
+  "id": "auto-eval-001",
+  "automation_slug": "prod_quality_monitor",
+  "name": "Production Quality Monitor",
+  "automation_type": "online_eval",
+  "condition": {
+    "id": "cond-12345",
+    "condition_slug": "success_logs",
+    "name": "Successful Requests",
+    "condition_type": "single_log"
+  },
+  "evaluator_ids": [
+    "eval-quality-uuid",
+    "eval-safety-uuid"
+  ],
+  "evaluator_details": [
+    {
+      "id": "eval-quality-uuid",
+      "name": "Response Quality Evaluator",
+      "evaluator_slug": "response_quality",
+      "eval_class": "keywordsai_custom_evaluator"
+    },
+    {
+      "id": "eval-safety-uuid",
+      "name": "Safety Check",
+      "evaluator_slug": "safety_check",
+      "eval_class": "keywordsai_custom_evaluator"
+    }
+  ],
+  "is_enabled": true,
+  "configuration": {
+    "evaluator_ids": [
+      "eval-quality-uuid",
+      "eval-safety-uuid"
+    ],
+    "sampling_rate": 0.1
+  },
+  "created_at": "2025-01-15T10:30:00Z",
+  "updated_at": "2025-01-15T10:30:00Z"
+}
+```
+</ResponseExample>
+
+## Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique automation identifier |
+| `automation_slug` | string | URL-friendly identifier |
+| `name` | string | Display name of the automation |
+| `automation_type` | string | Type of automation (`"online_eval"`) |
+| `condition` | object | Condition object with details |
+| `evaluator_ids` | array[string] | List of evaluator UUIDs |
+| `evaluator_details` | array[object] | Detailed information about each evaluator |
+| `is_enabled` | boolean | Whether the automation is active |
+| `configuration` | object | Configuration including sampling rate |
+| `created_at` | string | ISO timestamp of creation |
+| `updated_at` | string | ISO timestamp of last update |
+
+## How It Works
+
+1. **Condition Evaluation**: Incoming logs are evaluated against the specified condition
+2. **Sampling**: Logs that match the condition are sampled based on `sampling_rate`
+3. **Async Evaluation**: Sampled logs are queued for evaluation (doesn't block logging pipeline)
+4. **Score Creation**: Evaluators run and scores are saved to the database
+5. **Dashboard Visibility**: Scores appear in the existing scores dashboard at `/api/scores/`
+
+## Important Notes
+
+- Evaluation runs **asynchronously** and doesn't impact logging latency
+- Sampling reduces evaluation costs while maintaining statistical significance
+- Multiple evaluators can run on the same log
+- Scores are accessible via the standard Scores API
+- Online eval automations **do not** send notifications (use regular automations for alerts)
+
+## Error Responses
+
+### 400 Bad Request
+
+```json
+{
+  "evaluator_ids": [
+    "Evaluators not found: invalid-uuid-123"
+  ]
+}
+```
+
+### 400 Bad Request - Invalid Sampling Rate
+
+```json
+{
+  "configuration": {
+    "sampling_rate": [
+      "Sampling rate must be between 0.0 and 1.0"
+    ]
+  }
+}
+```
+
+### 400 Bad Request - Empty Evaluator List
+
+```json
+{
+  "evaluator_ids": [
+    "At least one evaluator is required"
+  ]
+}
+```
+
+### 401 Unauthorized
+
+```json
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+
+### 404 Not Found - Condition
+
+```json
+{
+  "condition": [
+    "Condition not found: cond-invalid"
+  ]
+}
+```
+

@@ -1,0 +1,311 @@
+---
+title: "Update Automation"
+api: "PATCH https://api.keywordsai.co/automation/automations/{automation_id}/"
+---
+
+Updates specific fields of an existing automation. Use this to enable/disable automations, change sampling rates, or update evaluator lists.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+**Note:** Use your API Key (not JWT token) for all requests. You can find your API keys in the Keywords AI platform under Settings > API Keys.
+
+## Path Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `automation_id` | string | The unique ID or slug of the automation to update |
+
+## Request Body
+
+All fields are optional - only include the fields you want to update.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `is_enabled` | boolean | Whether automation is active |
+| `configuration.sampling_rate` | number | Sampling rate between 0.0-1.0 |
+| `evaluator_ids` | array[string] | Array of evaluator UUIDs to run |
+
+## Examples
+
+### Enable/Disable Automation
+
+<CodeGroup>
+
+```python Python
+import requests
+
+automation_id = "auto-eval-001"
+url = f"https://api.keywordsai.co/automation/automations/{automation_id}/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+# Disable automation
+data = {
+    "is_enabled": False
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/automation/automations/auto-eval-001/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "is_enabled": false
+  }'
+```
+
+</CodeGroup>
+
+### Update Sampling Rate
+
+<CodeGroup>
+
+```python Python
+# Update sampling rate to 20%
+data = {
+    "configuration": {
+        "sampling_rate": 0.2
+    }
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/automation/automations/auto-eval-001/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "configuration": {
+      "sampling_rate": 0.2
+    }
+  }'
+```
+
+</CodeGroup>
+
+### Update Evaluator List
+
+<CodeGroup>
+
+```python Python
+# Add a new evaluator to the list
+data = {
+    "evaluator_ids": [
+        "eval-quality-uuid",
+        "eval-safety-uuid",
+        "eval-hallucination-uuid"
+    ]
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/automation/automations/auto-eval-001/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "evaluator_ids": [
+      "eval-quality-uuid",
+      "eval-safety-uuid",
+      "eval-hallucination-uuid"
+    ]
+  }'
+```
+
+</CodeGroup>
+
+### Update Multiple Fields
+
+<CodeGroup>
+
+```python Python
+# Update multiple fields at once
+data = {
+    "is_enabled": True,
+    "configuration": {
+        "sampling_rate": 0.15
+    },
+    "evaluator_ids": [
+        "eval-quality-uuid"
+    ]
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/automation/automations/auto-eval-001/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "is_enabled": true,
+    "configuration": {
+      "sampling_rate": 0.15
+    },
+    "evaluator_ids": [
+      "eval-quality-uuid"
+    ]
+  }'
+```
+
+</CodeGroup>
+
+### Reduce Sampling Rate for Cost Savings
+
+<CodeGroup>
+
+```python Python
+# Reduce from 10% to 1% sampling
+data = {
+    "configuration": {
+        "sampling_rate": 0.01
+    }
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/automation/automations/auto-eval-001/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "configuration": {
+      "sampling_rate": 0.01
+    }
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+**Status: 200 OK**
+
+<ResponseExample>
+```json
+{
+  "id": "auto-eval-001",
+  "automation_slug": "prod_quality_monitor",
+  "name": "Production Quality Monitor",
+  "automation_type": "online_eval",
+  "condition": {
+    "id": "cond-12345",
+    "condition_slug": "success_logs",
+    "name": "Successful Requests",
+    "condition_type": "single_log"
+  },
+  "evaluator_ids": [
+    "eval-quality-uuid"
+  ],
+  "evaluator_details": [
+    {
+      "id": "eval-quality-uuid",
+      "name": "Response Quality Evaluator",
+      "evaluator_slug": "response_quality",
+      "eval_class": "keywordsai_custom_evaluator"
+    }
+  ],
+  "is_enabled": true,
+  "configuration": {
+    "evaluator_ids": [
+      "eval-quality-uuid"
+    ],
+    "sampling_rate": 0.15
+  },
+  "created_at": "2025-01-15T10:30:00Z",
+  "updated_at": "2025-01-15T11:00:00Z"
+}
+```
+</ResponseExample>
+
+## Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique automation identifier |
+| `automation_slug` | string | URL-friendly identifier |
+| `name` | string | Display name of the automation |
+| `automation_type` | string | Type of automation (`"online_eval"`) |
+| `condition` | object | Condition object with details |
+| `evaluator_ids` | array[string] | Updated list of evaluator UUIDs |
+| `evaluator_details` | array[object] | Detailed information about each evaluator |
+| `is_enabled` | boolean | Updated enabled status |
+| `configuration` | object | Updated configuration including sampling rate |
+| `created_at` | string | ISO timestamp of creation |
+| `updated_at` | string | ISO timestamp of last update |
+
+## Update Behavior
+
+- **Partial Updates**: Only the fields you provide will be updated
+- **Configuration Merging**: The `configuration` object is merged with existing values
+- **Evaluator List Replacement**: Providing `evaluator_ids` replaces the entire list (not appended)
+- **Validation**: All validation rules from the create endpoint apply to updates
+
+## Error Responses
+
+### 400 Bad Request - Invalid Evaluator
+
+```json
+{
+  "evaluator_ids": [
+    "Evaluators not found: invalid-uuid-123"
+  ]
+}
+```
+
+### 400 Bad Request - Invalid Sampling Rate
+
+```json
+{
+  "configuration": {
+    "sampling_rate": [
+      "Sampling rate must be between 0.0 and 1.0"
+    ]
+  }
+}
+```
+
+### 400 Bad Request - Empty Evaluator List
+
+```json
+{
+  "evaluator_ids": [
+    "At least one evaluator is required"
+  ]
+}
+```
+
+### 401 Unauthorized
+
+```json
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+
+### 404 Not Found
+
+```json
+{
+  "detail": "Automation not found"
+}
+```
+

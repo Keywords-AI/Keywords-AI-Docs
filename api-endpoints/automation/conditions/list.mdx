@@ -1,0 +1,175 @@
+---
+title: "List Conditions"
+api: "GET https://api.keywordsai.co/automation/conditions/"
+---
+
+Returns a paginated list of automation conditions for your organization.
+
+## Authentication
+
+All endpoints require API key authentication:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+**Note:** Use your API Key (not JWT token) for all requests. You can find your API keys in the Keywords AI platform under Settings > API Keys.
+
+## Query Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `page` | integer | Page number for pagination (default: 1) |
+| `page_size` | integer | Number of items per page (default: 20) |
+| `search` | string | Search conditions by name or slug |
+| `condition_type` | string | Filter by condition type (e.g., `"single_log"`) |
+
+## Examples
+
+### Basic List Request
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/automation/conditions/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/automation/conditions/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+### With Pagination
+
+<CodeGroup>
+
+```python Python
+params = {
+    "page": 1,
+    "page_size": 10
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/automation/conditions/?page=1&page_size=10" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+### Search Conditions
+
+<CodeGroup>
+
+```python Python
+params = {
+    "search": "success",
+    "condition_type": "single_log"
+}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/automation/conditions/?search=success&condition_type=single_log" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Response
+
+**Status: 200 OK**
+
+<ResponseExample>
+```json
+{
+  "results": [
+    {
+      "id": "cond-12345",
+      "condition_slug": "success_logs",
+      "name": "Successful Requests",
+      "condition_type": "single_log",
+      "description": "Matches logs with HTTP status code 200",
+      "condition_policy": {
+        "rules": [
+          {
+            "field": "status_code",
+            "operator": "equals",
+            "value": 200
+          }
+        ],
+        "connector": "AND"
+      },
+      "unique_organization_id": "org-abc123",
+      "created_at": "2025-01-15T10:00:00Z",
+      "updated_at": "2025-01-15T10:00:00Z"
+    }
+  ],
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "filters_data": {}
+}
+```
+</ResponseExample>
+
+## Response Fields
+
+### Condition Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique condition identifier (save this for creating automations) |
+| `name` | string | Display name of the condition |
+| `condition_slug` | string | URL-friendly identifier |
+| `condition_type` | string | Type of condition (`"single_log"`) |
+| `description` | string | Description of the condition |
+| `condition_policy` | object | The condition policy with rules and connector |
+| `unique_organization_id` | string | Organization identifier |
+| `created_at` | string | ISO timestamp of creation |
+| `updated_at` | string | ISO timestamp of last update |
+
+### Pagination Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `count` | integer | Total number of conditions |
+| `previous` | string | URL for previous page (null if first page) |
+| `next` | string | URL for next page (null if last page) |
+| `filters_data` | object | Currently applied filters |
+
+**Note:** Save the `id` field from the response - you'll need it when creating the automation.
+
+## Error Responses
+
+### 401 Unauthorized
+
+```json
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+
+### 400 Bad Request
+
+```json
+{
+  "detail": "Invalid page number"
+}
+```
+
