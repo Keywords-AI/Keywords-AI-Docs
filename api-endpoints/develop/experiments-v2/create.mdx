@@ -3,7 +3,12 @@ title: "Create Experiment"
 api: "POST https://api.keywordsai.co/api/v2/experiments/"
 ---
 
-Creates a new experiment with custom workflows. The system will create placeholder traces for each dataset entry, which you can then update with your custom workflow results.
+Creates a new experiment with workflows. Supports three workflow types:
+- **Custom**: Submit your own workflow results via API
+- **Completion**: Direct LLM completions with custom parameters
+- **Prompt**: Load and render Jinja2 prompt templates with dataset variables
+
+For custom workflows, the system creates placeholder traces that you update with your results. For built-in workflows (prompt/completion), execution starts automatically in the background.
 
 ## Authentication
 
@@ -30,14 +35,33 @@ Authorization: Bearer YOUR_API_KEY
 <ParamField body="workflows" type="array" required>
   List of workflow configurations.
   <Accordion title="Properties">
-    <ParamField body="type" type="string">
-      Type of workflow. Set to `custom` for custom workflows.
+    <ParamField body="type" type="string" required>
+      Type of workflow. Options: `custom`, `completion`, or `prompt`.
+      - `custom`: Submit your own workflow results
+      - `completion`: Direct LLM completions
+      - `prompt`: Load and render Jinja2 prompt templates
     </ParamField>
     <ParamField body="config" type="object">
-      Configuration for the workflow.
-      <Accordion title="Properties">
-        <ParamField body="name" type="string">Name of the workflow step.</ParamField>
-        <ParamField body="description" type="string">Description of the workflow step.</ParamField>
+      Configuration for the workflow. Structure depends on workflow type:
+      <Accordion title="Custom Workflow Config">
+        <ParamField body="allow_submission" type="boolean">Allow trace updates (default: true).</ParamField>
+        <ParamField body="timeout_hours" type="number">Submission timeout in hours.</ParamField>
+      </Accordion>
+      <Accordion title="Completion Workflow Config">
+        <ParamField body="model" type="string" required>Model identifier (e.g., "gpt-4o-mini").</ParamField>
+        <ParamField body="temperature" type="number">Sampling temperature (0-2, default: 1.0).</ParamField>
+        <ParamField body="max_tokens" type="integer">Maximum completion tokens (default: 150).</ParamField>
+        <ParamField body="top_p" type="number">Nucleus sampling (0-1, default: 1.0).</ParamField>
+        <ParamField body="frequency_penalty" type="number">Frequency penalty (-2 to 2, default: 0).</ParamField>
+        <ParamField body="presence_penalty" type="number">Presence penalty (-2 to 2, default: 0).</ParamField>
+        <ParamField body="stop" type="string or array">Stop sequences.</ParamField>
+        <ParamField body="response_format" type="object">Response format (e.g., `{"type": "json_object"}`).</ParamField>
+        <ParamField body="tools" type="array">Function calling tools.</ParamField>
+        <ParamField body="tool_choice" type="string or object">Tool choice strategy.</ParamField>
+        <ParamField body="reasoning_effort" type="string">Reasoning effort for o1 models.</ParamField>
+      </Accordion>
+      <Accordion title="Prompt Workflow Config">
+        <ParamField body="prompt_id" type="string" required>Prompt identifier to load and render.</ParamField>
       </Accordion>
     </ParamField>
   </Accordion>
@@ -59,8 +83,8 @@ Authorization: Bearer YOUR_API_KEY
     {
       "type": "custom",
       "config": {
-        "name": "Custom Processing Workflow",
-        "description": "User-defined workflow for custom processing"
+        "allow_submission": true,
+        "timeout_hours": 24
       }
     }
   ],
@@ -74,7 +98,9 @@ Authorization: Bearer YOUR_API_KEY
 }
 ```
 
-## Example
+## Examples
+
+### Custom Workflow
 
 ```bash
 curl -X POST "https://api.keywordsai.co/api/v2/experiments/" \
@@ -83,8 +109,69 @@ curl -X POST "https://api.keywordsai.co/api/v2/experiments/" \
   -d '{
     "name": "Custom Processing Experiment",
     "dataset_id": "dataset-123",
-    "workflows": [{"type": "custom", "config": {"name": "My Custom Workflow"}}],
+    "workflows": [{"type": "custom", "config": {"allow_submission": true}}],
     "evaluator_slugs": ["response_quality_v1"]
   }'
 ```
+
+### Completion Workflow
+
+```bash
+curl -X POST "https://api.keywordsai.co/api/v2/experiments/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Completion Experiment",
+    "dataset_id": "dataset-123",
+    "workflows": [{
+      "type": "completion",
+      "config": {
+        "model": "gpt-4o-mini",
+        "temperature": 0.7,
+        "max_tokens": 150
+      }
+    }],
+    "evaluator_slugs": ["response_quality_v1"]
+  }'
+```
+
+### Prompt Workflow
+
+```bash
+curl -X POST "https://api.keywordsai.co/api/v2/experiments/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Prompt Experiment",
+    "dataset_id": "dataset-123",
+    "workflows": [{
+      "type": "prompt",
+      "config": {
+        "prompt_id": "6caa11b48d4d440986b3eb3b96ae795e"
+      }
+    }],
+    "evaluator_slugs": ["response_quality_v1"]
+  }'
+```
+
+## Workflow Rules
+
+**✅ Valid Combinations:**
+- Single custom workflow
+- Single built-in workflow (prompt or completion)
+- Multiple built-in workflows chained together
+
+**❌ Invalid Combinations:**
+- Multiple custom workflows
+- Custom workflow + built-in workflow
+- Mixing custom and built-in types
+
+**Chaining (Built-in Only):**
+When you configure multiple built-in workflows, they execute in sequence - the output of one becomes the input of the next.
+
+## See Also
+
+- [Custom Workflow Guide](/documentation/products/evaluation/experiments/workflows/custom-workflow) - Submit your own results
+- [Completion Workflow Guide](/documentation/products/evaluation/experiments/workflows/completion-workflow) - Direct LLM completions
+- [Prompt Workflow Guide](/documentation/products/evaluation/experiments/workflows/prompt-workflow) - Use prompt templates
 
