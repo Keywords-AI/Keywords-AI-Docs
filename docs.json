@@ -148,6 +148,14 @@
                 "pages": [
                   "documentation/products/evaluation/experiments/experiments",
                   "documentation/products/evaluation/experiments/api-tutorial",
+                  {
+                    "group": "Workflows",
+                    "pages": [
+                      "documentation/products/evaluation/experiments/workflows/custom-workflow",
+                      "documentation/products/evaluation/experiments/workflows/completion-workflow",
+                      "documentation/products/evaluation/experiments/workflows/prompt-workflow"
+                    ]
+                  },
                   "documentation/products/evaluation/experiments/experiments-images"
                 ]
               },

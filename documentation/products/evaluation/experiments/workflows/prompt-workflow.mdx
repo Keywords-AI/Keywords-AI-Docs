@@ -1,0 +1,636 @@
+# Prompt Workflow Guide
+
+> **Part of Experiment V2**  
+> See also: [API Reference](/api-endpoints/develop/experiments-v2/create) | [Workflows Overview](#)
+
+## Overview
+
+Prompt workflows load and render Jinja2 prompt templates with variables from your dataset, then execute LLM completions. This enables testing prompt variations across datasets without code changes.
+
+### How It Works
+
+```
+Dataset Entry → Load Prompt → Render Template → Call LLM → Output → Evaluators
+  (variables)     (by ID)      (Jinja2)        (auto)   (auto)    (auto)
+```
+
+**Execution Flow:**
+1. System loads prompt template by ID
+2. Renders template with dataset entry variables
+3. Calls LLM with rendered messages
+4. Stores output and metrics
+5. Runs configured evaluators
+
+### Key Benefits
+
+- **Template Reuse**: Share prompts across experiments
+- **Variable Injection**: Dynamic rendering per dataset entry
+- **Version Control**: Track prompt versions
+- **Rapid Iteration**: Test prompt variations without code
+- **Full Jinja2**: Loops, conditionals, filters, macros
+
+---
+
+## Configuration
+
+### Workflow Config
+
+**Type**: `"prompt"`
+
+**Config Fields:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `prompt_id` | string | **Yes** | Prompt identifier |
+
+**Example:**
+```json
+{
+  "type": "prompt",
+  "config": {
+    "prompt_id": "6caa11b48d4d440986b3eb3b96ae795e"
+  }
+}
+```
+
+**Note:** Variables are **NOT** in config - they come from dataset entries dynamically.
+
+---
+
+## Prerequisites
+
+### 1. Create Prompt Template
+
+Create a prompt with Jinja2 template and define variables:
+
+**POST** `/api/prompts/`
+
+```json
+{
+  "name": "Customer Support Template",
+  "description": "Template for customer support responses"
+}
+```
+
+### 2. Create Prompt Version
+
+**POST** `/api/prompts/{prompt_id}/versions/`
+
+```json
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful customer support agent."
+    },
+    {
+      "role": "user",
+      "content": "Customer: {{ name }}\nIssue: {{ issue }}\nOrder ID: {{ order_id }}"
+    }
+  ],
+  "model": "gpt-4o-mini",
+  "temperature": 0.7,
+  "max_tokens": 256,
+  "variables": {
+    "name": "string",
+    "issue": "string",
+    "order_id": "string"
+  }
+}
+```
+
+**Variables Schema:**
+- `"string"`: Text variable
+- `"number"`: Numeric variable
+- `"object"`: Nested object (`{{ obj.field }}`)
+- `"array"`: List variable (`{% for item in items %}`)
+
+### 3. Deploy Prompt Version
+
+To use in experiments, prompt version must be readonly (deployed):
+
+1. **Create version 2** (makes version 1 readonly)
+2. **Deploy version 1**:
+
+**PATCH** `/api/prompts/{prompt_id}/versions/1/`
+```json
+{
+  "deploy": true
+}
+```
+
+---
+
+## Dataset Format
+
+### Input Must Contain Variables
+
+Dataset entries must have variables matching the prompt template:
+
+**Prompt Template Variables:**
+```json
+{
+  "variables": {
+    "name": "string",
+    "issue": "string",
+    "order_id": "string"
+  }
+}
+```
+
+**Dataset Entry:**
+```json
+{
+  "input": {
+    "name": "John Doe",
+    "issue": "Damaged product",
+    "order_id": "ORD-12345"
+  }
+}
+```
+
+### Creating Logs with Variables
+
+Use `/api/chat/completions` with prompt override:
+
+```json
+{
+  "model": "gpt-4o-mini",
+  "messages": [{"role": "user", "content": "placeholder"}],
+  "prompt": {
+    "prompt_id": "6caa11b48d4d440986b3eb3b96ae795e",
+    "variables": {
+      "name": "John Doe",
+      "issue": "Damaged product",
+      "order_id": "ORD-12345"
+    },
+    "override": true
+  },
+  "custom_identifier": "support_ticket_123"
+}
+```
+
+**Key Points:**
+- `override: true` replaces messages with rendered prompt
+- Variables stored in log's input field
+- Use `custom_identifier` to filter logs for dataset
+
+---
+
+## API Endpoints
+
+### 1. Create Prompt Workflow Experiment
+
+**POST** `/api/v2/experiments/`
+
+**Request:**
+```json
+{
+  "name": "Prompt Workflow Test",
+  "description": "Testing customer support prompt",
+  "dataset_id": "dataset-123",
+  "workflows": [
+    {
+      "type": "prompt",
+      "config": {
+        "prompt_id": "6caa11b48d4d440986b3eb3b96ae795e"
+      }
+    }
+  ],
+  "evaluator_slugs": ["prompt_wf_eval_1764722125"]
+}
+```
+
+**Response (201):**
+```json
+{
+  "id": "176c42b0276d44f3867c7c59b83a7d25",
+  "name": "Prompt Workflow Test",
+  "status": "pending",
+  "workflows": [
+    {
+      "type": "prompt",
+      "config": {
+        "prompt_id": "6caa11b48d4d440986b3eb3b96ae795e"
+      }
+    }
+  ],
+  "evaluator_slugs": ["prompt_wf_eval_1764722125"],
+  "workflow_count": 1,
+  "created_at": "2025-12-03T01:30:00Z"
+}
+```
+
+---
+
+### 2. List Execution Results
+
+**GET** `/api/v2/experiments/{experiment_id}/logs/list/`
+
+**Response (200):**
+```json
+{
+  "results": [
+    {
+      "id": "trace-123",
+      "input": "{\"name\": \"John Doe\", \"issue\": \"Damaged product\", \"order_id\": \"ORD-12345\"}",
+      "output": "{\"role\": \"assistant\", \"content\": \"Dear John Doe, I apologize for the damaged product...\"}",
+      "status": "success",
+      "span_count": 5,
+      "total_cost": 0.000156,
+      "duration": 3.2
+    }
+  ],
+  "count": 3
+}
+```
+
+---
+
+### 3. Get Span Tree
+
+**GET** `/api/v2/experiments/{experiment_id}/logs/{trace_id}/?detail=1`
+
+**Response (200):**
+```json
+{
+  "span_tree": [
+    {
+      "span_name": "experiment_trace",
+      "log_type": "workflow",
+      "children": [
+        {
+          "span_name": "workflow_execution",
+          "children": [
+            {
+              "span_name": "Experiment Workflow.prompt",
+              "log_type": "workflow",
+              "children": [
+                {
+                  "span_name": "workflow.prompt.load_prompt",
+                  "log_type": "workflow",
+                  "output": "Loaded and rendered prompt"
+                },
+                {
+                  "span_name": "workflow.prompt.completion",
+                  "log_type": "chat",
+                  "model": "gpt-4o-mini",
+                  "cost": 0.000156
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "span_name": "evaluator.prompt_wf_eval_1764722125",
+          "log_type": "score",
+          "output": {
+            "primary_score": 4.5
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Span Hierarchy:**
+```
+experiment_trace (ROOT)
+├── workflow_execution
+│   └── Experiment Workflow.prompt
+│       ├── workflow.prompt.load_prompt (render template)
+│       └── workflow.prompt.completion (LLM call)
+└── evaluator.{slug} (score)
+```
+
+---
+
+## Jinja2 Template Features
+
+### Variables
+
+**Simple:**
+```jinja2
+Hello {{ name }}!
+```
+
+**Nested Objects:**
+```jinja2
+{{ user.first_name }} {{ user.last_name }}
+```
+
+**Array Access:**
+```jinja2
+First item: {{ items[0] }}
+```
+
+### Filters
+
+**String Filters:**
+```jinja2
+{{ name | title }}                {# Makes Title Case #}
+{{ email | lower }}               {# Lowercase #}
+{{ text | replace('old', 'new') }} {# Replace #}
+```
+
+**Number Filters:**
+```jinja2
+{{ price | round(2) }}            {# Round to 2 decimals #}
+{{ weight | float }}              {# Convert to float #}
+```
+
+**Default Values:**
+```jinja2
+{{ name | default('Anonymous') }}
+```
+
+### Conditionals
+
+```jinja2
+{% if age >= 18 %}
+  Adult content
+{% elif age >= 13 %}
+  Teen content
+{% else %}
+  Kid content
+{% endif %}
+```
+
+### Loops
+
+**Simple Loop:**
+```jinja2
+{% for item in backpack_items %}
+  {{ loop.index }}. {{ item }}
+{% endfor %}
+```
+
+**Loop Variables:**
+- `loop.index`: 1-based counter
+- `loop.index0`: 0-based counter
+- `loop.first`: True on first iteration
+- `loop.last`: True on last iteration
+
+**Dictionary Loop:**
+```jinja2
+{% for key, value in skills.items() %}
+  {{ key }}: {{ value }}/10
+{% endfor %}
+```
+
+### Macros
+
+```jinja2
+{% macro render_feature(name, status) %}
+  {{ name }}: {{ 'enabled' if status else 'disabled' }}
+{% endmacro %}
+
+{{ render_feature('Dark Mode', true) }}
+```
+
+### Math Operations
+
+```jinja2
+Years until retirement: {{ 65 - age }}
+Monthly salary: ${{ salary / 12 }}
+```
+
+### String Concatenation
+
+```jinja2
+Full name: {{ first_name ~ ' ' ~ last_name }}
+```
+
+---
+
+## Complete Example
+
+### Step 1: Create Dataset with Variables
+
+```python
+# Create logs with variables
+for variables in test_data:
+    response = create_log_with_prompt(
+        prompt_id="6caa11b48d4d440986b3eb3b96ae795e",
+        variables={
+            "name": "Raymond",
+            "age": 28,
+            "skills": {"Python": 9, "Django": 8}
+        },
+        custom_identifier=f"test_{i}"
+    )
+```
+
+### Step 2: Create Dataset
+
+```bash
+curl -X POST "https://api.keywordsai.co/api/datasets" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "name": "Prompt Test Dataset",
+    "type": "sampling",
+    "initial_log_filters": {
+      "custom_identifier": {
+        "value": ["test_1", "test_2", "test_3"],
+        "operator": "in"
+      }
+    }
+  }'
+```
+
+### Step 3: Create Experiment
+
+```bash
+curl -X POST "https://api.keywordsai.co/api/v2/experiments/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "dataset_id": "dataset-123",
+    "workflows": [{
+      "type": "prompt",
+      "config": {"prompt_id": "6caa11b48d4d440986b3eb3b96ae795e"}
+    }],
+    "evaluator_slugs": ["quality_v1"]
+  }'
+```
+
+### Step 4: Wait and View Results
+
+```python
+import time
+
+# Wait for execution (30-60 seconds)
+time.sleep(30)
+
+# List results
+response = requests.get(
+    f"https://api.keywordsai.co/api/v2/experiments/{exp_id}/logs/list/",
+    headers={"Authorization": f"Bearer {API_KEY}"}
+)
+
+logs = response.json()['results']
+print(f"Generated {len(logs)} responses")
+```
+
+---
+
+## Error Handling
+
+### Prompt Not Found
+
+**Error:**
+```json
+{
+  "error": "Prompt not found",
+  "prompt_id": "invalid-prompt-id"
+}
+```
+
+**Solution:** Verify prompt exists and is deployed.
+
+### Missing Variables
+
+**Error:**
+```json
+{
+  "error": "Template variable 'name' is undefined",
+  "workflow_type": "prompt"
+}
+```
+
+**Solution:** Ensure dataset entries contain all required variables.
+
+### Template Syntax Error
+
+**Error:**
+```json
+{
+  "error": "Jinja2TemplateSyntaxError: unexpected '}'",
+  "workflow_type": "prompt"
+}
+```
+
+**Solution:** Fix template syntax in prompt version.
+
+---
+
+## Best Practices
+
+### 1. Define All Variables
+
+Declare all variables in prompt version schema:
+
+```json
+{
+  "variables": {
+    "user_name": "string",
+    "user_email": "string",
+    "issue_type": "string",
+    "order_id": "string"
+  }
+}
+```
+
+### 2. Use Default Values
+
+Handle missing variables gracefully:
+
+```jinja2
+{{ customer_name | default('Valued Customer') }}
+```
+
+### 3. Test Templates First
+
+Test prompt rendering before creating experiments:
+
+**POST** `/api/chat/completions`
+```json
+{
+  "model": "gpt-4o-mini",
+  "messages": [{"role": "user", "content": "test"}],
+  "prompt": {
+    "prompt_id": "your-prompt-id",
+    "variables": {"name": "Test"},
+    "override": true
+  }
+}
+```
+
+### 4. Version Prompts
+
+Create new versions for experiments to compare:
+
+- Version 1: Original prompt
+- Version 2: Refined prompt
+- Version 3: A/B test variant
+
+### 5. Use Descriptive Names
+
+```json
+{
+  "name": "Customer Support - Empathetic Tone v2",
+  "description": "Added empathy statements and resolution steps"
+}
+```
+
+---
+
+## Troubleshooting
+
+### No Logs Created
+
+**Causes:**
+1. Prompt not deployed (not readonly)
+2. Dataset entries missing variables
+3. Experiment still processing in background
+
+**Solution:**
+```bash
+# Check prompt is deployed
+GET /api/prompts/{prompt_id}/versions/1/
+# Should show: "deploy": true, "readonly": true
+
+# Verify dataset entries have variables
+GET /api/datasets/{dataset_id}/logs/list/
+
+# Check experiment status in platform UI
+```
+
+### Span Tree Missing load_prompt
+
+**Expected:**
+```
+- workflow.prompt.load_prompt
+- workflow.prompt.completion
+```
+
+**If missing:** Check implementation - should create child spans.
+
+### Variables Not Rendering
+
+**Symptom:** Template shows `{{ name }}` instead of value
+
+**Cause:** Variables not in dataset entry
+
+**Solution:**
+```python
+# Ensure dataset entry has variables
+{
+  "input": {
+    "name": "John",  # Must match template variables
+    "issue": "Problem"
+  }
+}
+```
+
+---
+
+## See Also
+
+- [API Reference](/api-endpoints/develop/experiments-v2/create) - Complete endpoint documentation
+- [Custom Workflow](/documentation/products/evaluation/experiments/workflows/custom-workflow) - Submit your own results
+- [Completion Workflow](/documentation/products/evaluation/experiments/workflows/completion-workflow) - Direct LLM completions
+- [Jinja2 Documentation](https://jinja.palletsprojects.com/) - Official Jinja2 docs
+
+For more information, visit [Keywords AI Platform](https://platform.keywordsai.co).
+

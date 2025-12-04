@@ -1,0 +1,535 @@
+# Custom Workflow Guide
+
+> **Part of Experiment V2**  
+> See also: [API Reference](/api-endpoints/develop/experiments-v2/create) | [Workflows Overview](#)
+
+## Overview
+
+Custom workflows give you complete control over processing logic while leveraging Keywords AI's evaluation infrastructure. You submit your own workflow results via API, and the system automatically runs evaluators on your outputs.
+
+### How It Works
+
+```
+1. Create Experiment → 2. Get Placeholders → 3. Process → 4. Submit → 5. Evaluate
+   (via API)              (with inputs)        (yours)    (PATCH)    (automatic)
+```
+
+**Flow:**
+1. **Create Experiment**: Configure custom workflow with evaluators
+2. **Get Placeholder Traces**: System creates traces with `status: "pending"` containing dataset inputs
+3. **Process Externally**: Retrieve inputs and process with your own logic
+4. **Submit Results**: Update traces via PATCH with your outputs
+5. **Auto-Evaluation**: System runs evaluators and updates trace to `status: "success"`
+
+### Key Benefits
+
+- **Full Control**: Use any processing logic, models, or external systems
+- **Automatic Evaluation**: Evaluators run automatically on submitted outputs
+- **Flexible Data Types**: Any JSON-serializable input/output
+- **Partial Updates**: PATCH only the fields you need
+
+### Constraints
+
+- Custom and built-in workflows are **mutually exclusive** - cannot mix them
+- Only **one custom workflow** per experiment
+- Custom workflows are **atomic** (no chaining)
+
+---
+
+## Configuration
+
+### Workflow Config
+
+**Type**: `"custom"`
+
+**Config Fields** (all optional):
+```json
+{
+  "type": "custom",
+  "config": {
+    "allow_submission": true,
+    "timeout_hours": 24
+  }
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `allow_submission` | boolean | No | Allow trace updates (default: true) |
+| `timeout_hours` | number | No | Submission timeout in hours |
+
+**Note**: Config fields are informational only. The system doesn't enforce them.
+
+---
+
+## API Endpoints
+
+### 1. Create Custom Workflow Experiment
+
+**POST** `/api/v2/experiments/`
+
+Creates experiment and placeholder traces. Execution happens in the background - check status in the [platform UI](https://platform.keywordsai.co).
+
+**Request:**
+```json
+{
+  "name": "My Custom Workflow",
+  "description": "Testing custom processing",
+  "dataset_id": "172fc5e8-bac4-43d4-a066-f2f7a167c148",
+  "workflows": [
+    {
+      "type": "custom",
+      "config": {
+        "allow_submission": true,
+        "timeout_hours": 24
+      }
+    }
+  ],
+  "evaluator_slugs": ["a4e00c8a-c54c-43ca-ab96-0e385b5100b9"]
+}
+```
+
+**Response (201):**
+```json
+{
+  "id": "108d7abf206c4369a1b936ab282cf79f",
+  "name": "My Custom Workflow",
+  "description": "Testing custom processing",
+  "dataset_id": "172fc5e8-bac4-43d4-a066-f2f7a167c148",
+  "workflows": [
+    {
+      "type": "custom",
+      "config": {
+        "allow_submission": true,
+        "timeout_hours": 24
+      }
+    }
+  ],
+  "evaluator_slugs": ["a4e00c8a-c54c-43ca-ab96-0e385b5100b9"],
+  "status": "pending",
+  "workflow_count": 1,
+  "progress": 0.0,
+  "created_at": "2025-12-03T01:23:16.957952Z"
+}
+```
+
+---
+
+### 2. List Placeholder Traces
+
+**GET** `/api/v2/experiments/{experiment_id}/logs/list/`
+
+Retrieves placeholder traces with dataset inputs.
+
+**Query Parameters:**
+- `page`: Page number (default: 1)
+- `page_size`: Results per page (default: 100)
+
+**Response (200):**
+```json
+{
+  "results": [
+    {
+      "id": "132b50f55ab94f50892a7b90ef07929d",
+      "trace_unique_id": "132b50f55ab94f50892a7b90ef07929d",
+      "name": "experiment_trace",
+      "input": "[{\"role\": \"system\", \"content\": \"you are a helpful assistant\"}, {\"role\": \"user\", \"content\": [{\"type\": \"text\", \"text\": \"content\"}]}]",
+      "output": "",
+      "status": "pending",
+      "span_count": 2,
+      "duration": 1.012532,
+      "total_cost": 0.0,
+      "start_time": "2025-12-03T01:23:16.957952Z",
+      "end_time": "2025-12-03T01:23:17.970484Z"
+    }
+  ],
+  "count": 1,
+  "previous": null,
+  "next": null
+}
+```
+
+**Notes:**
+- `status: "pending"` indicates awaiting your submission
+- `input` contains dataset entry to process
+- `output` is empty until you submit
+- Use `id` for detail/update operations
+
+---
+
+### 3. Get Trace Details
+
+**GET** `/api/v2/experiments/{experiment_id}/logs/{trace_id}/`
+
+Get full trace with complete (untruncated) input.
+
+**Query Parameters:**
+- `detail`: Include span tree (default: 1/true)
+
+**Response (200):**
+```json
+{
+  "id": "132b50f55ab94f50892a7b90ef07929d",
+  "input": "[{\"role\": \"system\", \"content\": \"you are a helpful assistant\"}, ...]",
+  "output": "",
+  "status": "pending",
+  "span_tree": [
+    {
+      "id": "132b50f55ab94f50892a7b90ef07929d",
+      "span_name": "experiment_trace",
+      "input": "[{\"role\": \"system\", \"content\": \"...\"}]",
+      "output": "",
+      "status": "pending",
+      "log_type": "workflow"
+    }
+  ]
+}
+```
+
+---
+
+### 4. Submit Workflow Results
+
+**PATCH** `/api/v2/experiments/{experiment_id}/logs/{trace_id}/`
+
+Update placeholder with your results. Evaluators run automatically.
+
+**Request:**
+```json
+{
+  "input": "Calculate the length of this message",
+  "output": "Message length: 42 characters",
+  "name": "Custom Length Calculator",
+  "customer_identifier": "length-calc-v1"
+}
+```
+
+**Supported Fields** (all optional):
+- `input`: Updated input (any JSON type)
+- `output`: Your workflow output (any JSON type)
+- `name`: Trace name
+- `customer_identifier`: Your identifier
+- `metadata`: Custom metadata object
+
+**Response (200):**
+```json
+{
+  "id": "132b50f55ab94f50892a7b90ef07929d",
+  "input": "Calculate the length of this message",
+  "output": "Message length: 42 characters",
+  "name": "Custom Length Calculator",
+  "status": "success",
+  "span_count": 3,
+  "customer_identifier": "length-calc-v1"
+}
+```
+
+**Notes:**
+- Response is **optimistic** - shows your submitted data immediately
+- Evaluators run **in the background** automatically
+- Status changes: `pending` → `success` (or `error` if evaluator fails)
+- Partial updates supported - only include fields you want to change
+
+---
+
+### 5. Check Evaluator Results
+
+**GET** `/api/v2/experiments/{experiment_id}/logs/{trace_id}/?detail=1`
+
+Poll to see evaluator results after submission.
+
+**Response (200):**
+```json
+{
+  "id": "132b50f55ab94f50892a7b90ef07929d",
+  "output": "Message length: 42 characters",
+  "status": "success",
+  "span_tree": [
+    {
+      "span_name": "experiment_trace",
+      "output": "Message length: 42 characters",
+      "status": "success"
+    },
+    {
+      "span_name": "evaluator.a4e00c8a-c54c-43ca-ab96-0e385b5100b9",
+      "log_type": "score",
+      "status": "completed",
+      "output": {
+        "primary_score": 4.5,
+        "string_value": "High quality response"
+      }
+    }
+  ]
+}
+```
+
+**Evaluator Span Fields:**
+- `span_name`: `"evaluator.{slug}"`
+- `log_type`: `"score"`
+- `output`: Score results
+  - `primary_score`: Numerical score (if applicable)
+  - `string_value`: Text evaluation
+  - `json_value`: Structured data
+  - `boolean_value`: Pass/fail
+  - `categorical_value`: Category
+
+---
+
+## Data Types
+
+### Input/Output Support
+
+Both `input` and `output` accept any JSON-serializable type:
+
+**String:**
+```json
+{
+  "input": "What is AI?",
+  "output": "AI stands for Artificial Intelligence..."
+}
+```
+
+**Object:**
+```json
+{
+  "input": {"prompt": "Explain", "context": "educational"},
+  "output": {"answer": "...", "confidence": 0.95}
+}
+```
+
+**Array:**
+```json
+{
+  "input": ["Question 1", "Question 2"],
+  "output": ["Answer 1", "Answer 2"]
+}
+```
+
+**Messages (OpenAI format):**
+```json
+{
+  "input": "[{\"role\": \"user\", \"content\": \"Hello\"}]",
+  "output": "{\"role\": \"assistant\", \"content\": \"Hi there!\"}"
+}
+```
+
+---
+
+## Complete Example
+
+### Step 1: Create Experiment
+
+```bash
+curl -X POST "https://api.keywordsai.co/api/v2/experiments/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Custom Processing",
+    "dataset_id": "dataset-123",
+    "workflows": [{"type": "custom", "config": {}}],
+    "evaluator_slugs": ["quality_v1"]
+  }'
+```
+
+### Step 2: Get Placeholders
+
+```bash
+curl "https://api.keywordsai.co/api/v2/experiments/exp-123/logs/list/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+### Step 3: Process Input (Your Code)
+
+```python
+# Your custom workflow logic
+def process_input(input_data):
+    # Parse and process
+    result = your_custom_model(input_data)
+    return {
+        "output": result,
+        "metadata": {"confidence": 0.95}
+    }
+```
+
+### Step 4: Submit Results
+
+```bash
+curl -X PATCH "https://api.keywordsai.co/api/v2/experiments/exp-123/logs/trace-456/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "input": "What is AI?",
+    "output": "AI is artificial intelligence...",
+    "metadata": {"confidence": 0.95}
+  }'
+```
+
+### Step 5: Check Evaluators
+
+```bash
+curl "https://api.keywordsai.co/api/v2/experiments/exp-123/logs/trace-456/?detail=1" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+---
+
+## Error Handling
+
+### Validation Errors
+
+**Empty Update (Valid):**
+```json
+{}
+```
+Response: 200 OK (no changes)
+
+**Invalid Experiment:**
+```json
+{
+  "detail": "Experiment not found"
+}
+```
+
+**Invalid Trace:**
+```json
+{
+  "detail": "Trace not found"
+}
+```
+
+### Evaluator Errors
+
+If evaluator fails, span shows error:
+
+```json
+{
+  "span_name": "evaluator.my_evaluator",
+  "status": "error",
+  "output": {
+    "error": "Evaluator not found: my_evaluator",
+    "error_type": "ValueError",
+    "details": "No evaluators exist for organization_id=..."
+  }
+}
+```
+
+---
+
+## Best Practices
+
+### 1. Poll for Results
+
+Evaluators run in the background. Poll every 2-5 seconds:
+
+```python
+import time
+
+def wait_for_evaluators(exp_id, trace_id, max_retries=10):
+    for i in range(max_retries):
+        time.sleep(2)
+        response = get_trace_details(exp_id, trace_id)
+        evaluator_spans = find_evaluator_spans(response['span_tree'])
+        if evaluator_spans:
+            return evaluator_spans
+    return None
+```
+
+### 2. Use Detail Endpoint
+
+List view truncates `input`/`output`. Use detail endpoint for full data:
+
+```python
+# List view - truncated
+traces = list_traces(exp_id)
+input_preview = traces[0]['input']  # May be truncated at 50 chars
+
+# Detail view - full data
+trace = get_trace_details(exp_id, trace_id)
+full_input = trace['span_tree'][0]['input']  # Complete
+```
+
+### 3. Handle Errors Gracefully
+
+```python
+try:
+    response = submit_results(exp_id, trace_id, output)
+    if response.status_code == 200:
+        print("Submitted successfully")
+    else:
+        print(f"Error: {response.json()}")
+except Exception as e:
+    print(f"Failed to submit: {e}")
+```
+
+### 4. Include Metadata
+
+Add debugging info in metadata:
+
+```json
+{
+  "output": {"result": "..."},
+  "metadata": {
+    "processing_time": 2.5,
+    "model_used": "custom-v1",
+    "timestamp": "2025-12-03T01:23:00Z"
+  }
+}
+```
+
+---
+
+## Troubleshooting
+
+### Placeholders Not Created
+
+**Symptom**: List returns empty after experiment creation
+
+**Causes:**
+1. Experiment still processing in background
+2. Dataset is empty
+3. Wait a bit longer (5-10 seconds after creation)
+
+**Solution:**
+- Check experiment status in the [platform UI](https://platform.keywordsai.co)
+- Verify dataset has entries
+- Wait and retry
+
+### Evaluators Not Running
+
+**Symptom**: No evaluator spans after submission
+
+**Causes:**
+1. Evaluator slug doesn't exist
+2. Still processing in background (wait longer)
+3. Evaluator configuration error
+
+**Solution:**
+- Verify evaluator exists in the [platform UI](https://platform.keywordsai.co)
+- Wait 10-20 seconds and poll again
+- Check evaluator configuration
+
+### Status Stuck on "pending"
+
+**Symptom**: Trace stays `pending` after submission
+
+**Causes:**
+1. PATCH request failed
+2. Background processing error
+
+**Solution:**
+```python
+# Check PATCH response status code
+# Verify response shows your submitted data
+# Check experiment status in platform UI
+```
+
+---
+
+## See Also
+
+- [API Reference](/api-endpoints/develop/experiments-v2/create) - Complete endpoint documentation
+- [Completion Workflow](/documentation/products/evaluation/experiments/workflows/completion-workflow) - Direct LLM completions
+- [Prompt Workflow](/documentation/products/evaluation/experiments/workflows/prompt-workflow) - Use prompt templates
+
+For more information, visit [Keywords AI Platform](https://platform.keywordsai.co).
+
