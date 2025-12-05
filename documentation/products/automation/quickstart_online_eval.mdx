@@ -46,3 +46,42 @@ In the creation form:
 
 After saving, your online evals will appear in the [Automations](https://platform.keywordsai.co/platform/monitors) list.  
 When the defined condition is met, sampling will be done and run through evaluators.  
+
+---
+
+### 3. Check online evals results
+
+After condition is triggered, online evals results will be shown in the table of the automation detail page. 
+
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/observability/automation/online-eval-2.png"/>
+</Frame>
+
+#### Table columns
+
+The results table displays the following information for each evaluation:
+
+- **Time** – When the evaluation was executed
+- **ID** – Unique identifier for the evaluation score
+- **Environment** – The environment where the log was generated (e.g., `test`, `production`)
+- **Evaluator** – Name of the evaluator that was run
+- **Log ID** – The ID of the log that was evaluated
+
+Click on any row to open the detailed sidepanel.
+
+#### Sidepanel details
+
+The sidepanel on the right provides comprehensive information about the selected evaluation result:
+
+**Properties**
+- **ID** – Unique evaluation score identifier
+- **Type** – Evaluator type
+- **Log ID** – Link to the original log
+
+**Metrics**
+- **Numerical value** – Numeric score from the evaluation
+
+**Evaluator details**
+- **Name** – The evaluator's name
+- **Type** – The evaluator type
+- **Description** – Details about what the evaluator checks
