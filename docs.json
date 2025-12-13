@@ -272,7 +272,8 @@
               "integration/development-frameworks/tracing/vercel-tracing",
               "integration/development-frameworks/tracing/mastra",
               "integration/development-frameworks/tracing/langgraph",
-              "integration/development-frameworks/tracing/baml"
+              "integration/development-frameworks/tracing/baml",
+              "integration/development-frameworks/tracing/instructor"
             ]
           },
           {
