@@ -510,6 +510,7 @@
                     "group": "Dataset Logs",
                     "pages": [
                       "api-endpoints/evaluate/datasets/logs-add",
+                      "api-endpoints/evaluate/datasets/logs-create",
                       "api-endpoints/evaluate/datasets/logs-list",
                       "api-endpoints/evaluate/datasets/logs-list-post",
                       "api-endpoints/evaluate/datasets/logs-get",
