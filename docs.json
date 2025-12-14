@@ -198,7 +198,7 @@
                 ]
               },
               {
-                "group": "Automation",
+                "group": "Automations",
                 "pages": [
                   "documentation/products/automation/quickstart",
                   "documentation/products/automation/quickstart_online_eval"
