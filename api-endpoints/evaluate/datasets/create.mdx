@@ -3,7 +3,7 @@ title: "Create dataset"
 api: "POST https://api.keywordsai.co/api/datasets/"
 ---
 
-Creates a new dataset from your logs. You can specify filters and sampling rate to select which logs to include.
+Creates a new dataset, either populated with existing logs or empty for manual population. You can specify filters and sampling rate to select which logs to include, or create an empty dataset to add logs manually later.
 
 ## Authentication
 
@@ -23,20 +23,20 @@ Authorization: Bearer YOUR_API_KEY
   A description of the dataset.
 </ParamField>
 
-<ParamField body="type" type="string" default="sampling">
-  The type of dataset creation. currently supports `sampling`.
-</ParamField>
-
-<ParamField body="sampling" type="integer">
-  The number of logs to sample.
+<ParamField body="sampling" type="integer" default="100">
+  Percentage of logs to include (0-100).
 </ParamField>
 
 <ParamField body="start_time" type="string">
-  The start time for filtering logs (ISO format).
+  ISO 8601 timestamp for log filtering. Required when `is_empty` is false or not provided. Ignored when `is_empty` is true.
 </ParamField>
 
 <ParamField body="end_time" type="string">
-  The end_time time for filtering logs (ISO format).
+  ISO 8601 timestamp for log filtering. Required when `is_empty` is false or not provided. Ignored when `is_empty` is true.
+</ParamField>
+
+<ParamField body="is_empty" type="boolean" default="false">
+  Create empty dataset. When `true`, `start_time` and `end_time` are ignored.
 </ParamField>
 
 <ParamField body="initial_log_filters" type="object">
@@ -53,28 +53,26 @@ Authorization: Bearer YOUR_API_KEY
   </Accordion>
 </ParamField>
 
-## Request Example
+## Request Examples
 
-```python Python
+<CodeGroup>
+
+```python Python - Populated Dataset
 import requests
 import json
 
 url = "https://api.keywordsai.co/api/datasets/"
 
 payload = json.dumps({
-  "name": "My Dataset",
-  "description": "Dataset for evaluation",
-  "type": "sampling",
-  "sampling": 50,
-  "start_time": "2024-01-01T00:00:00Z",
-  "end_time": "2024-01-31T23:59:59Z",
+  "name": "Support Conversations - July",
+  "description": "Sampled support chats for July",
+  "sampling": 40,
+  "start_time": "2025-07-01T00:00:00Z",
+  "end_time": "2025-07-31T23:59:59Z",
   "initial_log_filters": {
-    "id": {
-      "operator": "in",
-      "value": [
-        "log_id_1",
-        "log_id_2"
-      ]
+    "status_code": {
+      "operator": "eq",
+      "value": 200
     }
   }
 })
@@ -87,4 +85,55 @@ response = requests.request("POST", url, headers=headers, data=payload)
 
 print(response.text)
 ```
+
+```python Python - Empty Dataset
+import requests
+import json
+
+url = "https://api.keywordsai.co/api/datasets/"
+
+payload = json.dumps({
+  "name": "Custom Workflow Logs",
+  "description": "Manually curated logs for workflow analysis",
+  "is_empty": true
+})
+headers = {
+  'Authorization': 'Bearer YOUR_API_KEY',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 201 Created - Populated Dataset
+{
+  "id": "6d0b2c7e-3a6a-4c09-9c7e-1f2d9e2d3f0a",
+  "name": "Support Conversations - July",
+  "description": "Sampled support chats for July",
+  "type": "sampling",
+  "status": "ready",
+  "log_count": 250,
+  "created_at": "2025-07-26T00:00:00Z"
+}
+```
+
+```json 201 Created - Empty Dataset
+{
+  "id": "6d0b2c7e-3a6a-4c09-9c7e-1f2d9e2d3f0a",
+  "name": "Custom Workflow Logs",
+  "description": "Manually curated logs for workflow analysis",
+  "type": "sampling",
+  "status": "ready",
+  "log_count": 0,
+  "created_at": "2025-12-09T10:00:00Z"
+}
+```
+</ResponseExample>
 

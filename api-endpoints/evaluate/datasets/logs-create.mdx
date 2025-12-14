@@ -1,0 +1,187 @@
+---
+title: "Create dataset log"
+api: "POST https://api.keywordsai.co/api/datasets/{dataset_id}/logs/"
+---
+
+Create an individual dataset log from unified format data. Datasets record end-to-end input/output of workflows, so both input and output can be arbitrary JSON structures.
+
+## Authentication
+
+- API key: `Authorization: Bearer <API key>`
+
+## Parameters
+
+<ParamField body="input" type="any" required>
+  The input data - can be any JSON structure (objects, arrays, strings, etc.)
+</ParamField>
+
+<ParamField body="output" type="any" required>
+  The output data - can be any JSON structure (objects, arrays, strings, etc.)
+</ParamField>
+
+<ParamField body="metadata" type="object">
+  Additional metadata fields (model, log_type, custom_identifier, etc.)
+</ParamField>
+
+<ParamField body="metrics" type="object">
+  Metric fields (prompt_tokens, completion_tokens, cost, latency, etc.)
+</ParamField>
+
+Note: Fields can be provided either at top-level or within metadata/metrics objects. This endpoint supports any workflow type - customer support, data processing, API transformations, calculations, etc.
+
+## Request Example
+
+<RequestExample>
+```json Request
+{
+  "input": {
+    "customer_id": "cust_12345",
+    "query_type": "billing",
+    "message": "I need help with my subscription",
+    "priority": "high",
+    "user_context": {
+      "plan": "premium",
+      "account_age_days": 365
+    }
+  },
+  "output": {
+    "response": "I'd be happy to help with your subscription. Let me look that up for you.",
+    "agent_id": "agent_789",
+    "resolution_time_seconds": 120,
+    "actions_taken": ["account_lookup", "plan_verification"],
+    "satisfaction_score": 4.5,
+    "follow_up_required": true
+  },
+  "metadata": {
+    "model": "gpt-4",
+    "log_type": "chat",
+    "session_id": "sess_abc123",
+    "custom_identifier": "support-interaction-v2"
+  },
+  "metrics": {
+    "prompt_tokens": 25,
+    "completion_tokens": 18,
+    "total_tokens": 43,
+    "cost": 0.002,
+    "latency": 1.8
+  }
+}
+```
+</RequestExample>
+
+## Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/datasets/{dataset_id}/logs/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "input": {
+        "customer_id": "cust_12345",
+        "query_type": "billing",
+        "message": "I need help with my subscription",
+        "priority": "high",
+        "user_context": {
+            "plan": "premium",
+            "account_age_days": 365
+        }
+    },
+    "output": {
+        "response": "I'd be happy to help with your subscription. Let me look that up for you.",
+        "agent_id": "agent_789",
+        "resolution_time_seconds": 120,
+        "actions_taken": ["account_lookup", "plan_verification"],
+        "satisfaction_score": 4.5,
+        "follow_up_required": True
+    },
+    "metadata": {
+        "model": "gpt-4",
+        "log_type": "chat",
+        "session_id": "sess_abc123",
+        "custom_identifier": "support-interaction-v2"
+    },
+    "metrics": {
+        "prompt_tokens": 25,
+        "completion_tokens": 18,
+        "total_tokens": 43,
+        "cost": 0.002,
+        "latency": 1.8
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/datasets/{dataset_id}/logs/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "input": {
+      "customer_id": "cust_12345",
+      "query_type": "billing",
+      "message": "I need help with my subscription"
+    },
+    "output": {
+      "response": "I'\''d be happy to help with your subscription.",
+      "agent_id": "agent_789",
+      "satisfaction_score": 4.5
+    },
+    "metadata": {
+      "model": "gpt-4",
+      "log_type": "chat"
+    },
+    "metrics": {
+      "prompt_tokens": 25,
+      "completion_tokens": 18,
+      "cost": 0.002,
+      "latency": 1.8
+    }
+  }'
+```
+
+</CodeGroup>
+
+## Response
+
+<ResponseExample>
+```json 201 Created
+{
+  "message": "Dataset log request completed synchronously (debug mode)!",
+  "log_data": {
+    "unique_id": "2844b4f401854250aec6ee1ffd8f38be",
+    "input": "{\"customer_id\": \"cust_12345\", \"query_type\": \"billing\", \"message\": \"I need help with my subscription\"}",
+    "output": {
+      "response": "I'd be happy to help with your subscription. Let me look that up for you.",
+      "agent_id": "agent_789",
+      "resolution_time_seconds": 120,
+      "satisfaction_score": 4.5
+    },
+    "model": "gpt-4",
+    "log_type": "chat",
+    "prompt_tokens": 25,
+    "completion_tokens": 18,
+    "cost": 0.002,
+    "latency": 1.8,
+    "dataset_id": "6828c7e1-51fa-4b05-89be-382567fc2703",
+    "status": "success",
+    "session_id": "sess_abc123",
+    "custom_identifier": "support-interaction-v2"
+  }
+}
+```
+</ResponseExample>
+
+## Errors
+
+- 400 Bad Request — Invalid unified format data
+- 401 Unauthorized — Missing/invalid authentication
+- 404 Not Found — Dataset not found or not in your organization

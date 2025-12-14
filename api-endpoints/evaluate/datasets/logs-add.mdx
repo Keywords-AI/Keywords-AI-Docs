@@ -1,7 +1,11 @@
 ---
 title: "Add logs to dataset"
-api: "POST https://api.keywordsai.co/api/datasets/{dataset_id}/logs/create/"
+api: "POST https://api.keywordsai.co/api/datasets/{dataset_id}/logs/bulk/"
 ---
+
+Add existing logs from your log history to a dataset based on filter criteria.
+
+**Note:** This endpoint also supports the legacy endpoint `POST /evaluations/datasets/{dataset_id}/logs/` for backward compatibility.
 
 ## Authentication
 
