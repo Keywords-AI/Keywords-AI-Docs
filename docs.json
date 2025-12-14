@@ -272,7 +272,8 @@
               "integration/development-frameworks/tracing/vercel-tracing",
               "integration/development-frameworks/tracing/mastra",
               "integration/development-frameworks/tracing/langgraph",
-              "integration/development-frameworks/tracing/baml"
+              "integration/development-frameworks/tracing/baml",
+              "integration/development-frameworks/tracing/instructor"
             ]
           },
           {
@@ -431,46 +432,13 @@
               {
                 "group": "Experiments",
                 "pages": [
-                  "api-endpoints/develop/experiments/create",
-                  "api-endpoints/develop/experiments/list",
-                  "api-endpoints/develop/experiments/get",
-                  "api-endpoints/develop/experiments/update",
-                  "api-endpoints/develop/experiments/delete",
-                  {
-                    "group": "Experiment Rows",
-                    "pages": [
-                      "api-endpoints/develop/experiments/rows-add",
-                      "api-endpoints/develop/experiments/rows-remove",
-                      "api-endpoints/develop/experiments/rows-update"
-                    ]
-                  },
-                  {
-                    "group": "Experiment Columns",
-                    "pages": [
-                      "api-endpoints/develop/experiments/columns-add",
-                      "api-endpoints/develop/experiments/columns-remove",
-                      "api-endpoints/develop/experiments/columns-update"
-                    ]
-                  },
-                  {
-                    "group": "Experiment Actions",
-                    "pages": [
-                      "api-endpoints/develop/experiments/run",
-                      "api-endpoints/develop/experiments/run-evals"
-                    ]
-                  }
-                ]
-              },
-              {
-                "group": "Experiments V2",
-                "pages": [
                   "api-endpoints/develop/experiments-v2/create",
                   "api-endpoints/develop/experiments-v2/list",
                   "api-endpoints/develop/experiments-v2/search",
                   "api-endpoints/develop/experiments-v2/get",
                   "api-endpoints/develop/experiments-v2/delete",
                   {
-                    "group": "Experiment V2 Logs",
+                    "group": "Experiment logs",
                     "pages": [
                       "api-endpoints/develop/experiments-v2/logs-list",
                       "api-endpoints/develop/experiments-v2/logs-search",
