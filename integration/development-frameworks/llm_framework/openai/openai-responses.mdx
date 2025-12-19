@@ -11,6 +11,14 @@ This integration works exclusively with **OpenAI models** and cannot be used wit
 
 </Warning>
 
+<Warning>
+**Pass-through Integration Limitations**: This is a pass-through integration. Some Keywords AI features are **not available**, including:
+- **User Rate Limits**: You cannot enforce rate limits on your users.
+- **Fallbacks**: You cannot set up fallback models.
+- **Load Balancing**: You cannot distribute traffic across multiple models or credentials.
+- **Prompt Management**: You cannot use prompts stored in Keywords AI directly.
+</Warning>
+
 [Responses API](https://platform.openai.com/docs/api-reference/responses) is OpenAI's most advanced interface for generating model responses. Supports text and image inputs, and text outputs. Create stateful interactions with the model, using the output of previous responses as input. 
 
 Extend the model's capabilities with built-in tools for file search, web search, computer use, and more. Allow the model access to external systems and data using function calling.
