@@ -86,6 +86,49 @@ async function main() {
 main()
 ```
 </CodeGroup>
+
+Here is an example of using the Vercel AI SDK with response API.
+
+```typescript TypeScript
+import { streamText, streamObject, generateText, tool } from "ai";
+import { createOpenAI, openai } from "@ai-sdk/openai";
+import { z } from "zod";
+
+// Keywords AI parameters to be sent in the header
+const keywordsAIHeaderContent = {
+    "customer_identifier": "test_customer_identifier_from_header"
+}
+const encoded = Buffer.from(JSON.stringify(keywordsAIHeaderContent)).toString('base64');
+
+const client = createOpenAI({
+  headers: {
+    "X-Data-Keywordsai-Params": encoded
+  },
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: process.env.KEYWORDSAI_API_KEY,
+});
+
+const result = await generateText({
+  model: client.responses('gpt-4o-mini'),
+  prompt: 'What happened in San Francisco last week?',
+  tools: {
+    web_search_preview: client.tools.webSearchPreview({
+      searchContextSize: 'high',
+      userLocation: {
+        type: 'approximate',
+        city: 'San Francisco',
+        region: 'California',
+      },
+    }),
+  },
+});
+
+console.log(result.text);
+console.log(result.sources);
+```
+
+You can find the full source code for this example on GitHub: [TypeScript Example](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/typescript/vercel_sdk_example.ts)
+
 </Tab>
 <Tab title="Anthropic">
 Here's an example of how to use the Vercel AI SDK with Anthropic:
