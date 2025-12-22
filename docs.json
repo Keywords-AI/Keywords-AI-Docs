@@ -673,17 +673,6 @@
                   "python-sdk/experiments/run-experiment",
                   "python-sdk/experiments/run-experiment-evals"
                 ]
-              },
-              {
-                "group": "Evaluators",
-                "pages": [
-                  "python-sdk/evaluators/overview",
-                  "python-sdk/evaluators/create",
-                  "python-sdk/evaluators/list",
-                  "python-sdk/evaluators/get",
-                  "python-sdk/evaluators/update",
-                  "python-sdk/evaluators/delete"
-                ]
               }
             ]
           }

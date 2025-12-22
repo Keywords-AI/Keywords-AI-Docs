@@ -132,7 +132,136 @@ const result = await genAI.models.generateContent({
 
 </CodeGroup>
 
-## 6. Next Steps
+## 6. Comprehensive Example
 
-- Explore our guide on [Supported Models](/integration/supported-models) to see all available Google models.
-- Learn about advanced Keywords AI features like [retries, fallbacks, and caching](/documentation/gateway/retries).
+Here are comprehensive examples showcasing various parameters, including system instructions, safety settings, and tools.
+
+<CodeGroup>
+```python Python
+from google import genai
+from google.genai import types
+import os
+
+client = genai.Client(
+    api_key=os.environ.get("KEYWORDSAI_API_KEY"),
+    http_options={
+        "base_url": "https://api.keywordsai.co/api/google/gemini",
+    }
+)
+
+# Example: Configure tools for grounding
+grounding_tool = types.Tool(
+    google_search=types.GoogleSearch()
+)
+
+# Example: Comprehensive GenerateContentConfig showcasing various parameters
+config = types.GenerateContentConfig(
+    # System instruction to guide the model's behavior
+    system_instruction="You are a helpful assistant that provides accurate, concise information about sports events.",
+    
+    # Sampling parameters
+    temperature=0.7,
+    top_p=0.95,
+    top_k=40,
+    
+    # Output controls
+    max_output_tokens=1024,
+    stop_sequences=["\n\n\n"],
+    
+    # Tools and function calling
+    tools=[grounding_tool],
+    
+    # Thinking configuration (for models that support it)
+    thinking_config=types.ThinkingConfig(thinking_budget=0),
+    
+    # Safety settings
+    safety_settings=[
+        types.SafetySetting(
+            category=types.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+            threshold=types.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE
+        ),
+        types.SafetySetting(
+            category=types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+            threshold=types.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE
+        )
+    ],
+)
+
+response = client.models.generate_content(
+    model="gemini-2.5-flash",
+    contents="Who won the euro 2024?",
+    config=config,
+)
+
+print(response.text)
+```
+
+```typescript TypeScript
+import { GoogleGenAI } from "@google/genai";
+
+const genAI = new GoogleGenAI({
+  apiKey: process.env.KEYWORDSAI_API_KEY,
+  httpOptions: {
+    baseUrl: "https://api.keywordsai.co/api/google/gemini",
+  },
+});
+
+// Example: Comprehensive GenerateContentConfig showcasing various parameters
+async function run() {
+  const response = await genAI.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: [
+      { 
+        role: "user", 
+        parts: [{ text: "Who won the euro 2024?" }] 
+      }
+    ],
+    config: {
+      // System instruction to guide the model's behavior
+      systemInstruction: "You are a helpful assistant that provides accurate, concise information about sports events.",
+      
+      // Sampling parameters
+      temperature: 0.7, 
+      topP: 0.95, 
+      topK: 40, 
+      
+      // Output controls
+      maxOutputTokens: 1024, 
+      stopSequences: ["\n\n\n"], 
+      
+      // Tools and function calling
+      tools: [
+        {
+          googleSearch: {} // Enable Google Search grounding
+        }
+      ],
+      
+      // Thinking configuration (for models that support it)
+      thinkingConfig: {
+        thinkingBudget: 0 
+      },
+      
+      // Safety settings
+      safetySettings: [
+        {
+          category: "HARM_CATEGORY_HATE_SPEECH",
+          threshold: "BLOCK_MEDIUM_AND_ABOVE"
+        },
+        {
+          category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+          threshold: "BLOCK_MEDIUM_AND_ABOVE"
+        }
+      ],
+    },
+  });
+
+  console.log(response.text);
+}
+
+run();
+```
+</CodeGroup>
+
+You can find the full source code for these examples on GitHub:
+- [Python Example](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/python/gemini/gemini_sdk_example.py)
+- [TypeScript Example](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/typescript/gemini_sdk_example.ts)
