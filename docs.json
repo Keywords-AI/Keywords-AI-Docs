@@ -679,8 +679,16 @@
         ]
       },
       {
-        "tab": "Changelog ↗",
-        "href": "https://www.keywordsai.co/changelog"
+        "tab": "Changelog",
+        "groups": [
+          {
+            "group": "Changelog",
+            "icon": "calendar",
+            "pages": [
+              "changelog"
+            ]
+          }
+        ]
       }
     ]
   },
