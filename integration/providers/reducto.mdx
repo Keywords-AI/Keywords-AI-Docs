@@ -1,0 +1,60 @@
+---
+title: "Reducto"
+description: "Use your own Reducto credits through Keywords AI"
+---
+
+<CardGroup cols={1}>
+  <Card title="Get Reducto API key" icon="key" href="https://reducto.ai/">
+    Get your Reducto API key from the Reducto platform to start using Reducto models through Keywords AI.
+  </Card>
+</CardGroup>
+
+## Reducto models compatibility
+
+<AccordionGroup>
+  <Accordion title="✅ Supported Frameworks">
+    - [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+    - [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+    - [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+    - [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+    - [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+    - [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+    - [Keywords native (Otel)]('/documentation/gateway/get_started)
+  </Accordion>
+  
+  <Accordion title="❌ Unsupported Frameworks">
+    - [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+    - [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+  </Accordion>
+</AccordionGroup>
+
+## Add Reducto API keys
+There are 2 ways to add your Reducto credentials to your requests:
+
+### Via UI
+<Steps>
+<Step title="Go to the Providers page">
+Go to [Providers page](https://platform.keywordsai.co/platform/api/providers)
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg" alt="Providers Page"/>
+</Frame>
+</Step>
+<Step title="Add your Reducto credentials.">
+Add your Reducto API key in the providers page.
+</Step>
+</Steps>
+
+### Via code
+Add `customer_credentials` parameter in your [request body](/api-endpoints/develop/gateway/chat-completions) to use your own Reducto credits.
+
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "reducto": {
+      "api_key": "YOUR_REDUCTO_API_KEY",
+    }
+  }
+}
+```
+

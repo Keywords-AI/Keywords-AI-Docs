@@ -309,7 +309,18 @@
               "integration/providers/bedrock",
               "integration/providers/nebius",
               "integration/providers/novita",
-              "integration/providers/xAI"
+              "integration/providers/xAI",
+              "integration/providers/ai21labs",
+              "integration/providers/baseten",
+              "integration/providers/cohere",
+              "integration/providers/deepseek",
+              "integration/providers/inference",
+              "integration/providers/mistral",
+              "integration/providers/moonshot",
+              "integration/providers/nextbit",
+              "integration/providers/parasail",
+              "integration/providers/replicate",
+              "integration/providers/reducto"
             ]
           },
           {

@@ -1,0 +1,116 @@
+---
+title: "Feature Name"
+description: "One sentence description (50-160 chars)"
+---
+
+## What is Feature Name?
+
+Explaining what the feature is and why users should use it.
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/path/image.png" alt="Feature screenshot" />
+</Frame>
+
+<Note>
+This is a note or important information about the feature that users should know before getting started.
+</Note>
+
+## Resources
+
+- [API Reference](/api-endpoints/path/to/endpoint)
+- [GitHub Example](https://github.com/keywordsai/example)
+
+## Steps to use
+
+<Steps>
+<Step title="Step 1: Go to the feature page">
+Go to [Feature page](https://platform.keywordsai.co/platform/feature) and click `Create`.
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/path/step1.png" alt="Step 1 screenshot" />
+</Frame>
+</Step>
+
+<Step title="Step 2: Configure the feature">
+Configure your feature settings:
+<CodeGroup>
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://api.keywordsai.co/api/",
+    api_key="YOUR_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello"}],
+    extra_body={
+        "feature_param": "value"
+    }
+)
+```
+```typescript Typescript
+import { OpenAI } from "openai";
+
+const client = new OpenAI({
+  baseURL: "https://api.keywordsai.co/api",
+  apiKey: "YOUR_API_KEY",
+});
+
+const response = await client.chat.completions.create({
+  model: "gpt-4o-mini",
+  messages: [{ role: "user", content: "Hello" }],
+  // @ts-expect-error
+  feature_param: "value"
+});
+```
+</CodeGroup>
+</Step>
+
+<Step title="Step 3: Use in your code">
+Copy the configuration and use it in your requests.
+</Step>
+</Steps>
+
+## Configuration
+
+### Parameter 1
+
+<Accordion title="parameter_name">
+Description of what this parameter does and how to use it.
+
+```json
+{
+  "parameter_name": "value"
+}
+```
+</Accordion>
+
+<Accordion title="another_parameter">
+Description of this parameter.
+
+```json
+{
+  "another_parameter": {
+    "nested": "value"
+  }
+}
+```
+</Accordion>
+
+## Additional
+
+<CardGroup cols={2}>
+<Card title="Related Feature" href="/documentation/products/related-feature">
+Description of the related feature and why users might want to check it out.
+</Card>
+
+<Card title="API Reference" href="/api-endpoints/path/to/endpoint">
+Complete API documentation for this feature.
+</Card>
+
+<Card title="GitHub Example" href="https://github.com/keywordsai/example">
+Working code examples and sample implementations.
+</Card>
+</CardGroup>

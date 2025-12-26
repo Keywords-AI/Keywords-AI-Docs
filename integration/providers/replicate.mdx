@@ -1,0 +1,60 @@
+---
+title: "Replicate"
+description: "Use your own Replicate credits through Keywords AI"
+---
+
+<CardGroup cols={1}>
+  <Card title="Get Replicate API key" icon="key" href="https://replicate.com/account/api-tokens">
+    Get your Replicate API key from the Replicate platform to start using Replicate models through Keywords AI.
+  </Card>
+</CardGroup>
+
+## Replicate models compatibility
+
+<AccordionGroup>
+  <Accordion title="✅ Supported Frameworks">
+    - [OpenAI SDK](/integration/development-frameworks/llm_framework/openai/openai-sdk)
+    - [LangChain SDK](/integration/development-frameworks/llm_framework/langchain) 
+    - [Vercel/OpenAI](/integration/development-frameworks/llm_framework/vercel#openai)
+    - [Vercel/Google](/integration/development-frameworks/llm_framework/vercel#google)
+    - [LlamaIndex SDK](/integration/development-frameworks/llm_framework/llamaindex)
+    - [Google GenAI](/integration/development-frameworks/llm_framework/google_genai)
+    - [Keywords native (Otel)]('/documentation/gateway/get_started)
+  </Accordion>
+  
+  <Accordion title="❌ Unsupported Frameworks">
+    - [Anthropic SDK](/integration/development-frameworks/llm_framework/anthropic)
+    - [Vercel/Anthropic](/integration/development-frameworks/llm_framework/vercel#anthropic)
+  </Accordion>
+</AccordionGroup>
+
+## Add Replicate API keys
+There are 2 ways to add your Replicate credentials to your requests:
+
+### Via UI
+<Steps>
+<Step title="Go to the Providers page">
+Go to [Providers page](https://platform.keywordsai.co/platform/api/providers)
+<Frame>
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg" alt="Providers Page"/>
+</Frame>
+</Step>
+<Step title="Add your Replicate credentials.">
+Add your Replicate API key in the providers page.
+</Step>
+</Steps>
+
+### Via code
+Add `customer_credentials` parameter in your [request body](/api-endpoints/develop/gateway/chat-completions) to use your own Replicate credits.
+
+```json
+{
+  // Rest of the request body
+  "customer_credentials": {
+    "replicate": {
+      "api_key": "YOUR_REPLICATE_API_KEY",
+    }
+  }
+}
+```
+
