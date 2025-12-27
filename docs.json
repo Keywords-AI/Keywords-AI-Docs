@@ -751,7 +751,7 @@
       "og:image": "/logo.svg",
       "twitter:site": "@keywordsai"
     },
-    "indexing": "navigable"
+    "indexing": "all"
   },
   "footer": {
     "socials": {

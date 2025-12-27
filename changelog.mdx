@@ -5,6 +5,32 @@ rss: true
 noindex: true
 ---
 
+<Update label="December 26, 2025">
+## New
+### Custom model in Playground
+You can now call your custom models in the Playground. Add custom models through Keywords AI  Models page and call them through LLM gateway and Playground.
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/changelog/2025-12-26/custom-model.png"/>
+</Frame>
+
+
+### YAML and Tree view mode for all side panels
+YAML and Tree view mode are now available for all side panels in the platform, including Logs, Traces, Threads, and Scores.
+
+## Improved
+- Added `Log type`, `Streamed`, `Input tokens`, and `Output tokens` to the Side panel in Logs.
+- Improved JSON view in Logs.
+- Added `Xhigh` reasoning effort option for GPT-5.2 models in Prompts & Playground.
+- Improved UI of side panel in Logs.
+- Improved UX of Customer LLM provider page.
+
+## Fixed
+- Fixed a bug where applies wrong filter when clicking on Top users in Dashboard.
+- Fixed a bug where `This week` view has less datapoints than expected.
+
+
+</Update>
+
 <Update label="December 19, 2025">
 ## New
 ### Click through from the top prompt graph
@@ -12,7 +38,9 @@ The top prompt graph is now clickable - select any prompt to jump straight to it
 
 ### YAML and Tree view mode for logs
 You can now switch log data between Formatted, JSON, YAML, and Tree views in the side panel. Your selection is saved as a preference and persists across sessions.
-<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/changelog/2025-12-19/yaml-tree-view-mode.png"/>
+<Frame className="rounded-md">
+<img  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/changelog/2025-12-19/yaml-tree-view-mode.png"/>
+</Frame>
 
 
 ### Google Gemini 3 Flash support
@@ -38,3 +66,4 @@ We’ve increased the Team plan rate limit for the LLM Gateway to 15,000 request
 - Fixed a bug where sorting didn't work in Users.
 - Fixed a bug where `customer_identifier` did not work when creating a user.
 </Update>
+
