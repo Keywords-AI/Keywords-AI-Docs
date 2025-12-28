@@ -1,0 +1,247 @@
+---
+title: Vercel AI SDK
+description: Learn how to integrate Keywords AI tracing with the Vercel AI SDK (Next.js) using OpenTelemetry.
+og:title: "Agent tracing with Vercel AI SDK"
+---
+
+## What is Vercel AI SDK tracing?
+
+This guide shows how to set up **Keywords AI tracing** with [Next.js](https://nextjs.org/) and the [Vercel AI SDK](https://ai-sdk.dev/) so you can monitor and trace your AI-powered applications.
+
+## Resources
+
+- [Example repo](https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/vercel_ai_next_openai)
+- [Deployed demo](https://keywordsai.agent-blocks.com/)
+
+## Steps to use
+
+If you already have a Next.js + Vercel AI SDK app, start from **Step 1** below.
+
+### Optional: start with the pre-built example
+
+<CodeGroup>
+```bash npm
+npx create-next-app --example https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/vercel_ai_next_openai my-keywordsai-app
+```
+```bash yarn
+yarn create next-app --example https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/vercel_ai_next_openai my-keywordsai-app
+```
+```bash pnpm
+pnpm create next-app --example https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/vercel_ai_next_openai my-keywordsai-app
+```
+</CodeGroup>
+
+Then:
+
+1. Add your API keys to `.env.local` (see Step 3)
+2. Run `yarn dev` (or `pnpm dev`) to start the dev server
+3. Start chatting and check your [KeywordsAI dashboard](https://platform.keywordsai.co/platform/dashboard)
+
+<Steps>
+<Step title="Install Keywords AI exporter">
+Install the Keywords AI exporter package:
+
+<CodeGroup>
+```bash npm
+npm install @keywordsai/exporter-vercel
+```
+```bash yarn
+yarn add @keywordsai/exporter-vercel
+```
+```bash pnpm
+pnpm add @keywordsai/exporter-vercel
+```
+```bash bun
+bun add @keywordsai/exporter-vercel
+```
+</CodeGroup>
+</Step>
+
+<Step title="Set up OpenTelemetry instrumentation">
+Next.js supports OpenTelemetry instrumentation out of the box. Create `instrumentation.ts` in your project root (where `package.json` lives).
+
+Install Vercel’s OpenTelemetry instrumentation:
+
+```bash
+yarn add @vercel/otel
+```
+
+Then configure the Keywords AI exporter:
+
+```typescript instrumentation.ts
+import { registerOTel } from "@vercel/otel";
+import { KeywordsAIExporter } from "@keywordsai/exporter-vercel";
+
+export function register() {
+  registerOTel({
+    serviceName: "next-app",
+    traceExporter: new KeywordsAIExporter({
+      apiKey: process.env.KEYWORDSAI_API_KEY,
+      baseUrl: process.env.KEYWORDSAI_BASE_URL,
+      debug: true,
+    }),
+  });
+}
+```
+</Step>
+
+<Step title="Configure environment variables">
+Add your KeywordsAI credentials (and your provider key) to `.env.local`:
+
+<Tabs>
+<Tab title="OpenAI">
+```bash .env.local
+OPENAI_API_KEY=your_openai_api_key_here
+
+KEYWORDSAI_API_KEY=your_keywordsai_api_key_here
+KEYWORDSAI_BASE_URL=https://api.keywordsai.co
+```
+</Tab>
+<Tab title="Anthropic">
+```bash .env.local
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+
+KEYWORDSAI_API_KEY=your_keywordsai_api_key_here
+KEYWORDSAI_BASE_URL=https://api.keywordsai.co
+```
+</Tab>
+<Tab title="Google Gemini">
+```bash .env.local
+GOOGLE_GENERATIVE_AI_API_KEY=your_google_api_key_here
+
+KEYWORDSAI_API_KEY=your_keywordsai_api_key_here
+KEYWORDSAI_BASE_URL=https://api.keywordsai.co
+```
+</Tab>
+</Tabs>
+</Step>
+
+<Step title="Enable telemetry in your route">
+In your API route file (e.g. `app/api/chat/route.ts`), enable telemetry by adding the `experimental_telemetry` option.
+
+<Tabs>
+<Tab title="OpenAI">
+```typescript app/api/chat/route.ts
+import { openai } from "@ai-sdk/openai";
+import { streamText } from "ai";
+
+export const maxDuration = 30;
+
+export async function POST(req: Request) {
+  const { messages, id } = await req.json();
+  console.log("chat id", id);
+
+  const createHeader = () => {
+    return {
+      "X-Data-Keywordsai-Params": Buffer.from(
+        JSON.stringify({
+          prompt_unit_price: 100000,
+        })
+      ).toString("base64"),
+    };
+  };
+
+  const result = streamText({
+    model: openai("gpt-4o"),
+    messages,
+    experimental_telemetry: {
+      isEnabled: true,
+      metadata: {
+        customer_identifier: "customer_from_metadata",
+        prompt_unit_price: 100000,
+      },
+      headers: createHeader(),
+    },
+  });
+
+  return result.toDataStreamResponse();
+}
+```
+</Tab>
+
+<Tab title="Anthropic">
+```typescript app/api/chat/route.ts
+import { anthropic } from "@ai-sdk/anthropic";
+import { streamText } from "ai";
+
+export const maxDuration = 30;
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+
+  const result = streamText({
+    model: anthropic("claude-3-5-sonnet-20240620"),
+    messages,
+    experimental_telemetry: {
+      isEnabled: true,
+    },
+  });
+
+  return result.toDataStreamResponse();
+}
+```
+</Tab>
+
+<Tab title="Google Gemini">
+```typescript app/api/chat/route.ts
+import { google } from "@ai-sdk/google";
+import { streamText } from "ai";
+
+export const maxDuration = 30;
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+
+  const result = streamText({
+    model: google("gemini-2.0-flash"),
+    messages,
+    experimental_telemetry: {
+      isEnabled: true,
+    },
+  });
+
+  return result.toDataStreamResponse();
+}
+```
+</Tab>
+</Tabs>
+</Step>
+
+<Step title="Run locally and verify traces">
+1. Start your dev server:
+
+<CodeGroup>
+```bash pnpm
+pnpm dev
+```
+```bash yarn
+yarn dev
+```
+```bash npm
+npm run dev
+```
+```bash bun
+bun dev
+```
+</CodeGroup>
+
+2. Make some chat requests through your application
+3. Verify traces in Keywords AI:
+   - Go to [Logs → Traces](https://platform.keywordsai.co/platform/traces)
+   - Confirm requests are being traced
+
+If you hit missing dependency errors from `@vercel/otel`, install the missing packages and retry.
+</Step>
+</Steps>
+
+## What gets traced
+
+With this setup, KeywordsAI will capture:
+
+- **AI model calls**: requests made via the Vercel AI SDK
+- **Token usage**: input and output token counts
+- **Performance metrics**: latency and throughput
+- **Errors**: failed requests and error details
+- **Custom metadata**: additional context you attach via telemetry metadata/headers
+
+
