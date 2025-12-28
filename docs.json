@@ -269,7 +269,7 @@
                   "integration/development-frameworks/tracing/openai-agents-sdk-js"
                 ]
               },
-              "integration/development-frameworks/tracing/vercel-tracing",
+              "integration/tracing/vercel-tracing",
               "integration/development-frameworks/tracing/mastra",
               "integration/development-frameworks/tracing/langgraph",
               "integration/development-frameworks/tracing/baml",
