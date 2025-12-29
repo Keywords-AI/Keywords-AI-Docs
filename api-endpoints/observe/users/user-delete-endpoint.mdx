@@ -1,0 +1,31 @@
+---
+title: "User delete"
+api: "DELETE https://api.keywordsai.co/api/users/<customer_identifier>/"
+---
+
+Deletes a customer and all associated data.
+
+<Warning>
+This operation is irreversible. All usage data and settings for this customer will be permanently deleted.
+</Warning>
+
+## Path parameters
+
+<ParamField path="customer_identifier" type="string" required={true}>
+Your unique identifier for this customer.
+</ParamField>
+
+## Example call
+
+<RequestExample>
+```bash cURL
+curl -X DELETE "https://api.keywordsai.co/api/users/user_123/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+</RequestExample>
+
+## Response
+
+Returns `204 No Content` on success.
+
+

@@ -380,7 +380,8 @@
                   "api-endpoints/observe/users/user-creation-endpoint",
                   "api-endpoints/observe/users/users-data-endpoint",
                   "api-endpoints/observe/users/user-detail-endpoint",
-                  "api-endpoints/observe/users/user-update-endpoint"
+                  "api-endpoints/observe/users/user-update-endpoint",
+                  "api-endpoints/observe/users/user-delete-endpoint"
                 ]
               }
             ]

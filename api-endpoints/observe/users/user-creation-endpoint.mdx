@@ -1,64 +1,57 @@
 ---
 title: "User creation"
-api: "POST https://api.keywordsai.co/api/users/create/"
+api: "POST https://api.keywordsai.co/api/users/"
 ---
 
-User creation endpoint allows you to create users and keep track of their usage/budget/limits.
+Creates a new customer (or upserts an existing customer).
 
-Make sure to replace `YOUR_KEYWORDSAI_API_KEY` with your actual Keywords AI API key.
+## Authentication
+
+<Info>
+Use either:
+
+- `Authorization: Bearer YOUR_API_KEY` (public API)
+- `Authorization: Bearer YOUR_JWT_TOKEN` (platform/internal)
+- `X-Auth-Api-Key: YOUR_API_KEY` (alternative header)
+</Info>
 
 
 <ParamField path="customer_identifier" type="string" required={true}>
-    The unique identifier for the user.
+    Your unique identifier for this customer.
 </ParamField>
 
 <ParamField path="name" type="string">
-    User's name.
+    Customer's display name.
 </ParamField>
 
 <ParamField path="email" type="string">
-    User's email address.
-</ParamField>
-<ParamField path="period_start" type="string">
-    The start of the budget period in ISO Format: `YYYY-MM-DD` (e.g. `2024-03-09`). If not provided, the current date will be used.
-
-    This field will automatically roll over to the next period if the current date is past the end of the period.
-</ParamField>
-
-<ParamField path="period_end" type="string">
-    The end of the budget period in ISO Format: `YYYY-MM-DD` (e.g. `2024-03-09`). If not provided, it will be set based on the `period_start` + `budget_duration`. (e.g. `2024-03-09` + `1 month` = `2024-04-09`)
-
-    This field will automatically roll over to the next period if the current date is past the end of the period.
-</ParamField>
-
-<ParamField path="budget_duration" type="string">
-    Type of budget duration. Possible values are `daily`, `weekly`, `monthly`, and `yearly`. The default value is `monthly`.
+    Customer's email address.
 </ParamField>
 
 <ParamField path="period_budget" type="number">
-    The budget amount for the period. The default value is `null`, which means no budget is set.
+    Spending limit for the current budget period in USD. Use `null` to remove the budget limit.
 </ParamField>
-<ParamField path="markup_percentage" type="number">
-    This allows a User's usage to be reported more by x%. The default value is `0`.
-```json
-  {
-    "markup_percentage": 30 // 30% extra on top of the usage  
-  }
-```
+
+<ParamField path="budget_duration" type="string" default="monthly">
+    Budget renewal period. Options: `daily`, `weekly`, `monthly`.
 </ParamField>
-<ParamField path="metadata" type="object">
-    Customized metadata for the user. Any key-value pairs can be added here.
+
+<ParamField path="environment" type="string" default="prod">
+    Environment. Options: `prod`, `test`.
 </ParamField>
 
 <RequestExample>
 ```Python Python
 import requests
 
-url = "https://api.keywordsai.co/api/users/create/"
-api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
+url = "https://api.keywordsai.co/api/users/"
+api_key = "YOUR_API_KEY"
 data = {
-    "period_budget": 30,
-    "customer_identifier": "some_customer_identifier"
+    "customer_identifier": "user_123",
+    "email": "john@example.com",
+    "name": "John Doe",
+    "period_budget": 100.0,
+    "budget_duration": "monthly"
 }
 headers = {
     "Authorization": f"Bearer {api_key}",
@@ -71,22 +64,28 @@ print(response.json())
 ```
 
 ```TypeScript TypeScript
-// Define the function with TypeScript
-fetch('https://api.keywordsai.co/api/users/create/', {
-  method: 'POST',
+fetch("https://api.keywordsai.co/api/users/", {
+  method: "POST",
   headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer Your_Keywords_AI_API_Key '
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_API_KEY"
   },
     body: JSON.stringify({
-        period_budget: 30,
-        customer_identifier: "some_customer_identifier"
+        customer_identifier: "user_123",
+        email: "john@example.com",
+        name: "John Doe",
+        period_budget: 100.0,
+        budget_duration: "monthly"
     })
 })
 .then(response => response.json())
 .then(data => console.log(data));
 ```
 </RequestExample>
+
+<Note>
+If a customer exceeds their budget, requests may be rejected with a `402` error.
+</Note>
 
 
 
