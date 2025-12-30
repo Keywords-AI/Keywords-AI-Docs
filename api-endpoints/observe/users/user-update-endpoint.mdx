@@ -5,65 +5,131 @@ api: "PATCH https://api.keywordsai.co/api/users/<customer_identifier>/"
 
 Updates an existing customer. Use this to change budgets or contact info.
 
-## Path parameters
+## Authentication
+
+<Info>
+Public API: use an API key.
+
+- `Authorization: Bearer YOUR_API_KEY` (public API)
+</Info>
+
+## Path params
 
 <ParamField path="customer_identifier" type="string" required={true}>
 Your unique identifier for this customer.
 </ParamField>
 
+## POST params
+You can add these params to the **body**:
 
-## Request body (any subset)
+```python
+url = "https://api.keywordsai.co/api/users/user_123/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+}
+data = {
+    "period_budget": 200.0,
+    "metadata": {"plan": "pro"},
+}
+response = requests.patch(url, headers=headers, json=data)
+```
 
-<ParamField path="email" type="string">
-Customer email address.
+<ParamField body="email" type="string">
+  Customer email address.
 </ParamField>
 
-<ParamField path="name" type="string">
-Customer display name.
+<ParamField body="name" type="string">
+  Customer display name.
 </ParamField>
 
-<ParamField path="period_budget" type="number">
-Budget for the current period in USD. Set to `null` to remove the budget limit.
+<ParamField body="metadata" type="object">
+  Custom metadata associated with this customer (optional).
 </ParamField>
 
-<ParamField path="budget_duration" type="string">
-Budget renewal period. Options: `daily`, `weekly`, `monthly`.
+<ParamField body="period_budget" type="number">
+  Budget for the current period in USD. Set to `null` to remove the budget limit.
 </ParamField>
+
+<ParamField body="budget_duration" type="string">
+  Budget renewal period. Options: `daily`, `weekly`, `monthly`.
+</ParamField>
+
+<ParamField body="total_budget" type="number">
+  Total all-time budget limit across all periods (optional).
+</ParamField>
+
+<ParamField body="markup_percentage" type="number">
+  Markup percentage applied to this customer's usage (optional).
+</ParamField>
+
+## Request example
 
 <RequestExample>
-```Python Python
+```python Python
 import requests
 
 url = "https://api.keywordsai.co/api/users/user_123/"
-api_key = "YOUR_API_KEY"
-data = {
-    "period_budget": 200.0
-}
-headers = {
-    "Authorization": f"Bearer {api_key}",
-    "Content-Type": "application/json"
-}
+headers = {"Authorization": "Bearer YOUR_API_KEY", "Content-Type": "application/json"}
+payload = {"period_budget": 200.0, "metadata": {"plan": "pro"}}
 
-response = requests.patch(url, headers=headers, json=data)
-print(response.json())
+resp = requests.patch(url, headers=headers, json=payload)
+print(resp.json())
 ```
 
-```TypeScript TypeScript
-fetch("https://api.keywordsai.co/api/users/user_123/", {
-  method: "PATCH",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": "Bearer YOUR_API_KEY"
-  },
-    body: JSON.stringify({
-        period_budget: 200.0,
-    })
-})
-.then(response => response.json())
-.then(data => console.log(data));
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/users/user_123/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "period_budget": 200.0,
+    "metadata": { "plan": "pro" }
+  }'
 ```
-
 </RequestExample>
+
+## Response
+
+Returns the updated customer object (same structure as the GET detail endpoint).
+
+<ResponseExample>
+```json
+{
+  "id": 12345,
+  "customer_identifier": "user_123",
+  "unique_organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
+  "email": "john@example.com",
+  "name": "John Doe",
+  "environment": "prod",
+  "organization": 456,
+  "period_budget": 200.0,
+  "budget_duration": "monthly",
+  "total_period_usage": 45.67,
+  "period_start": "2025-12-01T00:00:00Z",
+  "period_end": null,
+  "total_budget": null,
+  "total_usage": 523.45,
+  "total_requests": 15420,
+  "total_prompt_tokens": 125000,
+  "total_completion_tokens": 45000,
+  "total_tokens": 170000,
+  "total_cache_hits": 234,
+  "average_latency": 1.23,
+  "average_ttft": 0.45,
+  "average_monthly_cost": 67.89,
+  "top_models": {},
+  "last_active": "2025-12-29T10:30:00Z",
+  "created_at": "2025-10-15T08:00:00Z",
+  "updated_at": "2025-12-29T10:30:00Z",
+  "metadata": {
+    "plan": "pro"
+  },
+  "markup_percentage": 0.0,
+  "is_test": false,
+  "blurred": null,
+  "organization_key": null
+}
+```
+</ResponseExample>
 
 <Tip>
 To remove a budget limit, set `period_budget` to `null`.

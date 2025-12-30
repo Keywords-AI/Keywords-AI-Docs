@@ -5,67 +5,82 @@ api: "GET https://api.keywordsai.co/api/users/<customer_identifier>/"
 
 Retrieves detailed information about a specific customer, including current budget usage.
 
-## Path parameters
+## Authentication
+
+<Info>
+Public API: use an API key.
+
+- `Authorization: Bearer YOUR_API_KEY` (public API)
+</Info>
+
+## Path params
 
 <ParamField path="customer_identifier" type="string" required={true}>
 Your unique identifier for this customer.
 </ParamField>
 
-## Query parameters
+## Query params
+You can add these params to the **URL params**.
 
-<ParamField path="environment" type="string" default="prod">
-Specify environment if you are not using the default. Options: `prod`, `test`.
+<ParamField query="environment" type="string" default="prod">
+  Specify environment if you are not using the default. Options: `prod`, `test`.
 </ParamField>
 
-## Example call
-<CodeGroup>
-```Python Python
+## Request example
+
+<RequestExample>
+```python Python
 import requests
 
 url = "https://api.keywordsai.co/api/users/user_123/"
-api_key = "YOUR_API_KEY"
-headers = {
-    "Authorization": f"Bearer {api_key}",
-    "Content-Type": "application/json"
-}
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
 
-response = requests.get(url, headers=headers)
-print(response.json())
+resp = requests.get(url, headers=headers)
+print(resp.json())
 ```
 
-```TypeScript TypeScript
-fetch("https://api.keywordsai.co/api/users/user_123/", {
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": "Bearer YOUR_API_KEY"
-  }
-})
-.then(response => response.json())
-.then(data => console.log(data));
+```bash cURL
+curl "https://api.keywordsai.co/api/users/user_123/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
 ```
-</CodeGroup>
+</RequestExample>
+
+## Response
 
 <ResponseExample>
 ```json
 {
   "id": 12345,
   "customer_identifier": "user_123",
-  "customer_unique_id": "cust_abc123...",
+  "unique_organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
   "email": "john@example.com",
   "name": "John Doe",
   "environment": "prod",
   "organization": 456,
   "period_budget": 100.0,
   "budget_duration": "monthly",
-  "period_usage": 45.67,
+  "total_period_usage": 45.67,
   "period_start": "2025-12-01T00:00:00Z",
-  "period_end": "2025-12-31T23:59:59Z",
-  "total_cost": 523.45,
-  "total_logs": 15420,
+  "period_end": null,
+  "total_budget": null,
+  "total_usage": 523.45,
+  "total_requests": 15420,
+  "total_prompt_tokens": 125000,
+  "total_completion_tokens": 45000,
+  "total_tokens": 170000,
+  "total_cache_hits": 234,
+  "average_latency": 1.23,
+  "average_ttft": 0.45,
+  "average_monthly_cost": 67.89,
+  "top_models": {},
   "last_active": "2025-12-29T10:30:00Z",
   "created_at": "2025-10-15T08:00:00Z",
-  "updated_at": "2025-12-29T10:30:00Z"
+  "updated_at": "2025-12-29T10:30:00Z",
+  "metadata": null,
+  "markup_percentage": 0.0,
+  "is_test": false,
+  "blurred": null,
+  "organization_key": null
 }
 ```
 </ResponseExample>

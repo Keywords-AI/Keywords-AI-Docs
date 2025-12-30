@@ -1,126 +1,92 @@
 ---
 title: "List customers"
-api: "GET https://api.keywordsai.co/api/users/"
+api: "GET https://api.keywordsai.co/api/users/list/"
 ---
 
-Returns a paginated list of customers in your organization.
+The Users List endpoint allows you to retrieve customers with pagination and sorting.
 
 ## Authentication
 
-<Info>
-Use either:
+<Info>Use your Keywords AI API key in `Authorization: Bearer YOUR_API_KEY`.</Info>
 
-- `Authorization: Bearer YOUR_API_KEY` (public API)
-- `Authorization: Bearer YOUR_JWT_TOKEN` (platform/internal)
-- `X-Auth-Api-Key: YOUR_API_KEY` (alternative header)
-</Info>
+## Query params
+You can add these params to the **URL params**.
+For example:
+```
+https://api.keywordsai.co/api/users/list/?page=1&page_size=50&sort_by=-first_seen&environment=prod
+```
 
-## Query parameters
-
-<ParamField path="page" type="integer" default={1}>
-Page number.
-</ParamField>
-
-<ParamField path="page_size" type="integer" default={100}>
-Number of customers per page. Maximum: `1000`.
+<ParamField query="page" type="number" default={1}>
+  Page number.
 </ParamField>
 
-<ParamField path="environment" type="string" default="prod">
-Filter by environment. Options: `prod`, `test`.
+<ParamField query="page_size" type="number" default={50}>
+  The number of customers to return per page. Maximum is 1000.
 </ParamField>
 
-<ParamField path="search" type="string">
-Search by `customer_identifier`, `email`, or `name`.
+<ParamField query="sort_by" type="string" default="-first_seen">
+  Sort field. Prefix with `-` for descending.
+
+  Examples: `customer_identifier`, `-total_cost`, `email`, `-number_of_requests`.
 </ParamField>
 
-<ParamField path="has_budget" type="boolean">
-Filter customers that have budgets set.
+<ParamField query="environment" type="string" default="prod">
+  Filter by environment. Options: `prod`, `test`.
 </ParamField>
 
-## Response fields
-
-<ParamField name="count" type="integer">
-Total number of customers matching the query.
-</ParamField>
-
-<ParamField name="next" type="string">
-URL to the next page (or `null`).
-</ParamField>
-
-<ParamField name="previous" type="string">
-URL to the previous page (or `null`).
-</ParamField>
-
-<ParamField name="results" type="array">
-List of customer objects.
-<Accordion title="Customer object fields">
-<ParamField name="customer_identifier" type="string">
-Your unique identifier for this customer.
-</ParamField>
-<ParamField name="email" type="string">
-Customer email (optional).
-</ParamField>
-<ParamField name="name" type="string">
-Customer display name (optional).
-</ParamField>
-<ParamField name="environment" type="string">
-Environment (`prod` or `test`).
-</ParamField>
-<ParamField name="period_budget" type="number">
-Budget for the current period in USD (or `null`).
-</ParamField>
-<ParamField name="budget_duration" type="string">
-Budget renewal period (`daily`, `weekly`, `monthly`).
-</ParamField>
-<ParamField name="period_usage" type="number">
-Total usage in the current period in USD.
-</ParamField>
-<ParamField name="total_cost" type="number">
-All-time total usage in USD.
-</ParamField>
-<ParamField name="total_logs" type="integer">
-All-time total number of requests.
-</ParamField>
-<ParamField name="last_active" type="string">
-ISO timestamp of the last request.
-</ParamField>
-</Accordion>
-</ParamField>
+## Request example
 
 <RequestExample>
+```python Python
+import requests
+from urllib.parse import urlencode
+
+base_url = "https://api.keywordsai.co/api/users/list/"
+params = {
+    "page": 1,
+    "page_size": 50,
+    "sort_by": "-first_seen",
+    "environment": "prod",
+}
+url = f"{base_url}?{urlencode(params)}"
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
 ```bash cURL
-curl "https://api.keywordsai.co/api/users/?page_size=100&search=user_123&has_budget=true" \
+curl "https://api.keywordsai.co/api/users/list/?page=1&page_size=50&sort_by=-first_seen&environment=prod" \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 </RequestExample>
 
+## Response
+
 <ResponseExample>
 ```json
 {
-  "count": 1250,
-  "next": "https://api.keywordsai.co/api/users/?page=2",
+  "count": 51,
+  "next": "https://api.keywordsai.co/api/users/list/?page=2",
   "previous": null,
   "results": [
     {
-      "id": 12345,
+      "id": "user_123prod8264a3f4-40c7-476a-97d1-96908127ea21",
+      "unique_organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
       "customer_identifier": "user_123",
-      "customer_unique_id": "cust_abc123...",
-      "email": "john@example.com",
-      "name": "John Doe",
       "environment": "prod",
-      "period_budget": 100.0,
-      "budget_duration": "monthly",
-      "period_usage": 45.67,
-      "period_start": "2025-12-01T00:00:00Z",
-      "period_end": "2025-12-31T23:59:59Z",
+      "name": "John Doe",
+      "email": "john@example.com",
+      "first_seen": "2025-10-15T08:00:00Z",
+      "last_active_timeframe": "2025-12-29T10:30:00Z",
+      "active_days": 75,
+      "number_of_requests": 15420,
+      "total_tokens": 170000,
       "total_cost": 523.45,
-      "total_logs": 15420,
-      "last_active": "2025-12-29T10:30:00Z",
-      "created_at": "2025-10-15T08:00:00Z",
-      "updated_at": "2025-12-29T10:30:00Z"
+      "average_latency": 1.23,
+      "average_ttft": 0.45
     }
   ]
 }
 ```
-
 </ResponseExample>

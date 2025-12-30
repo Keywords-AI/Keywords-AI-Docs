@@ -9,15 +9,33 @@ Deletes a customer and all associated data.
 This operation is irreversible. All usage data and settings for this customer will be permanently deleted.
 </Warning>
 
-## Path parameters
+## Authentication
+
+<Info>
+Public API: use an API key.
+
+- `Authorization: Bearer YOUR_API_KEY` (public API)
+</Info>
+
+## Path params
 
 <ParamField path="customer_identifier" type="string" required={true}>
 Your unique identifier for this customer.
 </ParamField>
 
-## Example call
+## Request example
 
 <RequestExample>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/users/user_123/"
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
+
+resp = requests.delete(url, headers=headers)
+print(resp.status_code)
+```
+
 ```bash cURL
 curl -X DELETE "https://api.keywordsai.co/api/users/user_123/" \
   -H "Authorization: Bearer YOUR_API_KEY"
@@ -27,5 +45,11 @@ curl -X DELETE "https://api.keywordsai.co/api/users/user_123/" \
 ## Response
 
 Returns `204 No Content` on success.
+
+<ResponseExample>
+```text
+204 No Content
+```
+</ResponseExample>
 
 

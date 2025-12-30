@@ -1,91 +1,129 @@
 ---
-title: "User creation"
-api: "POST https://api.keywordsai.co/api/users/"
+title: "List customers (filters)"
+api: "POST https://api.keywordsai.co/api/users/list/"
 ---
 
-Creates a new customer (or upserts an existing customer).
+List customers with advanced filtering. Use POST when you need complex filters.
 
 ## Authentication
 
 <Info>
-Use either:
+Public API: use an API key.
 
 - `Authorization: Bearer YOUR_API_KEY` (public API)
-- `Authorization: Bearer YOUR_JWT_TOKEN` (platform/internal)
-- `X-Auth-Api-Key: YOUR_API_KEY` (alternative header)
 </Info>
 
+The Users List endpoint allows you to list customers with advanced filtering using POST.
 
-<ParamField path="customer_identifier" type="string" required={true}>
-    Your unique identifier for this customer.
-</ParamField>
-
-<ParamField path="name" type="string">
-    Customer's display name.
-</ParamField>
-
-<ParamField path="email" type="string">
-    Customer's email address.
-</ParamField>
-
-<ParamField path="period_budget" type="number">
-    Spending limit for the current budget period in USD. Use `null` to remove the budget limit.
-</ParamField>
-
-<ParamField path="budget_duration" type="string" default="monthly">
-    Budget renewal period. Options: `daily`, `weekly`, `monthly`.
-</ParamField>
-
-<ParamField path="environment" type="string" default="prod">
-    Environment. Options: `prod`, `test`.
-</ParamField>
-
-<RequestExample>
-```Python Python
-import requests
-
-url = "https://api.keywordsai.co/api/users/"
-api_key = "YOUR_API_KEY"
-data = {
-    "customer_identifier": "user_123",
-    "email": "john@example.com",
-    "name": "John Doe",
-    "period_budget": 100.0,
-    "budget_duration": "monthly"
-}
-headers = {
-    "Authorization": f"Bearer {api_key}",
-    "Content-Type": "application/json"
-}
-
-response = requests.post(url, headers=headers, json=data)
-print(response.json())
-
+## Query params
+You can add these params to the **URL params**.
+For example:
+```
+https://api.keywordsai.co/api/users/list/?page=1&page_size=50&sort_by=-first_seen&environment=prod
 ```
 
-```TypeScript TypeScript
-fetch("https://api.keywordsai.co/api/users/", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": "Bearer YOUR_API_KEY"
-  },
-    body: JSON.stringify({
-        customer_identifier: "user_123",
-        email: "john@example.com",
-        name: "John Doe",
-        period_budget: 100.0,
-        budget_duration: "monthly"
-    })
-})
-.then(response => response.json())
-.then(data => console.log(data));
+<ParamField query="page" type="number" default={1}>
+  Page number.
+</ParamField>
+
+<ParamField query="page_size" type="number" default={50}>
+  The number of customers to return per page. Maximum is 1000.
+</ParamField>
+
+<ParamField query="sort_by" type="string" default="-first_seen">
+  Sort field. Prefix with `-` for descending.
+</ParamField>
+
+<ParamField query="environment" type="string" default="prod">
+  Filter by environment. Options: `prod`, `test`.
+</ParamField>
+
+## POST params
+You can add these params to the **body**:
+
+```python
+url = "https://api.keywordsai.co/api/users/list/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+}
+data = {
+    "filters": {
+        "total_cost": {
+            "operator": "gt",
+            "value": [10.0]
+        }
+    }
+}
+response = requests.post(url, headers=headers, json=data)
+```
+
+<ParamField body="filters" type="object" default={{}}>
+  Filters to apply. Supported filter fields include:
+  `customer_identifier`, `name`, `email`, `number_of_requests`, `total_tokens`, `total_cost`, `active_days`.
+</ParamField>
+
+## Request example
+
+<RequestExample>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/users/list/"
+headers = {"Authorization": "Bearer YOUR_API_KEY", "Content-Type": "application/json"}
+payload = {
+    "filters": {
+        "email": {"operator": "contains", "value": ["example.com"]},
+    }
+}
+
+resp = requests.post(url, headers=headers, json=payload)
+print(resp.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/users/list/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filters": {
+      "email": {
+        "operator": "contains",
+        "value": ["example.com"]
+      }
+    }
+  }'
 ```
 </RequestExample>
 
-<Note>
-If a customer exceeds their budget, requests may be rejected with a `402` error.
-</Note>
+## Response
+
+<ResponseExample>
+```json
+{
+  "count": 51,
+  "next": "https://api.keywordsai.co/api/users/list/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "id": "user_123prod8264a3f4-40c7-476a-97d1-96908127ea21",
+      "unique_organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
+      "customer_identifier": "user_123",
+      "environment": "prod",
+      "name": "John Doe",
+      "email": "john@example.com",
+      "first_seen": "2025-10-15T08:00:00Z",
+      "last_active_timeframe": "2025-12-29T10:30:00Z",
+      "active_days": 75,
+      "number_of_requests": 15420,
+      "total_tokens": 170000,
+      "total_cost": 523.45,
+      "average_latency": 1.23,
+      "average_ttft": 0.45
+    }
+  ]
+}
+```
+</ResponseExample>
 
 
 
