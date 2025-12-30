@@ -355,7 +355,7 @@
                   "api-endpoints/observe/logs/logs-list-endpoint",
                   "api-endpoints/observe/logs/get-log-endpoint",
                   "api-endpoints/observe/logs/logs-update-endpoint",
-                  "api-endpoints/observe/logs/traces-ingest-from-logs"
+                  "api-endpoints/observe/logs/ingest"
                 ]
               },
               {
@@ -364,8 +364,7 @@
                   "api-endpoints/observe/traces/list",
                   "api-endpoints/observe/traces/get",
                   "api-endpoints/observe/traces/summary",
-                  "api-endpoints/observe/logs/traces-ingest-from-logs",
-                  "api-endpoints/observe/traces/ingest"
+                  "api-endpoints/observe/traces/traces-ingest-from-logs"
                 ]
               },
               {
