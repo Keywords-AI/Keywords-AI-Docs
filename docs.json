@@ -137,6 +137,13 @@
                 ]
               },
               {
+                "group": "Datasets",
+                "pages": [
+                  "documentation/products/dataset/via_api",
+                  "documentation/products/dataset/via_ui"
+                ]
+              },
+              {
                 "group": "Testsets",
                 "pages": [
                   "documentation/products/evaluation/experiments/testsets",
@@ -147,16 +154,14 @@
                 "group": "Experiments",
                 "pages": [
                   "documentation/products/evaluation/experiments/experiments",
-                  "documentation/products/evaluation/experiments/api-tutorial",
-                  {
-                    "group": "Workflows",
-                    "pages": [
-                      "documentation/products/evaluation/experiments/workflows/custom-workflow",
-                      "documentation/products/evaluation/experiments/workflows/completion-workflow",
-                      "documentation/products/evaluation/experiments/workflows/prompt-workflow"
-                    ]
-                  },
                   "documentation/products/evaluation/experiments/experiments-images"
+                ]
+              },
+              {
+                "group": "Experiments V2 (Beta)",
+                "pages": [
+                  "documentation/products/experiments_v2/via_ui",
+                  "documentation/products/experiments_v2/api-tutorial"                
                 ]
               },
               {
@@ -198,7 +203,7 @@
                 ]
               },
               {
-                "group": "Automations",
+                "group": "Automations (Beta)",
                 "pages": [
                   "documentation/products/automation/quickstart",
                   "documentation/products/automation/quickstart_online_eval"

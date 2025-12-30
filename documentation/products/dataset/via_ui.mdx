@@ -1,0 +1,130 @@
+---
+title: Create datasets in the UI
+description: "A guided walkthrough to create datasets from existing logs (sampling) or create an empty dataset and add logs via JSON/CSV."
+---
+
+## What is a dataset?
+
+A **dataset** is a curated collection of logs (inputs/outputs + metadata) that you can evaluate, annotate, and use to power Experiments.
+
+## Resources
+
+- [Create datasets via API](/documentation/products/dataset/via_api)
+- [Datasets API reference](/api-endpoints/evaluate/datasets/list)
+- [CSV template for importing dataset logs](https://drive.google.com/file/d/10U_nYZxCd_uOYyuZob9x0gE6McJPdYb8/view?usp=drive_link)
+
+## Steps to use
+
+<Tabs>
+<Tab title="Sampling existing logs">
+
+<Steps>
+<Step title="Step 1: Go to Datasets and click Create">
+Open the Keywords AI platform, navigate to **Datasets**, then click **Create dataset**.
+
+<Frame className="rounded-md">
+<img
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/products/dataset/create.png"
+  alt="Datasets page with Create dataset button"
+/>
+</Frame>
+</Step>
+
+<Step title="Step 2: Choose “From logs (sampling)”">
+In the creation modal, choose dataset type **From logs (sampling)**.
+
+<Frame className="rounded-md">
+<img
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/products/dataset/fromlogs_sampling.png"
+  alt="Create dataset modal with dataset type set to From logs (sampling)"
+/>
+</Frame>
+</Step>
+
+<Step title="Step 3: Set filters, time range, and sampling percentage">
+Configure:
+
+- **Filters**: narrow down which logs to include (e.g. `status_code = 200`, a specific `model`, metadata filters)
+- **Time range**: the window of logs to sample from
+- **Sampling percentage**: how much of matching logs to include
+
+<Frame className="rounded-md">
+<img
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/products/dataset/filters.png"
+  alt="Dataset from logs configuration showing filters, time range, and sampling percentage"
+/>
+</Frame>
+</Step>
+
+<Step title="Step 4: Create, wait for ingestion, and verify logs">
+Click **Create**. The dataset will begin processing while logs are being added.
+
+Depending on the size of the time range and filters, it may take some time until the dataset is fully populated.
+
+When it finishes, open the dataset and confirm:
+
+- `log_count` is non-zero
+- logs appear in the dataset logs table
+
+<Frame className="rounded-md">
+<img
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/products/dataset/see_logs.png"
+  alt="Dataset detail page showing dataset logs table populated"
+/>
+</Frame>
+</Step>
+</Steps>
+
+</Tab>
+
+<Tab title="Create empty + add logs (JSON/CSV)">
+
+<Steps>
+<Step title="Step 1: Create an empty dataset">
+Open the Keywords AI platform, navigate to **Datasets**, then click **Create dataset**.
+
+Choose **Create empty**. This creates the dataset immediately (no background sampling job).
+
+<Frame className="rounded-md">
+<img
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/products/dataset/create.png"
+  alt="Create dataset modal with Create empty option selected"
+/>
+</Frame>
+</Step>
+
+<Step title="Step 2: Add logs by inserting JSON (Input + Output)">
+Inside the dataset, click **Insert new log** and provide a JSON log with **input** and **output**.
+
+<Frame className="rounded-md">
+<img
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/products/dataset/insert_json.png"
+  alt="Insert new log UI with JSON editor for input and output"
+/>
+</Frame>
+
+<Tip>
+Datasets store end-to-end workflow I/O, so `input` and `output` can be any JSON structure.
+</Tip>
+</Step>
+
+<Step title="Step 3 (alternative): Import logs from CSV">
+If you already have a batch of examples, click **Import from CSV** and upload a CSV file.
+
+Use this template to get started:
+
+- [Google Drive CSV template](https://drive.google.com/file/d/10U_nYZxCd_uOYyuZob9x0gE6McJPdYb8/view?usp=drive_link)
+
+<Frame className="rounded-md">
+<img
+  src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/products/dataset/csv.png"
+  alt="Import from CSV modal for dataset logs"
+/>
+</Frame>
+</Step>
+</Steps>
+
+</Tab>
+</Tabs>
+
+
