@@ -489,15 +489,15 @@
                   {
                     "group": "Dataset Logs",
                     "pages": [
-                      "api-endpoints/evaluate/datasets/logs-add",
-                      "api-endpoints/evaluate/datasets/logs-create",
                       "api-endpoints/evaluate/datasets/logs-list",
                       "api-endpoints/evaluate/datasets/logs-list-post",
+                      "api-endpoints/evaluate/datasets/logs-create",
                       "api-endpoints/evaluate/datasets/logs-get",
                       "api-endpoints/evaluate/datasets/logs-put",
                       "api-endpoints/evaluate/datasets/logs-patch",
                       "api-endpoints/evaluate/datasets/logs-delete",
-                      "api-endpoints/evaluate/datasets/logs-remove"
+                      "api-endpoints/evaluate/datasets/logs-remove",
+                      "api-endpoints/evaluate/datasets/logs-add"
                     ]
                   },
                   {
@@ -512,8 +512,8 @@
               {
                 "group": "Scores",
                 "pages": [
-                  "api-endpoints/evaluate/scores/create",
                   "api-endpoints/evaluate/scores/list",
+                  "api-endpoints/evaluate/scores/create",
                   "api-endpoints/evaluate/scores/get",
                   "api-endpoints/evaluate/scores/update",
                   "api-endpoints/evaluate/scores/delete"
@@ -522,8 +522,8 @@
               {
                 "group": "Log Scores",
                 "pages": [
-                  "api-endpoints/evaluate/log-scores/create",
                   "api-endpoints/evaluate/log-scores/list",
+                  "api-endpoints/evaluate/log-scores/create",
                   "api-endpoints/evaluate/log-scores/get",
                   "api-endpoints/evaluate/log-scores/update",
                   "api-endpoints/evaluate/log-scores/delete"
@@ -549,8 +549,8 @@
               {
                 "group": "Temporary API Keys",
                 "pages": [
-                  "api-endpoints/manage/temporary-api-keys/create-temporary-key",
                   "api-endpoints/manage/temporary-api-keys/list-temporary-keys",
+                  "api-endpoints/manage/temporary-api-keys/create-temporary-key",
                   "api-endpoints/manage/temporary-api-keys/retrieve-temporary-key",
                   "api-endpoints/manage/temporary-api-keys/update-temporary-key",
                   "api-endpoints/manage/temporary-api-keys/delete-temporary-key"
@@ -564,8 +564,8 @@
               {
                 "group": "Conditions",
                 "pages": [
-                  "api-endpoints/automation/conditions/create",
-                  "api-endpoints/automation/conditions/list"
+                  "api-endpoints/automation/conditions/list",
+                  "api-endpoints/automation/conditions/create"
                 ]
               },
               {
