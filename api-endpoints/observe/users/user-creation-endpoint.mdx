@@ -1,92 +1,129 @@
 ---
-title: "User creation"
-api: "POST https://api.keywordsai.co/api/users/create/"
+title: "List customers (filters)"
+api: "POST https://api.keywordsai.co/api/users/list/"
 ---
 
-User creation endpoint allows you to create users and keep track of their usage/budget/limits.
+List customers with advanced filtering. Use POST when you need complex filters.
 
-Make sure to replace `YOUR_KEYWORDSAI_API_KEY` with your actual Keywords AI API key.
+## Authentication
 
+<Info>
+Public API: use an API key.
 
-<ParamField path="customer_identifier" type="string" required={true}>
-    The unique identifier for the user.
-</ParamField>
+- `Authorization: Bearer YOUR_API_KEY` (public API)
+</Info>
 
-<ParamField path="name" type="string">
-    User's name.
-</ParamField>
+The Users List endpoint allows you to list customers with advanced filtering using POST.
 
-<ParamField path="email" type="string">
-    User's email address.
-</ParamField>
-<ParamField path="period_start" type="string">
-    The start of the budget period in ISO Format: `YYYY-MM-DD` (e.g. `2024-03-09`). If not provided, the current date will be used.
-
-    This field will automatically roll over to the next period if the current date is past the end of the period.
-</ParamField>
-
-<ParamField path="period_end" type="string">
-    The end of the budget period in ISO Format: `YYYY-MM-DD` (e.g. `2024-03-09`). If not provided, it will be set based on the `period_start` + `budget_duration`. (e.g. `2024-03-09` + `1 month` = `2024-04-09`)
-
-    This field will automatically roll over to the next period if the current date is past the end of the period.
-</ParamField>
-
-<ParamField path="budget_duration" type="string">
-    Type of budget duration. Possible values are `daily`, `weekly`, `monthly`, and `yearly`. The default value is `monthly`.
-</ParamField>
-
-<ParamField path="period_budget" type="number">
-    The budget amount for the period. The default value is `null`, which means no budget is set.
-</ParamField>
-<ParamField path="markup_percentage" type="number">
-    This allows a User's usage to be reported more by x%. The default value is `0`.
-```json
-  {
-    "markup_percentage": 30 // 30% extra on top of the usage  
-  }
+## Query params
+You can add these params to the **URL params**.
+For example:
 ```
+https://api.keywordsai.co/api/users/list/?page=1&page_size=50&sort_by=-first_seen&environment=prod
+```
+
+<ParamField query="page" type="number" default={1}>
+  Page number.
 </ParamField>
-<ParamField path="metadata" type="object">
-    Customized metadata for the user. Any key-value pairs can be added here.
+
+<ParamField query="page_size" type="number" default={50}>
+  The number of customers to return per page. Maximum is 1000.
 </ParamField>
+
+<ParamField query="sort_by" type="string" default="-first_seen">
+  Sort field. Prefix with `-` for descending.
+</ParamField>
+
+<ParamField query="environment" type="string" default="prod">
+  Filter by environment. Options: `prod`, `test`.
+</ParamField>
+
+## POST params
+You can add these params to the **body**:
+
+```python
+url = "https://api.keywordsai.co/api/users/list/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+}
+data = {
+    "filters": {
+        "total_cost": {
+            "operator": "gt",
+            "value": [10.0]
+        }
+    }
+}
+response = requests.post(url, headers=headers, json=data)
+```
+
+<ParamField body="filters" type="object" default={{}}>
+  Filters to apply. Supported filter fields include:
+  `customer_identifier`, `name`, `email`, `number_of_requests`, `total_tokens`, `total_cost`, `active_days`.
+</ParamField>
+
+## Request example
 
 <RequestExample>
-```Python Python
+```python Python
 import requests
 
-url = "https://api.keywordsai.co/api/users/create/"
-api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
-data = {
-    "period_budget": 30,
-    "customer_identifier": "some_customer_identifier"
-}
-headers = {
-    "Authorization": f"Bearer {api_key}",
-    "Content-Type": "application/json"
+url = "https://api.keywordsai.co/api/users/list/"
+headers = {"Authorization": "Bearer YOUR_API_KEY", "Content-Type": "application/json"}
+payload = {
+    "filters": {
+        "email": {"operator": "contains", "value": ["example.com"]},
+    }
 }
 
-response = requests.post(url, headers=headers, json=data)
-print(response.json())
-
+resp = requests.post(url, headers=headers, json=payload)
+print(resp.json())
 ```
 
-```TypeScript TypeScript
-// Define the function with TypeScript
-fetch('https://api.keywordsai.co/api/users/create/', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer Your_Keywords_AI_API_Key '
-  },
-    body: JSON.stringify({
-        period_budget: 30,
-        customer_identifier: "some_customer_identifier"
-    })
-})
-.then(response => response.json())
-.then(data => console.log(data));
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/users/list/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filters": {
+      "email": {
+        "operator": "contains",
+        "value": ["example.com"]
+      }
+    }
+  }'
 ```
 </RequestExample>
+
+## Response
+
+<ResponseExample>
+```json
+{
+  "count": 51,
+  "next": "https://api.keywordsai.co/api/users/list/?page=2",
+  "previous": null,
+  "results": [
+    {
+      "id": "user_123prod8264a3f4-40c7-476a-97d1-96908127ea21",
+      "unique_organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
+      "customer_identifier": "user_123",
+      "environment": "prod",
+      "name": "John Doe",
+      "email": "john@example.com",
+      "first_seen": "2025-10-15T08:00:00Z",
+      "last_active_timeframe": "2025-12-29T10:30:00Z",
+      "active_days": 75,
+      "number_of_requests": 15420,
+      "total_tokens": 170000,
+      "total_cost": 523.45,
+      "average_latency": 1.23,
+      "average_ttft": 0.45
+    }
+  ]
+}
+```
+</ResponseExample>
 
 
 

@@ -1,77 +1,138 @@
 ---
 title: "User update"
-api: "PATCH https://api.keywordsai.co/api/user/update/<str:customer_identifier>"
+api: "PATCH https://api.keywordsai.co/api/users/<customer_identifier>/"
 ---
 
-User update endpoint allows you to update user information, and set budgets and limits for a specific user. 
+Updates an existing customer. Use this to change budgets or contact info.
 
-Make sure to replace `YOUR_KEYWORDSAI_API_KEY` with your actual Keywords AI API key, and `<str:customer_identifier>` with the actual customer identifier.
+## Authentication
 
+<Info>
+Public API: use an API key.
 
+- `Authorization: Bearer YOUR_API_KEY` (public API)
+</Info>
 
-<ParamField path="name" type="string">
-    User's name.
-</ParamField>
-<ParamField path="email" type="string">
-    User's email address.
-</ParamField>
-<ParamField path="period_start" type="string">
-    The start of the budget period in ISO Format: `YYYY-MM-DD` (e.g. `2024-03-09`). If not provided, the current date will be used.
+## Path params
 
-    This field will automatically roll over to the next period if the current date is past the end of the period.
+<ParamField path="customer_identifier" type="string" required={true}>
+Your unique identifier for this customer.
 </ParamField>
 
-<ParamField path="period_end" type="string">
-    The end of the budget period in ISO Format: `YYYY-MM-DD` (e.g. `2024-03-09`). If not provided, it will be set based on the `period_start` + `budget_duration`. (e.g. `2024-03-09` + `1 month` = `2024-04-09`)
+## POST params
+You can add these params to the **body**:
 
-    This field will automatically roll over to the next period if the current date is past the end of the period.
+```python
+url = "https://api.keywordsai.co/api/users/user_123/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+}
+data = {
+    "period_budget": 200.0,
+    "metadata": {"plan": "pro"},
+}
+response = requests.patch(url, headers=headers, json=data)
+```
+
+<ParamField body="email" type="string">
+  Customer email address.
 </ParamField>
 
-<ParamField path="budget_duration" type="string">
-    Type of budget duration. Possible values are `daily`, `weekly`, `monthly`, and `yearly`. The default value is `monthly`.
+<ParamField body="name" type="string">
+  Customer display name.
 </ParamField>
 
-<ParamField path="period_budget" type="number">
-    The budget amount for the period. The default value is `null`, which means no budget is set.
+<ParamField body="metadata" type="object">
+  Custom metadata associated with this customer (optional).
 </ParamField>
-<ParamField path="metadata" type="object">
-    Customized metadata for the user. Any key-value pairs can be added here.
+
+<ParamField body="period_budget" type="number">
+  Budget for the current period in USD. Set to `null` to remove the budget limit.
 </ParamField>
+
+<ParamField body="budget_duration" type="string">
+  Budget renewal period. Options: `daily`, `weekly`, `monthly`.
+</ParamField>
+
+<ParamField body="total_budget" type="number">
+  Total all-time budget limit across all periods (optional).
+</ParamField>
+
+<ParamField body="markup_percentage" type="number">
+  Markup percentage applied to this customer's usage (optional).
+</ParamField>
+
+## Request example
 
 <RequestExample>
-```Python Python
+```python Python
 import requests
 
-url = "https://api.keywordsai.co/api/user/update/some_customer_identifier"
-api_key = "YOUR_KEY" # Replace with your actual Keywords AI API key
-data = {
-    "period_budget": 30
-}
-headers = {
-    "Authorization": f"Bearer {api_key}",
-    "Content-Type": "application/json"
-}
+url = "https://api.keywordsai.co/api/users/user_123/"
+headers = {"Authorization": "Bearer YOUR_API_KEY", "Content-Type": "application/json"}
+payload = {"period_budget": 200.0, "metadata": {"plan": "pro"}}
 
-response = requests.patch(url, headers=headers, json=data)
-print(response.json())
+resp = requests.patch(url, headers=headers, json=payload)
+print(resp.json())
 ```
 
-```TypeScript TypeScript
-// Define the function with TypeScript
-fetch("https://api.keywordsai.co/api/user/update/some_customer_identifier", {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer Your_Keywords_AI_API_Key '
-  },
-    body: JSON.stringify({
-        period_budget: 30,
-    })
-})
-.then(response => response.json())
-.then(data => console.log(data));
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/users/user_123/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "period_budget": 200.0,
+    "metadata": { "plan": "pro" }
+  }'
 ```
-
 </RequestExample>
+
+## Response
+
+Returns the updated customer object (same structure as the GET detail endpoint).
+
+<ResponseExample>
+```json
+{
+  "id": 12345,
+  "customer_identifier": "user_123",
+  "unique_organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
+  "email": "john@example.com",
+  "name": "John Doe",
+  "environment": "prod",
+  "organization": 456,
+  "period_budget": 200.0,
+  "budget_duration": "monthly",
+  "total_period_usage": 45.67,
+  "period_start": "2025-12-01T00:00:00Z",
+  "period_end": null,
+  "total_budget": null,
+  "total_usage": 523.45,
+  "total_requests": 15420,
+  "total_prompt_tokens": 125000,
+  "total_completion_tokens": 45000,
+  "total_tokens": 170000,
+  "total_cache_hits": 234,
+  "average_latency": 1.23,
+  "average_ttft": 0.45,
+  "average_monthly_cost": 67.89,
+  "top_models": {},
+  "last_active": "2025-12-29T10:30:00Z",
+  "created_at": "2025-10-15T08:00:00Z",
+  "updated_at": "2025-12-29T10:30:00Z",
+  "metadata": {
+    "plan": "pro"
+  },
+  "markup_percentage": 0.0,
+  "is_test": false,
+  "blurred": null,
+  "organization_key": null
+}
+```
+</ResponseExample>
+
+<Tip>
+To remove a budget limit, set `period_budget` to `null`.
+</Tip>
 
 
