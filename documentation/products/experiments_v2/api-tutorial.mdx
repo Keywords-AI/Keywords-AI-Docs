@@ -1,0 +1,334 @@
+---
+title: "Run Experiments via API"
+description: "A guided workflow to run experiments programmatically. Pick a workflow type (Prompt / Completion / Custom) and follow the steps."
+---
+
+## What is Experiments?
+
+Experiments lets you run repeatable evaluations over a dataset and inspect results as traces/logs (outputs, evaluator scores, costs, latency).
+
+The main decision is **which workflow type** you want:
+
+- **Prompt workflow**: render a saved prompt template with dataset variables, then run LLM calls automatically
+- **Completion workflow**: run direct LLM completions on dataset messages automatically (no prompt templates)
+- **Custom workflow**: you fetch inputs, run your own code/model, and submit outputs back for evaluator execution
+
+<Note>
+This page is a tutorial. For full endpoint specs, jump to the linked API reference pages inside each step.
+</Note>
+
+## Resources
+
+- [Create datasets in the UI](/documentation/products/dataset/via_ui)
+- [Create datasets via API](/documentation/products/dataset/via_api)
+- [Experiments API reference](/api-endpoints/develop/experiments-v2/create)
+- [Evaluators: Create](/api-endpoints/evaluate/evaluators/create)
+
+## Steps to use
+
+<Tabs>
+<Tab title="Prompt workflow">
+
+<Steps>
+<Step title="Step 1: Prepare a dataset with variables">
+Dataset entries must include the variables your prompt template expects (example: `name`, `issue`, `order_id`).
+
+Reference: [Datasets: create / add logs](/documentation/products/dataset/via_api)
+
+<Accordion title="Dataset format (prompt workflow)">
+Your dataset log `input` should be an object with keys that match your prompt version variables schema:
+
+```json
+{
+  "input": {
+    "name": "John Doe",
+    "issue": "Damaged product",
+    "order_id": "ORD-12345"
+  }
+}
+```
+</Accordion>
+</Step>
+
+<Step title="Step 2: Create a prompt + deploy a version">
+Create a prompt template, create a version (with variables), and deploy it so it can be used in experiments.
+
+Reference: [Prompts API](/api-endpoints/develop/prompts/list)
+
+<Accordion title="What “deployed” means (important)">
+Prompt workflows need a readonly/deployed version so the experiment run is reproducible. A common pattern is:
+
+- Create version 1
+- Create version 2 (locks version 1 as readonly)
+- Deploy version 1
+</Accordion>
+</Step>
+
+<Step title="Step 3: Create the experiment (type = prompt)">
+Create an experiment that references your `dataset_id` and `prompt_id`.
+
+Reference: [Create experiment](/api-endpoints/develop/experiments-v2/create)
+
+<Accordion title="Workflow config (prompt)">
+```json
+{
+  "type": "prompt",
+  "config": {
+    "prompt_id": "YOUR_PROMPT_ID"
+  }
+}
+```
+</Accordion>
+
+<CodeGroup>
+
+```python Python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+url = "https://api.keywordsai.co/api/v2/experiments/"
+
+payload = {
+  "name": "Prompt Workflow Experiment",
+  "dataset_id": "YOUR_DATASET_ID",
+  "workflows": [{"type": "prompt", "config": {"prompt_id": "YOUR_PROMPT_ID"}}],
+  "evaluator_slugs": ["your_evaluator_slug"]
+}
+
+res = requests.post(url, headers={"Authorization": f"Bearer {API_KEY}"}, json=payload)
+res.raise_for_status()
+print(res.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/v2/experiments/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Prompt Workflow Experiment",
+    "dataset_id": "YOUR_DATASET_ID",
+    "workflows": [{"type":"prompt","config":{"prompt_id":"YOUR_PROMPT_ID"}}],
+    "evaluator_slugs": ["your_evaluator_slug"]
+  }'
+```
+
+</CodeGroup>
+</Step>
+
+<Step title="Step 4: List results and inspect the span tree">
+After the job runs, list logs for the experiment and fetch details for full span trees (workflow execution + evaluator spans).
+
+Reference: [List experiment logs](/api-endpoints/develop/experiments-v2/logs-list)
+
+<Accordion title="What you should see in results">
+- A root workflow span for the experiment trace
+- Child spans for prompt loading/rendering and the LLM call
+- Evaluator spans named like `evaluator.{slug}` with score outputs
+</Accordion>
+</Step>
+</Steps>
+
+</Tab>
+
+<Tab title="Completion workflow">
+
+<Steps>
+<Step title="Step 1: Prepare a dataset with messages">
+For completion workflow, dataset entries should have `input` as an OpenAI-style `messages` array.
+
+Reference: [Datasets: create / add logs](/documentation/products/dataset/via_api)
+
+<Accordion title="Dataset format (completion workflow)">
+```json
+{
+  "input": [
+    { "role": "system", "content": "You are a helpful assistant." },
+    { "role": "user", "content": "What is AI?" }
+  ]
+}
+```
+</Accordion>
+</Step>
+
+<Step title="Step 2: Create the experiment (type = completion)">
+Create an experiment that runs completions automatically in the background.
+
+Reference: [Create experiment](/api-endpoints/develop/experiments-v2/create)
+
+<Accordion title="Workflow config (completion)">
+Completion workflows execute LLM calls automatically. Common config fields include:
+
+| Field | Type | Required | Notes |
+|---|---:|:---:|---|
+| `model` | string | Yes | e.g. `gpt-4o-mini` |
+| `temperature` | number | No | 0–2 |
+| `max_tokens` | integer | No | |
+| `top_p` | number | No | 0–1 |
+| `frequency_penalty` | number | No | -2–2 |
+| `presence_penalty` | number | No | -2–2 |
+
+```json
+{
+  "type": "completion",
+  "config": {
+    "model": "gpt-4o-mini",
+    "temperature": 0.7,
+    "max_tokens": 200
+  }
+}
+```
+</Accordion>
+
+<CodeGroup>
+
+```python Python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+url = "https://api.keywordsai.co/api/v2/experiments/"
+
+payload = {
+  "name": "Completion Workflow Experiment",
+  "dataset_id": "YOUR_DATASET_ID",
+  "workflows": [{
+    "type": "completion",
+    "config": {
+      "model": "gpt-4o-mini",
+      "temperature": 0.7,
+      "max_tokens": 200
+    }
+  }],
+  "evaluator_slugs": ["your_evaluator_slug"]
+}
+
+res = requests.post(url, headers={"Authorization": f"Bearer {API_KEY}"}, json=payload)
+res.raise_for_status()
+print(res.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/v2/experiments/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name":"Completion Workflow Experiment",
+    "dataset_id":"YOUR_DATASET_ID",
+    "workflows":[{"type":"completion","config":{"model":"gpt-4o-mini","temperature":0.7,"max_tokens":200}}],
+    "evaluator_slugs":["your_evaluator_slug"]
+  }'
+```
+
+</CodeGroup>
+</Step>
+
+<Step title="Step 3: List results and debug failures">
+List experiment logs, then retrieve a single log with details to inspect:
+
+- workflow execution spans (LLM call, token/cost fields)
+- evaluator spans and score outputs
+- failure information when a run fails
+
+Reference: [Retrieve experiment log](/api-endpoints/develop/experiments-v2/logs-get)
+
+<Accordion title="How chaining works (optional)">
+If you include multiple completion workflows, they run sequentially (output of workflow N becomes input to workflow N+1).
+</Accordion>
+</Step>
+</Steps>
+
+</Tab>
+
+<Tab title="Custom workflow">
+
+<Steps>
+<Step title="Step 1: Prepare a dataset (any JSON input/output)">
+Custom workflow accepts any JSON-serializable `input`/`output`. The system will create placeholders from dataset inputs.
+
+Reference: [Datasets: create / add logs](/documentation/products/dataset/via_api)
+
+<Accordion title="How it works (custom workflow)">
+```
+1. Create experiment → 2. List placeholders (inputs) → 3. Process externally → 4. Submit output → 5. Evaluators run
+```
+</Accordion>
+</Step>
+
+<Step title="Step 2: Create the experiment (type = custom)">
+Create an experiment with a custom workflow config.
+
+Reference: [Create experiment](/api-endpoints/develop/experiments-v2/create)
+
+<Accordion title="Workflow config (custom)">
+```json
+{
+  "type": "custom",
+  "config": {
+    "allow_submission": true,
+    "timeout_hours": 24
+  }
+}
+```
+
+Constraints:
+- Custom and built-in workflows are mutually exclusive (don’t mix)
+- Only one custom workflow per experiment
+</Accordion>
+</Step>
+
+<Step title="Step 3: List placeholder logs (inputs)">
+List logs for the experiment to get the inputs you need to process. Placeholders start with `status: pending`.
+
+Reference: [List experiment logs](/api-endpoints/develop/experiments-v2/logs-list)
+
+<Tip>
+If list returns empty right after creation, wait a few seconds and retry—the placeholders can be created asynchronously.
+</Tip>
+</Step>
+
+<Step title="Step 4: Submit your outputs (PATCH) for automatic evaluation">
+Process each input with your own code/model, then PATCH the log with your `output`. Evaluators run automatically in the background.
+
+Reference: [Update experiment log](/api-endpoints/develop/experiments-v2/logs-update)
+
+<Tip>
+To get accurate latency metrics for your custom workflow, include execution timestamps in your payload metadata (start/end).
+</Tip>
+
+<Accordion title="Accurate timestamps (recommended)">
+If you don’t include your own timestamps, latency may reflect “time between placeholder creation and submission”, which is usually not what you want.
+
+```json
+{
+  "output": { "result": "..." },
+  "metadata": {
+    "start_time": "2024-01-15T10:30:00.000Z",
+    "end_time": "2024-01-15T10:30:02.500Z",
+    "processor_version": "v1.0.0"
+  }
+}
+```
+</Accordion>
+</Step>
+</Steps>
+
+</Tab>
+</Tabs>
+
+## Troubleshooting
+
+<AccordionGroup>
+<Accordion title="I created an experiment but logs list is empty">
+- The experiment may still be processing in the background (wait 5–10 seconds and retry)
+- Your dataset might be empty
+</Accordion>
+
+<Accordion title="Evaluator spans never appear">
+- Confirm your evaluator slug exists and is accessible to your org
+- Evaluators can run asynchronously—poll the log detail endpoint after submission
+</Accordion>
+
+<Accordion title="Inputs/outputs look truncated">
+Use the “get log” endpoint (detail) to retrieve the full span tree and untruncated fields.
+</Accordion>
+</AccordionGroup>
+
