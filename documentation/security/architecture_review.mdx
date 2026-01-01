@@ -13,13 +13,14 @@ Keywords AI provides LLM observability service: keeping track of all the inputs 
 - **Application hosted on Amazon Elastic Container Service (ECS)**
 - **Redis** for event queue management
 - **PostgreSQL** for persistent data storage
+- **ClickHouse** for high-performance analytics and observability data warehousing
 
 ### Data Flow
 
 1. Client requests are sent to our API server hosted on AWS ECS
 2. During LLM inference operations, events are generated and pushed to Redis queue
 3. Celery workers consume these events from Redis
-4. Data is batch inserted into PostgreSQL database
+4. Data is batch inserted into PostgreSQL and ClickHouse
 
 ## Security and Encryption Standards
 
