@@ -3,13 +3,37 @@ title: Retrieve log
 api: GET https://api.keywordsai.co/api/request-logs/{unique_id}
 ---
 
-The Get Log endpoint allows you to get a specific log by its unique ID.
+The Get Log endpoint allows you to retrieve complete information about a specific log by its unique ID, including:
+- Full input/output content (`input` and `output` fields)
+- Type-specific fields extracted based on `log_type`
+- Credit and budget check results (`limit_info`)
+- Evaluation scores
+- Complete request/response metadata
+
+## Response fields
+
+Each log in the response includes:
+
+### Universal fields (All Span Types)
+- **`input`** (string): JSON-serialized representation of the span's input data
+- **`output`** (string): JSON-serialized representation of the span's output data
+- **`log_type`** (string): Type of span (`"chat"`, `"embedding"`, `"workflow"`, etc.)
+
 
 <Note>
-You should first get the log list, and based on the unique id in the list, retrieve the specific log. Learn more about the [log list endpoint](/api-endpoints/observe/logs/logs-list-endpoint).
+### Legacy compatibility
+For `log_type="chat"`, `"completion"`, `"text"`, or `"response"`:
+- **`prompt_messages`** (array): Full input messages array (extracted from `input`)
+- **`completion_message`** (object): Full output message object (extracted from `output`)
+
+For other span types (embedding, workflow, etc.), type-specific fields are extracted based on the `log_type`. See [log types](https://localhost:3001/get-started/observability_data_model#log-types) for details.
 </Note>
 
-## Path params  
+<Note>
+You should first get the log list, and based on the unique_id in the list, retrieve the specific log. Learn more about the [log list endpoint](/api-endpoints/observe/logs/logs-list-endpoint).
+</Note>
+
+## Path parameters
 
 <ParamField path="unique_id" type="string" required>
   The unique ID of the log to get.
