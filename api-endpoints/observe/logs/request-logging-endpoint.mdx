@@ -3,68 +3,127 @@ title: Create log
 api: POST https://api.keywordsai.co/api/request-logs/
 ---
 
-This guide shows you how to log LLM requests to Keywords AI using the structured 3-layer approach for comprehensive LLM logging and monitoring.
+This guide shows you how to log any type of LLM request to Keywords AI using the **universal input/output design** that supports all span types.
 
-## Parameters
+## Input/Output
 
-These are the essential parameters needed for basic LLM request logging.
+**Keywords AI uses universal `input` and `output` fields across all span types.** 
 
-### Core required fields
+- **Chat completions**: Messages arrays
+- **Embeddings**: Text strings or arrays
+- **Transcriptions**: Audio metadata → text
+- **Speech**: Text → audio
+- **Workflows/Tasks**: Any custom data structure
+- **Agent operations**: Complex nested objects
 
-<ParamField body="model" type="string" required>
-The LLM model used for the inference. See the list of supported models [here](/integration/supported-models).
-</ParamField>
+**How it works:**
+1. You provide `input` and `output` fields in any structure (string, object, array, etc.)
+2. Set `log_type` to indicate span type (`"chat"`, `"embedding"`, `"workflow"`, etc.)
+3. Keywords AI automatically extracts type-specific fields for backward compatibility
+4. Your data is stored efficiently and retrieved with both universal and type-specific fields
 
-<ParamField body="prompt_messages" type="array" required>
-An array of prompt messages sent to the model.
+For complete `log_type` specifications, see [log types](https://localhost:3001/get-started/observability_data_model#log-types).
 
-<AccordionGroup>
-<Accordion title="Properties">
-<ParamField body="role" type="string" required>
-The role of the message. Could be `system`, `developer`, `user`, `assistant`, `tool`.
-</ParamField>
+<Note>
+### Legacy field support
 
-<ParamField body="content" type="string" required>
-The content of the message.
-</ParamField>
+For backward compatibility, Keywords AI still supports legacy fields:
 
-<ParamField body="tool_call_id" type="string">
-The tool call id for tool messages.
-</ParamField>
-</Accordion>
-
-<Accordion title="Example">
-```python
-"prompt_messages": [
-    {
-        "role": "system",
-        "content": "You are a helpful assistant."
-    },
-    {
-        "role": "user", 
-        "content": "What is machine learning?"
-    },
-    # optional tool call
-    {
-        "role": "tool",
-        "tool_call_id": "your tool call id",
-        "content": "...." # tool call content
-    }
-]
-```
-</Accordion>
-</AccordionGroup>
+<ParamField body="prompt_messages" type="array">
+**Legacy field.** Use `input` instead.
 </ParamField>
 
 <ParamField body="completion_message" type="object">
-The model's response message in JSON format.
+**Legacy field.** Use `output` instead.
+</ParamField>
+</Note>
+
+
+## Request body
+
+### Core fields
+
+<ParamField body="input" type="string | object | array">
+Universal input field for the span. Structure depends on `log_type`:
+- **Chat**: JSON string of messages array or messages array directly
+- **Embedding**: Text string or array of strings
+- **Workflow/Task**: Any JSON-serializable structure
+- **Transcription**: Audio file reference or metadata object
+- **Speech**: Text string or TTS configuration object
+
+See the **Span Types** section below for complete specifications.
+
+<Accordion title="Example for Chat">
+```json
+"input": "[{\"role\":\"system\",\"content\":\"You are helpful.\"},{\"role\":\"user\",\"content\":\"Hello\"}]"
+```
+</Accordion>
+
+<Accordion title="Example for Embedding">
+```json
+"input": "Keywords AI is an LLM observability platform"
+```
+</Accordion>
+
+<Accordion title="Example for Workflow">
+```json
+"input": "{\"query\":\"Help with order #12345\",\"context\":{\"user_id\":\"123\"}}"
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="output" type="string | object | array">
+Universal output field for the span. Structure depends on `log_type`:
+- **Chat**: JSON string of completion message or message object directly
+- **Embedding**: Array of vector embeddings
+- **Workflow/Task**: Any JSON-serializable result structure
+- **Transcription**: Transcribed text string
+- **Speech**: Audio file reference or base64 audio data
+
+<Accordion title="Example for Chat">
+```json
+"output": "{\"role\":\"assistant\",\"content\":\"Hello! How can I help you?\"}"
+```
+</Accordion>
+
+<Accordion title="Example for Embedding">
+```json
+"output": "[0.123, -0.456, 0.789, ...]"
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="log_type" type="string" default="chat">
+Type of span being logged. Determines how `input` and `output` are parsed.
+
+**Supported types:**
+- `"chat"` - Chat completion requests (default)
+- `"completion"` - Legacy completion requests
+- `"response"` - OpenAI Response API
+- `"embedding"` - Embedding generation
+- `"transcription"` - Speech-to-text
+- `"speech"` - Text-to-speech
+- `"workflow"` or `"agent"` - Workflow/agent execution
+- `"task"` or `"tool"` - Task/tool execution
+- `"function"` - Function call
+- `"generation"` - Generation span
+- `"handoff"` - Agent handoff
+- `"guardrail"` - Safety check
+- `"custom"` - Custom span type
+
+<Accordion title="Default Behavior">
+If not specified, defaults to `"chat"`. For chat types, the system automatically extracts `prompt_messages` and `completion_message` from `input` and `output` for backward compatibility.
+
+For complete specifications of each type, see [log types](https://localhost:3001/get-started/observability_data_model#log-types).
+</Accordion>
+</ParamField>
+
+<ParamField body="model" type="string">
+The model used for the inference. Optional but recommended for chat/completion/embedding types.
 
 <Accordion title="Example">
-```python
-"completion_message": {
-    "role": "assistant",
-    "content": "Machine learning is a subset of artificial intelligence..."
-}
+```json
+"model": "gpt-4o-mini"
 ```
 </Accordion>
 </ParamField>
@@ -73,40 +132,79 @@ The model's response message in JSON format.
 
 Performance metrics and cost tracking for monitoring LLM efficiency.
 
+<ParamField body="usage" type="object">
+Token usage information for the request.
+
+<AccordionGroup>
+<Accordion title="Properties">
 <ParamField body="prompt_tokens" type="integer">
-Number of tokens in the prompt.
+Number of tokens in the prompt/input.
 </ParamField>
 
 <ParamField body="completion_tokens" type="integer">
-Number of tokens in the completion.
+Number of tokens in the completion/output.
 </ParamField>
 
-<ParamField body="cost" type="float" default={0}>
-Cost of the inference in US dollars.
+<ParamField body="total_tokens" type="integer">
+Total tokens (prompt + completion).
 </ParamField>
 
-<ParamField body="generation_time" type="float" default={0}>
-Total generation time. Generation time = TTFT (Time To First Token) + TPOT (Time Per Output Token) * #tokens. **Do not** confuse this with `ttft`.
+<ParamField body="prompt_tokens_details" type="object">
+Detailed breakdown of prompt tokens (e.g., cached tokens).
+</ParamField>
+
+<ParamField body="cache_creation_prompt_tokens" type="integer">
+For Anthropic models: tokens used to create the cache.
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```json
+{
+  "usage": {
+    "prompt_tokens": 150,
+    "completion_tokens": 85,
+    "total_tokens": 235,
+    "prompt_tokens_details": {
+      "cached_tokens": 10
+    }
+  }
+}
+```
+</Accordion>
+</AccordionGroup>
+</ParamField>
+
+<ParamField body="cost" type="float">
+Cost of the inference in US dollars. If not provided, will be calculated automatically based on model pricing.
+</ParamField>
+
+<ParamField body="latency" type="float">
+Total request latency in seconds (replaces deprecated `generation_time`).
 
 <Note>
-The unit of generation time is seconds.
+Previously called `generation_time`. For backward compatibility, both field names are supported.
 </Note>
 </ParamField>
 
-<ParamField body="ttft" type="float" default={0.0}>
-Time to first token. The time it takes for the model to generate the first token after receiving a request.
+<ParamField body="time_to_first_token" type="float">
+Time to first token (TTFT) in seconds. Useful for streaming responses and voice AI applications.
 
 <Note>
-The unit of ttft is seconds.
+Previously called `ttft`. Both field names are supported.
 </Note>
+</ParamField>
+
+<ParamField body="tokens_per_second" type="float">
+Generation speed in tokens per second.
 </ParamField>
 
 ### Metadata
 
 Custom tracking and identification parameters for advanced analytics and filtering.
 
-<ParamField body="metadata" type="dict">
-You can add any key-value pair to this metadata field for your reference.
+<ParamField body="metadata" type="object">
+You can add any key-value pair to this metadata field for your reference. Useful for custom analytics and filtering.
 
 <Accordion title="Example">
 ```json
@@ -115,28 +213,39 @@ You can add any key-value pair to this metadata field for your reference.
     "language": "en",
     "environment": "production",
     "version": "v1.0.0",
-    "feature": "chat_support"
+    "feature": "chat_support",
+    "user_tier": "premium"
   }
 }
 ```
 </Accordion>
 </ParamField>
 
+<ParamField body="customer_identifier" type="string">
+An identifier for the customer that invoked this request. Helps with visualizing user activities. See [customer identifier details](/features/generation/customer-identifier).
+
+<Accordion title="Example">
+```json
+"customer_identifier": "user_123"
+```
+</Accordion>
+</ParamField>
+
 <ParamField body="customer_params" type="object">
-Parameters related to the customer.
+Extended customer information (alternative to individual customer fields).
 
 <AccordionGroup>
 <Accordion title="Properties">
-<ParamField body="customer_identifier" type="string" required>
-An identifier for the customer that invoked this LLM inference, helps with visualizing user activities. See the [details of customer identifier here](/features/generation/customer-identifier).
+<ParamField body="customer_identifier" type="string">
+Customer identifier.
 </ParamField>
 
 <ParamField body="name" type="string">
-Name of the customer.
+Customer name.
 </ParamField>
 
 <ParamField body="email" type="string">
-Email of the customer.
+Customer email.
 </ParamField>
 </Accordion>
 
@@ -154,29 +263,47 @@ Email of the customer.
 </AccordionGroup>
 </ParamField>
 
-<ParamField body="group_identifier" type="string">
-Group identifier. Use group identifier to group logs together.
-</ParamField>
-
 <ParamField body="thread_identifier" type="string">
-A unique identifier for the thread.
+A unique identifier for the conversation thread. Useful for multi-turn conversations.
 </ParamField>
 
 <ParamField body="custom_identifier" type="string">
-Same functionality as `metadata`, but it's faster to query since it's indexed.
+Same functionality as `metadata`, but indexed for faster querying.
 
 <Accordion title="Example">
 ```json
-{
-  "custom_identifier": "my_value"
-}
+"custom_identifier": "ticket_12345"
 ```
 </Accordion>
 </ParamField>
 
-## Advanced Parameters
+<ParamField body="group_identifier" type="string">
+Group identifier. Use to group related logs together.
+</ParamField>
 
-### Tool Calls and Function Calling
+### Workflow & tracing
+
+Parameters for distributed tracing and workflow tracking.
+
+<ParamField body="trace_unique_id" type="string">
+Unique identifier for the trace. Used to link multiple spans together in distributed tracing.
+</ParamField>
+
+<ParamField body="span_workflow_name" type="string">
+Name of the workflow this span belongs to.
+</ParamField>
+
+<ParamField body="span_name" type="string">
+Name of this specific span/task within the workflow.
+</ParamField>
+
+<ParamField body="span_parent_id" type="string">
+ID of the parent span. Used to build the trace hierarchy.
+</ParamField>
+
+## Advanced parameters
+
+### Tool calls and function calling
 
 <ParamField body="tools" type="array">
 A list of tools the model may call. Currently, only functions are supported as a tool.
@@ -205,7 +332,7 @@ The parameters the function accepts.
 </Accordion>
 
 <Accordion title="Example">
-```python
+```json
 "tools": [
     {
         "type": "function",
@@ -217,13 +344,13 @@ The parameters the function accepts.
                 "properties": {
                     "location": {
                         "type": "string",
-                        "description": "The city and state, e.g. San Francisco, CA",
+                        "description": "The city and state, e.g. San Francisco, CA"
                     },
-                    "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
+                    "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]}
                 },
-                "required": ["location"],
-            },
-        },
+                "required": ["location"]
+            }
+        }
     }
 ]
 ```
@@ -231,26 +358,11 @@ The parameters the function accepts.
 </AccordionGroup>
 </ParamField>
 
-<ParamField body="tool_choice" type="object">
-Controls which (if any) tool is called by the model. `none` means the model will not call any tool and instead generates a message.
-
-<AccordionGroup>
-<Accordion title="Properties">
-<ParamField body="type" type="string" required>
-The type of the tool. Currently, only `function` is supported.
-</ParamField>
-
-<ParamField body="function" type="object" required>
-<Accordion title="Properties">
-<ParamField body="name" type="string" required>
-The name of the function to call.
-</ParamField>
-</Accordion>
-</ParamField>
-</Accordion>
+<ParamField body="tool_choice" type="string | object">
+Controls which (if any) tool is called by the model. Can be `"none"`, `"auto"`, or an object specifying a specific tool.
 
 <Accordion title="Example">
-```python
+```json
 "tool_choice": {
     "type": "function",
     "function": {
@@ -259,132 +371,143 @@ The name of the function to call.
 }
 ```
 </Accordion>
-</AccordionGroup>
 </ParamField>
 
-### Response Configuration
+### Response configuration
 
 <ParamField body="response_format" type="object">
-Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs which ensures the model will match your supplied JSON schema.
+Setting to `{ "type": "json_schema", "json_schema": {...} }` enables Structured Outputs.
 
 <Accordion title="Possible types">
-<ParamField body="Text" type="Object">
-Default response format. Used to generate text responses.
-<Accordion title="Properties">
-<ParamField body="type" type="string" required>
-The type of response format being defined. Always `text`.
-</ParamField>
+- **Text**: `{ "type": "text" }` - Default response format
+- **JSON Schema**: `{ "type": "json_schema", "json_schema": {...} }` - Structured outputs
+- **JSON Object**: `{ "type": "json_object" }` - Legacy JSON format
 </Accordion>
 </ParamField>
 
-<ParamField body="JSON Schema" type="Object">
-JSON Schema response format. Used to generate structured JSON responses.
-<Accordion title="Properties">
-<ParamField body="type" type="string" required>
-The type of response format being defined. Always `json_schema`.
-</ParamField>
-
-<ParamField body="json_schema" type="object" required>
-Structured Outputs configuration options, including a JSON Schema.
-</ParamField>
-</Accordion>
-</ParamField>
-
-<ParamField body="JSON Object" type="Object">
-JSON object response format. An older method of generating JSON responses.
-<Accordion title="Properties">
-<ParamField body="type" type="string" required>
-The type of response format being defined. Always `json_object`.
-</ParamField>
-</Accordion>
-</ParamField>
-</Accordion>
-</ParamField>
-
-### Model Configuration
+### Model configuration
 
 <ParamField body="temperature" type="number" default={1}>
-Controls randomness in the output in the range of 0-2, higher temperature will result in more random responses.
+Controls randomness in the output (0-2). Higher values produce more random responses.
 </ParamField>
 
 <ParamField body="top_p" type="number" default={1}>
-An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
-
-We generally recommend altering this or temperature but not both.
+Nucleus sampling parameter. Alternative to temperature.
 </ParamField>
 
 <ParamField body="frequency_penalty" type="number">
-Penalizes new tokens based on their frequency in the text so far. Decreases the model's likelihood of repeating the same line verbatim.
+Penalizes tokens based on their frequency in the text so far.
 </ParamField>
 
 <ParamField body="presence_penalty" type="number">
-Penalizes new tokens based on whether they appear in the text so far. Increases the model's likelihood of talking about new topics.
+Penalizes tokens based on whether they appear in the text so far.
+</ParamField>
+
+<ParamField body="max_tokens" type="integer">
+Maximum number of tokens to generate.
 </ParamField>
 
 <ParamField body="stop" type="array[string]">
-Stop sequences where the API will stop generating further tokens.
+Stop sequences where generation will stop.
 </ParamField>
 
-### Error Handling and Status
+### Error handling and status
 
 <ParamField body="status_code" type="integer" default={200}>
-The status code of the LLM inference. Default is 200 (ok). See supported status codes [here](/error-handling).
+The HTTP status code for the request. Default is 200 (success).
 
 <Accordion title="Supported status codes">
-We support all status codes that are valid HTTP status codes.
-```200,201,204,301,304,400, 401,402,403,404,405,415,422,429,500,502,503,504``` etc.
+All valid HTTP status codes are supported: `200`, `201`, `400`, `401`, `403`, `404`, `429`, `500`, `502`, `503`, `504`, etc.
 </Accordion>
 </ParamField>
 
-<ParamField body="error_message" type="text">
-Error message if the LLM inference failed. Default is an empty string.
+<ParamField body="error_message" type="string">
+Error message if the request failed. Default is empty string.
 </ParamField>
 
-<ParamField body="warnings" type="string">
-Any warnings that occurred during the LLM inference. You could pass a warning message here. Default is an empty string.
+<ParamField body="warnings" type="string | object">
+Any warnings that occurred during the request.
 </ParamField>
 
-### Additional Configuration
-
-<ParamField body="stream" type="boolean">
-Whether the LLM inference was streamed. Default is false.
+<ParamField body="status" type="string">
+Request status. Common values: `"success"`, `"error"`.
 </ParamField>
 
-<ParamField body="is_custom_prompt" type="boolean" default={false}>
-Whether the prompt is a custom prompt. Default is `False`.
+### Additional configuration
+
+<ParamField body="stream" type="boolean" default={false}>
+Whether the response was streamed.
 </ParamField>
 
 <ParamField body="prompt_id" type="string">
-ID of the prompt. If you want to log a custom prompt ID, you need to pass `is_custom_prompt` as `True`. Otherwise, use the Prompt ID in [Prompts](/features/prompt/deploy-a-prompt#1-find-the-prompt-id).
+ID of the prompt template used. See [Prompts documentation](/features/prompt/deploy-a-prompt#1-find-the-prompt-id).
 </ParamField>
 
 <ParamField body="prompt_name" type="string">
-Name of the prompt.
+Name of the prompt template.
+</ParamField>
+
+<ParamField body="is_custom_prompt" type="boolean" default={false}>
+Whether the prompt is a custom prompt. Set to `true` if using custom `prompt_id`.
+</ParamField>
+
+<ParamField body="timestamp" type="string">
+ISO 8601 timestamp when the request completed.
+
+<Accordion title="Example">
+```json
+"timestamp": "2025-01-01T10:30:00Z"
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="start_time" type="string">
+ISO 8601 timestamp when the request started.
 </ParamField>
 
 <ParamField body="full_request" type="object">
-The full request object. Default is an empty dictionary. This is optional and it is helpful for logging configurations such as `temperature`, `presence_penalty` etc.
+The full request object. Useful for logging additional configuration parameters.
 
-<Note>`completion_messages`, `tool_calls` will be automatically extracted from full_request</Note>
-
-```json
-{
-    "full_request": {
-        "temperature": 0.5,
-        "top_p": 0.5,
-        //... other parameters
-    }
-}
-```
+<Note>
+Tool calls and other nested objects will be automatically extracted from `full_request`.
+</Note>
 </ParamField>
 
+<ParamField body="full_response" type="object">
+The full response object from the model provider.
+</ParamField>
+
+### Pricing configuration
+
+<ParamField body="prompt_unit_price" type="number">
+Custom price per 1M prompt tokens. Used for self-hosted or fine-tuned models.
+
+<Accordion title="Example">
+```json
+"prompt_unit_price": 0.0042  // $0.0042 per 1M tokens
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="completion_unit_price" type="number">
+Custom price per 1M completion tokens. Used for self-hosted or fine-tuned models.
+
+<Accordion title="Example">
+```json
+"completion_unit_price": 0.0042  // $0.0042 per 1M tokens
+```
+</Accordion>
+</ParamField>
+
+### API controls
+
 <ParamField body="keywordsai_api_controls" type="object">
-Use this parameter to control the behavior of the Keywords AI API. Default is an empty dictionary.
+Control the behavior of the Keywords AI logging API.
 
 <AccordionGroup>
 <Accordion title="Properties">
 <ParamField body="block" type="boolean" default={true}>
-If false, the server will immediately return a status of whether the logging task is initialized successfully with no log data.
+If `false`, the server immediately returns initialization status without waiting for log completion.
 </ParamField>
 </Accordion>
 
@@ -392,69 +515,7 @@ If false, the server will immediately return a status of whether the logging tas
 ```json
 {
   "keywordsai_api_controls": {
-    "block": true // true or false.
-  }
-//...other params...
-}
-```
-</Accordion>
-</AccordionGroup>
-</ParamField>
-
-### Pricing Configuration
-
-<ParamField body="prompt_unit_price" type="number">
-Pass this parameter in if you want to log your self-host / fine-tuned model.
-
-<Accordion title="Example">
-```json
-{
-"prompt_unit_price": 0.0042 // $0.0042 per 1M tokens
-}
-```
-</Accordion>
-</ParamField>
-
-<ParamField body="completion_unit_price" type="number">
-Pass this parameter in if you want to log your self-host / fine-tuned model.
-
-<Accordion title="Example">
-```json
-{
-"completion_unit_price": 0.0042 // $0.0042 per 1M tokens
-}
-```
-</Accordion>
-</ParamField>
-
-### Usage Details
-
-<ParamField body="usage" type="object">
-Usage details for the LLM inference. Currently, only support Prompt Caching.
-
-<AccordionGroup>
-<Accordion title="Properties">
-<ParamField body="prompt_tokens_details" type="object">
-<Accordion title="Properties">
-<ParamField body="cached_tokens" type="integer">
-Number of tokens in the prompt.
-</ParamField>
-</Accordion>
-</ParamField>
-
-<ParamField body="cache_creation_prompt_tokens" type="integer">
-This parameter is only applicable for Anthropic models. It represents the number of tokens used to create the cache.
-</ParamField>
-</Accordion>
-
-<Accordion title="Example">
-```json
-{
-  "usage": {
-      "prompt_tokens_details": {
-          "cached_tokens": 10,
-      },
-      "cache_creation_prompt_tokens": 20, // Anthropic only
+    "block": true
   }
 }
 ```
@@ -463,255 +524,5 @@ This parameter is only applicable for Anthropic models. It represents the number
 </ParamField>
 
 <ParamField body="positive_feedback" type="boolean">
-Whether the user liked the output. `True` means the user liked the output.
+Whether the user liked the output. `true` means positive feedback.
 </ParamField>
-
-
-<RequestExample>
-  ```python Python
-  import requests
-
-  url = "https://api.keywordsai.co/api/request-logs/create/"
-  headers = {
-      "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
-      "Content-Type": "application/json"
-  }
-  payload = {
-      "model": "gpt-4",
-      "prompt_messages": [
-          {
-            "role": "user",
-            "content": "Hi"
-          },
-          {
-            "role": "assistant",
-            "content": None,
-            "tool_calls": [
-              {
-                "id": "xxxx",
-                "type": "function",
-                "function": {
-                  "name": "get_current_weather", # Function name
-                  "arguments": "{\n\"location\": \"Boston, MA\"\n}" # Function arguments
-                }
-              }
-            ]
-          }, #optional
-      ],
-      "completion_message": {
-          "role": "assistant",
-          "content": "Hi, how can I assist you today?"
-      },
-      "tool_choice": {
-          "type": "function",
-          "function": {
-              "name": "get_current_weather"
-          }
-      },
-      "tools":[
-        {
-        "type": "function",
-        "function": {
-          "name": "get_current_weather",
-          "description": "Get the current weather in a given location",
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "location": {
-                "type": "string",
-                "description": "The city and state, e.g. San Francisco, CA",
-              },
-              "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
-            },
-            "required": ["location"],
-          },
-        },
-        }
-      ],
-      "customer_params": {
-          "customer_identifier": "customer_123",
-          "name": "Hendrix Liu", # optional
-          "email": "hendrix@keywordsai.co" # optional
-      },
-      "prompt_tokens": 8,
-      "completion_tokens": 16,
-      "cost": 0.00042,
-      "latency": 0.0,
-      "timestamp": "2024-04-15T08:30:37.721313Z",
-      "time_to_first_token": 0.0,
-      "metadata": {},
-      "stream": False,
-      "status_code": 200,
-      "warnings": "",
-      "error_message": "",
-      "type":"text", # "json_schema", "json_object"
-  }
-  response = requests.request("POST", url, headers=headers, json=payload)
-
-  ```
-
-  ```typescript TypeScript
-  const url = 'https://api.keywordsai.co/api/request-logs/create/';
-  const headers = {
-      'Authorization': 'Bearer YOUR_KEYWORDS_AI_API_KEY',
-      'Content-Type': 'application/json'
-  };
-
-  const payload = {
-      model: 'gpt-4',
-      prompt_messages: [
-        {
-          role: 'user',
-          content: 'Hi'
-        },
-        {
-          role: 'assistant',
-          content: null,
-          tool_calls: [
-            {
-              id: 'xxxx',
-              type: 'function',
-              function: {
-                name: 'get_current_weather',
-                arguments: '{"location": "Boston, MA"}'
-              }
-            }
-          ]
-        }
-      ],
-      completion_message: {
-          role: 'assistant',
-          content: 'Hi, how can I assist you today?'
-      },   
-      tool_choice: {
-          type: 'function',
-          function: {
-              name: 'get_current_weather'
-          }
-      },
-      tools: [
-          {
-              type: 'function',
-              function: {
-                  name: 'get_current_weather',
-                  description: 'Get the current weather in a given location',
-                  parameters: {
-                      type: 'object',
-                      properties: {
-                          location: {
-                              type: 'string',
-                              description: 'The city and state, e.g. San Francisco, CA'
-                          },
-                          unit: { type: 'string', enum: ['celsius', 'fahrenheit'] }
-                      },
-                      required: ['location']
-                  }
-              }
-          }
-      ],
-      customer_params: {
-          customer_identifier: "customer_123",
-          name: "Hendrix Liu",  // optional
-          email: "hendrix@keywordsai.co" // optional
-      },
-      prompt_tokens: 8,
-      completion_tokens: 16,
-      cost: 0.00042,
-      generation_time: 0.0,
-      timestamp: '2024-04-15T08:30:37.721313Z',
-      ttft: 0.0,
-      metadata: {},
-      stream: false,
-      status_code: 200,
-      warnings: '',
-      error_message: '',
-      type:"text", // "json_schema", "json_object"
-  };
-
-  fetch(url, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(payload)
-  })
-  .then(response => response.json())
-  .then(data => {
-      console.log(data);
-  })
-  ```
-
-  ```bash cURL
-  curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer {YOUR_KEYWORDSAI_API_KEY}" \
-  -d '{
-      "model": "gpt-4",
-      "prompt_messages": [
-          {
-            "role": "user",
-            "content": "Hi"
-          },
-          {
-            "role": "assistant",
-            "content": null,
-            "tool_calls": [
-              {
-                "id": "xxxx",
-                "type": "function",
-                "function": {
-                  "name": "get_current_weather",
-                  "arguments": "{\n\"location\": \"Boston, MA\"\n}" 
-                }
-              }
-            ]
-          }
-      ],
-      "completion_message": {
-          "role": "assistant",
-          "content": "Hi, how can I assist you today?"
-      },
-      "tool_choice": {
-          "type": "function",
-          "function": {
-              "name": "get_current_weather"
-          }
-      },
-      "tools":[
-        {
-          "type": "function",
-          "function": {
-            "name": "get_current_weather",
-            "description": "Get the current weather in a given location",
-            "parameters": {
-              "type": "object",
-              "properties": {
-                "location": {
-                  "type": "string",
-                  "description": "The city and state, e.g. San Francisco, CA"
-                },
-                "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]}
-              },
-              "required": ["location"]
-            }
-          }
-        }
-      ],
-      "prompt_tokens": 8,
-      "completion_tokens": 16,
-      "cost": 0.00042,
-      "generation_time": 0.0,
-      "timestamp": "2024-04-15T08:30:37.721313Z",
-      "ttft": 0.0,
-      "metadata": {},
-      "stream": false,
-      "status_code": 200,
-      "warnings": "",
-      "error_message": "",
-      "customer_params": {
-          "customer_identifier": "customer_123",
-          "name": "Hendrix Liu", 
-          "email": "hendrix@keywordsai.co" 
-      },
-      "type":"text",
-  }'
-  ```
-</RequestExample>

@@ -3,11 +3,30 @@ title: List logs
 api: POST https://api.keywordsai.co/api/request-logs/list/
 ---
 
-The Logs List endpoint allows you to get the past logs with specified filters.
+The Logs List endpoint allows you to retrieve past logs with specified filters.
+
+## Response fields
+
+Each log in the response includes:
+
+### Universal fields (All Span Types)
+- **`input`** (string): JSON-serialized representation of the span's input data
+- **`output`** (string): JSON-serialized representation of the span's output data
+- **`log_type`** (string): Type of span (`"chat"`, `"embedding"`, `"workflow"`, etc.)
 
 
-## Query params
-You can add these params to the **URL params**.
+<Note>
+### Legacy compatibility
+For `log_type="chat"`, `"completion"`, `"text"`, or `"response"`:
+- **`prompt_messages`** (array): Full input messages array (extracted from `input`)
+- **`completion_message`** (object): Full output message object (extracted from `output`)
+
+For other span types (embedding, workflow, etc.), type-specific fields are extracted based on the `log_type`. See [log types](https://localhost:3001/get-started/observability_data_model#log-types) for details.
+</Note>
+
+
+## Query parameters
+You can add these parameters to the **URL query string**.
 For example:
 ```
 "https://api.keywordsai.co/api/request-logs/list/?page=1&sort_by=-id&is_test=false&all_envs=false&fetch_filters=false&page_size=1"
@@ -105,8 +124,8 @@ For example:
   </Accordion>
 </ParamField>
 
-## POST params
-You can add these params to the **body**:
+## Body parameters
+You can add these parameters to the **request body**:
 ```python
 url = "https://api.keywordsai.co/api/request-logs/list/"
 headers = {
@@ -265,6 +284,9 @@ curl -X POST "https://api.keywordsai.co/api/request-logs/list/?page=1&sort_by=-i
 <ResponseExample>
 ```json
 {
+    "count": 1250,
+    "next": "https://api.keywordsai.co/api/request-logs/list/?page=2",
+    "previous": null,
     "results": [
        {
         "unique_id": "xxxxx",
@@ -273,9 +295,13 @@ curl -X POST "https://api.keywordsai.co/api/request-logs/list/?page=1&sort_by=-i
         "user": "hendrix@keywordsai.co",
         "is_example": false,
         "status": "success",
-        "prompt_tokens": 452,
-        "completion_tokens": 89,
-        "cost": 0.0005869,
+        "log_type": "chat",
+        
+        // Universal fields (all span types)
+        "input": "[{\"role\":\"system\",\"content\":\"You are a helpful assistant\"},{\"role\":\"user\",\"content\":\"What is Keywords AI?\"}]",
+        "output": "{\"role\":\"assistant\",\"content\":\"Keywords AI is a unified DevOps platform for AI products.\"}",
+        
+        // Type-specific fields (extracted from input/output for chat types)
         "prompt_messages": [
                 {
                     "role": "system",
@@ -290,27 +316,43 @@ curl -X POST "https://api.keywordsai.co/api/request-logs/list/?page=1&sort_by=-i
                 "role": "assistant",
                 "content": "Keywords AI is a unified DevOps platform for AI products."
         },
+        
+        // Telemetry
+        "prompt_tokens": 452,
+        "completion_tokens": 89,
+        "cost": 0.0005869,
         "latency": 1.2114145755767822,
+        "time_to_first_token": null,
+        "tokens_per_second": 73.4,
+        "routing_time": 0.0,
+        
+        // Model info
         "model": "gpt-3.5-turbo",
         "foundation_model": "gpt-3.5-turbo",
         "provider_id": "openai",
+        
+        // Function calling
         "tool_choice": null,
         "tools": null,
         "tool_calls": null,
+        
+        // Metadata
         "timestamp": "2024-06-24T21:33:06.601353Z",
-        "failed": false,
-        "time_to_first_token": null,
-        "routing_time": 0.0,
         "metadata": {
-            // any params you want to pass in the request
-            },
-        "stream": false,
-        "status_code": 200,
+            // any custom params you passed
+        },
         "customer_identifier": "123456",
         "customer_email": "",
-        "used_custom_credential": false,
-       // ... other models ... 
-       },
+        "thread_identifier": null,
+        "custom_identifier": null,
+        "trace_unique_id": null,
+        
+        // Status
+        "failed": false,
+        "stream": false,
+        "status_code": 200,
+        "used_custom_credential": false
+       }
     ]
 }
 

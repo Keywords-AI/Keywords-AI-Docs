@@ -1,0 +1,516 @@
+---
+title: "API endpoint SOP"
+description: "What the API is for"
+---
+
+Some intro here if necessary with context and feature links
+
+<Note>
+Any notes
+</Note>
+
+## Query parameters
+
+<ParamField query="start_time" type="string">
+  Start time in ISO 8601 format. Defaults to 1 hour ago.
+  
+  <Accordion title="Example">
+  ```json
+  "start_time": "2025-01-01T00:00:00Z"
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField query="page" type="integer" default={1}>
+  Page number for pagination.
+</ParamField>
+
+<ParamField query="page_size" type="integer" default={100}>
+  Number of items per page. Maximum is 1000.
+</ParamField>
+
+<ParamField query="sort_by" type="string" default="-id">
+  Field to sort by. Prefix with `-` for descending order.
+  
+  <Accordion title="Options">
+  - `id` / `-id`: Sort by ID
+  - `cost` / `-cost`: Sort by cost
+  - `latency` / `-latency`: Sort by latency
+  - `timestamp` / `-timestamp`: Sort by timestamp
+  </Accordion>
+</ParamField>
+
+## Path parameters
+
+<ParamField path="unique_id" type="string" required>
+  The unique identifier of the resource to retrieve.
+</ParamField>
+
+## Request body
+
+### Core fields
+
+<ParamField body="input" type="string | object | array">
+Universal input field for the span. Structure depends on `log_type`:
+- **Chat**: JSON string of messages array or messages array directly
+- **Embedding**: Text string or array of strings
+- **Workflow/Task**: Any JSON-serializable structure
+
+<Accordion title="Example for chat">
+```json
+"input": "[{\"role\":\"user\",\"content\":\"Hello\"}]"
+```
+</Accordion>
+
+<Accordion title="Example for embedding">
+```json
+"input": "Keywords AI is an LLM observability platform"
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="output" type="string | object | array">
+Universal output field for the span. Structure depends on `log_type`.
+
+<Accordion title="Example for chat">
+```json
+"output": "{\"role\":\"assistant\",\"content\":\"Hi! How can I help?\"}"
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="log_type" type="string" default="chat">
+Type of span being logged. Determines how `input` and `output` are parsed.
+
+**Supported types:**
+- `"chat"` - Chat completion requests (default)
+- `"embedding"` - Embedding generation
+- `"workflow"` or `"agent"` - Workflow execution
+- `"task"` or `"tool"` - Task execution
+- `"function"` - Function call
+- `"custom"` - Custom span type
+
+<Accordion title="Default behavior">
+If not specified, defaults to `"chat"`. For complete specifications of each type, see [log types](https://localhost:3001/get-started/observability_data_model#log-types).
+</Accordion>
+</ParamField>
+
+<ParamField body="model" type="string">
+The model used for the inference. Optional but recommended for chat/completion/embedding types.
+
+<Accordion title="Example">
+```json
+"model": "gpt-4o-mini"
+```
+</Accordion>
+</ParamField>
+
+### Telemetry
+
+<ParamField body="usage" type="object">
+Token usage information for the request.
+
+<AccordionGroup>
+<Accordion title="Properties">
+<ParamField body="prompt_tokens" type="integer">
+Number of tokens in the prompt/input.
+</ParamField>
+
+<ParamField body="completion_tokens" type="integer">
+Number of tokens in the completion/output.
+</ParamField>
+
+<ParamField body="total_tokens" type="integer">
+Total tokens (prompt + completion).
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```json
+{
+  "usage": {
+    "prompt_tokens": 150,
+    "completion_tokens": 85,
+    "total_tokens": 235
+  }
+}
+```
+</Accordion>
+</AccordionGroup>
+</ParamField>
+
+<ParamField body="cost" type="float">
+Cost of the inference in US dollars. If not provided, will be calculated automatically based on model pricing.
+</ParamField>
+
+<ParamField body="latency" type="float">
+Total request latency in seconds.
+
+<Note>
+Previously called `generation_time`. Both field names are supported for backward compatibility.
+</Note>
+</ParamField>
+
+<ParamField body="time_to_first_token" type="float">
+Time to first token (TTFT) in seconds. Useful for streaming responses and voice AI applications.
+</ParamField>
+
+### Metadata
+
+<ParamField body="metadata" type="object">
+Custom metadata properties for analytics and filtering.
+
+<Accordion title="Example">
+```json
+{
+  "metadata": {
+    "environment": "production",
+    "version": "v1.0.0",
+    "user_tier": "premium"
+  }
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="customer_identifier" type="string">
+An identifier for the customer that invoked this request. Helps with visualizing user activities.
+
+<Accordion title="Example">
+```json
+"customer_identifier": "user_123"
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="thread_identifier" type="string">
+A unique identifier for the conversation thread. Useful for multi-turn conversations.
+</ParamField>
+
+<ParamField body="custom_identifier" type="string">
+Same functionality as `metadata`, but indexed for faster querying.
+
+<Accordion title="Example">
+```json
+"custom_identifier": "ticket_12345"
+```
+</Accordion>
+</ParamField>
+
+### Workflow & tracing
+
+<ParamField body="trace_unique_id" type="string">
+Unique identifier for the trace. Used to link multiple spans together in distributed tracing.
+</ParamField>
+
+<ParamField body="span_workflow_name" type="string">
+Name of the workflow this span belongs to.
+</ParamField>
+
+<ParamField body="span_name" type="string">
+Name of this specific span/task within the workflow.
+</ParamField>
+
+## Body parameters
+
+<ParamField body="filters" type="object" default={{}}>
+The filters to be applied to the logs.
+
+<Note>
+If you want to filter your custom properties, add `metadata__` prefix. For example, to filter `my_custom_property`, use `metadata__my_custom_property`.
+</Note>
+
+<Accordion title="Example">
+```json
+{
+  "filters": {
+    "cost": {
+      "operator": "gt",
+      "value": [0.01]
+    },
+    "metadata__user_tier": {
+      "operator": "in",
+      "value": ["premium", "enterprise"]
+    }
+  }
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="operator" type="string">
+Comparison operator for filtering. Default is `""` (equal).
+
+<Accordion title="Supported operators">
+- `""` (empty string): Equal
+- `"lt"`: Less than
+- `"lte"`: Less than or equal
+- `"gt"`: Greater than
+- `"gte"`: Greater than or equal
+- `"contains"`: Contains substring
+- `"icontains"`: Case-insensitive contains
+- `"startswith"`: Starts with
+- `"endswith"`: Ends with
+- `"in"`: Value in array
+- `"not"`: Not equal
+- `"isnull"`: Check if field is null
+</Accordion>
+</ParamField>
+
+## Advanced parameters
+
+### Tool calls and function calling
+
+<ParamField body="tools" type="array">
+A list of tools the model may call. Currently, only functions are supported as a tool.
+
+<AccordionGroup>
+<Accordion title="Properties">
+<ParamField body="type" type="string" required>
+The type of the tool. Currently, only `function` is supported.
+</ParamField>
+
+<ParamField body="function" type="object" required>
+Function definition containing name, description, and parameters.
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```json
+"tools": [
+  {
+    "type": "function",
+    "function": {
+      "name": "get_weather",
+      "description": "Get current weather",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "location": {"type": "string"}
+        },
+        "required": ["location"]
+      }
+    }
+  }
+]
+```
+</Accordion>
+</AccordionGroup>
+</ParamField>
+
+<ParamField body="tool_choice" type="string | object">
+Controls which (if any) tool is called by the model. Can be `"none"`, `"auto"`, or an object specifying a specific tool.
+
+<Accordion title="Example">
+```json
+"tool_choice": {
+  "type": "function",
+  "function": {"name": "get_weather"}
+}
+```
+</Accordion>
+</ParamField>
+
+### Error handling and status
+
+<ParamField body="status_code" type="integer" default={200}>
+The HTTP status code for the request. Default is 200 (success).
+
+<Accordion title="Supported status codes">
+All valid HTTP status codes are supported: `200`, `201`, `400`, `401`, `403`, `404`, `429`, `500`, `502`, `503`, `504`, etc.
+</Accordion>
+</ParamField>
+
+<ParamField body="error_message" type="string">
+Error message if the request failed. Default is empty string.
+</ParamField>
+
+<ParamField body="warnings" type="string | object">
+Any warnings that occurred during the request.
+</ParamField>
+
+### API controls
+
+<ParamField body="keywordsai_api_controls" type="object">
+Control the behavior of the Keywords AI logging API.
+
+<AccordionGroup>
+<Accordion title="Properties">
+<ParamField body="block" type="boolean" default={true}>
+If `false`, the server immediately returns initialization status without waiting for log completion.
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```json
+{
+  "keywordsai_api_controls": {
+    "block": true
+  }
+}
+```
+</Accordion>
+</AccordionGroup>
+</ParamField>
+
+## Response fields
+
+Each log in the response includes:
+
+### Universal fields (All Span Types)
+- **`input`** (string): JSON-serialized representation of the span's input data
+- **`output`** (string): JSON-serialized representation of the span's output data
+- **`log_type`** (string): Type of span (`"chat"`, `"embedding"`, `"workflow"`, etc.)
+
+<Note>
+### Legacy compatibility
+For `log_type="chat"`, `"completion"`, `"text"`, or `"response"`:
+- **`prompt_messages`** (array): Full input messages array (extracted from `input`)
+- **`completion_message`** (object): Full output message object (extracted from `output`)
+
+For other span types, type-specific fields are extracted based on the `log_type`. See [log types](https://localhost:3001/get-started/observability_data_model#log-types) for details.
+</Note>
+
+### Identifiers
+- **`id`** (string): Unique identifier for the log
+- **`organization_id`** (string): Organization's unique ID
+- **`customer_identifier`** (string): Customer identifier
+- **`thread_identifier`** (string): Thread identifier
+
+### Telemetry
+- **`cost`** (float): Cost in USD
+- **`latency`** (float): Request latency in seconds
+- **`prompt_tokens`** (integer): Input tokens
+- **`completion_tokens`** (integer): Output tokens
+- **`total_request_tokens`** (integer): Total tokens
+- **`time_to_first_token`** (float): TTFT in seconds
+- **`tokens_per_second`** (float): Generation speed
+
+### Status
+- **`status`** (string): Request status (`"success"`, `"error"`)
+- **`status_code`** (integer): HTTP status code
+- **`error_message`** (string): Error message if failed
+
+## Response
+
+Returns the created log object with generated fields.
+
+```json
+{
+  "id": "log_abc123",
+  "status": "success",
+  "cost": 0.000123,
+  "timestamp": "2025-01-01T10:30:00Z",
+  "organization_id": "org_xyz789",
+  "customer_identifier": "user_123"
+}
+```
+
+<RequestExample>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+payload = {
+    "log_type": "chat",
+    "model": "gpt-4o-mini",
+    "input": '[{"role":"user","content":"Hello"}]',
+    "output": '{"role":"assistant","content":"Hi! How can I help?"}',
+    "usage": {
+        "prompt_tokens": 10,
+        "completion_tokens": 8,
+        "total_tokens": 18
+    },
+    "customer_identifier": "user_123",
+    "latency": 1.2,
+    "metadata": {
+        "environment": "production"
+    }
+}
+response = requests.post(url, headers=headers, json=payload)
+print(response.json())
+```
+
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/request-logs/create/';
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    log_type: 'chat',
+    model: 'gpt-4o-mini',
+    input: '[{"role":"user","content":"Hello"}]',
+    output: '{"role":"assistant","content":"Hi! How can I help?"}',
+    usage: {
+        prompt_tokens: 10,
+        completion_tokens: 8,
+        total_tokens: 18
+    },
+    customer_identifier: 'user_123',
+    latency: 1.2,
+    metadata: {
+        environment: 'production'
+    }
+};
+
+const response = await fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(payload)
+});
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "log_type": "chat",
+    "model": "gpt-4o-mini",
+    "input": "[{\"role\":\"user\",\"content\":\"Hello\"}]",
+    "output": "{\"role\":\"assistant\",\"content\":\"Hi! How can I help?\"}",
+    "usage": {
+      "prompt_tokens": 10,
+      "completion_tokens": 8,
+      "total_tokens": 18
+    },
+    "customer_identifier": "user_123",
+    "latency": 1.2
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "log_abc123",
+  "unique_id": "log_abc123",
+  "organization_id": "org_xyz789",
+  "customer_identifier": "user_123",
+  "status": "success",
+  "cost": 0.000123,
+  "timestamp": "2025-01-01T10:30:00Z"
+}
+```
+
+```json 400 Bad Request
+{
+  "error": "Invalid log format",
+  "detail": "Field 'input' is required"
+}
+```
+
+```json 401 Unauthorized
+{
+  "detail": "Your API key is invalid or expired"
+}
+```
+</ResponseExample>
