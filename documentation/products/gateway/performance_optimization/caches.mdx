@@ -97,7 +97,7 @@ print(demo_call(messages).json())
 ```
 </Tab>
 <Tab title="Other SDKs">
-We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/own-api-keys) for more information.
+We also support adding credentials in other SDKs or languages, please check out our [integration section](/documentation/admin/llm_provider_keys) for more information.
 </Tab>
 </Tabs>
 
@@ -154,4 +154,4 @@ So this won't generate a new LLM log when the cache is hit.
 ## LLM caching vs Prompt caching
 Regular caching stores complete prompt responses. When the same prompt is received, the system returns the stored response, reducing costs but limiting response variety.
 
-Prompt caching stores the model's intermediate computation state. This allows the model to generate diverse responses while still saving computational costs, as it doesn't need to reprocess the entire prompt from scratch. View the [Prompt caching](/features/generation/prompt-caching) section for more information.
+Prompt caching stores the model's intermediate computation state. This allows the model to generate diverse responses while still saving computational costs, as it doesn't need to reprocess the entire prompt from scratch. View the [Prompt caching](/documentation/products/gateway/performance_optimization/prompt_caching) section for more information.

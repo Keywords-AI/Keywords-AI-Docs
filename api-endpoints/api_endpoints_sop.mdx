@@ -11,127 +11,127 @@ Any notes
 
 ## Query parameters
 
-<ParamField query="start_time" type="string">
-  Start time in ISO 8601 format. Defaults to 1 hour ago.
+<ParamField query="param_a" type="string">
+  Description of what this query parameter does.
   
   <Accordion title="Example">
   ```json
-  "start_time": "2025-01-01T00:00:00Z"
+  "param_a": "2025-01-01T00:00:00Z"
   ```
   </Accordion>
 </ParamField>
 
-<ParamField query="page" type="integer" default={1}>
-  Page number for pagination.
+<ParamField query="param_b" type="integer" default={1}>
+  Description for parameter B.
 </ParamField>
 
-<ParamField query="page_size" type="integer" default={100}>
-  Number of items per page. Maximum is 1000.
+<ParamField query="param_c" type="integer" default={100}>
+  Description for parameter C. Maximum is 1000.
 </ParamField>
 
-<ParamField query="sort_by" type="string" default="-id">
-  Field to sort by. Prefix with `-` for descending order.
+<ParamField query="param_d" type="string" default="-id">
+  Description for parameter D. Prefix with `-` for descending order.
   
   <Accordion title="Options">
-  - `id` / `-id`: Sort by ID
-  - `cost` / `-cost`: Sort by cost
-  - `latency` / `-latency`: Sort by latency
-  - `timestamp` / `-timestamp`: Sort by timestamp
+  - `option_1` / `-option_1`: Option 1
+  - `option_2` / `-option_2`: Option 2
+  - `option_3` / `-option_3`: Option 3
+  - `option_4` / `-option_4`: Option 4
   </Accordion>
 </ParamField>
 
 ## Path parameters
 
-<ParamField path="unique_id" type="string" required>
+<ParamField path="resource_id" type="string" required>
   The unique identifier of the resource to retrieve.
 </ParamField>
 
 ## Request body
 
-### Core fields
+### Section A
 
-<ParamField body="input" type="string | object | array">
-Universal input field for the span. Structure depends on `log_type`:
-- **Chat**: JSON string of messages array or messages array directly
-- **Embedding**: Text string or array of strings
-- **Workflow/Task**: Any JSON-serializable structure
+<ParamField body="field_1" type="string | object | array">
+Description of field 1. Structure depends on `field_3`:
+- **Type A**: JSON string format
+- **Type B**: Text string or array format
+- **Type C/D**: Any JSON-serializable structure
 
-<Accordion title="Example for chat">
+<Accordion title="Example for Type A">
 ```json
-"input": "[{\"role\":\"user\",\"content\":\"Hello\"}]"
+"field_1": "[{\"key\":\"value\",\"data\":\"sample\"}]"
 ```
 </Accordion>
 
-<Accordion title="Example for embedding">
+<Accordion title="Example for Type B">
 ```json
-"input": "Keywords AI is an LLM observability platform"
-```
-</Accordion>
-</ParamField>
-
-<ParamField body="output" type="string | object | array">
-Universal output field for the span. Structure depends on `log_type`.
-
-<Accordion title="Example for chat">
-```json
-"output": "{\"role\":\"assistant\",\"content\":\"Hi! How can I help?\"}"
+"field_1": "Sample text string"
 ```
 </Accordion>
 </ParamField>
 
-<ParamField body="log_type" type="string" default="chat">
-Type of span being logged. Determines how `input` and `output` are parsed.
+<ParamField body="field_2" type="string | object | array">
+Description of field 2. Structure depends on `field_3`.
+
+<Accordion title="Example for Type A">
+```json
+"field_2": "{\"key\":\"value\",\"data\":\"response\"}"
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="field_3" type="string" default="type_a">
+Description of field 3. Determines how `field_1` and `field_2` are parsed.
 
 **Supported types:**
-- `"chat"` - Chat completion requests (default)
-- `"embedding"` - Embedding generation
-- `"workflow"` or `"agent"` - Workflow execution
-- `"task"` or `"tool"` - Task execution
-- `"function"` - Function call
-- `"custom"` - Custom span type
+- `"type_a"` - Type A records (default)
+- `"type_b"` - Type B records
+- `"type_c"` or `"type_d"` - Type C/D records
+- `"type_e"` or `"type_f"` - Type E/F records
+- `"type_g"` - Type G records
+- `"type_h"` - Custom type
 
 <Accordion title="Default behavior">
-If not specified, defaults to `"chat"`. For complete specifications of each type, see [log types](https://localhost:3001/get-started/observability_data_model#log-types).
+If not specified, defaults to `"type_a"`. For complete specifications of each type, see documentation.
 </Accordion>
 </ParamField>
 
-<ParamField body="model" type="string">
-The model used for the inference. Optional but recommended for chat/completion/embedding types.
+<ParamField body="field_4" type="string">
+Description of field 4. Optional but recommended for certain types.
 
 <Accordion title="Example">
 ```json
-"model": "gpt-4o-mini"
+"field_4": "sample-value-123"
 ```
 </Accordion>
 </ParamField>
 
-### Telemetry
+### Section B
 
-<ParamField body="usage" type="object">
-Token usage information for the request.
+<ParamField body="field_5" type="object">
+Description of field 5 for the request.
 
 <AccordionGroup>
 <Accordion title="Properties">
-<ParamField body="prompt_tokens" type="integer">
-Number of tokens in the prompt/input.
+<ParamField body="sub_field_a" type="integer">
+Description of sub field A.
 </ParamField>
 
-<ParamField body="completion_tokens" type="integer">
-Number of tokens in the completion/output.
+<ParamField body="sub_field_b" type="integer">
+Description of sub field B.
 </ParamField>
 
-<ParamField body="total_tokens" type="integer">
-Total tokens (prompt + completion).
+<ParamField body="sub_field_c" type="integer">
+Description of sub field C.
 </ParamField>
 </Accordion>
 
 <Accordion title="Example">
 ```json
 {
-  "usage": {
-    "prompt_tokens": 150,
-    "completion_tokens": 85,
-    "total_tokens": 235
+  "field_5": {
+    "sub_field_a": 150,
+    "sub_field_b": 85,
+    "sub_field_c": 235
   }
 }
 ```
@@ -139,98 +139,98 @@ Total tokens (prompt + completion).
 </AccordionGroup>
 </ParamField>
 
-<ParamField body="cost" type="float">
-Cost of the inference in US dollars. If not provided, will be calculated automatically based on model pricing.
+<ParamField body="field_6" type="float">
+Description of field 6. If not provided, will be calculated automatically.
 </ParamField>
 
-<ParamField body="latency" type="float">
-Total request latency in seconds.
+<ParamField body="field_7" type="float">
+Description of field 7 in seconds.
 
 <Note>
-Previously called `generation_time`. Both field names are supported for backward compatibility.
+Previously called `field_7_old`. Both field names are supported for backward compatibility.
 </Note>
 </ParamField>
 
-<ParamField body="time_to_first_token" type="float">
-Time to first token (TTFT) in seconds. Useful for streaming responses and voice AI applications.
+<ParamField body="field_8" type="float">
+Description of field 8 in seconds. Useful for performance tracking.
 </ParamField>
 
-### Metadata
+### Section C
 
-<ParamField body="metadata" type="object">
-Custom metadata properties for analytics and filtering.
+<ParamField body="field_9" type="object">
+Description of field 9 for analytics and filtering.
 
 <Accordion title="Example">
 ```json
 {
-  "metadata": {
-    "environment": "production",
-    "version": "v1.0.0",
-    "user_tier": "premium"
+  "field_9": {
+    "prop_1": "value_a",
+    "prop_2": "v1.0.0",
+    "prop_3": "tier_a"
   }
 }
 ```
 </Accordion>
 </ParamField>
 
-<ParamField body="customer_identifier" type="string">
-An identifier for the customer that invoked this request. Helps with visualizing user activities.
+<ParamField body="field_10" type="string">
+Description of field 10. Helps with tracking.
 
 <Accordion title="Example">
 ```json
-"customer_identifier": "user_123"
+"field_10": "entity_123"
 ```
 </Accordion>
 </ParamField>
 
-<ParamField body="thread_identifier" type="string">
-A unique identifier for the conversation thread. Useful for multi-turn conversations.
+<ParamField body="field_11" type="string">
+Description of field 11. Useful for grouping related records.
 </ParamField>
 
-<ParamField body="custom_identifier" type="string">
-Same functionality as `metadata`, but indexed for faster querying.
+<ParamField body="field_12" type="string">
+Same functionality as `field_9`, but indexed for faster querying.
 
 <Accordion title="Example">
 ```json
-"custom_identifier": "ticket_12345"
+"field_12": "ref_12345"
 ```
 </Accordion>
 </ParamField>
 
-### Workflow & tracing
+### Section D
 
-<ParamField body="trace_unique_id" type="string">
-Unique identifier for the trace. Used to link multiple spans together in distributed tracing.
+<ParamField body="field_13" type="string">
+Description of field 13. Used to link multiple records together.
 </ParamField>
 
-<ParamField body="span_workflow_name" type="string">
-Name of the workflow this span belongs to.
+<ParamField body="field_14" type="string">
+Description of field 14.
 </ParamField>
 
-<ParamField body="span_name" type="string">
-Name of this specific span/task within the workflow.
+<ParamField body="field_15" type="string">
+Description of field 15 within the group.
 </ParamField>
 
 ## Body parameters
 
 <ParamField body="filters" type="object" default={{}}>
-The filters to be applied to the logs.
+The filters to be applied to the records.
 
 <Note>
-If you want to filter your custom properties, add `metadata__` prefix. For example, to filter `my_custom_property`, use `metadata__my_custom_property`.
+If you want to filter your custom properties, add `field_9__` prefix. For example, to filter `my_property`, use `field_9__my_property`.
 </Note>
 
 <Accordion title="Example">
 ```json
 {
   "filters": {
-    "cost": {
+    "field_6": {
       "operator": "gt",
-      "value": [0.01]
+      "value": [10.0]
     },
-    "metadata__user_tier": {
+    "field_9__prop_3": {
       "operator": "in",
-      "value": ["premium", "enterprise"]
+      "value": ["tier_a", "tier_b"]
     }
   }
 }
@@ -259,36 +259,36 @@ Comparison operator for filtering. Default is `""` (equal).
 
 ## Advanced parameters
 
-### Tool calls and function calling
+### Feature 1
 
-<ParamField body="tools" type="array">
-A list of tools the model may call. Currently, only functions are supported as a tool.
+<ParamField body="field_16" type="array">
+Description of field 16 array. Currently, only type A is supported.
 
 <AccordionGroup>
 <Accordion title="Properties">
 <ParamField body="type" type="string" required>
-The type of the tool. Currently, only `function` is supported.
+The type of the item. Currently, only `type_a` is supported.
 </ParamField>
 
-<ParamField body="function" type="object" required>
-Function definition containing name, description, and parameters.
+<ParamField body="definition" type="object" required>
+Definition object containing name, description, and parameters.
 </ParamField>
 </Accordion>
 
 <Accordion title="Example">
 ```json
-"tools": [
+"field_16": [
   {
-    "type": "function",
-    "function": {
-      "name": "get_weather",
-      "description": "Get current weather",
+    "type": "type_a",
+    "definition": {
+      "name": "action_name",
+      "description": "Action description",
       "parameters": {
         "type": "object",
         "properties": {
-          "location": {"type": "string"}
+          "param_x": {"type": "string"}
         },
-        "required": ["location"]
+        "required": ["param_x"]
       }
     }
   }
@@ -298,54 +298,54 @@ Function definition containing name, description, and parameters.
 </AccordionGroup>
 </ParamField>
 
-<ParamField body="tool_choice" type="string | object">
-Controls which (if any) tool is called by the model. Can be `"none"`, `"auto"`, or an object specifying a specific tool.
+<ParamField body="field_17" type="string | object">
+Description of field 17. Can be `"none"`, `"auto"`, or an object specifying a specific item.
 
 <Accordion title="Example">
 ```json
-"tool_choice": {
-  "type": "function",
-  "function": {"name": "get_weather"}
+"field_17": {
+  "type": "type_a",
+  "definition": {"name": "action_name"}
 }
 ```
 </Accordion>
 </ParamField>
 
-### Error handling and status
+### Feature 2
 
-<ParamField body="status_code" type="integer" default={200}>
-The HTTP status code for the request. Default is 200 (success).
+<ParamField body="field_18" type="integer" default={200}>
+Description of field 18 for the request. Default is 200.
 
-<Accordion title="Supported status codes">
-All valid HTTP status codes are supported: `200`, `201`, `400`, `401`, `403`, `404`, `429`, `500`, `502`, `503`, `504`, etc.
+<Accordion title="Supported values">
+All valid HTTP codes are supported: `200`, `201`, `400`, `401`, `403`, `404`, `429`, `500`, `502`, `503`, `504`, etc.
 </Accordion>
 </ParamField>
 
-<ParamField body="error_message" type="string">
-Error message if the request failed. Default is empty string.
+<ParamField body="field_19" type="string">
+Description of field 19 if the request failed. Default is empty string.
 </ParamField>
 
-<ParamField body="warnings" type="string | object">
-Any warnings that occurred during the request.
+<ParamField body="field_20" type="string | object">
+Description of field 20 that occurred during the request.
 </ParamField>
 
-### API controls
+### Feature 3
 
-<ParamField body="keywordsai_api_controls" type="object">
-Control the behavior of the Keywords AI logging API.
+<ParamField body="field_21" type="object">
+Description of field 21 behavior.
 
 <AccordionGroup>
 <Accordion title="Properties">
-<ParamField body="block" type="boolean" default={true}>
-If `false`, the server immediately returns initialization status without waiting for log completion.
+<ParamField body="option_a" type="boolean" default={true}>
+If `false`, the server immediately returns initialization status without waiting for completion.
 </ParamField>
 </Accordion>
 
 <Accordion title="Example">
 ```json
 {
-  "keywordsai_api_controls": {
-    "block": true
+  "field_21": {
+    "option_a": true
   }
 }
 ```
@@ -355,54 +355,54 @@ If `false`, the server immediately returns initialization status without waiting
 
 ## Response fields
 
-Each log in the response includes:
+Each record in the response includes:
 
-### Universal fields (All Span Types)
-- **`input`** (string): JSON-serialized representation of the span's input data
-- **`output`** (string): JSON-serialized representation of the span's output data
-- **`log_type`** (string): Type of span (`"chat"`, `"embedding"`, `"workflow"`, etc.)
+### Group A (All Record Types)
+- **`field_1`** (string): Description of field 1 data
+- **`field_2`** (string): Description of field 2 data
+- **`field_3`** (string): Type of record (`"type_a"`, `"type_b"`, `"type_c"`, etc.)
 
 <Note>
-### Legacy compatibility
-For `log_type="chat"`, `"completion"`, `"text"`, or `"response"`:
-- **`prompt_messages`** (array): Full input messages array (extracted from `input`)
-- **`completion_message`** (object): Full output message object (extracted from `output`)
+### Compatibility notes
+For `field_3="type_a"`, `"type_b"`, `"type_c"`, or `"type_d"`:
+- **`field_22`** (array): Data array (extracted from `field_1`)
+- **`field_23`** (object): Data object (extracted from `field_2`)
 
-For other span types, type-specific fields are extracted based on the `log_type`. See [log types](https://localhost:3001/get-started/observability_data_model#log-types) for details.
+For other record types, type-specific fields are extracted based on the `field_3`. See documentation for details.
 </Note>
 
-### Identifiers
-- **`id`** (string): Unique identifier for the log
-- **`organization_id`** (string): Organization's unique ID
-- **`customer_identifier`** (string): Customer identifier
-- **`thread_identifier`** (string): Thread identifier
+### Group B
+- **`id`** (string): Unique identifier for the record
+- **`org_id`** (string): Organization's unique ID
+- **`field_10`** (string): Field 10 identifier
+- **`field_11`** (string): Field 11 identifier
 
-### Telemetry
-- **`cost`** (float): Cost in USD
-- **`latency`** (float): Request latency in seconds
-- **`prompt_tokens`** (integer): Input tokens
-- **`completion_tokens`** (integer): Output tokens
-- **`total_request_tokens`** (integer): Total tokens
-- **`time_to_first_token`** (float): TTFT in seconds
-- **`tokens_per_second`** (float): Generation speed
+### Group C
+- **`field_6`** (float): Field 6 value in decimal
+- **`field_7`** (float): Field 7 value in seconds
+- **`sub_field_a`** (integer): Sub field A units
+- **`sub_field_b`** (integer): Sub field B units
+- **`sub_field_total`** (integer): Total units
+- **`field_8`** (float): Field 8 value in seconds
+- **`rate`** (float): Rate calculation
 
-### Status
-- **`status`** (string): Request status (`"success"`, `"error"`)
-- **`status_code`** (integer): HTTP status code
-- **`error_message`** (string): Error message if failed
+### Group D
+- **`status`** (string): Record status (`"success"`, `"error"`)
+- **`field_18`** (integer): HTTP code
+- **`field_19`** (string): Error text if failed
 
 ## Response
 
-Returns the created log object with generated fields.
+Returns the created record object with generated fields.
 
 ```json
 {
-  "id": "log_abc123",
+  "id": "record_abc123",
   "status": "success",
-  "cost": 0.000123,
+  "field_6": 0.123,
   "timestamp": "2025-01-01T10:30:00Z",
-  "organization_id": "org_xyz789",
-  "customer_identifier": "user_123"
+  "org_id": "org_xyz789",
+  "field_10": "entity_123"
 }
 ```
 
@@ -410,25 +410,25 @@ Returns the created log object with generated fields.
 ```python Python
 import requests
 
-url = "https://api.keywordsai.co/api/request-logs/create/"
+url = "https://api.example.com/api/records/create/"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
 }
 payload = {
-    "log_type": "chat",
-    "model": "gpt-4o-mini",
-    "input": '[{"role":"user","content":"Hello"}]',
-    "output": '{"role":"assistant","content":"Hi! How can I help?"}',
-    "usage": {
-        "prompt_tokens": 10,
-        "completion_tokens": 8,
-        "total_tokens": 18
+    "field_3": "type_a",
+    "field_4": "sample-value",
+    "field_1": '[{"key":"value","data":"sample"}]',
+    "field_2": '{"key":"value","data":"response"}',
+    "field_5": {
+        "sub_field_a": 10,
+        "sub_field_b": 8,
+        "sub_field_c": 18
     },
-    "customer_identifier": "user_123",
-    "latency": 1.2,
-    "metadata": {
-        "environment": "production"
+    "field_10": "entity_123",
+    "field_7": 1.2,
+    "field_9": {
+        "prop_1": "value_a"
     }
 }
 response = requests.post(url, headers=headers, json=payload)
@@ -436,26 +436,26 @@ print(response.json())
 ```
 
 ```typescript TypeScript
-const url = 'https://api.keywordsai.co/api/request-logs/create/';
+const url = 'https://api.example.com/api/records/create/';
 const headers = {
     'Authorization': 'Bearer YOUR_API_KEY',
     'Content-Type': 'application/json'
 };
 
 const payload = {
-    log_type: 'chat',
-    model: 'gpt-4o-mini',
-    input: '[{"role":"user","content":"Hello"}]',
-    output: '{"role":"assistant","content":"Hi! How can I help?"}',
-    usage: {
-        prompt_tokens: 10,
-        completion_tokens: 8,
-        total_tokens: 18
+    field_3: 'type_a',
+    field_4: 'sample-value',
+    field_1: '[{"key":"value","data":"sample"}]',
+    field_2: '{"key":"value","data":"response"}',
+    field_5: {
+        sub_field_a: 10,
+        sub_field_b: 8,
+        sub_field_c: 18
     },
-    customer_identifier: 'user_123',
-    latency: 1.2,
-    metadata: {
-        environment: 'production'
+    field_10: 'entity_123',
+    field_7: 1.2,
+    field_9: {
+        prop_1: 'value_a'
     }
 };
 
@@ -469,21 +469,21 @@ console.log(data);
 ```
 
 ```bash cURL
-curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
+curl -X POST "https://api.example.com/api/records/create/" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "log_type": "chat",
-    "model": "gpt-4o-mini",
-    "input": "[{\"role\":\"user\",\"content\":\"Hello\"}]",
-    "output": "{\"role\":\"assistant\",\"content\":\"Hi! How can I help?\"}",
-    "usage": {
-      "prompt_tokens": 10,
-      "completion_tokens": 8,
-      "total_tokens": 18
+    "field_3": "type_a",
+    "field_4": "sample-value",
+    "field_1": "[{\"key\":\"value\",\"data\":\"sample\"}]",
+    "field_2": "{\"key\":\"value\",\"data\":\"response\"}",
+    "field_5": {
+      "sub_field_a": 10,
+      "sub_field_b": 8,
+      "sub_field_c": 18
     },
-    "customer_identifier": "user_123",
-    "latency": 1.2
+    "field_10": "entity_123",
+    "field_7": 1.2
   }'
 ```
 </RequestExample>
@@ -491,20 +491,20 @@ curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
 <ResponseExample>
 ```json 200 OK
 {
-  "id": "log_abc123",
-  "unique_id": "log_abc123",
-  "organization_id": "org_xyz789",
-  "customer_identifier": "user_123",
+  "id": "record_abc123",
+  "unique_id": "record_abc123",
+  "org_id": "org_xyz789",
+  "field_10": "entity_123",
   "status": "success",
-  "cost": 0.000123,
+  "field_6": 0.123,
   "timestamp": "2025-01-01T10:30:00Z"
 }
 ```
 
 ```json 400 Bad Request
 {
-  "error": "Invalid log format",
-  "detail": "Field 'input' is required"
+  "error": "Invalid record format",
+  "detail": "Field 'field_1' is required"
 }
 ```
 

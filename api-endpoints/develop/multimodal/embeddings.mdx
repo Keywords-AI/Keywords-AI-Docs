@@ -79,11 +79,11 @@ The number of dimensions the resulting output embeddings should have. Only suppo
 </ParamField>
 
 ## Keywords AI parameters
-See how to make a standard Keywords AI API call in the [Quick Start](/get-started/quick-start) guide.
+See how to make a standard Keywords AI API call in the [Quick Start](/get-started/quickstart/gateway) guide.
 ### Generation parameters
 
 <ParamField path="customer_credentials" type="object">
-You can pass in your customer's credentials for [supported providers](/integration/providers/providers-overview) and use their credits when our proxy is calling models from those providers. <br/>See details [here](/integration/own-api-keys)
+You can pass in your customer's credentials for [supported providers](/integration/overview) and use their credits when our proxy is calling models from those providers. <br/>See details [here](/documentation/admin/llm_provider_keys)
 <Accordion title="Example">
 ```json
 "customer_credentials": {
@@ -99,14 +99,14 @@ You can pass in your customer's credentials for [supported providers](/integrati
 
 <ParamField path="disable_log" type="boolean" deafault={false}>
   When set to true, only the request and [performance
-  metrics](/performance-monitoring/monitoring-metrics) will be recorded, input
+  metrics](/documentation/products/dashboard/quickstart) will be recorded, input
   and output messages will be omitted from the log.
 </ParamField>
 
 ### Observability parameters
 
 <ParamField path="metadata" type="dict">
-You can add any key-value pair to this metadata field for your reference. Check the [details of metadata here.](/features/generation/metadata)
+You can add any key-value pair to this metadata field for your reference. Check the [details of metadata here.](/documentation/products/logs/configuration/custom_properties)
 
 Contact team@keywordsai.co if you need extra parameter support for your use case.
 
@@ -120,7 +120,7 @@ Contact team@keywordsai.co if you need extra parameter support for your use case
 </ParamField>
 
 <ParamField path="customer_identifier" type="string">
-  Use this as a tag to identify the user associated with the API call. See the [details of customer identifier here.](/features/generation/customer-identifier)
+  Use this as a tag to identify the user associated with the API call. See the [details of customer identifier here.](/documentation/products/users/customer-identifier)
   <Accordion title="Example">
 ```json
 {
@@ -134,7 +134,7 @@ Contact team@keywordsai.co if you need extra parameter support for your use case
 <ParamField path="customer_email" type="string">
   This is the email address of the user associated with the API call. You can add your corresponding user's email address to the request.
   
-  You could also edit customer's emails on the platform. Check the [details of user editing here.](/features/user/user-creation)
+  You could also edit customer's emails on the platform. Check the [details of user editing here.](/api-endpoints/observe/users/user-creation-endpoint)
     <Accordion title="Example">
 ```json
 {

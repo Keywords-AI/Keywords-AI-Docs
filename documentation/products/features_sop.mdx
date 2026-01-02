@@ -48,7 +48,7 @@ response = client.chat.completions.create(
     model="gpt-4o-mini",
     messages=[{"role": "user", "content": "Hello"}],
     extra_body={
-        "feature_param": "value"
+        "var_1": "sample_value"
     }
 )
 ```
@@ -64,7 +64,7 @@ const response = await client.chat.completions.create({
   model: "gpt-4o-mini",
   messages: [{ role: "user", content: "Hello" }],
   // @ts-expect-error
-  feature_param: "value"
+  var_1: "sample_value"
 });
 ```
 </CodeGroup>
@@ -104,7 +104,7 @@ message = client.messages.create(
     messages=[{"role": "user", "content": "Hello"}],
     metadata={
         "keywordsai_params": {
-            "feature_param": "value"
+            "var_1": "sample_value"
         }
     },
 )
@@ -123,7 +123,7 @@ const message = await client.messages.create({
   messages: [{ role: "user", content: "Hello" }],
   metadata: {
     keywordsai_params: {
-      feature_param: "value",
+      var_1: "sample_value",
     },
   },
 });
@@ -165,8 +165,8 @@ client = genai.Client(
 response = client.models.generate_content(
     model="gemini-2.5-flash",
     contents="Hello",
-    # Note: provider SDK support for Keywords AI feature params may vary.
-    # If you can't pass `feature_param` via the SDK, use the Standard API/proxy endpoint instead.
+    # Note: provider SDK support for Keywords AI params may vary.
+    # If you can't pass `var_1` via the SDK, use the Standard API/proxy endpoint instead.
 )
 ```
 ```typescript TypeScript
@@ -182,7 +182,7 @@ const genAI = new GoogleGenAI({
 const response = await genAI.models.generateContent({
   model: "gemini-2.5-flash",
   contents: [{ role: "user", parts: [{ text: "Hello" }] }],
-  // Note: provider SDK support for Keywords AI feature params may vary.
+  // Note: provider SDK support for Keywords AI params may vary.
 });
 ```
 </CodeGroup>
@@ -199,23 +199,23 @@ Copy the configuration and use it in your requests.
 
 ### Parameter 1
 
-<Accordion title="parameter_name">
+<Accordion title="var_1">
 Description of what this parameter does and how to use it.
 
 ```json
 {
-  "parameter_name": "value"
+  "var_1": "sample_value"
 }
 ```
 </Accordion>
 
-<Accordion title="another_parameter">
+<Accordion title="var_2">
 Description of this parameter.
 
 ```json
 {
-  "another_parameter": {
-    "nested": "value"
+  "var_2": {
+    "nested_field": "sample_value"
   }
 }
 ```
