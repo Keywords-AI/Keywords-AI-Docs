@@ -1,10 +1,10 @@
 ---
 title: "Get transaction details"
-api: "GET /api/payment/credit-transactions/{id}/"
+api: "GET /api/credit-transactions/{id}/"
 description: "Retrieves a single credit transaction by ID"
 ---
 
-Retrieves detailed information about a specific credit transaction.
+Retrieves detailed information about a specific credit transaction. All users can view transactions for their organization.
 
 ## Path parameters
 
@@ -100,7 +100,7 @@ Retrieves detailed information about a specific credit transaction.
 import requests
 
 transaction_id = "ct_1a2b3c4d5e6f7g8h"
-url = f"https://api.keywordsai.co/api/payment/credit-transactions/{transaction_id}/"
+url = f"https://api.keywordsai.co/api/credit-transactions/{transaction_id}/"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY"
 }
@@ -111,7 +111,7 @@ print(response.json())
 
 ```typescript TypeScript
 const transactionId = 'ct_1a2b3c4d5e6f7g8h';
-const url = `https://api.keywordsai.co/api/payment/credit-transactions/${transactionId}/`;
+const url = `https://api.keywordsai.co/api/credit-transactions/${transactionId}/`;
 const headers = {
     'Authorization': 'Bearer YOUR_API_KEY'
 };
@@ -125,7 +125,7 @@ console.log(data);
 ```
 
 ```bash cURL
-curl -X GET "https://api.keywordsai.co/api/payment/credit-transactions/ct_1a2b3c4d5e6f7g8h/" \
+curl -X GET "https://api.keywordsai.co/api/credit-transactions/ct_1a2b3c4d5e6f7g8h/" \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 </RequestExample>

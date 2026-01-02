@@ -1,10 +1,10 @@
 ---
 title: "List credit transactions"
-api: "GET /api/payment/credit-transactions/"
+api: "GET /api/credit-transactions/list/"
 description: "Returns all credit transactions for your organization, newest first"
 ---
 
-Returns all credit transactions for your organization with complete audit trail history.
+Returns all credit transactions for your organization with complete audit trail history. Transactions are append-only and immutable, providing a permanent record of all credit changes.
 
 <Note>
 Credits only apply to the Chat Completions endpoint (`/api/chat/completions`). All other endpoints require customer-provided API credentials.
@@ -131,7 +131,7 @@ Credits only apply to the Chat Completions endpoint (`/api/chat/completions`). A
 ```python Python
 import requests
 
-url = "https://api.keywordsai.co/api/payment/credit-transactions/"
+url = "https://api.keywordsai.co/api/credit-transactions/list/"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY"
 }
@@ -141,7 +141,7 @@ print(response.json())
 ```
 
 ```typescript TypeScript
-const url = 'https://api.keywordsai.co/api/payment/credit-transactions/';
+const url = 'https://api.keywordsai.co/api/credit-transactions/list/';
 const headers = {
     'Authorization': 'Bearer YOUR_API_KEY'
 };
@@ -155,7 +155,7 @@ console.log(data);
 ```
 
 ```bash cURL
-curl -X GET "https://api.keywordsai.co/api/payment/credit-transactions/" \
+curl -X GET "https://api.keywordsai.co/api/credit-transactions/list/" \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 </RequestExample>
