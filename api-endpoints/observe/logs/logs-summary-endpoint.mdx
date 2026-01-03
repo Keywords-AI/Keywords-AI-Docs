@@ -1,0 +1,265 @@
+---
+title: Get logs summary
+api: POST https://api.keywordsai.co/api/request-logs/summary/
+---
+
+The Logs Summary endpoint returns aggregated statistics for logs matching the given filters. This is useful for getting quick insights into your LLM usage without fetching all individual logs.
+
+<Note>
+Both `GET` and `POST` methods are supported. `POST` is recommended when using complex filters.
+</Note>
+
+## Query parameters
+
+Same parameters as the [List Logs endpoint](/api-endpoints/observe/logs/list):
+
+<ParamField query="start_time" type="string">
+  The start time for filtering logs in ISO 8601 format. If not provided, defaults to 1 hour ago.
+  <Accordion title="Example">
+    ```json
+    {
+      "start_time": "2025-08-15T00:00:00Z"
+    }
+    ```
+  </Accordion>
+</ParamField>
+
+<ParamField query="end_time" type="string">
+  The end time for filtering logs in ISO 8601 format. If not provided, defaults to current time.
+  <Accordion title="Example">
+    ```json
+    {
+      "end_time": "2025-08-16T00:00:00Z"
+    }
+    ```
+  </Accordion>
+</ParamField>
+
+<ParamField query="all_envs" type="string" default="false">
+  Whether to include logs from all environments. `is_test` parameter will override this parameter.
+  Options: `true`, `false`.
+</ParamField>
+
+<ParamField query="is_test" type="string" default="false">
+  Whether to include test logs only. This parameter will override the `all_envs` parameter.
+  Options: `true`, `false`.
+</ParamField>
+
+## Body parameters
+
+You can add filter parameters to the request body (same as [List Logs endpoint](/api-endpoints/observe/logs/list)):
+
+<ParamField body="filters" type="object" default={{}}>
+  The filters to be applied to the logs.
+
+<Note>If you want to filter your custom properties, add `metadata__` + your custom property name. For example, to filter `my_custom_property`, use `metadata__my_custom_property`.</Note>
+
+<Accordion title="Example">
+  ```json
+    {
+      "model": {
+        "operator": "",
+        "value": ["gpt-4o"]
+      },
+      "cost": {
+        "operator": "gte",
+        "value": [0.01]
+      }
+    }
+  ```
+  </Accordion>
+</ParamField>
+
+## URL-based Filtering
+
+Just like the List Logs endpoint, you can use URL parameters for quick filtering:
+
+```bash
+# Filter summary by customer
+GET /api/request-logs/summary/?customer_identifier=user_123
+
+# Filter by custom metadata
+GET /api/request-logs/summary/?user_tier=premium&department=sales
+```
+
+See the [List Logs endpoint](/api-endpoints/observe/logs/list#url-based-filtering-quick-filters) for complete URL filtering documentation.
+
+## Response
+
+<ResponseField name="summary" type="object">
+  Aggregated statistics for the filtered logs.
+
+  <Expandable title="Fields">
+    <ResponseField name="total_cost" type="float">
+      Total cost in USD for all filtered logs.
+    </ResponseField>
+
+    <ResponseField name="total_tokens" type="integer">
+      Total tokens (prompt + completion) for all filtered logs.
+    </ResponseField>
+
+    <ResponseField name="number_of_requests" type="integer">
+      Total number of requests matching the filters.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/summary/"
+headers = {
+    "Authorization": f"Bearer {YOUR_KEYWORDS_AI_API_KEY}",
+    "Content-Type": "application/json"
+}
+params = {
+    "start_time": "2025-12-01T00:00:00Z",
+    "end_time": "2025-12-31T23:59:59Z"
+}
+data = {
+    "filters": {
+        "model": {
+            "operator": "",
+            "value": ["gpt-4o"]
+        }
+    }
+}
+
+response = requests.post(url, headers=headers, params=params, json=data)
+print(response.json())
+```
+
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/request-logs/summary/';
+
+const params = new URLSearchParams({
+    start_time: '2025-12-01T00:00:00Z',
+    end_time: '2025-12-31T23:59:59Z'
+});
+
+const headers = {
+    'Authorization': `Bearer ${YOUR_KEYWORDS_AI_API_KEY}`,
+    'Content-Type': 'application/json'
+};
+
+const data = {
+    filters: {
+        model: {
+            operator: '',
+            value: ['gpt-4o']
+        }
+    }
+};
+
+fetch(`${url}?${params}`, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(data)
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/request-logs/summary/?start_time=2025-12-01T00:00:00Z&end_time=2025-12-31T23:59:59Z" \
+-H "Authorization: Bearer YOUR_KEYWORDS_AI_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "filters": {
+    "model": {
+      "operator": "",
+      "value": ["gpt-4o"]
+    }
+  }
+}'
+```
+
+```bash cURL (GET with URL filters)
+# Quick summary with URL filters
+curl -X GET "https://api.keywordsai.co/api/request-logs/summary/?customer_identifier=user_123&start_time=2025-12-01T00:00:00Z" \
+-H "Authorization: Bearer YOUR_KEYWORDS_AI_API_KEY"
+```
+
+</RequestExample>
+
+<ResponseExample>
+```json 200 OK
+{
+  "summary": {
+    "total_cost": 15.67,
+    "total_tokens": 1250000,
+    "number_of_requests": 8453
+  }
+}
+```
+</ResponseExample>
+
+## Use Cases
+
+<AccordionGroup>
+  <Accordion title="Monitor monthly costs">
+    ```python
+    # Get total cost for the current month
+    import requests
+    from datetime import datetime
+    
+    start_of_month = datetime.now().replace(day=1, hour=0, minute=0, second=0).isoformat() + "Z"
+    
+    response = requests.get(
+        "https://api.keywordsai.co/api/request-logs/summary/",
+        headers={"Authorization": f"Bearer {YOUR_API_KEY}"},
+        params={
+            "start_time": start_of_month,
+            "environment": "prod"
+        }
+    )
+    
+    summary = response.json()["summary"]
+    print(f"Monthly cost: ${summary['total_cost']:.2f}")
+    print(f"Total requests: {summary['number_of_requests']}")
+    ```
+  </Accordion>
+
+  <Accordion title="Compare model costs">
+    ```python
+    # Compare costs between different models
+    models = ["gpt-4o", "gpt-4o-mini", "claude-3-5-sonnet-20241022"]
+    
+    for model in models:
+        response = requests.post(
+            "https://api.keywordsai.co/api/request-logs/summary/",
+            headers={"Authorization": f"Bearer {YOUR_API_KEY}"},
+            json={
+                "filters": {
+                    "model": {
+                        "operator": "",
+                        "value": [model]
+                    }
+                }
+            }
+        )
+        summary = response.json()["summary"]
+        print(f"{model}: ${summary['total_cost']:.2f}")
+    ```
+  </Accordion>
+
+  <Accordion title="Track customer usage">
+    ```python
+    # Get summary for a specific customer
+    response = requests.get(
+        "https://api.keywordsai.co/api/request-logs/summary/",
+        headers={"Authorization": f"Bearer {YOUR_API_KEY}"},
+        params={
+            "customer_identifier": "customer_123",
+            "start_time": "2025-12-01T00:00:00Z"
+        }
+    )
+    
+    summary = response.json()["summary"]
+    print(f"Customer cost: ${summary['total_cost']:.2f}")
+    print(f"Customer requests: {summary['number_of_requests']}")
+    ```
+  </Accordion>
+</AccordionGroup>

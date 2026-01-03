@@ -1,0 +1,211 @@
+---
+title: Delete log
+api: DELETE https://api.keywordsai.co/api/request-logs/{unique_id}/
+---
+
+The Delete Log endpoint permanently removes a log from the system.
+
+<Warning>
+**This operation is irreversible.** The log will be permanently deleted and cannot be recovered. Use with caution.
+</Warning>
+
+## Path parameters
+
+<ParamField path="unique_id" type="string" required>
+  The unique ID of the log to delete. You can get this from the [List Logs endpoint](/api-endpoints/observe/logs/list).
+</ParamField>
+
+## Response
+
+Returns HTTP `204 No Content` on successful deletion with no response body.
+
+<RequestExample>
+
+```python Python
+import requests
+
+unique_id = "log_abc123..."  # Replace with actual log ID
+url = f"https://api.keywordsai.co/api/request-logs/{unique_id}/"
+
+headers = {
+    "Authorization": f"Bearer {YOUR_KEYWORDS_AI_API_KEY}"
+}
+
+response = requests.delete(url, headers=headers)
+
+if response.status_code == 204:
+    print("Log deleted successfully")
+else:
+    print(f"Error: {response.status_code}")
+    print(response.json())
+```
+
+```typescript TypeScript
+const uniqueId = 'log_abc123...';  // Replace with actual log ID
+const url = `https://api.keywordsai.co/api/request-logs/${uniqueId}/`;
+
+const headers = {
+    'Authorization': `Bearer ${YOUR_KEYWORDS_AI_API_KEY}`
+};
+
+fetch(url, {
+    method: 'DELETE',
+    headers: headers
+})
+.then(response => {
+    if (response.status === 204) {
+        console.log('Log deleted successfully');
+    } else {
+        return response.json().then(data => {
+            console.error('Error:', data);
+        });
+    }
+});
+```
+
+```bash cURL
+curl -X DELETE "https://api.keywordsai.co/api/request-logs/log_abc123.../" \
+-H "Authorization: Bearer YOUR_KEYWORDS_AI_API_KEY"
+```
+
+</RequestExample>
+
+<ResponseExample>
+```text 204 No Content
+(Empty response body)
+```
+</ResponseExample>
+
+## Error Responses
+
+<ResponseExample>
+```json 404 Not Found
+{
+  "detail": "Log not found"
+}
+```
+</ResponseExample>
+
+<ResponseExample>
+```json 401 Unauthorized
+{
+  "detail": "Your API key is invalid or expired, please check your API key at https://platform.keywordsai.co/platform/api/api-keys"
+}
+```
+</ResponseExample>
+
+## Use Cases
+
+<AccordionGroup>
+  <Accordion title="Delete test logs">
+    ```python
+    # Delete all test logs after testing
+    import requests
+    
+    # First, list test logs
+    list_response = requests.get(
+        "https://api.keywordsai.co/api/request-logs/",
+        headers={"Authorization": f"Bearer {YOUR_API_KEY}"},
+        params={
+            "is_test": "true",
+            "page_size": 100
+        }
+    )
+    
+    logs = list_response.json()["results"]
+    
+    # Delete each test log
+    for log in logs:
+        delete_response = requests.delete(
+            f"https://api.keywordsai.co/api/request-logs/{log['unique_id']}/",
+            headers={"Authorization": f"Bearer {YOUR_API_KEY}"}
+        )
+        if delete_response.status_code == 204:
+            print(f"Deleted log {log['unique_id']}")
+    ```
+  </Accordion>
+
+  <Accordion title="Delete logs with sensitive data">
+    ```python
+    # Delete logs containing specific metadata
+    import requests
+    
+    # List logs with sensitive flag
+    list_response = requests.post(
+        "https://api.keywordsai.co/api/request-logs/",
+        headers={"Authorization": f"Bearer {YOUR_API_KEY}"},
+        json={
+            "filters": {
+                "metadata__contains_pii": {
+                    "operator": "",
+                    "value": [True]
+                }
+            }
+        }
+    )
+    
+    logs = list_response.json()["results"]
+    
+    # Delete each log
+    for log in logs:
+        requests.delete(
+            f"https://api.keywordsai.co/api/request-logs/{log['unique_id']}/",
+            headers={"Authorization": f"Bearer {YOUR_API_KEY}"}
+        )
+    ```
+  </Accordion>
+
+  <Accordion title="Bulk delete with confirmation">
+    ```python
+    # Safe bulk delete with confirmation
+    import requests
+    
+    def bulk_delete_logs(log_ids, api_key):
+        """Delete multiple logs with progress tracking"""
+        deleted_count = 0
+        failed_count = 0
+        
+        print(f"Preparing to delete {len(log_ids)} logs...")
+        confirmation = input("Type 'DELETE' to confirm: ")
+        
+        if confirmation != "DELETE":
+            print("Deletion cancelled")
+            return
+        
+        for log_id in log_ids:
+            response = requests.delete(
+                f"https://api.keywordsai.co/api/request-logs/{log_id}/",
+                headers={"Authorization": f"Bearer {api_key}"}
+            )
+            
+            if response.status_code == 204:
+                deleted_count += 1
+            else:
+                failed_count += 1
+                print(f"Failed to delete {log_id}: {response.status_code}")
+        
+        print(f"Deleted: {deleted_count}, Failed: {failed_count}")
+    
+    # Usage
+    log_ids_to_delete = ["log_1", "log_2", "log_3"]
+    bulk_delete_logs(log_ids_to_delete, YOUR_API_KEY)
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+<Note>
+### Before deleting logs:
+
+1. **Export important data**: Use the [export endpoint](/documentation/products/logs/export_logs) to backup logs before deletion
+2. **Verify filters**: When bulk deleting, test your filters with the list endpoint first
+3. **Consider alternatives**: For privacy compliance, consider using the `blurred` field instead of deletion
+4. **Audit trail**: Keep a record of deleted log IDs for compliance purposes
+</Note>
+
+## Related Endpoints
+
+- [List Logs](/api-endpoints/observe/logs/list) - Get log IDs for deletion
+- [Get Log](/api-endpoints/observe/logs/get-log-endpoint) - Verify log contents before deletion
+- [Update Log](/api-endpoints/observe/logs/logs-update-endpoint) - Alternative: update metadata instead of deleting

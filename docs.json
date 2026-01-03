@@ -358,8 +358,11 @@
                   "/api-endpoints/observe/logs/request-logging-endpoint",
                   "/api-endpoints/observe/logs/batch-logging-endpoint",
                   "/api-endpoints/observe/logs/logs-list-endpoint",
+                  "/api-endpoints/observe/logs/logs-summary-endpoint",
                   "/api-endpoints/observe/logs/get-log-endpoint",
+                  "/api-endpoints/observe/logs/update-single-log-endpoint",
                   "/api-endpoints/observe/logs/logs-update-endpoint",
+                  "/api-endpoints/observe/logs/delete-log-endpoint",
                   "/api-endpoints/observe/logs/ingest"
                 ]
               },

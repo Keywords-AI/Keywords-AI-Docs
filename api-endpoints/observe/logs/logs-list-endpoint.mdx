@@ -5,6 +5,10 @@ api: POST https://api.keywordsai.co/api/request-logs/list/
 
 The Logs List endpoint allows you to retrieve past logs with specified filters.
 
+<Note>
+Both `GET` and `POST` methods are supported for listing logs. `POST` is recommended when using complex filters or when URL length limits might be exceeded. The same endpoint is also available at `/api/request-logs/` (without `/list/`).
+</Note>
+
 ## Response fields
 
 Each log in the response includes:
@@ -123,6 +127,125 @@ For example:
     ```
   </Accordion>
 </ParamField>
+
+## URL-based Filtering (Quick Filters)
+
+You can filter logs directly via URL query parameters without constructing POST body filters. This is useful for sharing filtered views, bookmarking, or building dynamic filter links.
+
+### Basic Syntax
+
+**Simple filtering:**
+```
+?<field>=<value>
+```
+
+**Advanced filtering with operators:**
+```
+?<field>[value]=<value>&<field>[operator]=<operator>&<field>[connector]=<connector>
+```
+
+### Parameters
+
+- **`[value]`**: The filter value (required)
+- **`[operator]`**: Comparison operator (optional, defaults to `""` for equality)
+  - `""` (empty): Exact match (is)
+  - `"not"`: Not equal (is not)
+- **`[connector]`**: Logic connector (optional, defaults to `"AND"`)
+  - `"AND"`: Combine with previous filter using AND
+  - `"OR"`: Combine with previous filter using OR
+
+### Field Auto-Detection
+
+The system automatically detects how to handle each URL parameter:
+
+1. **Pagination/Sort parameters**: Skipped (page, page_size, sort_by, etc.)
+2. **Metadata fields starting with "metadata__"**: Filter custom metadata
+3. **Known log fields**: Filter directly on that field
+4. **Unknown fields**: Treated as custom metadata (auto-prefix "metadata__")
+
+### Known Log Fields
+
+These fields can be filtered directly without the `metadata__` prefix:
+
+- **Identifiers**: `customer_identifier`, `custom_identifier`, `thread_identifier`, `prompt_id`, `unique_id`
+- **Tracing**: `trace_unique_id`, `span_name`, `span_workflow_name`
+- **Provider/Model**: `model`, `deployment_name`, `provider_id`
+- **Status**: `status_code`, `status`, `error_message`
+- **Config**: `environment`, `log_type`, `stream`, `temperature`, `max_tokens`
+- **Metrics**: `cost`, `latency`, `tokens_per_second`, `time_to_first_token`, `prompt_tokens`, `completion_tokens`, `total_request_tokens`
+
+### URL Filter Examples
+
+<AccordionGroup>
+  <Accordion title="Filter by customer identifier">
+    ```bash
+    GET /api/request-logs/list/?customer_identifier=user_123
+    ```
+  </Accordion>
+
+  <Accordion title="Filter with operator (status code not equal to 200)">
+    ```bash
+    GET /api/request-logs/list/?status_code[value]=200&status_code[operator]=not
+    ```
+  </Accordion>
+
+  <Accordion title="Filter by custom metadata (auto-detected)">
+    ```bash
+    # This automatically becomes: metadata__event_id = "xxx"
+    GET /api/request-logs/list/?event_id=xxx
+    ```
+  </Accordion>
+
+  <Accordion title="Explicit metadata filter">
+    ```bash
+    GET /api/request-logs/list/?metadata__user_type=premium
+    ```
+  </Accordion>
+
+  <Accordion title="Multiple filters with OR logic">
+    ```bash
+    # (status_code = 200) OR (metadata__priority != "low")
+    GET /api/request-logs/list/?status_code[value]=200&status_code[connector]=OR&priority[value]=low&priority[operator]=not&priority[connector]=OR
+    ```
+  </Accordion>
+
+  <Accordion title="Mixed known and unknown fields">
+    ```bash
+    # customer_identifier = "abc" AND metadata__event_id = "xxx" AND model = "gpt-4"
+    GET /api/request-logs/list/?customer_identifier=abc&event_id=xxx&model=gpt-4
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Combining URL and POST Body Filters
+
+URL filters and POST body filters can be combined. When there's an overlap, URL filters take precedence.
+
+<Accordion title="Example: Combined filters">
+  ```bash
+  curl -X POST "https://api.keywordsai.co/api/request-logs/list/?customer_identifier=user_123" \
+    -H "Authorization: Bearer YOUR_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "filters": {
+        "status_code": {
+          "operator": "",
+          "value": [200]
+        }
+      }
+    }'
+  ```
+  This applies:
+  - `customer_identifier = "user_123"` (from URL)
+  - `status_code = 200` (from POST body)
+</Accordion>
+
+### Limitations
+
+- URL filters support only equality (`""`) and not-equal (`"not"`) operators
+- For complex operators (`gt`, `gte`, `lt`, `lte`, `contains`, etc.), use POST body filters
+- Each field can only have one value in URL (no arrays)
+- All URL values are treated as strings
 
 ## Body parameters
 You can add these parameters to the **request body**:
@@ -279,6 +402,33 @@ curl -X POST "https://api.keywordsai.co/api/request-logs/list/?page=1&sort_by=-i
 -H "Content-Type: application/json" \
 -d '{"filters": {}}'
 
+```
+
+```bash cURL (with URL filters)
+# Filter by customer identifier using URL parameter
+curl -X GET "https://api.keywordsai.co/api/request-logs/list/?customer_identifier=user_123&page_size=10" \
+-H "Authorization: Bearer YOUR_KEYWORDS_AI_API_KEY"
+```
+
+```bash cURL (URL filters + POST body)
+# Combine URL and POST body filters
+curl -X POST "https://api.keywordsai.co/api/request-logs/list/?customer_identifier=user_123&event_id=xxx" \
+-H "Authorization: Bearer YOUR_KEYWORDS_AI_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "filters": {
+    "cost": {
+      "operator": "gte",
+      "value": [0.01]
+    }
+  }
+}'
+```
+
+```bash cURL (custom metadata via URL)
+# Filter by custom metadata fields
+curl -X GET "https://api.keywordsai.co/api/request-logs/list/?user_tier=premium&department=sales" \
+-H "Authorization: Bearer YOUR_KEYWORDS_AI_API_KEY"
 ```
 </RequestExample>
 <ResponseExample>
