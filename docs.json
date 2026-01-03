@@ -583,6 +583,12 @@
                 ]
               }
             ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "/api-endpoints/reference/filters_api_reference"
+            ]
           }
         ]
       },

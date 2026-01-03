@@ -52,7 +52,11 @@ You can add filter parameters to the request body (same as [List Logs endpoint](
 <ParamField body="filters" type="object" default={{}}>
   The filters to be applied to the logs.
 
-<Note>If you want to filter your custom properties, add `metadata__` + your custom property name. For example, to filter `my_custom_property`, use `metadata__my_custom_property`.</Note>
+<Note>
+If you want to filter your custom properties, add `metadata__` + your custom property name. For example, to filter `my_custom_property`, use `metadata__my_custom_property`.
+
+For a complete list of filter operators and examples, see the [Filters API Reference](/api-endpoints/reference/filters_api_reference).
+</Note>
 
 <Accordion title="Example">
   ```json
