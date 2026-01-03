@@ -1,0 +1,349 @@
+---
+title: Update single log
+api: PATCH https://api.keywordsai.co/api/request-logs/{unique_id}/
+---
+
+The Update Log endpoint allows you to modify specific fields of a single log. This is useful for adding annotations, updating metadata, or correcting information.
+
+<Note>
+For updating multiple logs at once, use the [Batch Update endpoint](/api-endpoints/observe/logs/logs-update-endpoint).
+</Note>
+
+## Updatable fields
+
+The following fields can be updated:
+- **`metadata`** - Custom metadata properties
+- **`custom_identifier`** - Custom identifier
+- **`blurred`** - Privacy flag to blur log content
+
+<Warning>
+### Core log data is immutable
+Fields like `input`, `output`, `log_type`, `model`, `usage`, `cost`, `latency`, and other telemetry fields cannot be modified to maintain data integrity.
+</Warning>
+
+## Path parameters
+
+<ParamField path="unique_id" type="string" required>
+  The unique ID of the log to update. You can get this from the [List Logs endpoint](/api-endpoints/observe/logs/list).
+</ParamField>
+
+## Body parameters
+
+<ParamField body="metadata" type="object">
+  Update the log's metadata with custom properties. This can be used for tagging, categorization, or adding context.
+  
+  <Accordion title="Example">
+    ```json
+    {
+      "metadata": {
+        "user_feedback": "helpful",
+        "quality_rating": 5,
+        "reviewed": true,
+        "reviewer": "alice@company.com"
+      }
+    }
+    ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="custom_identifier" type="string">
+  Update the log's custom identifier. Useful for linking logs to external systems.
+  
+  <Accordion title="Example">
+    ```json
+    {
+      "custom_identifier": "ticket_12345_resolved"
+    }
+    ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="blurred" type="boolean">
+  Set whether the log content should be blurred for privacy reasons.
+  
+  <Accordion title="Example">
+    ```json
+    {
+      "blurred": true
+    }
+    ```
+  </Accordion>
+</ParamField>
+
+## Response
+
+Returns the complete updated log object (same structure as the [Get Log endpoint](/api-endpoints/observe/logs/get-log-endpoint)).
+
+<RequestExample>
+
+```python Python
+import requests
+
+unique_id = "log_abc123..."  # Replace with actual log ID
+url = f"https://api.keywordsai.co/api/request-logs/{unique_id}/"
+
+headers = {
+    "Authorization": f"Bearer {YOUR_KEYWORDS_AI_API_KEY}",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "metadata": {
+        "user_feedback": "helpful",
+        "quality_rating": 5
+    },
+    "custom_identifier": "ticket_12345"
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```typescript TypeScript
+const uniqueId = 'log_abc123...';  // Replace with actual log ID
+const url = `https://api.keywordsai.co/api/request-logs/${uniqueId}/`;
+
+const headers = {
+    'Authorization': `Bearer ${YOUR_KEYWORDS_AI_API_KEY}`,
+    'Content-Type': 'application/json'
+};
+
+const data = {
+    metadata: {
+        user_feedback: 'helpful',
+        quality_rating: 5
+    },
+    custom_identifier: 'ticket_12345'
+};
+
+fetch(url, {
+    method: 'PATCH',
+    headers: headers,
+    body: JSON.stringify(data)
+})
+.then(response => response.json())
+.then(data => console.log(data));
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/request-logs/log_abc123.../" \
+-H "Authorization: Bearer YOUR_KEYWORDS_AI_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "metadata": {
+    "user_feedback": "helpful",
+    "quality_rating": 5
+  },
+  "custom_identifier": "ticket_12345"
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "log_abc123...",
+  "unique_id": "log_abc123...",
+  "organization_id": "org_xyz789",
+  "environment": "prod",
+  "timestamp": "2025-12-26T10:30:00Z",
+  "start_time": "2025-12-26T10:29:58Z",
+  "log_type": "chat",
+  "model": "gpt-4o-mini",
+  "cost": 0.000705,
+  "latency": 1.234,
+  "status": "success",
+  "custom_identifier": "ticket_12345",
+  "metadata": {
+    "user_feedback": "helpful",
+    "quality_rating": 5,
+    "previous_metadata_key": "previous_value"
+  },
+  "input": "[{\"role\":\"user\",\"content\":\"Hello\"}]",
+  "output": "{\"role\":\"assistant\",\"content\":\"Hi there!\"}",
+  // ... rest of log fields
+}
+```
+</ResponseExample>
+
+## Use Cases
+
+<AccordionGroup>
+  <Accordion title="Add user feedback">
+    ```python
+    # Add thumbs up/down feedback to a log
+    import requests
+    
+    def add_feedback(log_id, is_positive, api_key):
+        url = f"https://api.keywordsai.co/api/request-logs/{log_id}/"
+        
+        response = requests.patch(
+            url,
+            headers={"Authorization": f"Bearer {api_key}"},
+            json={
+                "metadata": {
+                    "user_feedback": "positive" if is_positive else "negative",
+                    "feedback_timestamp": datetime.now().isoformat()
+                }
+            }
+        )
+        return response.json()
+    
+    # Usage
+    add_feedback("log_abc123", True, YOUR_API_KEY)
+    ```
+  </Accordion>
+
+  <Accordion title="Link log to support ticket">
+    ```python
+    # Update log with support ticket information
+    import requests
+    
+    def link_to_ticket(log_id, ticket_id, ticket_status, api_key):
+        url = f"https://api.keywordsai.co/api/request-logs/{log_id}/"
+        
+        response = requests.patch(
+            url,
+            headers={"Authorization": f"Bearer {api_key}"},
+            json={
+                "custom_identifier": ticket_id,
+                "metadata": {
+                    "ticket_status": ticket_status,
+                    "linked_at": datetime.now().isoformat()
+                }
+            }
+        )
+        return response.json()
+    
+    # Usage
+    link_to_ticket("log_abc123", "TICKET-5678", "resolved", YOUR_API_KEY)
+    ```
+  </Accordion>
+
+  <Accordion title="Mark logs for review">
+    ```python
+    # Flag logs that need human review
+    import requests
+    
+    def mark_for_review(log_id, reason, priority, api_key):
+        url = f"https://api.keywordsai.co/api/request-logs/{log_id}/"
+        
+        response = requests.patch(
+            url,
+            headers={"Authorization": f"Bearer {api_key}"},
+            json={
+                "metadata": {
+                    "needs_review": True,
+                    "review_reason": reason,
+                    "review_priority": priority,
+                    "flagged_at": datetime.now().isoformat()
+                }
+            }
+        )
+        return response.json()
+    
+    # Usage
+    mark_for_review(
+        "log_abc123",
+        "Potential PII in response",
+        "high",
+        YOUR_API_KEY
+    )
+    ```
+  </Accordion>
+
+  <Accordion title="Blur sensitive logs">
+    ```python
+    # Blur logs containing sensitive information
+    import requests
+    
+    def blur_log(log_id, reason, api_key):
+        url = f"https://api.keywordsai.co/api/request-logs/{log_id}/"
+        
+        response = requests.patch(
+            url,
+            headers={"Authorization": f"Bearer {api_key}"},
+            json={
+                "blurred": True,
+                "metadata": {
+                    "blur_reason": reason,
+                    "blurred_at": datetime.now().isoformat()
+                }
+            }
+        )
+        return response.json()
+    
+    # Usage
+    blur_log("log_abc123", "Contains PII", YOUR_API_KEY)
+    ```
+  </Accordion>
+
+  <Accordion title="Tag logs with experiments">
+    ```python
+    # Tag logs with A/B test or experiment information
+    import requests
+    
+    def tag_experiment(log_id, experiment_name, variant, api_key):
+        url = f"https://api.keywordsai.co/api/request-logs/{log_id}/"
+        
+        response = requests.patch(
+            url,
+            headers={"Authorization": f"Bearer {api_key}"},
+            json={
+                "metadata": {
+                    "experiment": experiment_name,
+                    "variant": variant,
+                    "experiment_tagged_at": datetime.now().isoformat()
+                }
+            }
+        )
+        return response.json()
+    
+    # Usage
+    tag_experiment(
+        "log_abc123",
+        "prompt_optimization_v2",
+        "variant_b",
+        YOUR_API_KEY
+    )
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Metadata Best Practices
+
+<Note>
+### Organizing metadata
+
+1. **Use consistent keys**: Establish naming conventions across your organization
+2. **Add timestamps**: Include `_at` or `_timestamp` fields for tracking when metadata was added
+3. **Namespace related fields**: Use prefixes like `review_`, `feedback_`, `experiment_` to group related fields
+4. **Keep it queryable**: Use simple data types (strings, numbers, booleans) for fields you'll filter on
+5. **Document your schema**: Maintain documentation of your metadata structure
+</Note>
+
+## Error Responses
+
+<ResponseExample>
+```json 404 Not Found
+{
+  "detail": "Log not found"
+}
+```
+</ResponseExample>
+
+<ResponseExample>
+```json 400 Bad Request
+{
+  "error": "Cannot update immutable field",
+  "detail": "The field 'cost' cannot be modified"
+}
+```
+</ResponseExample>
+
+## Related Endpoints
+
+- [Batch Update Logs](/api-endpoints/observe/logs/logs-update-endpoint) - Update multiple logs at once
+- [Get Log](/api-endpoints/observe/logs/get-log-endpoint) - View log details before updating
+- [List Logs](/api-endpoints/observe/logs/list) - Find logs to update using filters

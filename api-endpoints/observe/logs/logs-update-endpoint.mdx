@@ -17,13 +17,13 @@ The following fields can be updated:
 ### Core log data is immutable
 Fields like `input`, `output`, `log_type`, `model`, `usage`, `cost`, `latency`, and other telemetry fields cannot be modified to maintain data integrity.
 
-For `log_type` specifications, see [log types](https://localhost:3001/get-started/observability_data_model#log-types).
+For `log_type` specifications, see [log types](/get-started/observability_data_model#log-types).
 </Note>
 
 ## Body parameters
 
 <ParamField path="unique_id" type="string">
-You can get a log's `unique_id` from the [Logs list endpoint](/api-endpoints/observe/logs/logs-list-endpoint). Then pass this `unique_id` to update the log.
+You can get a log's `unique_id` from the [Logs list endpoint](/api-endpoints/observe/logs/list). Then pass this `unique_id` to update the log.
 ```json
 {
     "unique_id": "xxxxxx"

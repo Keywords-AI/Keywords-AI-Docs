@@ -1,0 +1,161 @@
+---
+title: "Filters API Reference"
+description: "This document describes the filtering system used across Keywords AI endpoints (logs, traces, threads, etc.)."
+---
+
+## Filter Structure
+
+Filters are passed in the request body as a JSON object:
+
+```json
+{
+  "filters": {
+    "field_name": {
+      "operator": "gt",
+      "value": [100]
+    }
+  }
+}
+```
+
+## Filter Operators
+
+| Operator | Description | Example |
+|----------|-------------|---------|
+| `` (empty) | Equal | `{"operator": "", "value": [100]}` |
+| `iexact` | Case insensitive equal | `{"operator": "iexact", "value": ["test"]}` |
+| `lt` | Less than | `{"operator": "lt", "value": [100]}` |
+| `lte` | Less than or equal | `{"operator": "lte", "value": [100]}` |
+| `gt` | Greater than | `{"operator": "gt", "value": [100]}` |
+| `gte` | Greater than or equal | `{"operator": "gte", "value": [100]}` |
+| `contains` | Contains substring | `{"operator": "contains", "value": ["keyword"]}` |
+| `icontains` | Case insensitive contains | `{"operator": "icontains", "value": ["keyword"]}` |
+| `startswith` | Starts with | `{"operator": "startswith", "value": ["prefix"]}` |
+| `endswith` | Ends with | `{"operator": "endswith", "value": ["suffix"]}` |
+| `in` | In list (array or text) | `{"operator": "in", "value": ["val1", "val2"]}` |
+| `isnull` | Is null | `{"operator": "isnull", "value": [true]}` |
+| `not` | Not equal | `{"operator": "not", "value": [100]}` |
+
+## Filter Examples
+
+### Numeric Filters
+
+**Filter by cost greater than $0.01:**
+```json
+{
+  "filters": {
+    "cost": {
+      "operator": "gt",
+      "value": [0.01]
+    }
+  }
+}
+```
+
+**Filter by token count range:**
+```json
+{
+  "filters": {
+    "total_tokens": {
+      "operator": "gte",
+      "value": [100]
+    }
+  }
+}
+```
+
+### String Filters
+
+**Filter by customer identifier:**
+```json
+{
+  "filters": {
+    "customer_identifier": {
+      "operator": "",
+      "value": ["user@example.com"]
+    }
+  }
+}
+```
+
+**Filter by workflow name (prefix):**
+```json
+{
+  "filters": {
+    "workflow_name": {
+      "operator": "startswith",
+      "value": ["chat_"]
+    }
+  }
+}
+```
+
+### Multiple Filters
+
+**Combine multiple conditions:**
+```json
+{
+  "filters": {
+    "cost": {
+      "operator": "gte",
+      "value": [0.01]
+    },
+    "environment": {
+      "operator": "",
+      "value": ["production"]
+    },
+    "error_count": {
+      "operator": "",
+      "value": [0]
+    }
+  }
+}
+```
+
+### Metadata Filters
+
+To filter custom properties in metadata, prefix the field with `metadata__`:
+
+```json
+{
+  "filters": {
+    "metadata__user_id": {
+      "operator": "",
+      "value": ["user123"]
+    }
+  }
+}
+```
+
+## Query Parameters
+
+Most endpoints also support these query parameters:
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `start_time` | ISO 8601 datetime | 1 hour ago | Start of time range |
+| `end_time` | ISO 8601 datetime | Current time | End of time range |
+| `page` | integer | 1 | Page number |
+| `page_size` | integer | 50 | Results per page (max 1000) |
+| `sort_by` | string | `-timestamp` | Field to sort by (prefix `-` for descending) |
+| `environment` | string | All | Filter by environment |
+
+## Complete Example
+
+```bash
+curl -X POST "https://api.keywordsai.co/api/traces/list/?start_time=2024-01-15T00:00:00Z&end_time=2024-01-15T23:59:59Z&page_size=20" \
+  -H "Authorization: Bearer <your-api-key>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filters": {
+      "total_cost": {
+        "operator": "gte",
+        "value": [0.01]
+      },
+      "environment": {
+        "operator": "",
+        "value": ["production"]
+      }
+    }
+  }'
+```

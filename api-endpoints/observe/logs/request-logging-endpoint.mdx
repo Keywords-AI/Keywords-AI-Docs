@@ -22,7 +22,7 @@ This guide shows you how to log any type of LLM request to Keywords AI using the
 3. Keywords AI automatically extracts type-specific fields for backward compatibility
 4. Your data is stored efficiently and retrieved with both universal and type-specific fields
 
-For complete `log_type` specifications, see [log types](https://localhost:3001/get-started/observability_data_model#log-types).
+For complete `log_type` specifications, see [log types](/get-started/observability_data_model#log-types).
 
 <Note>
 ### Legacy field support
@@ -114,7 +114,7 @@ Type of span being logged. Determines how `input` and `output` are parsed.
 <Accordion title="Default Behavior">
 If not specified, defaults to `"chat"`. For chat types, the system automatically extracts `prompt_messages` and `completion_message` from `input` and `output` for backward compatibility.
 
-For complete specifications of each type, see [log types](https://localhost:3001/get-started/observability_data_model#log-types).
+For complete specifications of each type, see [log types](/get-started/observability_data_model#log-types).
 </Accordion>
 </ParamField>
 
@@ -222,7 +222,7 @@ You can add any key-value pair to this metadata field for your reference. Useful
 </ParamField>
 
 <ParamField body="customer_identifier" type="string">
-An identifier for the customer that invoked this request. Helps with visualizing user activities. See [customer identifier details](/features/generation/customer-identifier).
+An identifier for the customer that invoked this request. Helps with visualizing user activities. See [customer identifier details](/documentation/products/users/customer-identifier).
 
 <Accordion title="Example">
 ```json
@@ -440,7 +440,7 @@ Whether the response was streamed.
 </ParamField>
 
 <ParamField body="prompt_id" type="string">
-ID of the prompt template used. See [Prompts documentation](/features/prompt/deploy-a-prompt#1-find-the-prompt-id).
+ID of the prompt template used. See [Prompts documentation](/documentation/products/prompt_management/creating_prompts/create_prompt).
 </ParamField>
 
 <ParamField body="prompt_name" type="string">
