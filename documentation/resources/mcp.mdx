@@ -12,41 +12,12 @@ Keywords AI provides an MCP server that gives your AI tools direct access to you
 ## Installation
 
 <Tabs>
-  <Tab title="Public HTTP">
-    Connect to Keywords AI's hosted MCP server. Each user provides their own API key via Authorization header.
+  <Tab title="Public HTTP (Recommended)">
+    Connect to Keywords AI's hosted MCP server. The simplest setup - no installation required.
 
     <Steps>
-      <Step title="Configure your AI tool">
-        ```json
-        {
-          "mcpServers": {
-            "keywords-ai": {
-              "url": "https://api.keywordsai.co/mcp",
-              "headers": {
-                "Authorization": "Bearer your_keywords_ai_api_key"
-              }
-            }
-          }
-        }
-        ```
-      </Step>
-      <Step title="Restart your AI tool">
-        Restart Cursor or Claude Desktop to load the MCP server.
-      </Step>
-    </Steps>
-  </Tab>
-
-  <Tab title="Local Stdio">
-    Run the MCP server locally via stdio - the simplest setup for personal development.
-
-    <Steps>
-      <Step title="Clone and build the project">
-        ```bash
-        git clone https://github.com/Keywords-AI/keywordsai-mcp.git
-        cd keywordsai-mcp
-        npm install
-        npm run build
-        ```
+      <Step title="Get your API key">
+        Get your Keywords AI API key from [platform.keywordsai.co](https://platform.keywordsai.co/platform/api/api-keys).
       </Step>
       <Step title="Configure your AI tool">
         Add to your MCP configuration file:
@@ -56,8 +27,83 @@ Keywords AI provides an MCP server that gives your AI tools direct access to you
         {
           "mcpServers": {
             "keywords-ai": {
+              "url": "https://mcp.keywordsai.co/api/mcp",
+              "headers": {
+                "Authorization": "Bearer your_keywords_ai_api_key"
+              }
+            }
+          }
+        }
+        ```
+
+        ```json Claude Desktop (macOS)
+        // ~/Library/Application Support/Claude/claude_desktop_config.json
+        {
+          "mcpServers": {
+            "keywords-ai": {
+              "url": "https://mcp.keywordsai.co/api/mcp",
+              "headers": {
+                "Authorization": "Bearer your_keywords_ai_api_key"
+              }
+            }
+          }
+        }
+        ```
+
+        ```json Claude Desktop (Windows)
+        // %APPDATA%\Claude\claude_desktop_config.json
+        {
+          "mcpServers": {
+            "keywords-ai": {
+              "url": "https://mcp.keywordsai.co/api/mcp",
+              "headers": {
+                "Authorization": "Bearer your_keywords_ai_api_key"
+              }
+            }
+          }
+        }
+        ```
+        </CodeGroup>
+      </Step>
+      <Step title="Restart your AI tool">
+        Restart Cursor or Claude Desktop to load the MCP server.
+      </Step>
+    </Steps>
+
+    <Tip>
+    This is the recommended setup for most users. No installation, no maintenance - just configure and go.
+    </Tip>
+  </Tab>
+
+  <Tab title="Local Stdio">
+    Run the MCP server locally via stdio - for personal development or offline use.
+
+    <Steps>
+      <Step title="Prerequisites">
+        - [Node.js](https://nodejs.org/) v18 or higher
+        - [Git](https://git-scm.com/)
+      </Step>
+      <Step title="Clone and build the project">
+        ```bash
+        git clone https://github.com/Keywords-AI/keywordsai-mcp.git
+        cd keywordsai-mcp
+        npm install
+        npm run build
+        ```
+      </Step>
+      <Step title="Get your API key">
+        Get your Keywords AI API key from [platform.keywordsai.co](https://platform.keywordsai.co/platform/api/api-keys).
+      </Step>
+      <Step title="Configure your AI tool">
+        Add to your MCP configuration file. **Important:** Replace the path with your actual installation path.
+        
+        <CodeGroup>
+        ```json Cursor (~/.cursor/mcp.json)
+        {
+          "mcpServers": {
+            "keywords-ai": {
               "command": "node",
-              "args": ["/path/to/keywordsai-mcp/dist/lib/index.js"],
+              "args": ["/Users/yourname/keywordsai-mcp/dist/lib/index.js"],
               "env": {
                 "KEYWORDS_API_KEY": "your_keywords_ai_api_key"
               }
@@ -72,7 +118,7 @@ Keywords AI provides an MCP server that gives your AI tools direct access to you
           "mcpServers": {
             "keywords-ai": {
               "command": "node",
-              "args": ["/path/to/keywordsai-mcp/dist/lib/index.js"],
+              "args": ["/Users/yourname/keywordsai-mcp/dist/lib/index.js"],
               "env": {
                 "KEYWORDS_API_KEY": "your_keywords_ai_api_key"
               }
@@ -87,7 +133,7 @@ Keywords AI provides an MCP server that gives your AI tools direct access to you
           "mcpServers": {
             "keywords-ai": {
               "command": "node",
-              "args": ["C:/path/to/keywordsai-mcp/dist/lib/index.js"],
+              "args": ["C:/Users/yourname/keywordsai-mcp/dist/lib/index.js"],
               "env": {
                 "KEYWORDS_API_KEY": "your_keywords_ai_api_key"
               }
@@ -101,22 +147,36 @@ Keywords AI provides an MCP server that gives your AI tools direct access to you
         Restart Cursor or Claude Desktop to load the MCP server.
       </Step>
     </Steps>
+
+    <Note>
+    After updating the code, run `npm run build` again and restart your AI tool.
+    </Note>
   </Tab>
 
-  <Tab title="Private HTTP">
-    Deploy your own instance to Vercel with your API key stored as an environment variable. No client-side key needed.
+  <Tab title="Private HTTP (Teams)">
+    Deploy your own instance to Vercel with your API key stored as an environment variable. Perfect for teams - no client-side keys needed.
 
     <Steps>
       <Step title="Deploy to Vercel">
-        [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Keywords-AI/keywordsai-mcp)
+        Click to deploy with one click:
         
-        Or deploy manually from the [GitHub repository](https://github.com/Keywords-AI/keywordsai-mcp).
+        [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Keywords-AI/keywordsai-mcp&env=KEYWORDS_API_KEY&envDescription=Your%20Keywords%20AI%20API%20key&envLink=https://platform.keywordsai.co/platform/api/api-keys)
+        
+        Or deploy manually:
+        ```bash
+        git clone https://github.com/Keywords-AI/keywordsai-mcp.git
+        cd keywordsai-mcp
+        vercel deploy --prod
+        ```
       </Step>
       <Step title="Set environment variable">
-        In Vercel Dashboard → Settings → Environment Variables:
+        In Vercel Dashboard → Your Project → Settings → Environment Variables:
         - Add `KEYWORDS_API_KEY` = `your_keywords_ai_api_key`
+        - Redeploy for changes to take effect
       </Step>
       <Step title="Configure your AI tool">
+        Share this config with your team (replace with your Vercel URL):
+        
         ```json
         {
           "mcpServers": {
@@ -129,9 +189,9 @@ Keywords AI provides an MCP server that gives your AI tools direct access to you
       </Step>
     </Steps>
 
-    <Note>
+    <Tip>
     This mode is ideal for teams - deploy once, and everyone can use the same URL without exposing API keys in their local config.
-    </Note>
+    </Tip>
   </Tab>
 </Tabs>
 
@@ -141,11 +201,62 @@ Keywords AI provides an MCP server that gives your AI tools direct access to you
 
 | Mode | API Key Location | Best For |
 |------|------------------|----------|
-| **Public HTTP** | Authorization header | Multi-user, each user's own key |
-| **Local Stdio** | Environment variable in config | Personal development |
-| **Private HTTP** | Authorization header or Vercel environment variable | Team sharing, key hidden |
+| **Public HTTP** | `Authorization` header | Individual users, quick setup |
+| **Local Stdio** | `KEYWORDS_API_KEY` env var | Personal development, offline use |
+| **Private HTTP** | Vercel environment variable | Teams, shared access |
 
 Get your Keywords AI API key from [platform.keywordsai.co](https://platform.keywordsai.co/platform/api/api-keys).
+
+---
+
+## Enterprise configuration
+
+For enterprise users with a custom API endpoint (e.g., `endpoint.keywordsai.co`), you can override the default API base URL.
+
+<Tabs>
+  <Tab title="HTTP Mode">
+    Add the `KEYWORDS_API_BASE_URL` header:
+    
+    ```json
+    {
+      "mcpServers": {
+        "keywords-ai": {
+          "url": "https://mcp.keywordsai.co/api/mcp",
+          "headers": {
+            "Authorization": "Bearer your_keywords_ai_api_key",
+            "KEYWORDS_API_BASE_URL": "https://endpoint.keywordsai.co/api"
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+  <Tab title="Stdio Mode">
+    Add the `KEYWORDS_API_BASE_URL` environment variable:
+    
+    ```json
+    {
+      "mcpServers": {
+        "keywords-ai": {
+          "command": "node",
+          "args": ["/path/to/keywordsai-mcp/dist/lib/index.js"],
+          "env": {
+            "KEYWORDS_API_KEY": "your_keywords_ai_api_key",
+            "KEYWORDS_API_BASE_URL": "https://endpoint.keywordsai.co/api"
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+**Supported endpoints:**
+| Endpoint | URL |
+|----------|-----|
+| Default (Cloud) | `https://api.keywordsai.co/api` |
+| Enterprise | `https://endpoint.keywordsai.co/api` |
+| Local development | `http://localhost:8000/api` |
 
 ---
 
@@ -202,6 +313,31 @@ Once connected, your AI tools have access to the following Keywords AI features.
 - "Show me all my prompts"
 - "Get the latest version of my customer-support prompt"
 - "What are the different versions of prompt xyz?"
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="MCP server not showing in Cursor/Claude Desktop">
+    1. Verify your config file path is correct
+    2. Check JSON syntax (use a JSON validator)
+    3. Restart your AI tool completely (not just reload)
+    4. For stdio mode: ensure `npm run build` completed successfully
+  </Accordion>
+  <Accordion title="Authentication errors">
+    1. Verify your API key is correct
+    2. For HTTP mode: ensure header is `Authorization: Bearer YOUR_KEY` (not just the key)
+    3. For stdio mode: check the `KEYWORDS_API_KEY` env var is set correctly
+  </Accordion>
+  <Accordion title="Connection timeout or errors">
+    1. Check your internet connection
+    2. For enterprise: verify `KEYWORDS_API_BASE_URL` is correct
+    3. For private HTTP: ensure Vercel deployment is active
+  </Accordion>
+</AccordionGroup>
+
+---
 
 ## Source code
 
