@@ -536,12 +536,6 @@
                   "/api-endpoints/evaluate/log-scores/update",
                   "/api-endpoints/evaluate/log-scores/delete"
                 ]
-              },
-              {
-                "group": "Async jobs",
-                "pages": [
-                  "/api-endpoints/evaluate/async-jobs/evaluations"
-                ]
               }
             ]
           },
