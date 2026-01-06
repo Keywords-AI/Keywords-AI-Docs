@@ -1,143 +1,103 @@
 ---
-title: Google GenAI
-description: "Use Google GenAI with Keywords AI"
+title: Google GenAI SDK
+description: "Use Google GenAI SDK with Keywords AI"
 ---
 
-<Note> This integration is for the **Keywords AI gateway**. </Note>
-import { Steps } from 'nextra/components'
+## What is Google GenAI SDK?
 
-## 1. Overview
-
-Keywords AI is compatible with the official Google GenAI SDK, enabling you to use Google's models through our gateway.
-
-This guide will walk you through setting up the Google GenAI SDK to work with Keywords AI.
-
-## 2. Quickstart
-
-<Steps>
-
-### Step 1: Install the SDK
-
-First, install the official Google GenAI SDK for TypeScript/JavaScript.
-
-<CodeGroup>
-```bash npm
-npm install @google/generative-ai
-```
-```bash yarn
-yarn add @google/generative-ai
-```
-```bash pnpm
-pnpm add @google/generative-ai
-```
-</CodeGroup>
-
-### Step 2: Initialize the client
-
-Next, initialize the `GoogleGenAI` client, making sure to set the `apiKey` to your Keywords AI key and the `baseUrl` within `httpOptions` to the Keywords AI endpoint for Google.
-
-<CodeGroup>
-
-```typescript TypeScript
-import { GoogleGenAI } from "@google/genai";
-
-const genAI = new GoogleGenAI({
-  apiKey: process.env.KEYWORDSAI_API_KEY, // Your Keywords AI API key
-  httpOptions: {
-    baseUrl: "https://api.keywordsai.co/api/google",
-  },
-});
-```
-
-</CodeGroup>
+Keywords AI is compatible with the official Google GenAI SDK, enabling you to use Google's Gemini models through our gateway with full observability, monitoring, and advanced features.
 
 <Note>
-  The `baseUrl` can be either `https://api.keywordsai.co/api/google` or `https://endpoint.keywordsai.co/api/google`.
+This integration is for the **Keywords AI gateway**.
 </Note>
 
-</Steps>
+## Resources
 
-## 3. Make Your First Request
+- [Python Example](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/python/gemini/gemini_sdk_example.py)
+- [TypeScript Example](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/typescript/gemini_sdk_example.ts)
 
-Now you can use the `genAI` instance to make requests to Google's models.
+## Steps to use
 
-<CodeGroup>
+<Tabs>
+<Tab title="Python">
+<Steps>
+<Step title="Step 1: Install the SDK">
+Install the official Google GenAI SDK for Python.
 
-```typescript TypeScript
-import { GoogleGenAI } from "@google/genai";
+```bash
+pip install google-genai
+```
+</Step>
 
-const genAI = new GoogleGenAI({
-  apiKey: process.env.KEYWORDSAI_API_KEY, // Your Keywords AI API key
-  httpOptions: {
-    baseUrl: "https://api.keywordsai.co/api/google",
-  },
-});
+<Step title="Step 2: Initialize the client">
+Initialize the client with your Keywords AI API key and set the base URL to Keywords AI's endpoint.
 
-async function run() {
-  const result = await genAI.models.generateContent({
-    model: "gemini-1.5-flash",
-    contents: [{ role: "user", parts: [{ text: "Hello, world!" }] }]
-  });
+```python
+from google import genai
+import os
 
-  console.log(result);
-}
-
-run();
+client = genai.Client(
+    api_key=os.environ.get("KEYWORDSAI_API_KEY"),
+    http_options={
+        "base_url": "https://api.keywordsai.co/api/google/gemini",
+    }
+)
 ```
 
-</CodeGroup>
+<Note>
+The `base_url` can be either `https://api.keywordsai.co/api/google/gemini` or `https://endpoint.keywordsai.co/api/google/gemini`.
+</Note>
+</Step>
 
-## 4. Switch models
+<Step title="Step 3: Make your first request">
+Now you can use the client to make requests to Google's models.
 
-To switch between different Google models, simply change the `model` parameter in your request.
+```python
+response = client.models.generate_content(
+    model="gemini-2.5-flash",
+    contents="Hello, world!",
+)
 
-<CodeGroup>
-
-```typescript TypeScript
-const result = await genAI.models.generateContent({
-  model: "gemini-1.5-pro-latest", // Switched to a different model
-  contents: [{ role: "user", parts: [{ text: "Tell me a joke." }] }]
-});
+print(response.text)
 ```
+</Step>
 
-</CodeGroup>
+<Step title="Step 4: Switch models">
+To switch between different Google models, simply change the `model` parameter.
 
-## 5. Supported parameters
-
-Keywords AI supports passing through native Google GenAI parameters and adding our own for enhanced functionality.
-
-### Keywords AI parameters
-
-To pass Keywords AI-specific parameters, you need to include them in the `extra_body` of your request. This is not natively supported by the Google GenAI SDK, so you may need to make a custom request or use a different library that allows modifying the request body.
-
-### Google GenAI parameters
-
-All standard Google GenAI parameters are supported and can be passed directly in the `generateContent` call.
-
-<CodeGroup>
-
-```typescript TypeScript
-const result = await genAI.models.generateContent({
-  model: "gemini-1.5-flash",
-  contents: [{ role: "user", parts: [{ text: "What is the capital of France?" }] }],
-  // Google GenAI parameters
-  generationConfig: {
-    temperature: 0.9,
-    topK: 1,
-    topP: 1,
-    maxOutputTokens: 2048,
-  },
-});
+```python
+response = client.models.generate_content(
+    model="gemini-2.0-flash-exp",
+    contents="Tell me a joke.",
+)
 ```
+</Step>
 
-</CodeGroup>
+<Step title="Step 5: Configure parameters">
+Use `GenerateContentConfig` to control model behavior with various parameters.
 
-## 6. Comprehensive Example
+```python
+from google.genai import types
 
-Here are comprehensive examples showcasing various parameters, including system instructions, safety settings, and tools.
+config = types.GenerateContentConfig(
+    temperature=0.9,
+    top_k=1,
+    top_p=1,
+    max_output_tokens=2048,
+)
 
-<CodeGroup>
-```python Python
+response = client.models.generate_content(
+    model="gemini-2.5-flash",
+    contents="What is the capital of France?",
+    config=config,
+)
+```
+</Step>
+
+<Step title="Step 6: Advanced configuration">
+Here's a comprehensive example showcasing various parameters, including system instructions, safety settings, and tools.
+
+```python
 from google import genai
 from google.genai import types
 import os
@@ -160,19 +120,29 @@ config = types.GenerateContentConfig(
     system_instruction="You are a helpful assistant that provides accurate, concise information about sports events.",
     
     # Sampling parameters
-    temperature=0.7,
-    top_p=0.95,
-    top_k=40,
+    temperature=0.7,  # Controls randomness (0.0-1.0). Lower = more focused, Higher = more creative
+    top_p=0.95,  # Nucleus sampling. Tokens with cumulative probability up to this value are considered
+    top_k=40,  # Top-k sampling. Considers this many top tokens at each step
     
     # Output controls
-    max_output_tokens=1024,
-    stop_sequences=["\n\n\n"],
+    max_output_tokens=1024,  # Maximum number of tokens in the response
+    stop_sequences=["\n\n\n"],  # Sequences that will stop generation
     
     # Tools and function calling
-    tools=[grounding_tool],
+    tools=[grounding_tool],  # Enable Google Search grounding
     
     # Thinking configuration (for models that support it)
-    thinking_config=types.ThinkingConfig(thinking_budget=0),
+    thinking_config=types.ThinkingConfig(thinking_budget=0),  # Disables thinking mode
+    
+    # Response format options
+    # response_mime_type="application/json",  # Uncomment for JSON output
+    # response_schema=types.Schema(  # Uncomment to enforce structured output
+    #     type=types.Type.OBJECT,
+    #     properties={
+    #         "winner": types.Schema(type=types.Type.STRING),
+    #         "year": types.Schema(type=types.Type.INTEGER)
+    #     }
+    # ),
     
     # Safety settings
     safety_settings=[
@@ -185,6 +155,17 @@ config = types.GenerateContentConfig(
             threshold=types.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE
         )
     ],
+    
+    # Diversity controls
+    presence_penalty=0.0,  # Penalize tokens based on presence in text (-2.0 to 2.0)
+    frequency_penalty=0.0,  # Penalize tokens based on frequency in text (-2.0 to 2.0)
+    
+    # Reproducibility
+    # seed=42,  # Uncomment to make responses more deterministic
+    
+    # Logprobs (for token analysis)
+    # response_logprobs=True,  # Uncomment to get log probabilities
+    # logprobs=5,  # Number of top candidate tokens to return logprobs for
 )
 
 response = client.models.generate_content(
@@ -195,8 +176,88 @@ response = client.models.generate_content(
 
 print(response.text)
 ```
+</Step>
+</Steps>
+</Tab>
 
-```typescript TypeScript
+<Tab title="TypeScript">
+<Steps>
+<Step title="Step 1: Install the SDK">
+Install the official Google GenAI SDK for TypeScript.
+
+```bash
+npm install @google/genai
+```
+</Step>
+
+<Step title="Step 2: Initialize the client">
+Initialize the client with your Keywords AI API key and set the base URL to Keywords AI's endpoint.
+
+```typescript
+import { GoogleGenAI } from "@google/genai";
+
+const genAI = new GoogleGenAI({
+  apiKey: process.env.KEYWORDSAI_API_KEY,
+  httpOptions: {
+    baseUrl: "https://api.keywordsai.co/api/google/gemini",
+  },
+});
+```
+
+<Note>
+The `baseUrl` can be either `https://api.keywordsai.co/api/google/gemini` or `https://endpoint.keywordsai.co/api/google/gemini`.
+</Note>
+</Step>
+
+<Step title="Step 3: Make your first request">
+Now you can use the client to make requests to Google's models.
+
+```typescript
+async function run() {
+  const result = await genAI.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: [{ role: "user", parts: [{ text: "Hello, world!" }] }]
+  });
+
+  console.log(result.text);
+}
+
+run();
+```
+</Step>
+
+<Step title="Step 4: Switch models">
+To switch between different Google models, simply change the `model` parameter.
+
+```typescript
+const result = await genAI.models.generateContent({
+  model: "gemini-2.0-flash-exp",
+  contents: [{ role: "user", parts: [{ text: "Tell me a joke." }] }]
+});
+```
+</Step>
+
+<Step title="Step 5: Configure parameters">
+Use the `config` parameter to control model behavior with various parameters.
+
+```typescript
+const result = await genAI.models.generateContent({
+  model: "gemini-2.5-flash",
+  contents: [{ role: "user", parts: [{ text: "What is the capital of France?" }] }],
+  config: {
+    temperature: 0.9,
+    topK: 1,
+    topP: 1,
+    maxOutputTokens: 2048,
+  },
+});
+```
+</Step>
+
+<Step title="Step 6: Advanced configuration">
+Here's a comprehensive example showcasing various parameters, including system instructions, safety settings, and tools.
+
+```typescript
 import { GoogleGenAI } from "@google/genai";
 
 const genAI = new GoogleGenAI({
@@ -221,25 +282,35 @@ async function run() {
       systemInstruction: "You are a helpful assistant that provides accurate, concise information about sports events.",
       
       // Sampling parameters
-      temperature: 0.7, 
-      topP: 0.95, 
-      topK: 40, 
+      temperature: 0.7,  // Controls randomness (0.0-1.0). Lower = more focused, Higher = more creative
+      topP: 0.95,  // Nucleus sampling. Tokens with cumulative probability up to this value are considered
+      topK: 40,  // Top-k sampling. Considers this many top tokens at each step
       
       // Output controls
-      maxOutputTokens: 1024, 
-      stopSequences: ["\n\n\n"], 
+      maxOutputTokens: 1024,  // Maximum number of tokens in the response
+      stopSequences: ["\n\n\n"],  // Sequences that will stop generation
       
       // Tools and function calling
       tools: [
         {
-          googleSearch: {} // Enable Google Search grounding
+          googleSearch: {}  // Enable Google Search grounding
         }
       ],
       
       // Thinking configuration (for models that support it)
       thinkingConfig: {
-        thinkingBudget: 0 
+        thinkingBudget: 0  // Disables thinking mode
       },
+      
+      // Response format options
+      // responseMimeType: "application/json",  // Uncomment for JSON output
+      // responseSchema: {  // Uncomment to enforce structured output
+      //   type: "OBJECT",
+      //   properties: {
+      //     winner: { type: "STRING" },
+      //     year: { type: "INTEGER" }
+      //   }
+      // },
       
       // Safety settings
       safetySettings: [
@@ -252,6 +323,17 @@ async function run() {
           threshold: "BLOCK_MEDIUM_AND_ABOVE"
         }
       ],
+      
+      // Diversity controls
+      presencePenalty: 0.0,  // Penalize tokens based on presence in text (-2.0 to 2.0)
+      frequencyPenalty: 0.0,  // Penalize tokens based on frequency in text (-2.0 to 2.0)
+      
+      // Reproducibility
+      // seed: 42,  // Uncomment to make responses more deterministic
+      
+      // Logprobs (for token analysis)
+      // responseLogprobs: true,  // Uncomment to get log probabilities
+      // logprobs: 5,  // Number of top candidate tokens to return logprobs for
     },
   });
 
@@ -260,8 +342,59 @@ async function run() {
 
 run();
 ```
-</CodeGroup>
+</Step>
+</Steps>
+</Tab>
+</Tabs>
 
-You can find the full source code for these examples on GitHub:
-- [Python Example](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/python/gemini/gemini_sdk_example.py)
-- [TypeScript Example](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/typescript/gemini_sdk_example.ts)
+## Configuration Parameters
+
+The `GenerateContentConfig` supports a wide range of parameters to control model behavior:
+
+### System Instructions
+- **`system_instruction`**: Sets the role and behavior guidelines for the model. This helps maintain consistent personality and response style throughout the conversation.
+
+### Sampling Parameters
+- **`temperature`** (0.0-1.0): Controls randomness in responses. Lower values (0.0-0.3) make output more focused and deterministic, while higher values (0.7-1.0) increase creativity and variation.
+- **`top_p`** (0.0-1.0): Nucleus sampling parameter. The model considers tokens with cumulative probability up to this value. Lower values make responses more focused.
+- **`top_k`**: Limits the number of highest probability tokens considered at each step. Helps balance between creativity and coherence.
+
+### Output Controls
+- **`max_output_tokens`**: Maximum number of tokens in the generated response. Helps control response length and costs.
+- **`stop_sequences`**: Array of strings that will stop generation when encountered. Useful for controlling output format.
+
+### Tools and Grounding
+- **`tools`**: Array of tools the model can use, such as Google Search for grounding responses in real-time information.
+- **`google_search`**: Enables the model to search the web for up-to-date information before generating responses.
+
+### Thinking Configuration
+- **`thinking_config`**: Controls the model's internal reasoning process for models that support thinking mode.
+- **`thinking_budget`**: Amount of tokens allocated for internal reasoning. Set to 0 to disable thinking mode.
+
+### Structured Output
+- **`response_mime_type`**: Specify the output format (e.g., "application/json" for JSON responses).
+- **`response_schema`**: Define the exact structure of JSON output using a schema. Ensures responses follow a specific format.
+
+### Safety Settings
+- **`safety_settings`**: Array of safety configurations to filter harmful content across different categories:
+  - `HARM_CATEGORY_HATE_SPEECH`: Hate speech and discriminatory content
+  - `HARM_CATEGORY_DANGEROUS_CONTENT`: Dangerous or harmful instructions
+  - `HARM_CATEGORY_HARASSMENT`: Harassment and bullying
+  - `HARM_CATEGORY_SEXUALLY_EXPLICIT`: Sexually explicit content
+
+Threshold options:
+  - `BLOCK_NONE`: Don't block any content
+  - `BLOCK_ONLY_HIGH`: Block only high-severity content
+  - `BLOCK_MEDIUM_AND_ABOVE`: Block medium and high-severity content
+  - `BLOCK_LOW_AND_ABOVE`: Block low, medium, and high-severity content
+
+### Diversity Controls
+- **`presence_penalty`** (-2.0 to 2.0): Penalizes tokens based on whether they appear in the text. Positive values encourage the model to talk about new topics.
+- **`frequency_penalty`** (-2.0 to 2.0): Penalizes tokens based on their frequency in the text. Positive values reduce repetition.
+
+### Reproducibility
+- **`seed`**: Integer value for deterministic output. Using the same seed with identical inputs will produce similar outputs (not guaranteed to be exactly identical due to model updates).
+
+### Token Analysis
+- **`response_logprobs`**: When enabled, returns log probabilities for generated tokens. Useful for analyzing model confidence.
+- **`logprobs`**: Number of top candidate tokens to return log probabilities for at each position.
