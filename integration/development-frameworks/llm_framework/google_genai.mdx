@@ -1,11 +1,11 @@
 ---
-title: Google GenAI SDK
-description: "Use Google GenAI SDK with Keywords AI"
+title: Google Gen AI SDK
+description: "Use Google Gen AI SDK with Keywords AI"
 ---
 
-## What is Google GenAI SDK?
+## What is Google Gen AI SDK?
 
-Keywords AI is compatible with the official Google GenAI SDK, enabling you to use Google's Gemini models through our gateway with full observability, monitoring, and advanced features.
+Keywords AI is compatible with the official Google Gen AI SDK, enabling you to use Google's Gemini models through our gateway with full observability, monitoring, and advanced features.
 
 <Note>
 This integration is for the **Keywords AI gateway**.
@@ -22,10 +22,10 @@ This integration is for the **Keywords AI gateway**.
 <Tab title="Python">
 <Steps>
 <Step title="Step 1: Install the SDK">
-Install the official Google GenAI SDK for Python.
+Install the official Google Gen AI SDK for Python.
 
 ```bash
-pip install google-genai
+pip install google-Gen AI
 ```
 </Step>
 
@@ -33,10 +33,10 @@ pip install google-genai
 Initialize the client with your Keywords AI API key and set the base URL to Keywords AI's endpoint.
 
 ```python
-from google import genai
+from google import Gen AI
 import os
 
-client = genai.Client(
+client = Gen AI.Client(
     api_key=os.environ.get("KEYWORDSAI_API_KEY"),
     http_options={
         "base_url": "https://api.keywordsai.co/api/google/gemini",
@@ -77,7 +77,7 @@ response = client.models.generate_content(
 Use `GenerateContentConfig` to control model behavior with various parameters.
 
 ```python
-from google.genai import types
+from google.Gen AI import types
 
 config = types.GenerateContentConfig(
     temperature=0.9,
@@ -98,11 +98,11 @@ response = client.models.generate_content(
 Here's a comprehensive example showcasing various parameters, including system instructions, safety settings, and tools.
 
 ```python
-from google import genai
-from google.genai import types
+from google import Gen AI
+from google.Gen AI import types
 import os
 
-client = genai.Client(
+client = Gen AI.Client(
     api_key=os.environ.get("KEYWORDSAI_API_KEY"),
     http_options={
         "base_url": "https://api.keywordsai.co/api/google/gemini",
@@ -183,10 +183,10 @@ print(response.text)
 <Tab title="TypeScript">
 <Steps>
 <Step title="Step 1: Install the SDK">
-Install the official Google GenAI SDK for TypeScript.
+Install the official Google Gen AI SDK for TypeScript.
 
 ```bash
-npm install @google/genai
+npm install @google/Gen AI
 ```
 </Step>
 
@@ -194,9 +194,9 @@ npm install @google/genai
 Initialize the client with your Keywords AI API key and set the base URL to Keywords AI's endpoint.
 
 ```typescript
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGen AI } from "@google/Gen AI";
 
-const genAI = new GoogleGenAI({
+const Gen AI = new GoogleGen AI({
   apiKey: process.env.KEYWORDSAI_API_KEY,
   httpOptions: {
     baseUrl: "https://api.keywordsai.co/api/google/gemini",
@@ -214,7 +214,7 @@ Now you can use the client to make requests to Google's models.
 
 ```typescript
 async function run() {
-  const result = await genAI.models.generateContent({
+  const result = await Gen AI.models.generateContent({
     model: "gemini-2.5-flash",
     contents: [{ role: "user", parts: [{ text: "Hello, world!" }] }]
   });
@@ -230,7 +230,7 @@ run();
 To switch between different Google models, simply change the `model` parameter.
 
 ```typescript
-const result = await genAI.models.generateContent({
+const result = await Gen AI.models.generateContent({
   model: "gemini-2.0-flash-exp",
   contents: [{ role: "user", parts: [{ text: "Tell me a joke." }] }]
 });
@@ -241,7 +241,7 @@ const result = await genAI.models.generateContent({
 Use the `config` parameter to control model behavior with various parameters.
 
 ```typescript
-const result = await genAI.models.generateContent({
+const result = await Gen AI.models.generateContent({
   model: "gemini-2.5-flash",
   contents: [{ role: "user", parts: [{ text: "What is the capital of France?" }] }],
   config: {
@@ -258,9 +258,9 @@ const result = await genAI.models.generateContent({
 Here's a comprehensive example showcasing various parameters, including system instructions, safety settings, and tools.
 
 ```typescript
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGen AI } from "@google/Gen AI";
 
-const genAI = new GoogleGenAI({
+const Gen AI = new GoogleGen AI({
   apiKey: process.env.KEYWORDSAI_API_KEY,
   httpOptions: {
     baseUrl: "https://api.keywordsai.co/api/google/gemini",
@@ -269,7 +269,7 @@ const genAI = new GoogleGenAI({
 
 // Example: Comprehensive GenerateContentConfig showcasing various parameters
 async function run() {
-  const response = await genAI.models.generateContent({
+  const response = await Gen AI.models.generateContent({
     model: "gemini-2.5-flash",
     contents: [
       { 
