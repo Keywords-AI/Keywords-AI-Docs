@@ -28,23 +28,23 @@ After you create an account on [Keywords AI](https://platform.keywordsai.co), yo
 <CodeGroup>
 ```python Python {22}
 import requests
+import json
 
 url = "https://api.keywordsai.co/api/request-logs/create/"
 payload = {
     "model": "gpt-4o",
-    "prompt_messages": [
+    "log_type": "chat",
+    "input": json.dumps([
         {
             "role": "user",
             "content": "How can I help a customer with a billing issue?"
         }
-    ],
-    "completion_message": {
+    ]),
+    "output": json.dumps({
         "role": "assistant",
         "content": "I'd be happy to help with billing issues. First, let me check your account details..."
-    },
-    "customer_params": {
-        "customer_identifier": "support_agent_001"
-    }
+    }),
+    "customer_identifier": "support_agent_001"
 }
 
 headers = {
@@ -64,19 +64,18 @@ const headers = {
 
 const payload = {
     model: 'gpt-4o',
-    prompt_messages: [
+    log_type: 'chat',
+    input: JSON.stringify([
         {
             role: "user",
             content: "How can I help a customer with a billing issue?"
         }
-    ],
-    completion_message: {
+    ]),
+    output: JSON.stringify({
         role: "assistant",
         content: "I'd be happy to help with billing issues. First, let me check your account details..."
-    },
-    customer_params: {
-        customer_identifier: "support_agent_001"
-    }
+    }),
+    customer_identifier: "support_agent_001"
 };
 
 fetch(url, {
@@ -96,19 +95,10 @@ curl -X POST "https://api.keywordsai.co/api/request-logs/create/" \
 -H "Authorization: Bearer YOUR_KEYWORDS_AI_API_KEY" \
 -d '{
     "model": "gpt-4o",
-    "prompt_messages": [
-        {
-            "role": "user",
-            "content": "How can I help a customer with a billing issue?"
-        }
-    ],
-    "completion_message": {
-        "role": "assistant",
-        "content": "I'd be happy to help with billing issues. First, let me check your account details..."
-    },
-    "customer_params": {
-        "customer_identifier": "support_agent_001"
-    }
+    "log_type": "chat",
+    "input": "[{\"role\":\"user\",\"content\":\"How can I help a customer with a billing issue?\"}]",
+    "output": "{\"role\":\"assistant\",\"content\":\"I'\''d be happy to help with billing issues. First, let me check your account details...\"}",
+    "customer_identifier": "support_agent_001"
 }'
 ```
 </CodeGroup>
