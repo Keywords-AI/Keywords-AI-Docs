@@ -330,6 +330,14 @@
             ]
           },
           {
+            "group": "Dev Tools",
+            "pages": [
+              "/integration/dev-tools/cursor",
+              "/integration/dev-tools/claude-code",
+              "/integration/dev-tools/linkup"
+            ]
+          },
+          {
             "group": "Memory",
             "pages": [
               "/integration/development-frameworks/mem0",
@@ -340,7 +348,6 @@
             "group": "Others",
             "pages": [
               "/integration/providers/assemblyai",
-              "/integration/dev-tools/linkup",
               "/integration/development-frameworks/baml",
               "/integration/analytics/posthog"
             ]
