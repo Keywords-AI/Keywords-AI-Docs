@@ -94,12 +94,26 @@ A log represents a single LLM request and contains all the information about tha
 </Accordion>
 
 <Accordion title="Input and Output">
-- input — Raw request input (e.g., prompt or structured messages)
-- output — Raw model output
-- prompt_messages — Messages sent to the model
-- completion_message — Final assistant message from the model
+- input — Universal input field containing JSON-serialized request data
+- output — Universal output field containing JSON-serialized response data
+- prompt_messages — (Legacy) Messages sent to the model (extracted from input for chat/completion types)
+- completion_message — (Legacy) Final assistant message from the model (extracted from output for chat/completion types)
 </Accordion>
 </AccordionGroup>
+
+### Universal input/output design
+
+<Info>
+**Keywords AI uses universal `input` and `output` fields across all log types.** These fields contain JSON-serialized data that represents the complete request and response for any span type.
+</Info>
+
+The system automatically:
+- Serializes your data into `input` and `output` fields
+- Extracts type-specific fields (like `prompt_messages`, `completion_message`) for backward compatibility
+- Calculates metrics (cost, tokens, latency)
+- Validates and sanitizes all fields
+
+This design allows you to log any data structure while maintaining compatibility with legacy fields.
 
 ### Log types
 
@@ -107,13 +121,21 @@ All logs are categorized by type to help with filtering and organization:
 
 <Tabs>
 <Tab title="LLM inference">
-- **`text`**: Basic text completion requests
 - **`chat`**: Conversational chat completions (most common)
+  - Input: Array of messages `[{"role": "user", "content": "..."}]`
+  - Output: Message object `{"role": "assistant", "content": "..."}`
 - **`completion`**: Legacy completion format
 - **`response`**: Response API calls
 - **`embedding`**: Vector embedding generation
+  - Input: Text string or array of texts
+  - Output: Vector embeddings array
 - **`transcription`**: Speech-to-text conversion
+  - Input: JSON with audio metadata `{"audio_url": "...", "filename": "..."}`
+  - Output: Transcribed text string
 - **`speech`**: Text-to-speech generation
+  - Input: Text string to be spoken
+  - Output: JSON with audio metadata `{"audio_url": "...", "filename": "..."}`
+- **`text`**: (Deprecated) Use `chat` instead
 </Tab>
 
 <Tab title="Workflow & agent">
@@ -139,16 +161,27 @@ All logs are categorized by type to help with filtering and organization:
 {
   "id": "log_123",
   "log_type": "chat",
-  "prompt": "What is the capital of France?",
-  "response": "The capital of France is Paris.",
   "model": "gpt-4",
-  "tokens": {
-    "input": 8,
-    "output": 7,
-    "total": 15
+  
+  // Universal fields (always present)
+  "input": "[{\"role\":\"user\",\"content\":\"What is the capital of France?\"}]",
+  "output": "{\"role\":\"assistant\",\"content\":\"The capital of France is Paris.\"}",
+  
+  // Extracted legacy fields (for backward compatibility)
+  "prompt_messages": [
+    {"role": "user", "content": "What is the capital of France?"}
+  ],
+  "completion_message": {
+    "role": "assistant",
+    "content": "The capital of France is Paris."
   },
+  
+  // Metrics
+  "prompt_tokens": 8,
+  "completion_tokens": 7,
+  "total_tokens": 15,
   "cost": 0.0003,
-  "latency": 1200,
+  "latency": 1.2,
   "timestamp": "2024-01-15T10:30:00Z",
   "status": "success"
 }

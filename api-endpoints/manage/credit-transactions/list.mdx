@@ -1,0 +1,161 @@
+---
+title: "List credit transactions"
+api: "GET /api/credit-transactions/list/"
+description: "Returns all credit transactions for your organization, newest first"
+---
+
+Returns all credit transactions for your organization with complete audit trail history. Transactions are append-only and immutable, providing a permanent record of all credit changes.
+
+<Note>
+Credits only apply to the Chat Completions endpoint (`/api/chat/completions`). All other endpoints require customer-provided API credentials.
+</Note>
+
+## Query parameters
+
+<ParamField query="page" type="integer" default={1}>
+  Page number for pagination.
+</ParamField>
+
+<ParamField query="page_size" type="integer" default={100}>
+  Number of items per page. Maximum is 1000.
+</ParamField>
+
+## Response fields
+
+### Transaction object
+
+<ResponseField name="id" type="string">
+  Unique transaction identifier (e.g., `ct_1a2b3c4d5e6f7g8h`)
+</ResponseField>
+
+<ResponseField name="organization_subscription" type="integer">
+  Subscription ID for the organization
+</ResponseField>
+
+<ResponseField name="unique_organization_id" type="string">
+  Organization's unique identifier (UUID format)
+</ResponseField>
+
+<ResponseField name="amount" type="float">
+  Transaction amount in USD
+  - Positive: Adds credits (purchase, grant, bonus)
+  - Negative: Removes credits (adjustment, refund)
+</ResponseField>
+
+<ResponseField name="transaction_type" type="string">
+  Type of transaction:
+  - `purchase` - Customer purchased credits
+  - `grant` - Admin granted free credits
+  - `adjustment` - Admin adjustment (positive or negative)
+  - `refund` - Refund issued
+  - `bonus` - Promotional or bonus credits
+</ResponseField>
+
+<ResponseField name="created_at" type="datetime">
+  When transaction was created (ISO 8601 format)
+</ResponseField>
+
+<ResponseField name="expires_at" type="datetime">
+  Expiration date for time-limited credits (nullable)
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Human-readable description of the transaction
+</ResponseField>
+
+<ResponseField name="stripe_payment_intent_id" type="string">
+  Stripe payment intent ID (for purchases)
+</ResponseField>
+
+<ResponseField name="metadata" type="object">
+  Additional JSON metadata
+</ResponseField>
+
+## Response
+
+<ResponseExample>
+```json 200 OK
+{
+  "count": 3,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": "ct_3c4d5e6f",
+      "organization_subscription": 42,
+      "unique_organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
+      "amount": -50.0,
+      "transaction_type": "adjustment",
+      "created_at": "2025-12-27T11:00:00.000Z",
+      "expires_at": null,
+      "description": "Correcting previous grant error",
+      "stripe_payment_intent_id": "",
+      "metadata": {}
+    },
+    {
+      "id": "ct_2b3c4d5e",
+      "organization_subscription": 42,
+      "unique_organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
+      "amount": 100.0,
+      "transaction_type": "grant",
+      "created_at": "2025-12-27T10:30:00.000Z",
+      "expires_at": null,
+      "description": "Welcome bonus",
+      "stripe_payment_intent_id": "",
+      "metadata": {}
+    },
+    {
+      "id": "ct_1a2b3c4d",
+      "organization_subscription": 42,
+      "unique_organization_id": "8264a3f4-40c7-476a-97d1-96908127ea21",
+      "amount": 500.0,
+      "transaction_type": "purchase",
+      "created_at": "2025-12-27T09:00:00.000Z",
+      "expires_at": null,
+      "description": "Credit purchase",
+      "stripe_payment_intent_id": "pi_1234567890abcdef",
+      "metadata": {}
+    }
+  ]
+}
+```
+
+```json 401 Unauthorized
+{
+  "detail": "Your API key is invalid or expired"
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/credit-transactions/list/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/credit-transactions/list/';
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY'
+};
+
+const response = await fetch(url, {
+    method: 'GET',
+    headers: headers
+});
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/api/credit-transactions/list/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+</RequestExample>

@@ -1,0 +1,405 @@
+---
+title: Create datasets via API
+description: "A guided tutorial to create a dataset, add logs, and run evals—without reading the full API reference."
+---
+
+## What is a dataset?
+
+A **dataset** is a curated collection of logs (inputs/outputs + metadata) that you can evaluate, annotate, and use to power Experiments.
+
+If you want the raw endpoint specs, see the [Datasets API reference](/api-endpoints/evaluate/datasets/list). This page is the **workflow**.
+
+## When to use “datasets via API”
+
+- **Automated evaluation pipelines**: programmatically create datasets per release / per prompt version
+- **Curated test cases**: write your own input/output JSON and store it as dataset logs
+- **Sampling production logs**: build datasets from existing request logs with filters + sampling
+
+## Resources
+
+- [Datasets API reference](/api-endpoints/evaluate/datasets/list)
+- [Testsets & Experiments overview](/documentation/products/evaluation/experiments/overview)
+- [Add test cases from logs (UI workflow)](/documentation/products/evaluation/experiments/testsets)
+
+## Steps to use
+
+### Prerequisites
+
+- **API key**: `Authorization: Bearer YOUR_API_KEY`
+- **Base URL**: `https://api.keywordsai.co`
+
+<Tip>
+If you’re starting from scratch, the easiest path is: **create an empty dataset** → **POST dataset logs** (unified format).
+</Tip>
+
+<Tabs>
+<Tab title="Create manually">
+
+<Steps>
+<Step title="Step 1: Create an empty dataset">
+Create an empty dataset so you can add logs manually.
+
+Reference: [Create dataset](/api-endpoints/evaluate/datasets/create)
+
+<CodeGroup>
+
+```python Python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+
+url = "https://api.keywordsai.co/api/datasets/"
+payload = {
+  "name": "Demo Dataset (via API)",
+  "description": "Created from docs tutorial",
+  "is_empty": True
+}
+
+res = requests.post(url, headers={"Authorization": f"Bearer {API_KEY}"}, json=payload)
+res.raise_for_status()
+dataset = res.json()
+print("dataset_id:", dataset["id"])
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/datasets/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Demo Dataset (via API)",
+    "description": "Created from docs tutorial",
+    "is_empty": true
+  }'
+```
+
+</CodeGroup>
+
+You’ll use the returned `id` as `dataset_id` in the next steps.
+</Step>
+
+<Step title="Step 2: Add a dataset log (your own input/output JSON)">
+Dataset logs store end-to-end workflow I/O. Both `input` and `output` can be **any JSON**.
+
+Reference: [Create dataset log](/api-endpoints/evaluate/datasets/logs-create)
+
+<CodeGroup>
+
+```python Python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+dataset_id = "YOUR_DATASET_ID"
+
+url = f"https://api.keywordsai.co/api/datasets/{dataset_id}/logs/"
+payload = {
+  "input": {
+    "question": "What is 2+2?",
+    "context": {"source": "docs_tutorial"}
+  },
+  "output": {
+    "answer": "4",
+    "explanation": "2 + 2 = 4."
+  },
+  "metadata": {
+    "custom_identifier": "dataset-tutorial-log",
+    "model": "gpt-4o-mini"
+  },
+  "metrics": {"cost": 0.0, "latency": 0.0}
+}
+
+res = requests.post(url, headers={"Authorization": f"Bearer {API_KEY}"}, json=payload)
+res.raise_for_status()
+print(res.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/datasets/{dataset_id}/logs/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "input": {"question":"What is 2+2?","context":{"source":"docs_tutorial"}},
+    "output": {"answer":"4","explanation":"2 + 2 = 4."},
+    "metadata": {"custom_identifier":"dataset-tutorial-log","model":"gpt-4o-mini"},
+    "metrics": {"cost": 0.0, "latency": 0.0}
+  }'
+```
+
+</CodeGroup>
+</Step>
+
+<Step title="Step 3: List dataset logs to verify">
+Fetch logs inside the dataset (paginated).
+
+Reference: [List logs (GET)](/api-endpoints/evaluate/datasets/logs-list)
+
+<CodeGroup>
+
+```python Python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+dataset_id = "YOUR_DATASET_ID"
+
+url = f"https://api.keywordsai.co/api/datasets/{dataset_id}/logs/list/?page=1&page_size=10"
+res = requests.get(url, headers={"Authorization": f"Bearer {API_KEY}"})
+res.raise_for_status()
+print(res.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/api/datasets/{dataset_id}/logs/list/?page=1&page_size=10" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+</Step>
+
+<Step title="Step 4: Run an eval on the dataset">
+Run one or more evaluators over all logs in the dataset.
+
+Reference: [Run eval on dataset](/api-endpoints/evaluate/datasets/eval-reports-create)
+
+<CodeGroup>
+
+```python Python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+dataset_id = "YOUR_DATASET_ID"
+
+url = f"https://api.keywordsai.co/api/datasets/{dataset_id}/eval-reports/create"
+payload = {"evaluator_slugs": ["char_count_eval"]}
+
+res = requests.post(url, headers={"Authorization": f"Bearer {API_KEY}"}, json=payload)
+res.raise_for_status()
+print(res.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/datasets/{dataset_id}/eval-reports/create" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"evaluator_slugs":["char_count_eval"]}'
+```
+
+</CodeGroup>
+</Step>
+
+<Step title="Step 5: List eval runs for the dataset">
+Use this to check the run status and see report IDs.
+
+Reference: [List eval runs](/api-endpoints/evaluate/datasets/eval-reports-list)
+
+<CodeGroup>
+
+```python Python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+dataset_id = "YOUR_DATASET_ID"
+
+url = f"https://api.keywordsai.co/api/datasets/{dataset_id}/eval-reports/list/"
+res = requests.get(url, headers={"Authorization": f"Bearer {API_KEY}"})
+res.raise_for_status()
+print(res.json())
+```
+
+```bash cURL
+curl -X GET "https://api.keywordsai.co/api/datasets/{dataset_id}/eval-reports/list/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+</Step>
+</Steps>
+
+</Tab>
+
+<Tab title="Create from existing request logs">
+
+<Steps>
+<Step title="Step 1: Create a dataset with specific request log IDs">
+If you already have request logs (from Observability), you can create a dataset by referencing those `log_id`s via `initial_log_filters`.
+
+This is the most deterministic “from production” workflow when you already know which logs you want.
+
+Reference: [Create dataset with specified logs](/api-endpoints/evaluate/datasets/create-with-logs)
+
+<CodeGroup>
+
+```python Python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+url = "https://api.keywordsai.co/api/datasets/"
+
+payload = {
+  "name": "Dataset from existing logs",
+  "description": "Created from a fixed set of request logs",
+  "type": "sampling",
+  "sampling": 100,
+  "start_time": "2025-07-30T00:00:00Z",
+  "end_time": "2025-08-01T00:00:00Z",
+  "initial_log_filters": {
+    "id": {"operator": "in", "value": ["log_id_1", "log_id_2"]}
+  }
+}
+
+res = requests.post(url, headers={"Authorization": f"Bearer {API_KEY}"}, json=payload)
+res.raise_for_status()
+print(res.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/datasets/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name":"Dataset from existing logs",
+    "type":"sampling",
+    "sampling":100,
+    "start_time":"2025-07-30T00:00:00Z",
+    "end_time":"2025-08-01T00:00:00Z",
+    "initial_log_filters":{"id":{"operator":"in","value":["log_id_1","log_id_2"]}}
+  }'
+```
+
+</CodeGroup>
+</Step>
+
+<Step title="Step 2 (alternative): Bulk add logs by filters + time range">
+If you don’t know the exact log IDs, use the bulk endpoint to add logs matching filters over a time window.
+
+Reference: [Add logs to dataset (bulk)](/api-endpoints/evaluate/datasets/logs-add)
+
+<CodeGroup>
+
+```python Python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+dataset_id = "YOUR_DATASET_ID"
+
+url = f"https://api.keywordsai.co/api/datasets/{dataset_id}/logs/bulk/"
+payload = {
+  "start_time": "2025-07-01T00:00:00Z",
+  "end_time": "2025-07-31T23:59:59Z",
+  "filters": {"status_code": {"operator": "eq", "value": 200}},
+  "sampling_percentage": 40
+}
+
+res = requests.post(url, headers={"Authorization": f"Bearer {API_KEY}"}, json=payload)
+res.raise_for_status()
+print(res.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/datasets/{dataset_id}/logs/bulk/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "start_time":"2025-07-01T00:00:00Z",
+    "end_time":"2025-07-31T23:59:59Z",
+    "filters":{"status_code":{"operator":"eq","value":200}},
+    "sampling_percentage": 40
+  }'
+```
+
+</CodeGroup>
+
+<Note>
+This runs in the background. Use “List dataset logs” to check when logs appear.
+</Note>
+</Step>
+</Steps>
+
+</Tab>
+</Tabs>
+
+## Maintenance & cleanup (optional)
+
+### Update dataset metadata
+
+Use PATCH to rename or update the description:
+
+Reference: [Update dataset (PATCH)](/api-endpoints/evaluate/datasets/patch)
+
+<CodeGroup>
+
+```python Python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+dataset_id = "YOUR_DATASET_ID"
+
+url = f"https://api.keywordsai.co/api/datasets/{dataset_id}/"
+payload = {"name": "Renamed dataset", "description": "Updated via API"}
+
+res = requests.patch(url, headers={"Authorization": f"Bearer {API_KEY}"}, json=payload)
+res.raise_for_status()
+print(res.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/datasets/{dataset_id}/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Renamed dataset","description":"Updated via API"}'
+```
+
+</CodeGroup>
+
+### Remove logs from a dataset (by filter or delete all)
+
+Reference: [Delete logs (filters / delete-all)](/api-endpoints/evaluate/datasets/logs-remove)
+
+<CodeGroup>
+
+```python Python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+dataset_id = "YOUR_DATASET_ID"
+
+url = f"https://api.keywordsai.co/api/datasets/{dataset_id}/logs/delete/"
+payload = {"filters": {"metadata.custom_identifier": "dataset-tutorial-log"}}
+
+res = requests.delete(url, headers={"Authorization": f"Bearer {API_KEY}"}, json=payload)
+res.raise_for_status()
+print(res.json())
+```
+
+```bash cURL
+curl -X DELETE "https://api.keywordsai.co/api/datasets/{dataset_id}/logs/delete/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"filters":{"metadata.custom_identifier":"dataset-tutorial-log"}}'
+```
+
+</CodeGroup>
+
+### Delete the dataset
+
+Reference: [Delete dataset](/api-endpoints/evaluate/datasets/delete)
+
+<CodeGroup>
+
+```python Python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+dataset_id = "YOUR_DATASET_ID"
+
+url = f"https://api.keywordsai.co/api/datasets/{dataset_id}/"
+res = requests.delete(url, headers={"Authorization": f"Bearer {API_KEY}"})
+print(res.status_code)  # typically 204
+```
+
+```bash cURL
+curl -X DELETE "https://api.keywordsai.co/api/datasets/{dataset_id}/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+

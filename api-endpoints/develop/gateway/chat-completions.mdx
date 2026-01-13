@@ -1,5 +1,5 @@
 ---
-title: LLM gateway
+title: Create chat completion
 api: POST https://api.keywordsai.co/api/chat/completions
 ---
 
@@ -260,7 +260,7 @@ curl -X POST "https://api.keywordsai.co/api/chat/completions" \
 
 <ParamField body="model" type="string" required={true}>
   Specify which model to use. See the list of model
-  [here](/integration/supported-models)
+  [here](/integration/overview)
 
 <Note> This parameter will be overridden by the `loadbalance_models` parameter.</Note>
 
@@ -408,12 +408,12 @@ response_format={
 </ParamField>
 
 ## Keywords AI parameters
-See how to make a standard Keywords AI API call in the [Quick Start](/get-started/quick-start) guide.
+See how to make a standard Keywords AI API call in the [Gateway Quickstart](/get-started/quickstart/gateway) guide.
 ### Generation parameters
 
 <ParamField body="load_balance_group" type="object">
   Balance the load of your requests between different models. See the [details of load balancing
-  here.](/features/generation/load-balancing)
+  here.](/documentation/products/gateway/traffic_management/load-balancing)
 <Note> The proxy will pick one model from the group and override the `model` parameter </Note>
   <Accordion title="Example">
 ```json
@@ -461,7 +461,7 @@ See how to make a standard Keywords AI API call in the [Quick Start](/get-starte
 <ParamField body="fallback_models" type="array">
   Specify the list of backup models (ranked by priority) to respond in case of a
   failure in the primary model. See the [details of fallback models
-  here.](/features/generation/fallbacks)
+  here.](/documentation/products/gateway/traffic_management/fallbacks)
     <Accordion title="Example">
   ```json
 {
@@ -477,7 +477,7 @@ See how to make a standard Keywords AI API call in the [Quick Start](/get-starte
 </ParamField>
 
 <ParamField body="customer_credentials" type="object">
-You can pass in your customer's credentials for [supported providers](/integration/own-api-keys) and use their credits when our proxy is calling models from those providers. <br/>See details [here](/integration/own-api-keys)
+You can pass in your customer's credentials for [supported providers](/documentation/admin/llm_provider_keys) and use their credits when our proxy is calling models from those providers. <br/>See details [here](/documentation/admin/llm_provider_keys)
 <Accordion title="Example">
 ```json
 "customer_credentials": {
@@ -508,7 +508,7 @@ Go to [provider page](/integration/overview) to see how to add your own credenti
 </ParamField>
 
 <ParamField body="cache_enabled" type="boolean">
-Enable or disable caches. Check the [details of caches here.](/features/generation/caches)
+Enable or disable caches. Check the [details of caches here.](/documentation/products/gateway/performance_optimization/caches)
 <Accordion title="Example">
 ```json
 {
@@ -551,7 +551,7 @@ This parameter specifies the cache options. Currently we support `cache_by_custo
 
 
 <ParamField body="prompt" type="object">
-  The prompt template to use for the completion. You can build and deploy prompts in the [Prompt](/features/prompt/prompt-management).
+  The prompt template to use for the completion. You can build and deploy prompts in the [Prompt Management](/documentation/products/prompt_management/quickstart).
 <AccordionGroup>
   <Accordion title="Properties">
     <ParamField body="prompt_id" type="string" required={true}>
@@ -639,7 +639,7 @@ This parameter allows you to control how you can override the parameters in the 
 </ParamField>
 
 <ParamField body="retry_params" type="object">
-    Enable or disable retries and set the number of retries and the time to wait before retrying. Check the [details of retries here.](/features/generation/retries)
+    Enable or disable retries and set the number of retries and the time to wait before retrying. Check the [details of retries here.](/documentation/products/gateway/traffic_management/retries)
   <Accordion title="Properties">
     <ParamField body="retry_enabled" type="boolean" required>
         Enable or disable retries.
@@ -655,7 +655,7 @@ This parameter allows you to control how you can override the parameters in the 
 
 <ParamField body="disable_log" type="boolean" deafault={false}>
   When set to true, only the request and [performance
-  metrics](/performance-monitoring/monitoring-metrics) will be recorded, input
+  metrics](/documentation/products/dashboard/quickstart) will be recorded, input
   and output messages will be omitted from the log.
 </ParamField>
 
@@ -679,7 +679,7 @@ We understand that you may have a custom name for your Azure deployment. Keyword
   Specify the list of models for the Keywords AI LLM router to choose between. 
   If not specified,{" "}
   <strong>all models</strong> will be used. See the list of models
-  [here](/integration/supported-models)
+  [here](/integration/overview)
 
 If only one model is specified, it will be treated as if the `model` parameter is used and the router will not trigger.
 
@@ -688,23 +688,23 @@ When the `model` parameter is used, the router will not trigger, and this parame
 </ParamField>
 
 <ParamField body="exclude_providers" type="array" default={[]}>
-  The list of providers to exclude from the LLM router's selection. All models under the provider will be excluded. See the list of providers [here](/integration/providers/providers-overview)
+  The list of providers to exclude from the LLM router's selection. All models under the provider will be excluded. See the list of providers [here](/integration/overview)
 
-This only excludes providers in the LLM router, if `model` parameter takes precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
+This only excludes providers in the LLM router, if `model` parameter takes precedence over this parameter, and`fallback_models` and [safety net](/documentation/products/notifications/subscribe_alerts) will still use the excluded models to catch failures.
 
 </ParamField>
 
 <ParamField body="exclude_models" type="array" default={[]}>
-The list of models to exclude from the LLM router's selection. See the list of models [here](/integration/supported-models)
+The list of models to exclude from the LLM router's selection. See the list of models [here](/integration/overview)
 
-This only excludes models in the LLM router, if `model` parameter takes precedence over this parameter, and`fallback_models` and [safety net](/features/monitoring/alerts-and-fallback) will still use the excluded models to catch failures.
+This only excludes models in the LLM router, if `model` parameter takes precedence over this parameter, and`fallback_models` and [safety net](/documentation/products/notifications/subscribe_alerts) will still use the excluded models to catch failures.
 
 </ParamField>
 
 ### Observability parameters
 
 <ParamField body="metadata" type="dict">
-You can add any key-value pair to this metadata field for your reference. Check the [details of metadata here.](/features/generation/metadata)
+You can add any key-value pair to this metadata field for your reference. Check the [details of metadata here.](/documentation/products/logs/configuration/custom_properties)
 
 Contact team@keywordsai.co if you need extra parameter support for your use case.
 
@@ -733,7 +733,7 @@ You can use this parameter to send an extra custom tag with your request. This w
 </ParamField>
 
 <ParamField body="customer_identifier" type="string">
-  Use this as a tag to identify the user associated with the API call. See the [details of customer identifier here.](/features/generation/customer-identifier)
+  Use this as a tag to identify the user associated with the API call. See the [details of customer identifier here.](/documentation/products/users/customer-identifier)
   <Accordion title="Example">
 ```json
 {
@@ -745,7 +745,7 @@ You can use this parameter to send an extra custom tag with your request. This w
 </ParamField>
 
 <ParamField body="customer_params" type="object">
-  Pass the customer's parameters in the API call to monitor the user's data in the Keywords AI platform. See how to get insights into your users' data [here](/features/user/user-creation)
+  Pass the customer's parameters in the API call to monitor the user's data in the Keywords AI platform. See how to get insights into your users' data [here](/api-endpoints/observe/users/user-creation-endpoint)
   <Accordion title="Properties">
 <ParamField body="customer_identifier" type="string" required>
 The unique identifier for the customer. It can be any string.
@@ -908,7 +908,7 @@ Adding this returns the summarization of the response in the response body. If s
 ## Deprecated parameters
 
 <ParamField body="customer_api_keys" type="object">
-You can pass in a dictionary of your customer's API keys for specific models. If the router selects a model that is in the dictionary, it will attempt to use the customer's API key for calling the model before using your [integration API key](/integration/llm-credits) or Keywords AI's default API key.
+You can pass in a dictionary of your customer's API keys for specific models. If the router selects a model that is in the dictionary, it will attempt to use the customer's API key for calling the model before using your [integration API key](/documentation/admin/llm_provider_keys) or Keywords AI's default API key.
 
 ```json
 {
@@ -921,7 +921,7 @@ You can pass in a dictionary of your customer's API keys for specific models. If
 
 <ParamField body="loadbalance_models" type="array">
   Balance the load of your requests between different models. See the [details of load balancing
-  here.](/features/generation/load-balancing)
+  here.](/documentation/products/gateway/traffic_management/load-balancing)
 <Note> This parameter will override the `model` parameter. </Note>
   <Accordion title="Example">
   ```json

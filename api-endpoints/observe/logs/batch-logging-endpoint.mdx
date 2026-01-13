@@ -1,184 +1,49 @@
 ---
-title: Batch logging
+title: Create logs (batch)
 api: POST https://api.keywordsai.co/api/request-logs/batch/create
 ---
 
-The batch logging endpoint allows you to log multiple requests at once. This is useful for logging multiple requests in a single call.
+The batch logging endpoint allows you to log multiple requests at once using the **universal input/output design**. This endpoint accepts any span type (chat, embedding, workflow, etc.) and processes them efficiently in batches.
+
 <Info>
 You can log up to **5000 requests** at once, and the maximum size of the request is **100MB**.
 </Info>
 
-## Example call
-<CodeGroup>
-```python Python
-import requests
-import os
+## Request body
 
-URL = "https://api.keywordsai.co/api/request-logs/batch/create"
-API_KEY = os.getenv("KEYWORDS_AI_API_KEY_PRODUCTION")
+<ParamField body="logs" type="array" required>
+Array of log objects. Each log object follows the same structure as the single log creation endpoint.
 
+Each log object supports:
+- Universal `input` and `output` fields (recommended)
+- Legacy `prompt_messages` and `completion_message` fields (backward compatible)
+- Any `log_type`: `"chat"`, `"embedding"`, `"workflow"`, `"task"`, etc.
 
-response = requests.post(
-    URL,
-    headers={"Authorization": "Bearer " + API_KEY},
-    json={
-        "logs": [
-            {
-                "cost": 0,
-                "prompt_messages": [
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "text", "text": "Sixth message"},
-                            {
-                                "type": "image_url",
-                                "image_url": {
-                                    "url": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/"
-                                },
-                            },
-                        ],
-                    },
-                    {
-                        "role": "assistant",
-                        "content": None,
-                        "tool_calls": [
-                            {
-                                "id": "call_p2RIiNv3B8JF8Capaz3vA7kZ",
-                                "type": "function",
-                                "function": {
-                                    "name": "transfer_call",
-                                    "arguments": '{"execution_message":"I\'m sorry to hear that. Let me transfer you to a human representative for further assistance."}',
-                                },
-                            }
-                        ],
-                    },
-                ],
-                "completion_message": {
-                    "role": "assistant",
-                    "content": "Hi, How can I assist you today?",
-                    "tool_calls": None,
-                },
-                "tool_calls": [
-                    {
-                        "id": None,
-                        "function": {"arguments": '"}', "name": None},
-                        "type": "function",
-                        "index": 0,
-                    }
-                ],
-                "tool_choice": {
-                    "type": "function",
-                    "function": {"name": "get_current_weather"},
-                },
-                "latency": 10,
-                "time_to_first_token": 0.1,
-                "model": "claude-3-5-sonnet-20240620",
-                "timestamp": "2024-04-15T08:30:37.721313Z",
-                "metadata": {"key2": "1"},
-                "stream": True,
-                "status_code": 401,
-                "warnings": "Test log",
-                "error_message": "",
-                "customer_identifier": "a_model_customer",
-                "keywordsai_params": {"customer_identifier": "b_model_customer"},
-            }
-        ]
-    },
-)
+See the [Create Log](/api-endpoints/observe/logs/request-logging-endpoint) documentation for complete field specifications and [log types](/get-started/observability_data_model#log-types) for `log_type` details.
+</ParamField>
 
-print(response.json())
+## Key features
 
-```
-```typescript Typescript
-const URL = "https://api.keywordsai.co/api/request-logs/batch/create";
-const API_KEY = process.env.KEYWORDS_AI_API_KEY_PRODUCTION;
+- ✅ **Supports all span types**: Chat, embedding, workflow, transcription, etc.
+- ✅ **Mixed types in one batch**: Log different span types in a single request
+- ✅ **Automatic field extraction**: System extracts type-specific fields based on `log_type`
+- ✅ **Legacy format support**: Both old and new formats work in the same batch
 
-const requestBody = {
-  logs: [
+## Response
+
+Returns an array of created log IDs or error details for each log in the batch.
+
+```json
+{
+  "results": [
     {
-      cost: 0,
-      prompt_messages: [
-        {
-          role: "user",
-          content: [
-            { type: "text", text: "Sixth message" },
-            {
-              type: "image_url",
-              image_url: {
-                url: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/"
-              }
-            }
-          ]
-        },
-        {
-          role: "assistant",
-          content: null,
-          tool_calls: [
-            {
-              id: "call_p2RIiNv3B8JF8Capaz3vA7kZ",
-              type: "function",
-              function: {
-                name: "transfer_call",
-                arguments: JSON.stringify({
-                  execution_message: "I'm sorry to hear that. Let me transfer you to a human representative for further assistance."
-                })
-              }
-            }
-          ]
-        }
-      ],
-      completion_message: {
-        role: "assistant",
-        content: "Hi, How can I assist you today?",
-        tool_calls: null
-      },
-      tool_calls: [
-        {
-          id: null,
-          function: { arguments: '"}"', name: null },
-          type: "function",
-          index: 0
-        }
-      ],
-      tool_choice: {
-        type: "function",
-        function: { name: "get_current_weather" }
-      },
-      latency: 10,
-      time_to_first_token: 0.1,
-      model: "claude-3-5-sonnet-20240620",
-      timestamp: "2024-04-15T08:30:37.721313Z",
-      metadata: { key2: "1" },
-      stream: true,
-      status_code: 401,
-      warnings: "Test log",
-      error_message: "",
-      customer_identifier: "a_model_customer",
-      keywordsai_params: { customer_identifier: "b_model_customer" }
+      "id": "log_abc123...",
+      "status": "success"
+    },
+    {
+      "id": "log_def456...",
+      "status": "success"
     }
   ]
-};
-
-fetch(URL, {
-  method: 'POST',
-  headers: {
-    'Authorization': `Bearer ${API_KEY}`,
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(requestBody)
-})
-.then(response => response.json())
-.then(data => console.log(data))
-.catch(error => console.error('Error:', error));
-
-
+}
 ```
-
-
-</CodeGroup>
-
-<RequestExample>
-
-</RequestExample>
-<ResponseExample>
-</ResponseExample>

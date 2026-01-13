@@ -24,7 +24,7 @@
           {
             "group": "Get started",
             "pages": [
-              "get-started/overview",
+              "/get-started/overview",
               {
                 "group": "Quickstart",
                 "pages": [
@@ -44,45 +44,45 @@
               {
                 "group": "Views",
                 "pages": [
-                  "documentation/products/dashboard/quickstart",
-                  "documentation/products/dashboard/filter",
-                  "documentation/products/dashboard/json_mode"
+                  "/documentation/products/dashboard/quickstart",
+                  "/documentation/products/dashboard/filter",
+                  "/documentation/products/dashboard/json_mode"
                 ]
               },
               {
                 "group": "Logs",
                 "pages": [
-                  "documentation/products/logs/quickstart",
-                  "documentation/products/logs/configuration/pass_keywordsai_parameters",
-                  "documentation/products/logs/configuration/custom_properties",
-                  "documentation/products/logs/log_variables",
-                  "documentation/products/logs/log_tool_calls",
-                  "documentation/products/logs/log_images",
-                  "documentation/products/logs/log_thinking",
-                  "documentation/products/logs/embedding_logging",
-                  "documentation/products/logs/save_log_to_prompt",
-                  "documentation/products/logs/configuration/threads",
-                  "documentation/products/logs/export_logs",
-                  "documentation/products/logs/configuration/group_logs",
-                  "documentation/products/logs/custom_model",
-                  "documentation/products/logs/filters",
-                  "documentation/products/logs/sharing",
+                  "/documentation/products/logs/quickstart",
+                  "/documentation/products/logs/configuration/pass_keywordsai_parameters",
+                  "/documentation/products/logs/configuration/custom_properties",
+                  "/documentation/products/logs/log_variables",
+                  "/documentation/products/logs/log_tool_calls",
+                  "/documentation/products/logs/log_images",
+                  "/documentation/products/logs/log_thinking",
+                  "/documentation/products/logs/embedding_logging",
+                  "/documentation/products/logs/save_log_to_prompt",
+                  "/documentation/products/logs/configuration/threads",
+                  "/documentation/products/logs/export_logs",
+                  "/documentation/products/logs/configuration/group_logs",
+                  "/documentation/products/logs/custom_model",
+                  "/documentation/products/logs/filters",
+                  "/documentation/products/logs/sharing",
                   {
                     "group": "Providers",
                     "pages": [
-                      "documentation/products/logs/providers/openai",
-                      "documentation/products/logs/providers/anthropic",
-                      "documentation/products/logs/providers/openrouter",
-                      "documentation/products/logs/providers/groq",
-                      "documentation/products/logs/providers/fireworks",
-                      "documentation/products/logs/providers/together",
-                      "documentation/products/logs/providers/perplexity",
-                      "documentation/products/logs/providers/azure",
-                      "documentation/products/logs/providers/vertex",
-                      "documentation/products/logs/providers/gemini",
-                      "documentation/products/logs/providers/bedrock",
-                      "documentation/products/logs/providers/nebius",
-                      "documentation/products/logs/providers/novita"
+                      "/documentation/products/logs/providers/openai",
+                      "/documentation/products/logs/providers/anthropic",
+                      "/documentation/products/logs/providers/openrouter",
+                      "/documentation/products/logs/providers/groq",
+                      "/documentation/products/logs/providers/fireworks",
+                      "/documentation/products/logs/providers/together",
+                      "/documentation/products/logs/providers/perplexity",
+                      "/documentation/products/logs/providers/azure",
+                      "/documentation/products/logs/providers/vertex",
+                      "/documentation/products/logs/providers/gemini",
+                      "/documentation/products/logs/providers/bedrock",
+                      "/documentation/products/logs/providers/nebius",
+                      "/documentation/products/logs/providers/novita"
                     ]
                   }
                 ]
@@ -90,118 +90,123 @@
               {
                 "group": "Traces",
                 "pages": [
-                  "documentation/products/traces/quickstart",
-                  "documentation/products/traces/decorators",
-                  "documentation/products/traces/configuration/pass_keywordsai_parameters",
-                  "documentation/products/traces/configuration/group_traces",
-                  "documentation/products/traces/configuration/customer_identifier",
-                  "documentation/products/traces/override-span-input-output",
-                  "documentation/products/traces/filters",
-                  "documentation/products/traces/logs_to_trace"
+                  "/documentation/products/traces/quickstart",
+                  "/documentation/products/traces/decorators",
+                  "/documentation/products/traces/configuration/pass_keywordsai_parameters",
+                  "/documentation/products/traces/configuration/group_traces",
+                  "/documentation/products/traces/configuration/customer_identifier",
+                  "/documentation/products/traces/override-span-input-output",
+                  "/documentation/products/traces/filters",
+                  "/documentation/products/traces/logs_to_trace"
                 ]
               },
               {
                 "group": "Prompt management",
                 "pages": [
-                  "documentation/products/prompt_management/quickstart",
-                  "documentation/products/prompt_management/model_playground",
+                  "/documentation/products/prompt_management/quickstart",
+                  "/documentation/products/prompt_management/model_playground",
                   {
                     "group": "Create prompts",
                     "pages": [
-                      "documentation/products/prompt_management/creating_prompts/create_prompt",
-                      "documentation/products/prompt_management/creating_prompts/json_schema",
-                      "documentation/products/prompt_management/creating_prompts/streaming",
-                      "documentation/products/prompt_management/creating_prompts/jinja_support",
-                      "documentation/products/prompt_management/creating_prompts/manage_prompt_api"
+                      "/documentation/products/prompt_management/creating_prompts/create_prompt",
+                      "/documentation/products/prompt_management/creating_prompts/json_schema",
+                      "/documentation/products/prompt_management/creating_prompts/streaming",
+                      "/documentation/products/prompt_management/creating_prompts/jinja_support",
+                      "/documentation/products/prompt_management/creating_prompts/manage_prompt_api"
                     ]
                   },
-                  "documentation/products/prompt_management/management_collaboration/version_control",
+                  "/documentation/products/prompt_management/management_collaboration/version_control",
                   {
                     "group": "Use prompt in code",
                     "pages": [
-                      "documentation/products/prompt_management/use_prompt_in_code/use_prompt_in_llms",
-                      "documentation/products/prompt_management/use_prompt_in_code/prompt_logging"
+                      "/documentation/products/prompt_management/use_prompt_in_code/use_prompt_in_llms",
+                      "/documentation/products/prompt_management/use_prompt_in_code/prompt_logging"
                     ]
                   },
-                  "documentation/products/prompt_management/management_collaboration/team_collaboration"
+                  "/documentation/products/prompt_management/management_collaboration/team_collaboration"
                 ]
               },
               {
                 "group": "Evaluators",
                 "pages": [
-                  "documentation/products/evaluation/llm-evals/llm-evaluator",
-                  "documentation/products/evaluation/llm-evals/run-evaluator-code",
-                  "documentation/products/evaluation/llm-evals/run-evaluator-ui",
-                  "documentation/products/evaluation/human-evals/human-evals-setup",
-                  "documentation/products/evaluation/human-evals/human-annotation"
+                  "/documentation/products/evaluation/llm-evals/llm-evaluator",
+                  "/documentation/products/evaluation/llm-evals/run-evaluator-code",
+                  "/documentation/products/evaluation/llm-evals/run-evaluator-ui",
+                  "/documentation/products/evaluation/human-evals/human-evals-setup",
+                  "/documentation/products/evaluation/human-evals/human-annotation"
+                ]
+              },
+              {
+                "group": "Datasets",
+                "pages": [
+                  "/documentation/products/dataset/via_api",
+                  "/documentation/products/dataset/via_ui"
                 ]
               },
               {
                 "group": "Testsets",
                 "pages": [
-                  "documentation/products/evaluation/experiments/testsets",
-                  "documentation/products/evaluation/experiments/upload-testsets"
+                  "/documentation/products/evaluation/experiments/testsets",
+                  "/documentation/products/evaluation/experiments/upload-testsets"
                 ]
               },
               {
                 "group": "Experiments",
                 "pages": [
-                  "documentation/products/evaluation/experiments/experiments",
-                  "documentation/products/evaluation/experiments/api-tutorial",
-                  {
-                    "group": "Workflows",
-                    "pages": [
-                      "documentation/products/evaluation/experiments/workflows/custom-workflow",
-                      "documentation/products/evaluation/experiments/workflows/completion-workflow",
-                      "documentation/products/evaluation/experiments/workflows/prompt-workflow"
-                    ]
-                  },
-                  "documentation/products/evaluation/experiments/experiments-images"
+                  "/documentation/products/evaluation/experiments/experiments",
+                  "/documentation/products/evaluation/experiments/experiments-images"
+                ]
+              },
+              {
+                "group": "Experiments V2 (Beta)",
+                "pages": [
+                  "/documentation/products/experiments_v2/via_ui",
+                  "/documentation/products/experiments_v2/api-tutorial"                
                 ]
               },
               {
                 "group": "LLM Gateway",
                 "pages": [
-                  "documentation/products/gateway/quickstart",
-                  "documentation/products/gateway/configuration/models",
-                  "documentation/products/gateway/traffic_management/load-balancing",
-                  "documentation/products/gateway/traffic_management/retries",
-                  "documentation/products/gateway/traffic_management/fallbacks",
-                  "documentation/products/gateway/traffic_management/rate_limit",
+                  "/get-started/quickstart/gateway",
+                  "/documentation/products/gateway/configuration/models",
+                  "/documentation/products/gateway/traffic_management/load-balancing",
+                  "/documentation/products/gateway/traffic_management/retries",
+                  "/documentation/products/gateway/traffic_management/fallbacks",
+                  "/documentation/products/gateway/traffic_management/rate_limit",
                   {
                     "group": "Caches",
                     "pages": [
-                      "documentation/products/gateway/performance_optimization/caches",
-                      "documentation/products/gateway/performance_optimization/prompt-caching"
+                      "/documentation/products/gateway/performance_optimization/caches",
+                      "/documentation/products/gateway/performance_optimization/prompt-caching"
                     ]
                   },
-                  "documentation/products/gateway/advanced_features/function_calling",
-                  "documentation/products/gateway/advanced_features/thinking",
-                  "documentation/products/gateway/advanced_features/upload_pdf",
-                  "documentation/products/gateway/advanced_features/upload_image",
-                  "documentation/products/gateway/monitoring_analysis/disable_logging"
+                  "/documentation/products/gateway/advanced_features/function_calling",
+                  "/documentation/products/gateway/advanced_features/thinking",
+                  "/documentation/products/gateway/advanced_features/upload_pdf",
+                  "/documentation/products/gateway/advanced_features/upload_image",
+                  "/documentation/products/gateway/monitoring_analysis/disable_logging"
                 ]
               },
               {
                 "group": "Users",
                 "pages": [
-                  "documentation/products/users/customer-identifier",
-                  "documentation/products/users/user_rate_limit",
-                  "documentation/products/users/user-budget"
+                  "/documentation/products/users/customer-identifier",
+                  "/documentation/products/users/user_rate_limit",
+                  "/documentation/products/users/user-budget"
                 ]
               },
               {
                 "group": "Notifications",
                 "pages": [
-                  "documentation/products/notifications/subscribe_alerts",
-                  "documentation/products/notifications/webhooks"
+                  "/documentation/products/notifications/subscribe_alerts",
+                  "/documentation/products/notifications/webhooks"
                 ]
               },
               {
-                "group": "Automations",
+                "group": "Automations (Beta)",
                 "pages": [
-                  "documentation/products/automation/quickstart",
-                  "documentation/products/automation/quickstart_online_eval"
+                  "/documentation/products/automation/quickstart",
+                  "/documentation/products/automation/quickstart_online_eval"
                 ]
               }
             ]
@@ -209,12 +214,12 @@
           {
             "group": "Admin",
             "pages": [
-              "documentation/admin/keywords_api_keys",
-              "documentation/admin/llm_provider_keys",
+              "/documentation/admin/keywords_api_keys",
+              "/documentation/admin/llm_provider_keys",
               {
                 "group": "Team management",
                 "pages": [
-                  "documentation/admin/team_management/create_a_new_team"
+                  "/documentation/admin/team_management/create_a_new_team"
                 ]
               }
             ]
@@ -222,30 +227,31 @@
           {
             "group": "Security",
             "pages": [
-              "documentation/security/trust_center",
-              "documentation/security/socii",
-              "documentation/security/hipaa",
-              "documentation/security/gdpr",
-              "documentation/security/architecture_review",
-              "documentation/security/security-qa"
+              "/documentation/security/trust_center",
+              "/documentation/security/socii",
+              "/documentation/security/hipaa",
+              "/documentation/security/gdpr",
+              "/documentation/security/architecture_review",
+              "/documentation/security/security-qa"
             ]
           },
           {
             "group": "Resources",
             "pages": [
-              "documentation/resources/what-is-llm-observability-and-monitoring",
-              "documentation/resources/automatic-retries",
-              "documentation/resources/streaming",
-              "documentation/resources/error-handling",
-              "documentation/resources/api-rate-limits"
+              "/documentation/resources/mcp",
+              "/documentation/resources/what-is-llm-observability-and-monitoring",
+              "/documentation/resources/automatic-retries",
+              "/documentation/resources/streaming",
+              "/documentation/resources/error-handling",
+              "/documentation/resources/api-rate-limits"
             ]
           },
           {
             "group": "Help & Community",
             "pages": [
-              "documentation/support/support",
-              "documentation/support/feedback",
-              "documentation/support/status"
+              "/documentation/support/support",
+              "/documentation/support/feedback",
+              "/documentation/support/status"
             ]
           }
         ]
@@ -256,7 +262,7 @@
           {
             "group": "Ecosystem",
             "pages": [
-              "integration/overview"
+              "/integration/overview"
             ]
           },
           {
@@ -265,15 +271,15 @@
               {
                 "group": "OpenAI Agents SDK",
                 "pages": [
-                  "integration/development-frameworks/tracing/openai-agents-sdk",
-                  "integration/development-frameworks/tracing/openai-agents-sdk-js"
+                  "/integration/development-frameworks/tracing/openai-agents-sdk",
+                  "/integration/development-frameworks/tracing/openai-agents-sdk-js"
                 ]
               },
-              "integration/development-frameworks/tracing/vercel-tracing",
-              "integration/development-frameworks/tracing/mastra",
-              "integration/development-frameworks/tracing/langgraph",
-              "integration/development-frameworks/tracing/baml",
-              "integration/development-frameworks/tracing/instructor"
+              "/integration/tracing/vercel-tracing",
+              "/integration/development-frameworks/tracing/mastra",
+              "/integration/development-frameworks/tracing/langgraph",
+              "/integration/development-frameworks/tracing/baml",
+              "/integration/development-frameworks/tracing/instructor"
             ]
           },
           {
@@ -282,61 +288,68 @@
               {
                 "group": "OpenAI SDK",
                 "pages": [
-                  "integration/development-frameworks/llm_framework/openai/openai-sdk",
-                  "integration/development-frameworks/llm_framework/openai/openai-responses"
+                  "/integration/development-frameworks/llm_framework/openai/openai-sdk",
+                  "/integration/development-frameworks/llm_framework/openai/openai-responses"
                 ]
               },
-              "integration/development-frameworks/llm_framework/anthropic",
-              "integration/development-frameworks/llm_framework/langchain",
-              "integration/development-frameworks/llm_framework/vercel",
-              "integration/development-frameworks/llm_framework/llama-index",
-              "integration/development-frameworks/llm_framework/google_genai"
+              "/integration/development-frameworks/llm_framework/anthropic",
+              "/integration/development-frameworks/llm_framework/langchain",
+              "/integration/development-frameworks/llm_framework/vercel",
+              "/integration/development-frameworks/llm_framework/llama-index",
+              "/integration/development-frameworks/llm_framework/google_genai"
             ]
           },
           {
             "group": "LLM providers",
             "pages": [
-              "integration/providers/openai",
-              "integration/providers/anthropic",
-              "integration/providers/openrouter",
-              "integration/providers/groq",
-              "integration/providers/fireworks",
-              "integration/providers/together",
-              "integration/providers/perplexity",
-              "integration/providers/azure",
-              "integration/providers/vertex",
-              "integration/providers/gemini",
-              "integration/providers/bedrock",
-              "integration/providers/nebius",
-              "integration/providers/novita",
-              "integration/providers/xAI",
-              "integration/providers/ai21labs",
-              "integration/providers/baseten",
-              "integration/providers/cohere",
-              "integration/providers/deepseek",
-              "integration/providers/inference",
-              "integration/providers/mistral",
-              "integration/providers/moonshot",
-              "integration/providers/nextbit",
-              "integration/providers/parasail",
-              "integration/providers/replicate",
-              "integration/providers/reducto"
+              "/integration/providers/openai",
+              "/integration/providers/anthropic",
+              "/integration/providers/openrouter",
+              "/integration/providers/groq",
+              "/integration/providers/fireworks",
+              "/integration/providers/together",
+              "/integration/providers/perplexity",
+              "/integration/providers/azure",
+              "/integration/providers/vertex",
+              "/integration/providers/gemini",
+              "/integration/providers/bedrock",
+              "/integration/providers/nebius",
+              "/integration/providers/novita",
+              "/integration/providers/xAI",
+              "/integration/providers/ai21labs",
+              "/integration/providers/baseten",
+              "/integration/providers/cohere",
+              "/integration/providers/deepseek",
+              "/integration/providers/inference",
+              "/integration/providers/mistral",
+              "/integration/providers/moonshot",
+              "/integration/providers/nextbit",
+              "/integration/providers/parasail",
+              "/integration/providers/replicate",
+              "/integration/providers/reducto"
+            ]
+          },
+          {
+            "group": "Dev Tools",
+            "pages": [
+              "/integration/dev-tools/cursor",
+              "/integration/dev-tools/claude-code",
+              "/integration/dev-tools/linkup"
             ]
           },
           {
             "group": "Memory",
             "pages": [
-              "integration/development-frameworks/mem0",
-              "integration/others/cognee"
+              "/integration/development-frameworks/mem0",
+              "/integration/others/cognee"
             ]
           },
           {
             "group": "Others",
             "pages": [
-              "integration/providers/assemblyai",
-              "integration/dev-tools/linkup",
-              "integration/development-frameworks/baml",
-              "integration/analytics/posthog"
+              "/integration/providers/assemblyai",
+              "/integration/development-frameworks/baml",
+              "/integration/analytics/posthog"
             ]
           }
         ]
@@ -350,37 +363,40 @@
               {
                 "group": "Logs",
                 "pages": [
-                  "api-endpoints/observe/logs/request-logging-endpoint",
-                  "api-endpoints/observe/logs/batch-logging-endpoint",
-                  "api-endpoints/observe/logs/logs-list-endpoint",
-                  "api-endpoints/observe/logs/get-log-endpoint",
-                  "api-endpoints/observe/logs/logs-update-endpoint",
-                  "api-endpoints/observe/logs/traces-ingest-from-logs"
+                  "/api-endpoints/observe/logs/request-logging-endpoint",
+                  "/api-endpoints/observe/logs/batch-logging-endpoint",
+                  "/api-endpoints/observe/logs/logs-list-endpoint",
+                  "/api-endpoints/observe/logs/logs-summary-endpoint",
+                  "/api-endpoints/observe/logs/get-log-endpoint",
+                  "/api-endpoints/observe/logs/update-single-log-endpoint",
+                  "/api-endpoints/observe/logs/logs-update-endpoint",
+                  "/api-endpoints/observe/logs/delete-log-endpoint",
+                  "/api-endpoints/observe/logs/ingest"
                 ]
               },
               {
                 "group": "Traces",
                 "pages": [
-                  "api-endpoints/observe/traces/list",
-                  "api-endpoints/observe/traces/get",
-                  "api-endpoints/observe/traces/summary",
-                  "api-endpoints/observe/logs/traces-ingest-from-logs",
-                  "api-endpoints/observe/traces/ingest"
+                  "/api-endpoints/observe/traces/list",
+                  "/api-endpoints/observe/traces/get",
+                  "/api-endpoints/observe/traces/summary",
+                  "/api-endpoints/observe/traces/traces-ingest-from-logs"
                 ]
               },
               {
                 "group": "Threads",
                 "pages": [
-                  "api-endpoints/observe/threads/thread-list-endpoint"
+                  "/api-endpoints/observe/threads/thread-list-endpoint"
                 ]
               },
               {
                 "group": "Users",
                 "pages": [
-                  "api-endpoints/observe/users/user-creation-endpoint",
-                  "api-endpoints/observe/users/users-data-endpoint",
-                  "api-endpoints/observe/users/user-detail-endpoint",
-                  "api-endpoints/observe/users/user-update-endpoint"
+                  "/api-endpoints/observe/users/user-creation-endpoint",
+                  "/api-endpoints/observe/users/users-data-endpoint",
+                  "/api-endpoints/observe/users/user-detail-endpoint",
+                  "/api-endpoints/observe/users/user-update-endpoint",
+                  "/api-endpoints/observe/users/user-delete-endpoint"
                 ]
               }
             ]
@@ -391,32 +407,32 @@
               {
                 "group": "Gateway",
                 "pages": [
-                  "api-endpoints/develop/gateway/chat-completions"
+                  "/api-endpoints/develop/gateway/chat-completions"
                 ]
               },
               {
                 "group": "Multimodal",
                 "pages": [
-                  "api-endpoints/develop/multimodal/embeddings",
-                  "api-endpoints/develop/multimodal/speech-to-text",
-                  "api-endpoints/develop/multimodal/text-to-speech",
-                  "api-endpoints/develop/multimodal/assemblyai"
+                  "/api-endpoints/develop/multimodal/embeddings",
+                  "/api-endpoints/develop/multimodal/speech-to-text",
+                  "/api-endpoints/develop/multimodal/text-to-speech",
+                  "/api-endpoints/develop/multimodal/assemblyai"
                 ]
               },
               {
                 "group": "Prompts",
                 "pages": [
-                  "api-endpoints/develop/prompts/create-prompts",
-                  "api-endpoints/develop/prompts/get-prompts",
-                  "api-endpoints/develop/prompts/update-prompt",
-                  "api-endpoints/develop/prompts/delete-prompt",
+                  "/api-endpoints/develop/prompts/create-prompts",
+                  "/api-endpoints/develop/prompts/get-prompts",
+                  "/api-endpoints/develop/prompts/update-prompt",
+                  "/api-endpoints/develop/prompts/delete-prompt",
                   {
                     "group": "Prompt Versions",
                     "pages": [
-                      "api-endpoints/develop/prompts/create-prompt-version",
-                      "api-endpoints/develop/prompts/get-prompt-versions",
-                      "api-endpoints/develop/prompts/update-prompt-version",
-                      "api-endpoints/develop/prompts/delete-prompt-version"
+                      "/api-endpoints/develop/prompts/create-prompt-version",
+                      "/api-endpoints/develop/prompts/get-prompt-versions",
+                      "/api-endpoints/develop/prompts/update-prompt-version",
+                      "/api-endpoints/develop/prompts/delete-prompt-version"
                     ]
                   }
                 ]
@@ -424,18 +440,18 @@
               {
                 "group": "Testsets",
                 "pages": [
-                  "api-endpoints/develop/testsets/create",
-                  "api-endpoints/develop/testsets/list",
-                  "api-endpoints/develop/testsets/get",
-                  "api-endpoints/develop/testsets/update",
-                  "api-endpoints/develop/testsets/delete",
+                  "/api-endpoints/develop/testsets/create",
+                  "/api-endpoints/develop/testsets/list",
+                  "/api-endpoints/develop/testsets/get",
+                  "/api-endpoints/develop/testsets/update",
+                  "/api-endpoints/develop/testsets/delete",
                   {
                     "group": "Testset Rows",
                     "pages": [
-                      "api-endpoints/develop/testsets/rows-create",
-                      "api-endpoints/develop/testsets/rows-list",
-                      "api-endpoints/develop/testsets/rows-update",
-                      "api-endpoints/develop/testsets/rows-delete"
+                      "/api-endpoints/develop/testsets/rows-create",
+                      "/api-endpoints/develop/testsets/rows-list",
+                      "/api-endpoints/develop/testsets/rows-update",
+                      "/api-endpoints/develop/testsets/rows-delete"
                     ]
                   }
                 ]
@@ -443,20 +459,20 @@
               {
                 "group": "Experiments",
                 "pages": [
-                  "api-endpoints/develop/experiments-v2/create",
-                  "api-endpoints/develop/experiments-v2/list",
-                  "api-endpoints/develop/experiments-v2/search",
-                  "api-endpoints/develop/experiments-v2/get",
-                  "api-endpoints/develop/experiments-v2/delete",
+                  "/api-endpoints/develop/experiments-v2/create",
+                  "/api-endpoints/develop/experiments-v2/list",
+                  "/api-endpoints/develop/experiments-v2/search",
+                  "/api-endpoints/develop/experiments-v2/get",
+                  "/api-endpoints/develop/experiments-v2/delete",
                   {
                     "group": "Experiment logs",
                     "pages": [
-                      "api-endpoints/develop/experiments-v2/logs-list",
-                      "api-endpoints/develop/experiments-v2/logs-search",
-                      "api-endpoints/develop/experiments-v2/logs-get",
-                      "api-endpoints/develop/experiments-v2/logs-update",
-                      "api-endpoints/develop/experiments-v2/logs-summary",
-                      "api-endpoints/develop/experiments-v2/logs-export"
+                      "/api-endpoints/develop/experiments-v2/logs-list",
+                      "/api-endpoints/develop/experiments-v2/logs-search",
+                      "/api-endpoints/develop/experiments-v2/logs-get",
+                      "/api-endpoints/develop/experiments-v2/logs-update",
+                      "/api-endpoints/develop/experiments-v2/logs-summary",
+                      "/api-endpoints/develop/experiments-v2/logs-export"
                     ]
                   }
                 ]
@@ -469,41 +485,41 @@
               {
                 "group": "Evaluators",
                 "pages": [
-                  "api-endpoints/evaluate/evaluators/create",
-                  "api-endpoints/evaluate/evaluators/list",
-                  "api-endpoints/evaluate/evaluators/get",
-                  "api-endpoints/evaluate/evaluators/update",
-                  "api-endpoints/evaluate/evaluators/delete",
-                  "api-endpoints/evaluate/evaluators/run"
+                  "/api-endpoints/evaluate/evaluators/create",
+                  "/api-endpoints/evaluate/evaluators/list",
+                  "/api-endpoints/evaluate/evaluators/get",
+                  "/api-endpoints/evaluate/evaluators/update",
+                  "/api-endpoints/evaluate/evaluators/delete",
+                  "/api-endpoints/evaluate/evaluators/run"
                 ]
               },
               {
                 "group": "Datasets",
                 "pages": [
-                  "api-endpoints/evaluate/datasets/get",
-                  "api-endpoints/evaluate/datasets/create",
-                  "api-endpoints/evaluate/datasets/list",
-                  "api-endpoints/evaluate/datasets/patch",
-                  "api-endpoints/evaluate/datasets/delete",
+                  "/api-endpoints/evaluate/datasets/get",
+                  "/api-endpoints/evaluate/datasets/create",
+                  "/api-endpoints/evaluate/datasets/list",
+                  "/api-endpoints/evaluate/datasets/patch",
+                  "/api-endpoints/evaluate/datasets/delete",
                   {
                     "group": "Dataset Logs",
                     "pages": [
-                      "api-endpoints/evaluate/datasets/logs-add",
-                      "api-endpoints/evaluate/datasets/logs-create",
-                      "api-endpoints/evaluate/datasets/logs-list",
-                      "api-endpoints/evaluate/datasets/logs-list-post",
-                      "api-endpoints/evaluate/datasets/logs-get",
-                      "api-endpoints/evaluate/datasets/logs-put",
-                      "api-endpoints/evaluate/datasets/logs-patch",
-                      "api-endpoints/evaluate/datasets/logs-delete",
-                      "api-endpoints/evaluate/datasets/logs-remove"
+                      "/api-endpoints/evaluate/datasets/logs-list",
+                      "/api-endpoints/evaluate/datasets/logs-list-post",
+                      "/api-endpoints/evaluate/datasets/logs-create",
+                      "/api-endpoints/evaluate/datasets/logs-get",
+                      "/api-endpoints/evaluate/datasets/logs-put",
+                      "/api-endpoints/evaluate/datasets/logs-patch",
+                      "/api-endpoints/evaluate/datasets/logs-delete",
+                      "/api-endpoints/evaluate/datasets/logs-remove",
+                      "/api-endpoints/evaluate/datasets/logs-add"
                     ]
                   },
                   {
                     "group": "Dataset Evaluations",
                     "pages": [
-                      "api-endpoints/evaluate/datasets/eval-reports-create",
-                      "api-endpoints/evaluate/datasets/eval-reports-list"
+                      "/api-endpoints/evaluate/datasets/eval-reports-create",
+                      "/api-endpoints/evaluate/datasets/eval-reports-list"
                     ]
                   }
                 ]
@@ -511,27 +527,21 @@
               {
                 "group": "Scores",
                 "pages": [
-                  "api-endpoints/evaluate/scores/create",
-                  "api-endpoints/evaluate/scores/list",
-                  "api-endpoints/evaluate/scores/get",
-                  "api-endpoints/evaluate/scores/update",
-                  "api-endpoints/evaluate/scores/delete"
+                  "/api-endpoints/evaluate/scores/list",
+                  "/api-endpoints/evaluate/scores/create",
+                  "/api-endpoints/evaluate/scores/get",
+                  "/api-endpoints/evaluate/scores/update",
+                  "/api-endpoints/evaluate/scores/delete"
                 ]
               },
               {
                 "group": "Log Scores",
                 "pages": [
-                  "api-endpoints/evaluate/log-scores/create",
-                  "api-endpoints/evaluate/log-scores/list",
-                  "api-endpoints/evaluate/log-scores/get",
-                  "api-endpoints/evaluate/log-scores/update",
-                  "api-endpoints/evaluate/log-scores/delete"
-                ]
-              },
-              {
-                "group": "Async jobs",
-                "pages": [
-                  "api-endpoints/evaluate/async-jobs/evaluations"
+                  "/api-endpoints/evaluate/log-scores/list",
+                  "/api-endpoints/evaluate/log-scores/create",
+                  "/api-endpoints/evaluate/log-scores/get",
+                  "/api-endpoints/evaluate/log-scores/update",
+                  "/api-endpoints/evaluate/log-scores/delete"
                 ]
               }
             ]
@@ -542,17 +552,17 @@
               {
                 "group": "Models",
                 "pages": [
-                  "api-endpoints/manage/models/models-endpoint"
+                  "/api-endpoints/manage/models/models-endpoint"
                 ]
               },
               {
                 "group": "Temporary API Keys",
                 "pages": [
-                  "api-endpoints/manage/temporary-api-keys/create-temporary-key",
-                  "api-endpoints/manage/temporary-api-keys/list-temporary-keys",
-                  "api-endpoints/manage/temporary-api-keys/retrieve-temporary-key",
-                  "api-endpoints/manage/temporary-api-keys/update-temporary-key",
-                  "api-endpoints/manage/temporary-api-keys/delete-temporary-key"
+                  "/api-endpoints/manage/temporary-api-keys/list-temporary-keys",
+                  "/api-endpoints/manage/temporary-api-keys/create-temporary-key",
+                  "/api-endpoints/manage/temporary-api-keys/retrieve-temporary-key",
+                  "/api-endpoints/manage/temporary-api-keys/update-temporary-key",
+                  "/api-endpoints/manage/temporary-api-keys/delete-temporary-key"
                 ]
               }
             ]
@@ -563,17 +573,23 @@
               {
                 "group": "Conditions",
                 "pages": [
-                  "api-endpoints/automation/conditions/create",
-                  "api-endpoints/automation/conditions/list"
+                  "/api-endpoints/automation/conditions/list",
+                  "/api-endpoints/automation/conditions/create"
                 ]
               },
               {
                 "group": "Automations",
                 "pages": [
-                  "api-endpoints/automation/automations/create",
-                  "api-endpoints/automation/automations/patch"
+                  "/api-endpoints/automation/automations/create",
+                  "/api-endpoints/automation/automations/patch"
                 ]
               }
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "/api-endpoints/reference/filters_api_reference"
             ]
           }
         ]
@@ -587,48 +603,48 @@
               {
                 "group": "Getting Started",
                 "pages": [
-                  "tracing-sdk/quickstart",
-                  "tracing-sdk/examples"
+                  "/tracing-sdk/quickstart",
+                  "/tracing-sdk/examples"
                 ]
               },
               {
                 "group": "Decorators",
                 "pages": [
-                  "tracing-sdk/decorators/workflow",
-                  "tracing-sdk/decorators/task",
-                  "tracing-sdk/decorators/agent",
-                  "tracing-sdk/decorators/tool"
+                  "/tracing-sdk/decorators/workflow",
+                  "/tracing-sdk/decorators/task",
+                  "/tracing-sdk/decorators/agent",
+                  "/tracing-sdk/decorators/tool"
                 ]
               },
               {
                 "group": "Client API",
                 "pages": [
-                  "tracing-sdk/main/initialize",
-                  "tracing-sdk/client/get-client",
-                  "tracing-sdk/client/get-current-trace-id",
-                  "tracing-sdk/client/get-current-span-id",
-                  "tracing-sdk/client/update-current-span",
-                  "tracing-sdk/client/add-event",
-                  "tracing-sdk/client/record-exception",
-                  "tracing-sdk/client/get-context-value",
-                  "tracing-sdk/client/set-context-value",
-                  "tracing-sdk/client/is-recording",
-                  "tracing-sdk/client/get-tracer",
-                  "tracing-sdk/client/flush",
-                  "tracing-sdk/client/get-span-buffer",
-                  "tracing-sdk/client/export-spans"
+                  "/tracing-sdk/main/initialize",
+                  "/tracing-sdk/client/get-client",
+                  "/tracing-sdk/client/get-current-trace-id",
+                  "/tracing-sdk/client/get-current-span-id",
+                  "/tracing-sdk/client/update-current-span",
+                  "/tracing-sdk/client/add-event",
+                  "/tracing-sdk/client/record-exception",
+                  "/tracing-sdk/client/get-context-value",
+                  "/tracing-sdk/client/set-context-value",
+                  "/tracing-sdk/client/is-recording",
+                  "/tracing-sdk/client/get-tracer",
+                  "/tracing-sdk/client/flush",
+                  "/tracing-sdk/client/get-span-buffer",
+                  "/tracing-sdk/client/export-spans"
                 ]
               },
               {
                 "group": "Contexts",
                 "pages": [
-                  "tracing-sdk/contexts/keywordsai-span-attributes"
+                  "/tracing-sdk/contexts/keywordsai-span-attributes"
                 ]
               },
               {
                 "group": "Instrumentation",
                 "pages": [
-                  "tracing-sdk/instrumentation/overview"
+                  "/tracing-sdk/instrumentation/overview"
                 ]
               }
             ]
@@ -639,50 +655,50 @@
               {
                 "group": "Getting Started",
                 "pages": [
-                  "python-sdk/quickstart",
-                  "python-sdk/examples"
+                  "/python-sdk/quickstart",
+                  "/python-sdk/examples"
                 ]
               },
               {
                 "group": "Logs",
                 "pages": [
-                  "python-sdk/logs/overview",
-                  "python-sdk/logs/create",
-                  "python-sdk/logs/list"
+                  "/python-sdk/logs/overview",
+                  "/python-sdk/logs/create",
+                  "/python-sdk/logs/list"
                 ]
               },
               {
                 "group": "Prompts",
                 "pages": [
-                  "python-sdk/prompts/overview",
-                  "python-sdk/prompts/create",
-                  "python-sdk/prompts/list",
-                  "python-sdk/prompts/get",
-                  "python-sdk/prompts/update",
-                  "python-sdk/prompts/delete",
-                  "python-sdk/prompts/create-version",
-                  "python-sdk/prompts/list-versions",
-                  "python-sdk/prompts/get-version",
-                  "python-sdk/prompts/update-version"
+                  "/python-sdk/prompts/overview",
+                  "/python-sdk/prompts/create",
+                  "/python-sdk/prompts/list",
+                  "/python-sdk/prompts/get",
+                  "/python-sdk/prompts/update",
+                  "/python-sdk/prompts/delete",
+                  "/python-sdk/prompts/create-version",
+                  "/python-sdk/prompts/list-versions",
+                  "/python-sdk/prompts/get-version",
+                  "/python-sdk/prompts/update-version"
                 ]
               },
               {
                 "group": "Experiments",
                 "pages": [
-                  "python-sdk/experiments/overview",
-                  "python-sdk/experiments/create",
-                  "python-sdk/experiments/list",
-                  "python-sdk/experiments/get",
-                  "python-sdk/experiments/update",
-                  "python-sdk/experiments/delete",
-                  "python-sdk/experiments/add-rows",
-                  "python-sdk/experiments/remove-rows",
-                  "python-sdk/experiments/update-rows",
-                  "python-sdk/experiments/add-columns",
-                  "python-sdk/experiments/remove-columns",
-                  "python-sdk/experiments/update-columns",
-                  "python-sdk/experiments/run-experiment",
-                  "python-sdk/experiments/run-experiment-evals"
+                  "/python-sdk/experiments/overview",
+                  "/python-sdk/experiments/create",
+                  "/python-sdk/experiments/list",
+                  "/python-sdk/experiments/get",
+                  "/python-sdk/experiments/update",
+                  "/python-sdk/experiments/delete",
+                  "/python-sdk/experiments/add-rows",
+                  "/python-sdk/experiments/remove-rows",
+                  "/python-sdk/experiments/update-rows",
+                  "/python-sdk/experiments/add-columns",
+                  "/python-sdk/experiments/remove-columns",
+                  "/python-sdk/experiments/update-columns",
+                  "/python-sdk/experiments/run-experiment",
+                  "/python-sdk/experiments/run-experiment-evals"
                 ]
               }
             ]
@@ -781,6 +797,14 @@
     {
       "source": "/integration/development-frameworks/openai-agents-sdk-js",
       "destination": "/integration/development-frameworks/tracing/openai-agents-sdk-js"
+    },
+    {
+      "source": "/integration/development-frameworks/openai-sdk",
+      "destination": "/integration/development-frameworks/llm_framework/openai/openai-sdk"
+    },
+    {
+      "source": "/get-started/llm-inference",
+      "destination": "/get-started/overview"
     }
   ]
 }

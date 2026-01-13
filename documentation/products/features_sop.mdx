@@ -21,7 +21,8 @@ This is a note or important information about the feature that users should know
 - [GitHub Example](https://github.com/keywordsai/example)
 
 ## Steps to use
-
+<Tabs>
+<Tab title="OpenAI">
 <Steps>
 <Step title="Step 1: Go to the feature page">
 Go to [Feature page](https://platform.keywordsai.co/platform/feature) and click `Create`.
@@ -32,37 +33,38 @@ Go to [Feature page](https://platform.keywordsai.co/platform/feature) and click 
 </Step>
 
 <Step title="Step 2: Configure the feature">
-Configure your feature settings:
+Configure your feature settings in the UI (model, parameters, etc.).
+
 <CodeGroup>
 ```python Python
 from openai import OpenAI
 
 client = OpenAI(
     base_url="https://api.keywordsai.co/api/",
-    api_key="YOUR_API_KEY",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
 )
 
 response = client.chat.completions.create(
     model="gpt-4o-mini",
     messages=[{"role": "user", "content": "Hello"}],
     extra_body={
-        "feature_param": "value"
+        "var_1": "sample_value"
     }
 )
 ```
-```typescript Typescript
+```typescript TypeScript
 import { OpenAI } from "openai";
 
 const client = new OpenAI({
   baseURL: "https://api.keywordsai.co/api",
-  apiKey: "YOUR_API_KEY",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
 });
 
 const response = await client.chat.completions.create({
   model: "gpt-4o-mini",
   messages: [{ role: "user", content: "Hello" }],
   // @ts-expect-error
-  feature_param: "value"
+  var_1: "sample_value"
 });
 ```
 </CodeGroup>
@@ -72,28 +74,148 @@ const response = await client.chat.completions.create({
 Copy the configuration and use it in your requests.
 </Step>
 </Steps>
+</Tab>
+
+<Tab title="Anthropic">
+<Steps>
+<Step title="Step 1: Go to the feature page">
+Go to [Feature page](https://platform.keywordsai.co/platform/feature) and click `Create`.
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/path/step1.png" alt="Step 1 screenshot" />
+</Frame>
+</Step>
+
+<Step title="Step 2: Configure the feature">
+Configure your feature settings in the UI (model, parameters, etc.).
+
+<CodeGroup>
+```python Python
+import anthropic
+
+client = anthropic.Anthropic(
+    base_url="https://api.keywordsai.co/api/anthropic/",
+    api_key="YOUR_KEYWORDSAI_API_KEY",
+)
+
+message = client.messages.create(
+    model="claude-3-5-sonnet-20240620",
+    max_tokens=1000,
+    messages=[{"role": "user", "content": "Hello"}],
+    metadata={
+        "keywordsai_params": {
+            "var_1": "sample_value"
+        }
+    },
+)
+```
+```typescript TypeScript
+import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic({
+  baseUrl: "https://api.keywordsai.co/api/anthropic/",
+  apiKey: "YOUR_KEYWORDSAI_API_KEY",
+});
+
+const message = await client.messages.create({
+  model: "claude-3-5-sonnet-20240620",
+  max_tokens: 1000,
+  messages: [{ role: "user", content: "Hello" }],
+  metadata: {
+    keywordsai_params: {
+      var_1: "sample_value",
+    },
+  },
+});
+```
+</CodeGroup>
+</Step>
+
+<Step title="Step 3: Use in your code">
+Copy the configuration and use it in your requests.
+</Step>
+</Steps>
+</Tab>
+
+<Tab title="Google Gemini">
+<Steps>
+<Step title="Step 1: Go to the feature page">
+Go to [Feature page](https://platform.keywordsai.co/platform/feature) and click `Create`.
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/path/step1.png" alt="Step 1 screenshot" />
+</Frame>
+</Step>
+
+<Step title="Step 2: Configure the feature">
+Configure your feature settings in the UI (model, parameters, etc.).
+
+<CodeGroup>
+```python Python
+from google import genai
+import os
+
+client = genai.Client(
+    api_key=os.environ.get("KEYWORDSAI_API_KEY"),
+    http_options={
+        "base_url": "https://api.keywordsai.co/api/google/gemini",
+    },
+)
+
+response = client.models.generate_content(
+    model="gemini-2.5-flash",
+    contents="Hello",
+    # Note: provider SDK support for Keywords AI params may vary.
+    # If you can't pass `var_1` via the SDK, use the Standard API/proxy endpoint instead.
+)
+```
+```typescript TypeScript
+import { GoogleGenAI } from "@google/genai";
+
+const genAI = new GoogleGenAI({
+  apiKey: process.env.KEYWORDSAI_API_KEY,
+  httpOptions: {
+    baseUrl: "https://api.keywordsai.co/api/google/gemini",
+  },
+});
+
+const response = await genAI.models.generateContent({
+  model: "gemini-2.5-flash",
+  contents: [{ role: "user", parts: [{ text: "Hello" }] }],
+  // Note: provider SDK support for Keywords AI params may vary.
+});
+```
+</CodeGroup>
+</Step>
+
+<Step title="Step 3: Use in your code">
+Copy the configuration and use it in your requests.
+</Step>
+</Steps>
+</Tab>
+</Tabs>
 
 ## Configuration
 
 ### Parameter 1
 
-<Accordion title="parameter_name">
+<Accordion title="var_1">
 Description of what this parameter does and how to use it.
 
 ```json
 {
-  "parameter_name": "value"
+  "var_1": "sample_value"
 }
 ```
 </Accordion>
 
-<Accordion title="another_parameter">
+<Accordion title="var_2">
 Description of this parameter.
 
 ```json
 {
-  "another_parameter": {
-    "nested": "value"
+  "var_2": {
+    "nested_field": "sample_value"
   }
 }
 ```

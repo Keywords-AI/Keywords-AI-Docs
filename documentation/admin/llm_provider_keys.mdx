@@ -104,7 +104,7 @@ print(demo_call(messages).json())
 ```
 </Tab>
 <Tab title="Other SDKs">
-We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/own-api-keys) for more information.
+We also support adding credentials in other SDKs or languages.
 </Tab>
 </Tabs>
 
@@ -112,7 +112,7 @@ We also support adding credentials in other SDKs or languages, please check out 
 ## Add multiple credentials
 We support you adding multiple credentials for the same provider. For example, you can add multiple OpenAI API keys, or multiple Anthropic API keys. Just add the credentials in the same way you would add a single credential, but you have to specify the weight of each credential - the weight is the probability of the model using the credential.
 
-For more information, please check out our [Load balancing page](/features/generation/load-balancing).
+For more information, please check out our [Load balancing page](/documentation/products/gateway/traffic_management/load-balancing).
 
 ## View which credential was used
 You can view which credential was used in the each LLM log. Open the side panel of the LLM log, and you will see the `Deployment` section.

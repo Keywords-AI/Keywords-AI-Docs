@@ -1,5 +1,5 @@
 ---
-title: Thread list
+title: List thread
 api: POST https://api.keywordsai.co/api/log_threads/
 ---
 
@@ -27,7 +27,7 @@ This is controlled by the API key. A `prod` API key creates `prod` threads, `tes
 ## Post params
 
 <ParamField body="filters" type="object" default={{}}>
-  The filters to apply to the threads.
+  The filters to apply to the threads. For complete filter operators and examples, see the [Filters API Reference](/api-endpoints/reference/filters_api_reference).
   <Accordion title="Properties">
 
     <ParamField body="thread_identifier" type="string">

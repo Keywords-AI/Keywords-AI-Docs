@@ -1,15 +1,132 @@
 ---
-title: Get log
+title: Retrieve log
 api: GET https://api.keywordsai.co/api/request-logs/{unique_id}
 ---
 
-The Get Log endpoint allows you to get a specific log by its unique ID.
+The Get Log endpoint allows you to retrieve complete information about a specific log by its unique ID, including:
+- Full input/output content (`input` and `output` fields)
+- Type-specific fields extracted based on `log_type`
+- Credit and budget check results (`limit_info`)
+- Evaluation scores
+- Complete request/response metadata
+
+## Response fields
+
+Each log in the response includes:
+
+### Universal fields (All Span Types)
+- **`input`** (string): JSON-serialized representation of the span's input data
+- **`output`** (string): JSON-serialized representation of the span's output data
+- **`log_type`** (string): Type of span (`"chat"`, `"embedding"`, `"workflow"`, etc.)
+
 
 <Note>
-You should first get the log list, and based on the unique id in the list, retrieve the specific log. Learn more about the [log list endpoint](/api-endpoints/observe/logs/logs-list-endpoint).
+### Legacy compatibility
+For `log_type="chat"`, `"completion"`, `"text"`, or `"response"`:
+- **`prompt_messages`** (array): Full input messages array (extracted from `input`)
+- **`completion_message`** (object): Full output message object (extracted from `output`)
+
+For other span types (embedding, workflow, etc.), type-specific fields are extracted based on the `log_type`. See [log types](/get-started/observability_data_model#log-types) for details.
 </Note>
 
-## Path params  
+<Note>
+You should first get the log list, and based on the unique_id in the list, retrieve the specific log. Learn more about the [log list endpoint](/api-endpoints/observe/logs/list).
+</Note>
+
+## Credit and Budget Information
+
+Every log includes credit and budget check information in the `keywordsai_params.limit_info` field (available in the detail endpoint only).
+
+### What is `limit_info`?
+
+When you make an LLM request, Keywords AI checks:
+1. **Organization Credits**: Your organization's remaining credit balance
+2. **Customer Budgets**: Per-customer spending limits (if configured)
+
+The `limit_info` object shows the results of these checks.
+
+### Structure
+
+```json
+{
+  "limit_info": {
+    "is_allowed": true,
+    "limits": [
+      {
+        "name": "org_credits",
+        "current_value": 29.99,
+        "new_value": 29.98,
+        "limit_value": 0.0,
+        "is_within_limit": true
+      },
+      {
+        "name": "customer_budget",
+        "current_value": 8.50,
+        "new_value": 8.49,
+        "limit_value": 10.0,
+        "is_within_limit": true
+      }
+    ]
+  }
+}
+```
+
+### Fields Explained
+
+- **`is_allowed`**: Whether the request was allowed to proceed (all limits passed)
+- **`limits`**: Array of individual limit check results
+  - **`name`**: Type of limit - `"org_credits"` or `"customer_budget"`
+  - **`current_value`**: Balance before this request (USD)
+  - **`new_value`**: Balance after this request (USD)
+  - **`limit_value`**: Minimum required balance (USD)
+  - **`is_within_limit`**: Whether this specific check passed
+
+### Use Cases
+
+- **Monitor spending**: Track credit usage per request
+- **Debug rejections**: Understand why a request was blocked
+- **Customer analytics**: Analyze per-customer spending patterns
+- **Budget alerts**: Build custom alerts when approaching limits
+
+<AccordionGroup>
+  <Accordion title="Example: Request Allowed">
+    ```json
+    {
+      "is_allowed": true,
+      "limits": [
+        {
+          "name": "org_credits",
+          "current_value": 50.00,
+          "new_value": 49.98,
+          "limit_value": 0.0,
+          "is_within_limit": true
+        }
+      ]
+    }
+    ```
+    *Request succeeded. Organization had $50 in credits, now has $49.98 after this $0.02 request.*
+  </Accordion>
+
+  <Accordion title="Example: Request Blocked">
+    ```json
+    {
+      "is_allowed": false,
+      "limits": [
+        {
+          "name": "customer_budget",
+          "current_value": 9.99,
+          "new_value": 9.99,
+          "limit_value": 10.0,
+          "is_within_limit": false
+        }
+      ]
+    }
+    ```
+    *Request blocked. Customer has used $9.99 of their $10 budget, not enough for this request.*
+  </Accordion>
+</AccordionGroup>
+
+## Path parameters
 
 <ParamField path="unique_id" type="string" required>
   The unique ID of the log to get.

@@ -1,0 +1,516 @@
+---
+title: "API endpoint SOP"
+description: "What the API is for"
+---
+
+Some intro here if necessary with context and feature links
+
+<Note>
+Any notes
+</Note>
+
+## Query parameters
+
+<ParamField query="param_a" type="string">
+  Description of what this query parameter does.
+  
+  <Accordion title="Example">
+  ```json
+  "param_a": "2025-01-01T00:00:00Z"
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField query="param_b" type="integer" default={1}>
+  Description for parameter B.
+</ParamField>
+
+<ParamField query="param_c" type="integer" default={100}>
+  Description for parameter C. Maximum is 1000.
+</ParamField>
+
+<ParamField query="param_d" type="string" default="-id">
+  Description for parameter D. Prefix with `-` for descending order.
+  
+  <Accordion title="Options">
+  - `option_1` / `-option_1`: Option 1
+  - `option_2` / `-option_2`: Option 2
+  - `option_3` / `-option_3`: Option 3
+  - `option_4` / `-option_4`: Option 4
+  </Accordion>
+</ParamField>
+
+## Path parameters
+
+<ParamField path="resource_id" type="string" required>
+  The unique identifier of the resource to retrieve.
+</ParamField>
+
+## Request body
+
+### Section A
+
+<ParamField body="field_1" type="string | object | array">
+Description of field 1. Structure depends on `field_3`:
+- **Type A**: JSON string format
+- **Type B**: Text string or array format
+- **Type C/D**: Any JSON-serializable structure
+
+<Accordion title="Example for Type A">
+```json
+"field_1": "[{\"key\":\"value\",\"data\":\"sample\"}]"
+```
+</Accordion>
+
+<Accordion title="Example for Type B">
+```json
+"field_1": "Sample text string"
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="field_2" type="string | object | array">
+Description of field 2. Structure depends on `field_3`.
+
+<Accordion title="Example for Type A">
+```json
+"field_2": "{\"key\":\"value\",\"data\":\"response\"}"
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="field_3" type="string" default="type_a">
+Description of field 3. Determines how `field_1` and `field_2` are parsed.
+
+**Supported types:**
+- `"type_a"` - Type A records (default)
+- `"type_b"` - Type B records
+- `"type_c"` or `"type_d"` - Type C/D records
+- `"type_e"` or `"type_f"` - Type E/F records
+- `"type_g"` - Type G records
+- `"type_h"` - Custom type
+
+<Accordion title="Default behavior">
+If not specified, defaults to `"type_a"`. For complete specifications of each type, see documentation.
+</Accordion>
+</ParamField>
+
+<ParamField body="field_4" type="string">
+Description of field 4. Optional but recommended for certain types.
+
+<Accordion title="Example">
+```json
+"field_4": "sample-value-123"
+```
+</Accordion>
+</ParamField>
+
+### Section B
+
+<ParamField body="field_5" type="object">
+Description of field 5 for the request.
+
+<AccordionGroup>
+<Accordion title="Properties">
+<ParamField body="sub_field_a" type="integer">
+Description of sub field A.
+</ParamField>
+
+<ParamField body="sub_field_b" type="integer">
+Description of sub field B.
+</ParamField>
+
+<ParamField body="sub_field_c" type="integer">
+Description of sub field C.
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```json
+{
+  "field_5": {
+    "sub_field_a": 150,
+    "sub_field_b": 85,
+    "sub_field_c": 235
+  }
+}
+```
+</Accordion>
+</AccordionGroup>
+</ParamField>
+
+<ParamField body="field_6" type="float">
+Description of field 6. If not provided, will be calculated automatically.
+</ParamField>
+
+<ParamField body="field_7" type="float">
+Description of field 7 in seconds.
+
+<Note>
+Previously called `field_7_old`. Both field names are supported for backward compatibility.
+</Note>
+</ParamField>
+
+<ParamField body="field_8" type="float">
+Description of field 8 in seconds. Useful for performance tracking.
+</ParamField>
+
+### Section C
+
+<ParamField body="field_9" type="object">
+Description of field 9 for analytics and filtering.
+
+<Accordion title="Example">
+```json
+{
+  "field_9": {
+    "prop_1": "value_a",
+    "prop_2": "v1.0.0",
+    "prop_3": "tier_a"
+  }
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="field_10" type="string">
+Description of field 10. Helps with tracking.
+
+<Accordion title="Example">
+```json
+"field_10": "entity_123"
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="field_11" type="string">
+Description of field 11. Useful for grouping related records.
+</ParamField>
+
+<ParamField body="field_12" type="string">
+Same functionality as `field_9`, but indexed for faster querying.
+
+<Accordion title="Example">
+```json
+"field_12": "ref_12345"
+```
+</Accordion>
+</ParamField>
+
+### Section D
+
+<ParamField body="field_13" type="string">
+Description of field 13. Used to link multiple records together.
+</ParamField>
+
+<ParamField body="field_14" type="string">
+Description of field 14.
+</ParamField>
+
+<ParamField body="field_15" type="string">
+Description of field 15 within the group.
+</ParamField>
+
+## Body parameters
+
+<ParamField body="filters" type="object" default={{}}>
+The filters to be applied to the records.
+
+<Note>
+If you want to filter your custom properties, add `field_9__` prefix. For example, to filter `my_property`, use `field_9__my_property`.
+</Note>
+
+<Accordion title="Example">
+```json
+{
+  "filters": {
+    "field_6": {
+      "operator": "gt",
+      "value": [10.0]
+    },
+    "field_9__prop_3": {
+      "operator": "in",
+      "value": ["tier_a", "tier_b"]
+    }
+  }
+}
+```
+</Accordion>
+</ParamField>
+
+<ParamField body="operator" type="string">
+Comparison operator for filtering. Default is `""` (equal).
+
+<Accordion title="Supported operators">
+- `""` (empty string): Equal
+- `"lt"`: Less than
+- `"lte"`: Less than or equal
+- `"gt"`: Greater than
+- `"gte"`: Greater than or equal
+- `"contains"`: Contains substring
+- `"icontains"`: Case-insensitive contains
+- `"startswith"`: Starts with
+- `"endswith"`: Ends with
+- `"in"`: Value in array
+- `"not"`: Not equal
+- `"isnull"`: Check if field is null
+</Accordion>
+</ParamField>
+
+## Advanced parameters
+
+### Feature 1
+
+<ParamField body="field_16" type="array">
+Description of field 16 array. Currently, only type A is supported.
+
+<AccordionGroup>
+<Accordion title="Properties">
+<ParamField body="type" type="string" required>
+The type of the item. Currently, only `type_a` is supported.
+</ParamField>
+
+<ParamField body="definition" type="object" required>
+Definition object containing name, description, and parameters.
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```json
+"field_16": [
+  {
+    "type": "type_a",
+    "definition": {
+      "name": "action_name",
+      "description": "Action description",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "param_x": {"type": "string"}
+        },
+        "required": ["param_x"]
+      }
+    }
+  }
+]
+```
+</Accordion>
+</AccordionGroup>
+</ParamField>
+
+<ParamField body="field_17" type="string | object">
+Description of field 17. Can be `"none"`, `"auto"`, or an object specifying a specific item.
+
+<Accordion title="Example">
+```json
+"field_17": {
+  "type": "type_a",
+  "definition": {"name": "action_name"}
+}
+```
+</Accordion>
+</ParamField>
+
+### Feature 2
+
+<ParamField body="field_18" type="integer" default={200}>
+Description of field 18 for the request. Default is 200.
+
+<Accordion title="Supported values">
+All valid HTTP codes are supported: `200`, `201`, `400`, `401`, `403`, `404`, `429`, `500`, `502`, `503`, `504`, etc.
+</Accordion>
+</ParamField>
+
+<ParamField body="field_19" type="string">
+Description of field 19 if the request failed. Default is empty string.
+</ParamField>
+
+<ParamField body="field_20" type="string | object">
+Description of field 20 that occurred during the request.
+</ParamField>
+
+### Feature 3
+
+<ParamField body="field_21" type="object">
+Description of field 21 behavior.
+
+<AccordionGroup>
+<Accordion title="Properties">
+<ParamField body="option_a" type="boolean" default={true}>
+If `false`, the server immediately returns initialization status without waiting for completion.
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```json
+{
+  "field_21": {
+    "option_a": true
+  }
+}
+```
+</Accordion>
+</AccordionGroup>
+</ParamField>
+
+## Response fields
+
+Each record in the response includes:
+
+### Group A (All Record Types)
+- **`field_1`** (string): Description of field 1 data
+- **`field_2`** (string): Description of field 2 data
+- **`field_3`** (string): Type of record (`"type_a"`, `"type_b"`, `"type_c"`, etc.)
+
+<Note>
+### Compatibility notes
+For `field_3="type_a"`, `"type_b"`, `"type_c"`, or `"type_d"`:
+- **`field_22`** (array): Data array (extracted from `field_1`)
+- **`field_23`** (object): Data object (extracted from `field_2`)
+
+For other record types, type-specific fields are extracted based on the `field_3`. See documentation for details.
+</Note>
+
+### Group B
+- **`id`** (string): Unique identifier for the record
+- **`org_id`** (string): Organization's unique ID
+- **`field_10`** (string): Field 10 identifier
+- **`field_11`** (string): Field 11 identifier
+
+### Group C
+- **`field_6`** (float): Field 6 value in decimal
+- **`field_7`** (float): Field 7 value in seconds
+- **`sub_field_a`** (integer): Sub field A units
+- **`sub_field_b`** (integer): Sub field B units
+- **`sub_field_total`** (integer): Total units
+- **`field_8`** (float): Field 8 value in seconds
+- **`rate`** (float): Rate calculation
+
+### Group D
+- **`status`** (string): Record status (`"success"`, `"error"`)
+- **`field_18`** (integer): HTTP code
+- **`field_19`** (string): Error text if failed
+
+## Response
+
+Returns the created record object with generated fields.
+
+```json
+{
+  "id": "record_abc123",
+  "status": "success",
+  "field_6": 0.123,
+  "timestamp": "2025-01-01T10:30:00Z",
+  "org_id": "org_xyz789",
+  "field_10": "entity_123"
+}
+```
+
+<RequestExample>
+```python Python
+import requests
+
+url = "https://api.example.com/api/records/create/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+payload = {
+    "field_3": "type_a",
+    "field_4": "sample-value",
+    "field_1": '[{"key":"value","data":"sample"}]',
+    "field_2": '{"key":"value","data":"response"}',
+    "field_5": {
+        "sub_field_a": 10,
+        "sub_field_b": 8,
+        "sub_field_c": 18
+    },
+    "field_10": "entity_123",
+    "field_7": 1.2,
+    "field_9": {
+        "prop_1": "value_a"
+    }
+}
+response = requests.post(url, headers=headers, json=payload)
+print(response.json())
+```
+
+```typescript TypeScript
+const url = 'https://api.example.com/api/records/create/';
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    field_3: 'type_a',
+    field_4: 'sample-value',
+    field_1: '[{"key":"value","data":"sample"}]',
+    field_2: '{"key":"value","data":"response"}',
+    field_5: {
+        sub_field_a: 10,
+        sub_field_b: 8,
+        sub_field_c: 18
+    },
+    field_10: 'entity_123',
+    field_7: 1.2,
+    field_9: {
+        prop_1: 'value_a'
+    }
+};
+
+const response = await fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(payload)
+});
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl -X POST "https://api.example.com/api/records/create/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "field_3": "type_a",
+    "field_4": "sample-value",
+    "field_1": "[{\"key\":\"value\",\"data\":\"sample\"}]",
+    "field_2": "{\"key\":\"value\",\"data\":\"response\"}",
+    "field_5": {
+      "sub_field_a": 10,
+      "sub_field_b": 8,
+      "sub_field_c": 18
+    },
+    "field_10": "entity_123",
+    "field_7": 1.2
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "record_abc123",
+  "unique_id": "record_abc123",
+  "org_id": "org_xyz789",
+  "field_10": "entity_123",
+  "status": "success",
+  "field_6": 0.123,
+  "timestamp": "2025-01-01T10:30:00Z"
+}
+```
+
+```json 400 Bad Request
+{
+  "error": "Invalid record format",
+  "detail": "Field 'field_1' is required"
+}
+```
+
+```json 401 Unauthorized
+{
+  "detail": "Your API key is invalid or expired"
+}
+```
+</ResponseExample>

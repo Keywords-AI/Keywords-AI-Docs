@@ -3,7 +3,7 @@ title: "Set budget for users"
 description: ""
 ---
 
-<Note>Only Keywords AI users who are using the **LLM proxy** can set budget for their users. See how to [set up LLM proxy](/features/generation/llm-proxy) for more information.</Note>
+<Note>Only Keywords AI users who are using the **LLM proxy** can set budget for their users. See how to [set up LLM proxy](/get-started/quickstart/gateway) for more information.</Note>
 
 
 <Tabs>
@@ -126,7 +126,7 @@ response = requests.request("POST", url, headers=headers, json=payload)
 </CodeGroup>
 </Tab>
 <Tab title="Other SDKs">
-We also support adding credentials in other SDKs or languages, please check out our [integration section](/integration/own-api-keys) for more information.
+We also support adding credentials in other SDKs or languages, please check out our [integration section](/documentation/admin/llm_provider_keys) for more information.
 </Tab>
 </Tabs>
 
@@ -183,4 +183,4 @@ The total budget for a user.
 ``` */}
 
 ## Other ways to set budget
-You can also set the budget to a specific user by calling the [User Update endpoint](/api-endpoints/observe/users/user-update-endpoint) or the [User Creation endpoint](/api-endpoints/observe/users/user-creation-endpoint) for the new users.
+You can also set the budget to a specific user by calling the [User Update endpoint](/api-endpoints/observe/users/update) or the [User Creation endpoint](/api-endpoints/observe/users/create) for the new users.

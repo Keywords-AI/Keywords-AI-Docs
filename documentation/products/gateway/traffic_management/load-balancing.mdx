@@ -75,7 +75,7 @@ You could specify the load balancing weights for different models. This is usefu
 
 
 ### Fallback usage in load balancing
-You could also set up fallback models to avoid errors. It will fall back to the list of models you specified in the `fallback` field once have any outages. Check out the [Fallbacks](/features/generation/fallbacks) section for more information.
+You could also set up fallback models to avoid errors. It will fall back to the list of models you specified in the `fallback` field once have any outages. Check out the [Fallbacks](/documentation/products/gateway/traffic_management/fallbacks) section for more information.
 
 
 
@@ -235,14 +235,14 @@ The `loadbalance_models` parameter is deprecated. You should use the `load_balan
 </Accordion>
 <Accordion title="Depracted params">
 <ParamField path="model" type="string" required>
-  Specify which model to balance load. See the list of models [here](/integration/supported-models). 
+  Specify which model to balance load. See the list of models [here](/integration/overview). 
 </ParamField>
 <ParamField path="weight" type="integer" required>
     Specify the weight of the model (has to be a positive integer). The higher the weight, the more requests will be sent to the model.
 </ParamField>
 <ParamField path="credentials" type="list" >
 This is required for all free plan users. For team plan and above, this is optional. <br/>
-See how to add your own credentials [here](/integration/providers/providers-overview).
+See how to add your own credentials [here](/integration/overview).
 </ParamField>
 </Accordion>
 </AccordionGroup>
