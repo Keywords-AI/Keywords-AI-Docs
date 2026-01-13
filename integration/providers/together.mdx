@@ -1,15 +1,23 @@
 ---
 title: "Together AI"
-description: "Use your own Together AI credits through Keywords AI"
+description: "Route Together AI model calls through Keywords AI Gateway using your own Together AI credits."
 ---
+
+<Note> This section is for **Keywords AI LLM gateway** users.</Note>
+
+Use Keywords AI Gateway to call **Together AI** models while keeping unified observability (logs, cost, latency, and reliability metrics) in Keywords AI — and optionally charge usage to **your own Together AI credits**.
+
+## Prerequisites
+- A **Keywords AI API key**
+- A **Together AI API key** (BYOK credits)
 
 <CardGroup cols={1}>
   <Card title="Get Together AI API key" icon="key" href="https://api.together.xyz/settings/api-keys">
-    Get your Together AI API key from the Together AI platform to start using Together AI models through Keywords AI.
+    Retrieve your API key from Together AI to begin integration.
   </Card>
 </CardGroup>
 
-## Together AI models compatibility
+## Supported SDKs / integrations
 
 <AccordionGroup>
   <Accordion title="✅ Supported Frameworks">
@@ -28,24 +36,85 @@ description: "Use your own Together AI credits through Keywords AI"
   </Accordion>
 </AccordionGroup>
 
-## Add Together AI API keys
+## Configuration
 There are 2 ways to add your Together AI credentials to your requests:
-### Via UI
 
-### Via Code
-Add `customer_credentials` parameter in your [request body](/api-endpoints/develop/gateway/chat-completions) to use your own Together AI credits.
+### Via UI (Global)
+
+<Steps>
+  <Step title="Navigate to Providers">
+    Go to the [Providers page](https://platform.keywordsai.co/platform/api/providers). This page allows you to manage credentials for over 20+ supported providers.
+    <Frame>
+      <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg" alt="Keywords AI Providers Page"/>
+    </Frame>
+  </Step>
+
+  <Step title="Add your Together AI API Key">
+    Select Together AI and paste your API key.
+    {/* Replace with your real screenshot path if different */}
+    <Frame>
+      <img src="/images/providers/togetherai.png" alt="Add Together AI Credentials"/>
+    </Frame>
+  </Step>
+
+  <Step title="Configure Load Balancing (Optional)">
+    You can add multiple Together AI API keys for redundancy. Use the `Load balancing weight` field to determine how traffic is distributed between keys.
+  </Step>
+</Steps>
+
+### Via code (Per-Request)
+You can pass credentials dynamically in the request body. This is useful if you need to use your users' own API keys (BYOK credits).
+
+Add the `customer_credentials` parameter to your [Gateway request](/api-endpoints/develop/gateway/chat-completions):
 
 ```json
 {
   // Rest of the request body
   "customer_credentials": {
     "togetherai": {
-      "api_key": "YOUR_TOGETHERAI_API_KEY",
+      "api_key": "YOUR_TOGETHERAI_API_KEY"
     }
   }
 }
 ```
 
+## Log Together AI requests
+
+If you are not using the Gateway to proxy requests, you can still log your Together AI requests to Keywords AI asynchronously. This allows you to track cost, latency, and performance metrics for external calls.
+
+```python Together AI Python SDK
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "model": "meta-llama/Llama-3-8b-chat-hf",
+    "prompt_messages": [
+        {
+            "role": "user",
+            "content": "Explain machine learning in simple terms"
+        }
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Machine learning is like teaching computers to recognize patterns by learning from examples..."
+    },
+    "cost": 0.0005,
+    "generation_time": 2.1,
+    "customer_params": {
+        "customer_identifier": "user_303"
+    }
+}
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, headers=headers, json=payload)
+```
+
+<Card title="Get Started with Logging" icon="rocket" href="/documentation/products/logs/quickstart"> Learn how to set up comprehensive logging for all your LLM requests </Card>
+
+{/* 
 ## Full request example
 <Accordion title="Example">
 <CodeGroup>
@@ -96,4 +165,4 @@ messages = "Say 'Hello World'"
 print(demo_call(messages).json())
 ```
 </CodeGroup>
-</Accordion>
+</Accordion> */}

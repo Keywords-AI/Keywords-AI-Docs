@@ -1,15 +1,23 @@
 ---
 title: "OpenRouter"
-description: "Use your own OpenRouter credits through Keywords AI"
+description: "Route OpenRouter model calls through Keywords AI Gateway using your own OpenRouter credits."
 ---
+
+<Note> This section is for **Keywords AI LLM gateway** users.</Note>
+
+Use Keywords AI Gateway to call **OpenRouter** models while keeping unified observability (logs, cost, latency, and reliability metrics) in Keywords AI — and optionally charge usage to **your own OpenRouter credits**.
+
+## Prerequisites
+- A **Keywords AI API key**
+- An **OpenRouter API key** (BYOK credits)
 
 <CardGroup cols={1}>
   <Card title="Get OpenRouter API key" icon="key" href="https://openrouter.ai/keys">
-    Get your OpenRouter API key from the OpenRouter platform to start using OpenRouter models through Keywords AI.
+    Retrieve your API key from OpenRouter to begin integration.
   </Card>
 </CardGroup>
 
-## OpenRouter models compatibility
+## Supported SDKs / integrations
 
 <AccordionGroup>
   <Accordion title="✅ Supported Frameworks">
@@ -28,38 +36,84 @@ description: "Use your own OpenRouter credits through Keywords AI"
   </Accordion>
 </AccordionGroup>
 
-## Add OpenRouter API keys
+## Configuration
 There are 2 ways to add your OpenRouter credentials to your requests:
-### Via UI
+
+### Via UI (Global)
 
 <Steps>
-<Step title="Go to the Providers page">
-Go to [Providers page](https://platform.keywordsai.co/platform/api/providers)
-<Frame>
-<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg" alt="Providers Page"/>
-</Frame>
-</Step>
-<Step title="Add your OpenRouter credentials.">
+  <Step title="Navigate to Providers">
+    Go to the [Providers page](https://platform.keywordsai.co/platform/api/providers). This page allows you to manage credentials for over 20+ supported providers.
+    <Frame>
+      <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/settings/providers.jpg" alt="Keywords AI Providers Page"/>
+    </Frame>
+  </Step>
 
-<img height="200" width="300"  src="/images/providers/openrouter.png" alt="Dashboard Page"/>
-</Step>
+  <Step title="Add your OpenRouter API Key">
+    Select OpenRouter and paste your API key.
+    <Frame>
+      <img src="/images/providers/openrouter.png" alt="Add OpenRouter Credentials"/>
+    </Frame>
+  </Step>
+
+  <Step title="Configure Load Balancing (Optional)">
+    You can add multiple OpenRouter API keys for redundancy. Use the `Load balancing weight` field to determine how traffic is distributed between keys.
+  </Step>
 </Steps>
 
-## Via code
-- Add `customer_credentials` parameter in your [request body](/api-endpoints/develop/gateway/chat-completions) to use your own OpenRouter credits.
+### Via code (Per-Request)
+You can pass credentials dynamically in the request body. This is useful if you need to use your users' own API keys (BYOK credits).
+
+Add the `customer_credentials` parameter to your [Gateway request](/api-endpoints/develop/gateway/chat-completions):
 
 ```json
 {
   // Rest of the request body
   "customer_credentials": {
     "openrouter": {
-      "api_key": "YOUR_OPENROUTER_API_KEY",
+      "api_key": "YOUR_OPENROUTER_API_KEY"
     }
   }
 }
 ```
 
-## Full request example
+## Log OpenRouter requests
+
+If you are not using the Gateway to proxy requests, you can still log your OpenRouter requests to Keywords AI asynchronously. This allows you to track cost, latency, and performance metrics for external calls.
+
+```python OpenRouter Python SDK
+import requests
+
+url = "https://api.keywordsai.co/api/request-logs/create/"
+payload = {
+    "model": "openai/gpt-4o",
+    "prompt_messages": [
+        {
+            "role": "user",
+            "content": "Explain quantum computing"
+        }
+    ],
+    "completion_message": {
+        "role": "assistant",
+        "content": "Quantum computing is a computing paradigm that uses quantum mechanics to process information..."
+    },
+    "cost": 0.002,
+    "generation_time": 3.1,
+    "customer_params": {
+        "customer_identifier": "user_789"
+    }
+}
+headers = {
+    "Authorization": "Bearer YOUR_KEYWORDS_AI_API_KEY",
+    "Content-Type": "application/json"
+}
+
+response = requests.post(url, headers=headers, json=payload)
+```
+
+<Card title="Get Started with Logging" icon="rocket" href="/documentation/products/logs/quickstart"> Learn how to set up comprehensive logging for all your LLM requests </Card>
+
+{/* ## Full request example
 <Accordion title="Example">
 <CodeGroup>
 ```python openai_example.py
@@ -109,4 +163,4 @@ messages = "Say 'Hello World'"
 print(demo_call(messages).json())
 ```
 </CodeGroup>
-</Accordion>
+</Accordion> */}
