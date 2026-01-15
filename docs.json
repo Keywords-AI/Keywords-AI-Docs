@@ -66,25 +66,7 @@
                   "/documentation/products/logs/configuration/group_logs",
                   "/documentation/products/logs/custom_model",
                   "/documentation/products/logs/filters",
-                  "/documentation/products/logs/sharing",
-                  {
-                    "group": "Providers",
-                    "pages": [
-                      "/documentation/products/logs/providers/openai",
-                      "/documentation/products/logs/providers/anthropic",
-                      "/documentation/products/logs/providers/openrouter",
-                      "/documentation/products/logs/providers/groq",
-                      "/documentation/products/logs/providers/fireworks",
-                      "/documentation/products/logs/providers/together",
-                      "/documentation/products/logs/providers/perplexity",
-                      "/documentation/products/logs/providers/azure",
-                      "/documentation/products/logs/providers/vertex",
-                      "/documentation/products/logs/providers/gemini",
-                      "/documentation/products/logs/providers/bedrock",
-                      "/documentation/products/logs/providers/nebius",
-                      "/documentation/products/logs/providers/novita"
-                    ]
-                  }
+                  "/documentation/products/logs/sharing"
                 ]
               },
               {
@@ -364,7 +346,6 @@
                 "group": "Logs",
                 "pages": [
                   "/api-endpoints/observe/logs/request-logging-endpoint",
-                  "/api-endpoints/observe/logs/batch-logging-endpoint",
                   "/api-endpoints/observe/logs/logs-list-endpoint",
                   "/api-endpoints/observe/logs/logs-summary-endpoint",
                   "/api-endpoints/observe/logs/get-log-endpoint",
