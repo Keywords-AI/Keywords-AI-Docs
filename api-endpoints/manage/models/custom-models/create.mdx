@@ -1,0 +1,237 @@
+---
+title: Create custom model
+api: POST https://api.keywordsai.co/api/models/
+---
+
+Create a new custom model or update an existing one (upsert by `model_name`). Custom models allow you to define organization-specific configurations with custom pricing, capabilities, and provider associations.
+
+<Note>
+**Upsert behavior**: If a model with the same `model_name` already exists in your organization, it will be updated with the new values.
+</Note>
+
+## Request body
+
+<ParamField body="model_name" type="string" required>
+  Unique model name within your organization. This will be used to reference the model in API calls.
+  
+  <Accordion title="Example">
+  ```json
+  "model_name": "my-custom-gpt-4"
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="base_model_name" type="string">
+  Base model to inherit properties from. Can be a global model (e.g., `"gpt-4"`) or another custom model.
+  
+  <Accordion title="Example">
+  ```json
+  "base_model_name": "gpt-4"
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="display_name" type="string">
+  Human-readable display name for the model.
+  
+  <Accordion title="Example">
+  ```json
+  "display_name": "My Custom GPT-4"
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="custom_provider_id" type="integer | string">
+  ID or `provider_id` of the custom provider to associate with this model. See [Custom Providers](/api-endpoints/manage/models/custom-providers/list).
+  
+  <Accordion title="Example">
+  ```json
+  "custom_provider_id": "my-azure-provider"
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="provider_id" type="integer | string">
+  Alternative to `custom_provider_id`. Either one can be used.
+</ParamField>
+
+### Pricing
+
+<ParamField body="input_cost" type="float">
+  Cost per 1M input tokens in USD.
+  
+  <Accordion title="Example">
+  ```json
+  "input_cost": 0.025
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="output_cost" type="float">
+  Cost per 1M output tokens in USD.
+  
+  <Accordion title="Example">
+  ```json
+  "output_cost": 0.075
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="cache_hit_input_cost" type="float">
+  Cost per 1M cached input tokens in USD.
+</ParamField>
+
+<ParamField body="cache_creation_input_cost" type="float">
+  Cost per 1M cache creation tokens in USD.
+</ParamField>
+
+### Capabilities
+
+<ParamField body="max_context_window" type="integer">
+  Maximum context window size for the model.
+  
+  <Accordion title="Example">
+  ```json
+  "max_context_window": 8192
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="streaming_support" type="integer">
+  Streaming support. `0` for no, `1` for yes.
+</ParamField>
+
+<ParamField body="function_call" type="integer">
+  Function calling support. `0` for no, `1` for yes.
+</ParamField>
+
+<ParamField body="image_support" type="integer">
+  Image/vision support. `0` for no, `1` for yes.
+</ParamField>
+
+<ParamField body="supported_params_override" type="object">
+  Override UI parameter support for this model in the Playground. See the model detail endpoint for current values.
+  
+  <Accordion title="Example">
+  ```json
+  {
+    "supported_params_override": {
+      "temperature": {
+        "name": "temperature",
+        "type": "number",
+        "default": 0.7,
+        "min": 0,
+        "max": 1.5
+      }
+    }
+  }
+  ```
+  </Accordion>
+</ParamField>
+
+## Response
+
+Returns the created or updated model object.
+
+<ResponseExample>
+```json 201 Created
+{
+  "id": "my-custom-gpt-4",
+  "model_name": "my-custom-gpt-4",
+  "display_name": "My Custom GPT-4",
+  "base_model_name": "gpt-4",
+  "affiliation_category": "custom",
+  "is_called_by_custom_name": false,
+  "input_cost": 0.025,
+  "output_cost": 0.075,
+  "cache_hit_input_cost": 0.0,
+  "cache_creation_input_cost": 0.0,
+  "max_context_window": 8192,
+  "streaming_support": 1,
+  "function_call": 1,
+  "image_support": 0,
+  "source": "db",
+  "provider": {
+    "id": "my-custom-provider",
+    "provider_id": "my-custom-provider",
+    "provider_name": "My Custom Provider",
+    "organization_id": 123
+  }
+}
+```
+
+```json 400 Bad Request
+{
+  "error": "Base model not found"
+}
+```
+
+```json 401 Unauthorized
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/models/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+payload = {
+    "model_name": "my-custom-gpt-4",
+    "base_model_name": "gpt-4",
+    "display_name": "My Custom GPT-4",
+    "custom_provider_id": "my-azure-provider",
+    "input_cost": 0.025,
+    "output_cost": 0.075
+}
+
+response = requests.post(url, headers=headers, json=payload)
+print(response.json())
+```
+
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/models/';
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    model_name: 'my-custom-gpt-4',
+    base_model_name: 'gpt-4',
+    display_name: 'My Custom GPT-4',
+    custom_provider_id: 'my-azure-provider',
+    input_cost: 0.025,
+    output_cost: 0.075
+};
+
+const response = await fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(payload)
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/models/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model_name": "my-custom-gpt-4",
+    "base_model_name": "gpt-4",
+    "display_name": "My Custom GPT-4",
+    "custom_provider_id": "my-azure-provider",
+    "input_cost": 0.025,
+    "output_cost": 0.075
+  }'
+```
+</RequestExample>

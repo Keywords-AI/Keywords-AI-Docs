@@ -1,0 +1,165 @@
+---
+title: Create custom provider
+api: POST https://api.keywordsai.co/api/providers/
+---
+
+Create a new custom provider or update an existing one (upsert by `provider_id`). Custom providers allow you to configure custom LLM API endpoints with your own credentials.
+
+<Note>
+**Upsert behavior**: If a provider with the same `provider_id` already exists in your organization, it will be updated with the new values.
+</Note>
+
+<Note>
+**Write-only fields**: The `api_key` and `extra_kwargs` fields are accepted in requests but never returned in responses for security reasons.
+</Note>
+
+## Request body
+
+<ParamField body="provider_id" type="string" required>
+  Unique provider identifier within your organization.
+  
+  <Accordion title="Example">
+  ```json
+  "provider_id": "my-azure-provider"
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="provider_name" type="string" required>
+  Human-readable provider name.
+  
+  <Accordion title="Example">
+  ```json
+  "provider_name": "My Azure Provider"
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="api_key" type="string">
+  API key for the provider (write-only, never returned in responses).
+  
+  <Accordion title="Example">
+  ```json
+  "api_key": "your-api-key-here"
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="extra_kwargs" type="object">
+  Additional provider configuration (write-only, never returned in responses).
+  
+  <AccordionGroup>
+  <Accordion title="Common fields">
+  - `base_url` (string): Custom API base URL
+  - `timeout` (integer): Request timeout in seconds
+  - `temperature` (float): Default temperature setting
+  - `max_tokens` (integer): Default max tokens
+  </Accordion>
+  
+  <Accordion title="Example">
+  ```json
+  {
+    "extra_kwargs": {
+      "base_url": "https://my-azure-endpoint.openai.azure.com",
+      "timeout": 60
+    }
+  }
+  ```
+  </Accordion>
+  </AccordionGroup>
+</ParamField>
+
+## Response
+
+Returns the created or updated provider object (without sensitive fields).
+
+<ResponseExample>
+```json 201 Created
+{
+  "id": "my-azure-provider",
+  "provider_id": "my-azure-provider",
+  "provider_name": "My Azure Provider",
+  "created_at": "2024-01-15T10:30:00Z",
+  "updated_at": "2024-01-15T10:30:00Z"
+}
+```
+
+```json 200 OK (Updated)
+{
+  "id": "my-azure-provider",
+  "provider_id": "my-azure-provider",
+  "provider_name": "My Azure Provider",
+  "created_at": "2024-01-15T10:30:00Z",
+  "updated_at": "2024-01-15T12:00:00Z"
+}
+```
+
+```json 401 Unauthorized
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/providers/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+payload = {
+    "provider_id": "my-azure-provider",
+    "provider_name": "My Azure Provider",
+    "api_key": "your-api-key",
+    "extra_kwargs": {
+        "base_url": "https://my-azure-endpoint.openai.azure.com"
+    }
+}
+
+response = requests.post(url, headers=headers, json=payload)
+print(response.json())
+```
+
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/providers/';
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    provider_id: 'my-azure-provider',
+    provider_name: 'My Azure Provider',
+    api_key: 'your-api-key',
+    extra_kwargs: {
+        base_url: 'https://my-azure-endpoint.openai.azure.com'
+    }
+};
+
+const response = await fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(payload)
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/providers/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "provider_id": "my-azure-provider",
+    "provider_name": "My Azure Provider",
+    "api_key": "your-api-key",
+    "extra_kwargs": {
+      "base_url": "https://my-azure-endpoint.openai.azure.com"
+    }
+  }'
+```
+</RequestExample>

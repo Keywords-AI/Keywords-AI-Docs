@@ -1,0 +1,86 @@
+---
+title: Retrieve custom provider
+api: GET https://api.keywordsai.co/api/providers/{pk}/
+---
+
+Retrieve a specific custom provider by its primary key ID.
+
+<Note>
+**Sensitive fields**: The `api_key` and `extra_kwargs` fields are never returned in API responses for security reasons.
+</Note>
+
+## Path parameters
+
+<ParamField path="pk" type="integer" required>
+  The provider's primary key ID (numeric database ID).
+  
+  <Accordion title="Example">
+  ```
+  123
+  ```
+  </Accordion>
+</ParamField>
+
+## Response
+
+Returns the provider object without sensitive fields.
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "my-azure-provider",
+  "provider_id": "my-azure-provider",
+  "provider_name": "My Azure Provider",
+  "created_at": "2024-01-15T10:30:00Z",
+  "updated_at": "2024-01-15T10:30:00Z"
+}
+```
+
+```json 404 Not Found
+{
+  "detail": "Not found."
+}
+```
+
+```json 401 Unauthorized
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+provider_pk = 123
+url = f"https://api.keywordsai.co/api/providers/{provider_pk}/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```typescript TypeScript
+const providerPk = 123;
+const url = `https://api.keywordsai.co/api/providers/${providerPk}/`;
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY'
+};
+
+const response = await fetch(url, {
+    method: 'GET',
+    headers: headers
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl "https://api.keywordsai.co/api/providers/123/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+</RequestExample>

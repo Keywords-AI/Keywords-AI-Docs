@@ -1,0 +1,108 @@
+---
+title: Retrieve custom model
+api: GET https://api.keywordsai.co/api/models/{model_name}/
+---
+
+Retrieve a specific model by its model name. Returns detailed configuration including associated provider and supported parameters.
+
+<Note>
+**Permissions**: Global models are accessible by anyone. Custom models are only accessible by the owning organization.
+</Note>
+
+## Path parameters
+
+<ParamField path="model_name" type="string" required>
+  The model's unique name. Can include slashes (e.g., `openai/gpt-4`).
+  
+  <Accordion title="Example">
+  ```
+  my-custom-gpt-4
+  ```
+  </Accordion>
+</ParamField>
+
+## Response
+
+Returns the model object with full configuration details.
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "my-custom-gpt-4",
+  "model_name": "my-custom-gpt-4",
+  "display_name": "My Custom GPT-4",
+  "base_model_name": "gpt-4",
+  "affiliation_category": "custom",
+  "is_called_by_custom_name": false,
+  "input_cost": 0.025,
+  "output_cost": 0.075,
+  "cache_hit_input_cost": 0.0,
+  "cache_creation_input_cost": 0.0,
+  "max_context_window": 8192,
+  "streaming_support": 1,
+  "function_call": 1,
+  "image_support": 0,
+  "source": "db",
+  "provider": {
+    "id": "my-custom-provider",
+    "provider_id": "my-custom-provider",
+    "provider_name": "My Custom Provider",
+    "organization_id": 123
+  }
+}
+```
+
+```json 404 Not Found
+{
+  "detail": "Not found."
+}
+```
+
+```json 403 Forbidden
+{
+  "detail": "Cannot access objects owned by others"
+}
+```
+
+```json 401 Unauthorized
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+model_name = "my-custom-gpt-4"
+url = f"https://api.keywordsai.co/api/models/{model_name}/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```typescript TypeScript
+const modelName = 'my-custom-gpt-4';
+const url = `https://api.keywordsai.co/api/models/${modelName}/`;
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY'
+};
+
+const response = await fetch(url, {
+    method: 'GET',
+    headers: headers
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl "https://api.keywordsai.co/api/models/my-custom-gpt-4/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+</RequestExample>

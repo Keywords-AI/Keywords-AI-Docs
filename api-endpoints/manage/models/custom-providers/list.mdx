@@ -1,0 +1,75 @@
+---
+title: List custom providers
+api: GET https://api.keywordsai.co/api/providers/
+---
+
+Retrieve all custom providers for your organization. Custom providers allow you to configure custom LLM API endpoints with your own credentials and settings.
+
+<Note>
+**Sensitive fields**: The `api_key` and `extra_kwargs` fields are write-only and never returned in API responses for security reasons.
+</Note>
+
+## Response
+
+Returns an array of custom provider objects.
+
+<ResponseExample>
+```json 200 OK
+[
+  {
+    "id": "my-azure-provider",
+    "provider_id": "my-azure-provider",
+    "provider_name": "My Azure Provider",
+    "created_at": "2024-01-15T10:30:00Z",
+    "updated_at": "2024-01-15T10:30:00Z"
+  },
+  {
+    "id": "my-openai-provider",
+    "provider_id": "my-openai-provider",
+    "provider_name": "My OpenAI Provider",
+    "created_at": "2024-01-16T14:20:00Z",
+    "updated_at": "2024-01-16T14:20:00Z"
+  }
+]
+```
+
+```json 401 Unauthorized
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/providers/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/providers/';
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY'
+};
+
+const response = await fetch(url, {
+    method: 'GET',
+    headers: headers
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl "https://api.keywordsai.co/api/providers/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+</RequestExample>
