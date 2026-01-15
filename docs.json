@@ -620,10 +620,10 @@
         ]
       },
       {
-        "tab": "Python SDKs",
+        "tab": "SDKs",
         "groups": [
           {
-            "group": "Tracing SDK",
+            "group": "Python Tracing SDK",
             "pages": [
               {
                 "group": "Getting Started",
@@ -670,6 +670,57 @@
                 "group": "Instrumentation",
                 "pages": [
                   "/tracing-sdk/instrumentation/overview"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "TypeScript Tracing SDK",
+            "pages": [
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "/tracing-sdk-js/quickstart",
+                  "/tracing-sdk-js/examples"
+                ]
+              },
+              {
+                "group": "Methods",
+                "pages": [
+                  "/tracing-sdk-js/methods/with-workflow",
+                  "/tracing-sdk-js/methods/with-task",
+                  "/tracing-sdk-js/methods/with-agent",
+                  "/tracing-sdk-js/methods/with-tool"
+                ]
+              },
+              {
+                "group": "Client API",
+                "pages": [
+                  "/tracing-sdk-js/client/initialize",
+                  "/tracing-sdk-js/client/get-client",
+                  "/tracing-sdk-js/client/get-current-trace-id",
+                  "/tracing-sdk-js/client/get-current-span-id",
+                  "/tracing-sdk-js/client/update-current-span",
+                  "/tracing-sdk-js/client/add-span-event",
+                  "/tracing-sdk-js/client/record-span-exception",
+                  "/tracing-sdk-js/client/get-context-value",
+                  "/tracing-sdk-js/client/set-context-value",
+                  "/tracing-sdk-js/client/is-recording",
+                  "/tracing-sdk-js/client/get-tracer",
+                  "/tracing-sdk-js/client/flush",
+                  "/tracing-sdk-js/client/shutdown"
+                ]
+              },
+              {
+                "group": "Configuration",
+                "pages": [
+                  "/tracing-sdk-js/configuration/keywordsai-params"
+                ]
+              },
+              {
+                "group": "Instrumentation",
+                "pages": [
+                  "/tracing-sdk-js/instrumentation/overview"
                 ]
               }
             ]

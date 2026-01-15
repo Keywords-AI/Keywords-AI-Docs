@@ -1,0 +1,254 @@
+---
+title: "Keywords AI Parameters"
+description: "Understanding Keywords AI-specific span parameters for filtering and metadata"
+---
+
+## Overview
+
+Keywords AI Parameters are special attributes you can attach to spans for enhanced filtering, grouping, and metadata in the Keywords AI dashboard.
+
+## Parameters
+
+### customer_identifier
+
+Identifies the customer or user associated with the trace. Useful for filtering traces by customer.
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'user_request' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        client.updateCurrentSpan({
+            keywordsai_params: {
+                customer_identifier: 'user-123'
+            }
+        });
+        
+        return await processUserRequest();
+    }
+);
+```
+
+### trace_group_identifier
+
+Groups related traces together. Useful for organizing traces by feature, team, or project.
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'order_processing' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        client.updateCurrentSpan({
+            keywordsai_params: {
+                trace_group_identifier: 'ecommerce-orders'
+            }
+        });
+        
+        return await processOrder();
+    }
+);
+```
+
+### metadata
+
+Arbitrary key-value pairs for additional context. Useful for business-specific information.
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'api_request' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        client.updateCurrentSpan({
+            keywordsai_params: {
+                metadata: {
+                    order_id: 'ORDER-789',
+                    payment_method: 'credit_card',
+                    shipping_country: 'US',
+                    cart_total: 99.99,
+                    is_premium_user: true
+                }
+            }
+        });
+        
+        return await processApiRequest();
+    }
+);
+```
+
+## Complete Example
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'ecommerce-api'
+});
+
+await keywordsAi.initialize();
+
+await keywordsAi.withWorkflow(
+    { 
+        name: 'checkout_workflow',
+        associationProperties: {
+            'workflow_version': '2.0'
+        }
+    },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        client.updateCurrentSpan({
+            keywordsai_params: {
+                customer_identifier: 'customer-abc123',
+                trace_group_identifier: 'checkout',
+                metadata: {
+                    cart_id: 'CART-456',
+                    items_count: 3,
+                    subtotal: 89.97,
+                    tax: 7.20,
+                    total: 97.17,
+                    payment_method: 'visa',
+                    shipping_method: 'express',
+                    promo_code: 'SAVE10',
+                    is_first_purchase: false
+                }
+            }
+        });
+        
+        // Process checkout
+        await validateCart();
+        await processPayment();
+        await createOrder();
+        
+        return 'checkout_complete';
+    }
+);
+
+await keywordsAi.shutdown();
+```
+
+## Use Cases
+
+### Customer Support
+
+Filter traces by customer ID when investigating support tickets:
+
+```typescript
+client.updateCurrentSpan({
+    keywordsai_params: {
+        customer_identifier: supportTicket.customerId,
+        metadata: {
+            ticket_id: supportTicket.id,
+            issue_type: supportTicket.category,
+            priority: supportTicket.priority
+        }
+    }
+});
+```
+
+### Feature Tracking
+
+Group traces by feature for usage analytics:
+
+```typescript
+client.updateCurrentSpan({
+    keywordsai_params: {
+        trace_group_identifier: 'new-search-feature',
+        metadata: {
+            feature_flag: 'search_v2',
+            ab_test_variant: 'B',
+            feature_enabled_at: new Date().toISOString()
+        }
+    }
+});
+```
+
+### Business Metrics
+
+Track business-relevant information:
+
+```typescript
+client.updateCurrentSpan({
+    keywordsai_params: {
+        customer_identifier: order.customerId,
+        trace_group_identifier: 'orders',
+        metadata: {
+            order_value: order.total,
+            product_category: order.category,
+            revenue_type: 'subscription',
+            conversion_source: 'email_campaign'
+        }
+    }
+});
+```
+
+### Multi-Tenant Applications
+
+Identify traces by tenant:
+
+```typescript
+client.updateCurrentSpan({
+    keywordsai_params: {
+        customer_identifier: tenant.id,
+        trace_group_identifier: `tenant-${tenant.plan}`,
+        metadata: {
+            tenant_name: tenant.name,
+            plan_tier: tenant.plan,
+            region: tenant.region,
+            custom_domain: tenant.domain
+        }
+    }
+});
+```
+
+## Association Properties vs Keywords AI Params
+
+| Feature | associationProperties | keywordsai_params |
+| --- | --- | --- |
+| Set via | Method options | `updateCurrentSpan()` |
+| When to set | At span creation | During span execution |
+| Use case | Static metadata | Dynamic runtime metadata |
+| Location | `withWorkflow`, `withTask`, etc. | `getClient().updateCurrentSpan()` |
+
+### Using Both Together
+
+```typescript
+await keywordsAi.withWorkflow(
+    { 
+        name: 'user_workflow',
+        associationProperties: {
+            'app_version': '2.1.0',
+            'environment': 'production'
+        }
+    },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Add dynamic runtime metadata
+        client.updateCurrentSpan({
+            keywordsai_params: {
+                customer_identifier: userId,
+                metadata: {
+                    action: 'purchase',
+                    timestamp: Date.now()
+                }
+            }
+        });
+        
+        return await processAction();
+    }
+);
+```
+
+## Best Practices
+
+- Always include `customer_identifier` for user-specific traces
+- Use `trace_group_identifier` to organize traces by feature or team
+- Store business-relevant information in `metadata`
+- Keep metadata values simple (strings, numbers, booleans)
+- Avoid sensitive information (passwords, tokens) in metadata
+- Use consistent naming conventions for metadata keys
+- Update params early in the span lifecycle for complete context

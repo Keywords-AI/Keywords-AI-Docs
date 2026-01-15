@@ -1,0 +1,127 @@
+---
+title: "withTask()"
+description: "Wrap an async function as a traced task"
+---
+
+## Overview
+
+Use `withTask(options, fn)` to mark a discrete step within a workflow. Tasks are automatically linked to their parent workflow or agent.
+
+## Signature
+
+```typescript
+withTask<T>(
+  options: {
+    name: string;
+    version?: number;
+    associationProperties?: Record<string, any>;
+  },
+  fn: () => Promise<T>
+): Promise<T>
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+const result = await keywordsAi.withTask(
+    { name: 'data_processing' },
+    async () => {
+        const data = await fetchFromDatabase();
+        return processData(data);
+    }
+);
+```
+
+## With Metadata
+
+```typescript
+await keywordsAi.withTask(
+    { 
+        name: 'api_call',
+        version: 2,
+        associationProperties: {
+            'endpoint': '/api/users',
+            'method': 'GET'
+        }
+    },
+    async () => {
+        return await fetch('https://api.example.com/users');
+    }
+);
+```
+
+## Within a Workflow
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'user_onboarding' },
+    async () => {
+        await keywordsAi.withTask(
+            { name: 'create_account' },
+            async () => {
+                return await createUserAccount();
+            }
+        );
+        
+        await keywordsAi.withTask(
+            { name: 'send_welcome_email' },
+            async () => {
+                return await sendEmail();
+            }
+        );
+        
+        return 'onboarding_complete';
+    }
+);
+```
+
+## Error Handling
+
+```typescript
+try {
+    await keywordsAi.withTask(
+        { name: 'risky_operation' },
+        async () => {
+            const result = await riskyApiCall();
+            return result;
+        }
+    );
+} catch (error) {
+    // Error is automatically recorded in the span
+    console.error('Task failed:', error);
+}
+```
+
+## Parameters
+
+<ParamField body="name" type="string" required>
+  Task display name for identification in the Keywords AI dashboard
+</ParamField>
+
+<ParamField body="version" type="number">
+  Version number for tracking task iterations
+</ParamField>
+
+<ParamField body="associationProperties" type="Record<string, any>">
+  Custom metadata to associate with the task
+</ParamField>
+
+## Return Value
+
+Returns a Promise that resolves to the return value of the provided function.
+
+## Best Practices
+
+- Use tasks for discrete, measurable operations within workflows
+- Name tasks clearly to reflect their purpose
+- Nest tasks within workflows or agents for proper hierarchy
+- Tasks automatically capture timing and error information

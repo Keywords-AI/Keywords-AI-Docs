@@ -1,0 +1,144 @@
+---
+title: "getClient()"
+description: "Access the Keywords AI client for span and trace operations"
+---
+
+## Overview
+
+`getClient()` returns the tracing client instance for manual span operations. Use it to read IDs, update spans, add events, and manage traces.
+
+## Signature
+
+```typescript
+getClient(): KeywordsAIClient
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+await keywordsAi.withTask(
+    { name: 'data_processing' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Get current trace and span IDs
+        const traceId = client.getCurrentTraceId();
+        const spanId = client.getCurrentSpanId();
+        
+        console.log(`Processing in trace ${traceId}, span ${spanId}`);
+        
+        // Add event
+        client.addSpanEvent('processing_started', { 
+            records: 100 
+        });
+        
+        // Your processing logic
+        return 'processed';
+    }
+);
+```
+
+## Update Current Span
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'user_request' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Update span with custom attributes
+        client.updateCurrentSpan({
+            keywordsai_params: {
+                customer_identifier: 'user-123',
+                metadata: { 
+                    environment: 'production',
+                    version: '2.0'
+                }
+            },
+            attributes: {
+                'custom.status': 'in_progress'
+            }
+        });
+        
+        return await processRequest();
+    }
+);
+```
+
+## Record Exceptions
+
+```typescript
+await keywordsAi.withTask(
+    { name: 'risky_operation' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        try {
+            return await riskyApiCall();
+        } catch (error) {
+            // Manually record exception
+            client.recordSpanException(error);
+            throw error;
+        }
+    }
+);
+```
+
+## Add Events
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'batch_processing' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        client.addSpanEvent('batch_started', { 
+            batch_size: 1000 
+        });
+        
+        for (let i = 0; i < 10; i++) {
+            await processBatch(i);
+            client.addSpanEvent('batch_completed', { 
+                batch_number: i,
+                records_processed: 100 
+            });
+        }
+        
+        client.addSpanEvent('all_batches_completed');
+        
+        return 'done';
+    }
+);
+```
+
+## Available Client Methods
+
+| Method | Description |
+| --- | --- |
+| `getCurrentTraceId()` | Get the current trace ID |
+| `getCurrentSpanId()` | Get the current span ID |
+| `updateCurrentSpan()` | Update span attributes, status, metadata |
+| `addSpanEvent()` | Add a timestamped event to current span |
+| `recordSpanException()` | Record an error on current span |
+| `getContextValue()` | Get a context value by key |
+| `setContextValue()` | Set a context value by key |
+| `isRecording()` | Check if tracing is currently active |
+| `getTracer()` | Get the underlying OpenTelemetry tracer |
+| `flush()` | Manually flush pending spans |
+
+## Best Practices
+
+- Use `getClient()` within traced functions (workflow, task, agent, tool)
+- Call client methods only when a span is active
+- Add events for significant milestones in your logic
+- Record exceptions for better error tracking
+- Update spans with custom metadata for filtering and analysis

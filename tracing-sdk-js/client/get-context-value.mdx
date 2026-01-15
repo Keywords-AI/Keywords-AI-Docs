@@ -1,0 +1,195 @@
+---
+title: "getContextValue()"
+description: "Get a value from the trace context by key"
+---
+
+## Overview
+
+`getContextValue()` retrieves a value that was previously stored in the trace context. Useful for passing data between spans without function parameters.
+
+## Signature
+
+```typescript
+getContextValue(key: string): any
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+await keywordsAi.withWorkflow(
+    { name: 'user_workflow' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Set a value in the context
+        client.setContextValue('user_id', 'user-123');
+        
+        await keywordsAi.withTask(
+            { name: 'nested_task' },
+            async () => {
+                // Retrieve the value from context
+                const userId = client.getContextValue('user_id');
+                console.log(`Processing for user: ${userId}`);
+                
+                return userId;
+            }
+        );
+        
+        return 'complete';
+    }
+);
+```
+
+## Sharing Data Across Spans
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'order_processing' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Store order info in context
+        client.setContextValue('order_id', 'ORDER-789');
+        client.setContextValue('customer_id', 'CUST-123');
+        
+        await keywordsAi.withTask(
+            { name: 'validate_order' },
+            async () => {
+                const orderId = client.getContextValue('order_id');
+                return await validateOrder(orderId);
+            }
+        );
+        
+        await keywordsAi.withTask(
+            { name: 'process_payment' },
+            async () => {
+                const orderId = client.getContextValue('order_id');
+                const customerId = client.getContextValue('customer_id');
+                return await processPayment(orderId, customerId);
+            }
+        );
+        
+        await keywordsAi.withTask(
+            { name: 'send_confirmation' },
+            async () => {
+                const customerId = client.getContextValue('customer_id');
+                return await sendEmail(customerId);
+            }
+        );
+        
+        return 'order_complete';
+    }
+);
+```
+
+## Request Context Propagation
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'api_request' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Store request metadata
+        client.setContextValue('request_id', 'REQ-456');
+        client.setContextValue('user_agent', 'Mozilla/5.0');
+        client.setContextValue('ip_address', '192.168.1.1');
+        
+        await keywordsAi.withTask(
+            { name: 'log_request' },
+            async () => {
+                const requestId = client.getContextValue('request_id');
+                const userAgent = client.getContextValue('user_agent');
+                console.log(`[${requestId}] User-Agent: ${userAgent}`);
+            }
+        );
+        
+        await keywordsAi.withTask(
+            { name: 'process_request' },
+            async () => {
+                const requestId = client.getContextValue('request_id');
+                return await processRequest(requestId);
+            }
+        );
+        
+        return 'done';
+    }
+);
+```
+
+## Feature Flags
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'feature_workflow' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Store feature flag
+        const newFeatureEnabled = await checkFeatureFlag('new_algorithm');
+        client.setContextValue('new_algorithm_enabled', newFeatureEnabled);
+        
+        await keywordsAi.withTask(
+            { name: 'process_data' },
+            async () => {
+                const useNewAlgorithm = client.getContextValue('new_algorithm_enabled');
+                
+                if (useNewAlgorithm) {
+                    return await newAlgorithm();
+                } else {
+                    return await legacyAlgorithm();
+                }
+            }
+        );
+        
+        return 'complete';
+    }
+);
+```
+
+## Default Values
+
+```typescript
+await keywordsAi.withTask(
+    { name: 'optional_context' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Get value with fallback
+        const theme = client.getContextValue('theme') || 'default';
+        const locale = client.getContextValue('locale') || 'en-US';
+        
+        console.log(`Theme: ${theme}, Locale: ${locale}`);
+        
+        return 'done';
+    }
+);
+```
+
+## Parameters
+
+<ParamField body="key" type="string" required>
+  The key to retrieve from the context
+</ParamField>
+
+## Return Value
+
+Returns the value associated with the key, or `undefined` if the key doesn't exist.
+
+## Best Practices
+
+- Use context to share data between spans without passing parameters
+- Store request metadata, user info, or feature flags in context
+- Provide default values when retrieving optional context data
+- Context is scoped to the current trace and its child spans
+- Values must be set with `setContextValue()` before retrieval
+- Context is useful for cross-cutting concerns like request IDs

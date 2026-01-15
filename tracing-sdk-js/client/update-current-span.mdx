@@ -1,0 +1,239 @@
+---
+title: "updateCurrentSpan()"
+description: "Update name, status, attributes, and Keywords AI params on the current span"
+---
+
+## Overview
+
+`updateCurrentSpan()` allows you to modify the currently active span's metadata, status, attributes, and Keywords AI-specific parameters.
+
+## Signature
+
+```typescript
+updateCurrentSpan(options: {
+    keywordsai_params?: {
+        customer_identifier?: string;
+        trace_group_identifier?: string;
+        metadata?: Record<string, any>;
+    };
+    attributes?: Record<string, any>;
+    status?: 'OK' | 'ERROR';
+    name?: string;
+}): void
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+await keywordsAi.withWorkflow(
+    { name: 'user_request' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        client.updateCurrentSpan({
+            keywordsai_params: {
+                customer_identifier: 'user-123',
+                metadata: { 
+                    environment: 'production',
+                    version: '2.0'
+                }
+            }
+        });
+        
+        return await processRequest();
+    }
+);
+```
+
+## Update Status
+
+```typescript
+await keywordsAi.withTask(
+    { name: 'validation' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        try {
+            const data = await validateInput();
+            
+            client.updateCurrentSpan({
+                status: 'OK',
+                attributes: {
+                    'validation.result': 'success'
+                }
+            });
+            
+            return data;
+        } catch (error) {
+            client.updateCurrentSpan({
+                status: 'ERROR',
+                attributes: {
+                    'validation.result': 'failed',
+                    'error.message': error.message
+                }
+            });
+            throw error;
+        }
+    }
+);
+```
+
+## Custom Attributes
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'data_pipeline' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        client.updateCurrentSpan({
+            attributes: {
+                'pipeline.stage': 'extraction',
+                'pipeline.source': 'database',
+                'pipeline.records': 1000
+            }
+        });
+        
+        const data = await extractData();
+        
+        client.updateCurrentSpan({
+            attributes: {
+                'pipeline.stage': 'transformation',
+                'pipeline.records_processed': data.length
+            }
+        });
+        
+        return await transformData(data);
+    }
+);
+```
+
+## Keywords AI Parameters
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'customer_interaction' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        client.updateCurrentSpan({
+            keywordsai_params: {
+                customer_identifier: 'customer-abc123',
+                trace_group_identifier: 'support-tickets',
+                metadata: {
+                    ticket_id: 'TICKET-456',
+                    priority: 'high',
+                    category: 'billing'
+                }
+            }
+        });
+        
+        return await handleTicket();
+    }
+);
+```
+
+## Dynamic Span Naming
+
+```typescript
+await keywordsAi.withTask(
+    { name: 'api_call' },
+    async () => {
+        const client = keywordsAi.getClient();
+        const endpoint = '/api/users';
+        
+        client.updateCurrentSpan({
+            name: `api_call:${endpoint}`,
+            attributes: {
+                'http.endpoint': endpoint,
+                'http.method': 'GET'
+            }
+        });
+        
+        return await fetch(`https://api.example.com${endpoint}`);
+    }
+);
+```
+
+## Comprehensive Update
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'order_processing' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        const orderId = 'ORDER-789';
+        const customerId = 'CUST-123';
+        
+        client.updateCurrentSpan({
+            name: `order_processing:${orderId}`,
+            keywordsai_params: {
+                customer_identifier: customerId,
+                trace_group_identifier: 'orders',
+                metadata: {
+                    order_id: orderId,
+                    payment_method: 'credit_card',
+                    total_amount: 99.99
+                }
+            },
+            attributes: {
+                'order.id': orderId,
+                'order.status': 'processing',
+                'customer.id': customerId
+            },
+            status: 'OK'
+        });
+        
+        return await processOrder(orderId);
+    }
+);
+```
+
+## Parameters
+
+<ParamField body="keywordsai_params" type="object">
+  Keywords AI-specific parameters for filtering and grouping
+  
+  <ParamField body="customer_identifier" type="string">
+    Customer or user identifier for filtering traces by customer
+  </ParamField>
+  
+  <ParamField body="trace_group_identifier" type="string">
+    Group identifier for organizing related traces
+  </ParamField>
+  
+  <ParamField body="metadata" type="Record<string, any>">
+    Custom metadata for additional context
+  </ParamField>
+</ParamField>
+
+<ParamField body="attributes" type="Record<string, any>">
+  Custom OpenTelemetry attributes (key-value pairs)
+</ParamField>
+
+<ParamField body="status" type="string">
+  Span status: `"OK"` or `"ERROR"`
+</ParamField>
+
+<ParamField body="name" type="string">
+  New name for the span (useful for dynamic naming)
+</ParamField>
+
+## Best Practices
+
+- Update spans with customer identifiers for user-specific filtering
+- Set status to ERROR when operations fail
+- Use attributes for technical details (HTTP status, DB queries, etc.)
+- Use Keywords AI metadata for business context (order IDs, ticket numbers, etc.)
+- Update spans early in the function with identifying information
+- Only call within an active span

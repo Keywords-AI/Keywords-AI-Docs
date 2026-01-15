@@ -1,0 +1,181 @@
+---
+title: "withTool()"
+description: "Wrap an async function as a traced tool"
+---
+
+## Overview
+
+Use `withTool(options, fn)` to trace tool or function calls within agents. Tools represent specific capabilities that agents can invoke.
+
+## Signature
+
+```typescript
+withTool<T>(
+  options: {
+    name: string;
+    version?: number;
+    associationProperties?: Record<string, any>;
+  },
+  fn: () => Promise<T>
+): Promise<T>
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+const result = await keywordsAi.withTool(
+    { name: 'web_search' },
+    async () => {
+        return await searchWeb('latest AI news');
+    }
+);
+```
+
+## Tools within an Agent
+
+```typescript
+await keywordsAi.withAgent(
+    { name: 'research_agent' },
+    async () => {
+        // Tool 1: Web search
+        const searchResults = await keywordsAi.withTool(
+            { 
+                name: 'web_search',
+                associationProperties: {
+                    'query': 'machine learning trends',
+                    'source': 'google'
+                }
+            },
+            async () => {
+                return await searchWeb('machine learning trends');
+            }
+        );
+        
+        // Tool 2: Summarize
+        const summary = await keywordsAi.withTool(
+            { name: 'summarizer' },
+            async () => {
+                return await summarizeText(searchResults);
+            }
+        );
+        
+        // Tool 3: Format response
+        const formatted = await keywordsAi.withTool(
+            { name: 'formatter' },
+            async () => {
+                return await formatMarkdown(summary);
+            }
+        );
+        
+        return formatted;
+    }
+);
+```
+
+## API Integration Tool
+
+```typescript
+await keywordsAi.withTool(
+    { 
+        name: 'weather_api',
+        associationProperties: {
+            'location': 'San Francisco',
+            'units': 'metric'
+        }
+    },
+    async () => {
+        const response = await fetch(
+            'https://api.weather.com/v1/forecast?location=SF'
+        );
+        return await response.json();
+    }
+);
+```
+
+## Database Query Tool
+
+```typescript
+await keywordsAi.withTool(
+    { 
+        name: 'database_query',
+        associationProperties: {
+            'table': 'users',
+            'operation': 'select'
+        }
+    },
+    async () => {
+        return await db.query('SELECT * FROM users WHERE active = true');
+    }
+);
+```
+
+## Custom Calculator Tool
+
+```typescript
+const calculator = async (operation: string, a: number, b: number) => {
+    return await keywordsAi.withTool(
+        { 
+            name: 'calculator',
+            associationProperties: {
+                'operation': operation,
+                'inputs': [a, b]
+            }
+        },
+        async () => {
+            switch (operation) {
+                case 'add': return a + b;
+                case 'subtract': return a - b;
+                case 'multiply': return a * b;
+                case 'divide': return a / b;
+                default: throw new Error('Invalid operation');
+            }
+        }
+    );
+};
+
+// Usage in agent
+await keywordsAi.withAgent(
+    { name: 'math_agent' },
+    async () => {
+        const sum = await calculator('add', 10, 5);
+        const product = await calculator('multiply', sum, 2);
+        return product;
+    }
+);
+```
+
+## Parameters
+
+<ParamField body="name" type="string" required>
+  Tool display name for identification in the Keywords AI dashboard
+</ParamField>
+
+<ParamField body="version" type="number">
+  Version number for tracking tool iterations
+</ParamField>
+
+<ParamField body="associationProperties" type="Record<string, any>">
+  Custom metadata to associate with the tool (inputs, configuration, etc.)
+</ParamField>
+
+## Return Value
+
+Returns a Promise that resolves to the return value of the provided function.
+
+## Best Practices
+
+- Use tools for specific capabilities that agents can invoke
+- Name tools clearly to reflect their function
+- Always nest tools within agents for proper hierarchy
+- Add association properties to track tool inputs and configuration
+- Tools are automatically linked to their parent agent in traces
+- Tools can be reused across multiple agents

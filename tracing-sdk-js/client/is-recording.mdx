@@ -1,0 +1,201 @@
+---
+title: "isRecording()"
+description: "Check if tracing is currently active"
+---
+
+## Overview
+
+`isRecording()` returns whether the current span is active and recording. Useful for conditional tracing logic or debugging.
+
+## Signature
+
+```typescript
+isRecording(): boolean
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+await keywordsAi.withWorkflow(
+    { name: 'my_workflow' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        if (client.isRecording()) {
+            console.log('Tracing is active');
+            client.addSpanEvent('workflow_started');
+        }
+        
+        return 'done';
+    }
+);
+```
+
+## Conditional Event Adding
+
+```typescript
+await keywordsAi.withTask(
+    { name: 'data_processing' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        const data = await fetchData();
+        
+        // Only add events if tracing is active
+        if (client.isRecording()) {
+            client.addSpanEvent('data_fetched', {
+                records: data.length,
+                size_bytes: JSON.stringify(data).length
+            });
+        }
+        
+        const processed = await processData(data);
+        
+        if (client.isRecording()) {
+            client.addSpanEvent('data_processed', {
+                records_processed: processed.length
+            });
+        }
+        
+        return processed;
+    }
+);
+```
+
+## Debug Logging
+
+```typescript
+function debugLog(message: string, data?: any) {
+    const client = keywordsAi.getClient();
+    
+    if (client.isRecording()) {
+        client.addSpanEvent('debug_log', {
+            message,
+            data: JSON.stringify(data)
+        });
+    }
+    
+    console.log(message, data);
+}
+
+await keywordsAi.withWorkflow(
+    { name: 'debug_workflow' },
+    async () => {
+        debugLog('Starting workflow');
+        const result = await process();
+        debugLog('Workflow complete', { result });
+        return result;
+    }
+);
+```
+
+## Performance Metrics
+
+```typescript
+await keywordsAi.withTask(
+    { name: 'expensive_operation' },
+    async () => {
+        const client = keywordsAi.getClient();
+        const startTime = Date.now();
+        
+        const result = await expensiveComputation();
+        
+        const duration = Date.now() - startTime;
+        
+        // Only record metrics if tracing is active
+        if (client.isRecording()) {
+            client.updateCurrentSpan({
+                attributes: {
+                    'operation.duration_ms': duration,
+                    'operation.result_size': result.length
+                }
+            });
+        }
+        
+        return result;
+    }
+);
+```
+
+## Outside of Traced Functions
+
+```typescript
+async function helperFunction() {
+    const client = keywordsAi.getClient();
+    
+    if (client.isRecording()) {
+        // We're inside a traced context
+        client.addSpanEvent('helper_called');
+    } else {
+        // Not in a traced context, skip tracing
+        console.log('Running without tracing');
+    }
+    
+    return await doWork();
+}
+
+await keywordsAi.withWorkflow(
+    { name: 'main_workflow' },
+    async () => {
+        // isRecording will be true here
+        await helperFunction();
+    }
+);
+
+// isRecording will be false here
+await helperFunction();
+```
+
+## Sampling Logic
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'high_volume_workflow' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Only add detailed events if actively tracing
+        if (client.isRecording()) {
+            for (let i = 0; i < 1000; i++) {
+                await processItem(i);
+                
+                // Add event every 100 items
+                if (i % 100 === 0) {
+                    client.addSpanEvent('progress', {
+                        items_processed: i
+                    });
+                }
+            }
+        } else {
+            // Skip detailed tracking if not recording
+            for (let i = 0; i < 1000; i++) {
+                await processItem(i);
+            }
+        }
+        
+        return 'complete';
+    }
+);
+```
+
+## Return Value
+
+Returns `true` if tracing is currently active and recording, `false` otherwise.
+
+## Best Practices
+
+- Use to conditionally add expensive tracing operations
+- Check before adding numerous events in loops
+- Useful for debug logging that should only happen during tracing
+- Safe to call from any context (traced or untraced)
+- Can be used to implement custom sampling logic
+- Helps avoid overhead when tracing is disabled

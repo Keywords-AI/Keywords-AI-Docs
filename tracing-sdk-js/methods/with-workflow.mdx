@@ -1,0 +1,117 @@
+---
+title: "withWorkflow()"
+description: "Wrap an async function as a traced workflow"
+---
+
+## Overview
+
+Use `withWorkflow(options, fn)` to mark an end-to-end run. All nested tasks, agents, and tools are captured under this workflow.
+
+## Signature
+
+```typescript
+withWorkflow<T>(
+  options: {
+    name: string;
+    version?: number;
+    associationProperties?: Record<string, any>;
+  },
+  fn: () => Promise<T>
+): Promise<T>
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+const result = await keywordsAi.withWorkflow(
+    { 
+        name: 'data_pipeline',
+        version: 1
+    },
+    async () => {
+        // Your workflow logic here
+        const data = await fetchData();
+        const processed = await processData(data);
+        return processed;
+    }
+);
+```
+
+## With Association Properties
+
+```typescript
+await keywordsAi.withWorkflow(
+    { 
+        name: 'user_request',
+        version: 1,
+        associationProperties: {
+            'user_id': 'user-123',
+            'session_id': 'session-abc',
+            'environment': 'production'
+        }
+    },
+    async () => {
+        // Your workflow logic
+        return await handleUserRequest();
+    }
+);
+```
+
+## Nested Tasks
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'complete_pipeline' },
+    async () => {
+        const extracted = await keywordsAi.withTask(
+            { name: 'extract' },
+            async () => {
+                return { records: [1, 2, 3] };
+            }
+        );
+        
+        const transformed = await keywordsAi.withTask(
+            { name: 'transform' },
+            async () => {
+                return extracted.records.map(x => x * 2);
+            }
+        );
+        
+        return transformed;
+    }
+);
+```
+
+## Parameters
+
+<ParamField body="name" type="string" required>
+  Workflow display name for identification in the Keywords AI dashboard
+</ParamField>
+
+<ParamField body="version" type="number">
+  Version number for tracking workflow iterations
+</ParamField>
+
+<ParamField body="associationProperties" type="Record<string, any>">
+  Custom metadata to associate with the workflow (user ID, session ID, etc.)
+</ParamField>
+
+## Return Value
+
+Returns a Promise that resolves to the return value of the provided function.
+
+## Best Practices
+
+- Use descriptive workflow names for easy navigation in the dashboard
+- Keep workflows coarse-grained; use tasks for internal steps
+- Add association properties for filtering and grouping in analytics
+- Always call `initialize()` before using `withWorkflow()`

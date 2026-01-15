@@ -1,0 +1,317 @@
+---
+title: "Automatic Instrumentation"
+description: "Auto-instrument popular libraries like OpenAI and Anthropic"
+---
+
+## Overview
+
+The Keywords AI Tracing SDK can automatically instrument popular LLM libraries, capturing all API calls without manual tracing code.
+
+## Supported Libraries
+
+| Library | Package | Status |
+| --- | --- | --- |
+| OpenAI | `openai` | ✅ Supported |
+| Anthropic | `@anthropic-ai/sdk` | ✅ Supported |
+
+## Setup
+
+### OpenAI Instrumentation
+
+```typescript
+import OpenAI from 'openai';
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app',
+    instrumentModules: {
+        openAI: OpenAI,  // Pass the OpenAI class
+    }
+});
+
+await keywordsAi.initialize();
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+});
+
+// All OpenAI calls are automatically traced
+await keywordsAi.withWorkflow(
+    { name: 'ai_chat' },
+    async () => {
+        const completion = await openai.chat.completions.create({
+            model: 'gpt-4',
+            messages: [
+                { role: 'system', content: 'You are a helpful assistant.' },
+                { role: 'user', content: 'Hello!' }
+            ],
+        });
+        
+        console.log(completion.choices[0].message.content);
+    }
+);
+```
+
+### Anthropic Instrumentation
+
+```typescript
+import Anthropic from '@anthropic-ai/sdk';
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app',
+    instrumentModules: {
+        anthropic: Anthropic,  // Pass the Anthropic class
+    }
+});
+
+await keywordsAi.initialize();
+
+const anthropic = new Anthropic({
+    apiKey: process.env.ANTHROPIC_API_KEY
+});
+
+// All Anthropic calls are automatically traced
+await keywordsAi.withWorkflow(
+    { name: 'ai_chat' },
+    async () => {
+        const message = await anthropic.messages.create({
+            model: 'claude-3-haiku-20240307',
+            max_tokens: 1024,
+            messages: [
+                { role: 'user', content: 'Hello!' }
+            ],
+        });
+        
+        console.log(message.content);
+    }
+);
+```
+
+### Multi-Provider Instrumentation
+
+```typescript
+import OpenAI from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'multi-provider-app',
+    instrumentModules: {
+        openAI: OpenAI,
+        anthropic: Anthropic,
+    }
+});
+
+await keywordsAi.initialize();
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+await keywordsAi.withWorkflow(
+    { name: 'multi_provider_comparison' },
+    async () => {
+        // Both providers are automatically traced
+        const openaiResponse = await openai.chat.completions.create({
+            model: 'gpt-3.5-turbo',
+            messages: [{ role: 'user', content: 'Hello!' }]
+        });
+        
+        const anthropicResponse = await anthropic.messages.create({
+            model: 'claude-3-haiku-20240307',
+            max_tokens: 100,
+            messages: [{ role: 'user', content: 'Hello!' }]
+        });
+        
+        return { openaiResponse, anthropicResponse };
+    }
+);
+```
+
+## What Gets Traced
+
+### OpenAI
+
+- **Chat Completions**: `openai.chat.completions.create()`
+- **Streaming**: `openai.chat.completions.create({ stream: true })`
+- **Embeddings**: `openai.embeddings.create()`
+- **Images**: `openai.images.generate()`
+
+Captured data:
+- Model name
+- Messages/prompts
+- Response content
+- Token usage
+- Latency
+- Errors
+
+### Anthropic
+
+- **Messages**: `anthropic.messages.create()`
+- **Streaming**: `anthropic.messages.create({ stream: true })`
+
+Captured data:
+- Model name
+- Messages
+- Response content
+- Token usage
+- Latency
+- Errors
+
+## Configuration Options
+
+### Disable Specific Instrumentation
+
+```typescript
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app',
+    instrumentModules: {
+        openAI: OpenAI,
+        // anthropic: Anthropic,  // Commented out to disable
+    }
+});
+```
+
+### No Instrumentation
+
+```typescript
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app',
+    // Don't pass instrumentModules for manual tracing only
+});
+```
+
+## Manual Tracing with Auto-Instrumentation
+
+You can combine auto-instrumentation with manual tracing:
+
+```typescript
+import OpenAI from 'openai';
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app',
+    instrumentModules: { openAI: OpenAI }
+});
+
+await keywordsAi.initialize();
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+await keywordsAi.withWorkflow(
+    { name: 'research_workflow' },
+    async () => {
+        // Manual task
+        const query = await keywordsAi.withTask(
+            { name: 'prepare_query' },
+            async () => {
+                return 'What is quantum computing?';
+            }
+        );
+        
+        // Auto-instrumented OpenAI call
+        const completion = await openai.chat.completions.create({
+            model: 'gpt-4',
+            messages: [{ role: 'user', content: query }]
+        });
+        
+        // Manual task
+        return await keywordsAi.withTask(
+            { name: 'process_response' },
+            async () => {
+                return completion.choices[0].message.content;
+            }
+        );
+    }
+);
+```
+
+## Streaming Support
+
+Auto-instrumentation works with streaming:
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'streaming_chat' },
+    async () => {
+        const stream = await openai.chat.completions.create({
+            model: 'gpt-4',
+            messages: [{ role: 'user', content: 'Tell me a story' }],
+            stream: true,
+        });
+        
+        for await (const chunk of stream) {
+            process.stdout.write(chunk.choices[0]?.delta?.content || '');
+        }
+        
+        // Full stream is traced including all chunks
+    }
+);
+```
+
+## Error Tracking
+
+Auto-instrumentation captures errors:
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'error_handling' },
+    async () => {
+        try {
+            await openai.chat.completions.create({
+                model: 'invalid-model',
+                messages: [{ role: 'user', content: 'Hello' }]
+            });
+        } catch (error) {
+            // Error is automatically recorded in the trace
+            console.error('OpenAI error:', error);
+        }
+    }
+);
+```
+
+## Best Practices
+
+- Always pass the library class (not an instance) to `instrumentModules`
+- Initialize auto-instrumentation before creating SDK instances
+- Combine auto-instrumentation with manual tracing for complete visibility
+- Auto-instrumentation captures all SDK calls within traced contexts
+- Use manual tracing for business logic around LLM calls
+- Auto-instrumentation has minimal performance overhead
+
+## Troubleshooting
+
+### Instrumentation Not Working
+
+Ensure you:
+1. Pass the class to `instrumentModules` (e.g., `OpenAI`, not `openai`)
+2. Call `initialize()` before creating SDK instances
+3. Wrap calls in `withWorkflow`, `withTask`, `withAgent`, or `withTool`
+4. Use the latest version of the Keywords AI Tracing SDK
+
+### Example Debug
+
+```typescript
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'debug-app',
+    instrumentModules: { openAI: OpenAI },
+    logLevel: 'debug'  // Enable debug logging
+});
+
+await keywordsAi.initialize();
+
+// Check if instrumentation is active
+const client = keywordsAi.getClient();
+console.log('Recording:', client.isRecording());
+```
+
+## Future Support
+
+Additional libraries will be supported in future versions. Check the documentation for updates.
