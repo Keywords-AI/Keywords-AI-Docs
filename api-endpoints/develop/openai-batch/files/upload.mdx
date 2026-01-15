@@ -1,0 +1,113 @@
+---
+title: Upload file
+api: POST https://api.keywordsai.co/api/files/
+---
+
+Upload a file for use with OpenAI Batch API. The uploaded file is stored on OpenAI's servers and can be used to create batch jobs for asynchronous LLM request processing.
+
+<Note>
+**Customer credentials required**: This endpoint requires your own OpenAI API key configured in Keywords AI dashboard (Settings → Providers). Keywords AI passes the request through to OpenAI's infrastructure.
+</Note>
+
+## Request body
+
+The request must use `multipart/form-data` encoding.
+
+<ParamField body="file" type="file" required>
+  The file to upload. Must be a valid JSONL (JSON Lines) file for batch processing.
+  
+  <Accordion title="Example JSONL format">
+  ```jsonl
+  {"custom_id": "request-1", "method": "POST", "url": "/v1/chat/completions", "body": {"model": "gpt-4", "messages": [{"role": "user", "content": "Hello!"}]}}
+  {"custom_id": "request-2", "method": "POST", "url": "/v1/chat/completions", "body": {"model": "gpt-3.5-turbo", "messages": [{"role": "user", "content": "How are you?"}]}}
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="purpose" type="string" required>
+  The intended purpose of the file. For batch jobs, use `"batch"`.
+  
+  **Supported values:**
+  - `"batch"` - For use with the Batch API
+</ParamField>
+
+## Response
+
+Returns a file object with metadata about the uploaded file.
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "file-abc123",
+  "object": "file",
+  "bytes": 1024,
+  "created_at": 1677610602,
+  "filename": "batch_input.jsonl",
+  "purpose": "batch"
+}
+```
+
+```json 400 Bad Request - No OpenAI Key
+{
+  "error": "OpenAI API key not configured"
+}
+```
+
+```json 400 Bad Request - Invalid Purpose
+{
+  "error": {
+    "message": "Invalid value for 'purpose': must be one of ['batch', ...]",
+    "type": "invalid_request_error"
+  }
+}
+```
+
+```json 401 Unauthorized
+{
+  "error": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/files/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+with open("batch_input.jsonl", "rb") as f:
+    files = {"file": f}
+    data = {"purpose": "batch"}
+    response = requests.post(url, headers=headers, files=files, data=data)
+
+print(response.json())
+```
+
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/files/';
+const formData = new FormData();
+formData.append('file', fileInput.files[0]);
+formData.append('purpose', 'batch');
+
+const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+        'Authorization': 'Bearer YOUR_API_KEY'
+    },
+    body: formData
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl https://api.keywordsai.co/api/files/ \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "file=@batch_input.jsonl" \
+  -F "purpose=batch"
+```
+</RequestExample>

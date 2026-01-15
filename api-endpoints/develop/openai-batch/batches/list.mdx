@@ -1,0 +1,131 @@
+---
+title: List batches
+api: GET https://api.keywordsai.co/api/v1/batches/
+---
+
+Retrieve a list of all batch jobs for your organization. Use this to monitor the status of multiple batches or find specific batch IDs.
+
+<Note>
+**Customer credentials required**: This endpoint requires your own OpenAI API key configured in Keywords AI dashboard (Settings → Providers).
+</Note>
+
+## Keywords AI parameters
+
+You can pass Keywords AI tracking parameters via the `X-Data-Keywordsai-Params` header:
+
+```bash
+-H "X-Data-Keywordsai-Params: {\"customer_identifier\": \"user123\"}"
+```
+
+## Query parameters
+
+<ParamField query="limit" type="integer" default={20}>
+  Maximum number of batches to return.
+  
+  <Accordion title="Example">
+  ```
+  ?limit=10
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField query="after" type="string">
+  Cursor for pagination. Use the `last_id` from a previous response to get the next page.
+  
+  <Accordion title="Example">
+  ```
+  ?after=batch_def456
+  ```
+  </Accordion>
+</ParamField>
+
+## Response
+
+Returns a list object containing batch metadata.
+
+<ResponseExample>
+```json 200 OK
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "batch_abc123",
+      "object": "batch",
+      "endpoint": "/v1/chat/completions",
+      "status": "completed",
+      "created_at": 1711471533,
+      "completed_at": 1711493163,
+      "request_counts": {
+        "total": 100,
+        "completed": 95,
+        "failed": 5
+      }
+    },
+    {
+      "id": "batch_def456",
+      "object": "batch",
+      "endpoint": "/v1/chat/completions",
+      "status": "in_progress",
+      "created_at": 1711475163,
+      "request_counts": {
+        "total": 50,
+        "completed": 23,
+        "failed": 0
+      }
+    }
+  ],
+  "first_id": "batch_abc123",
+  "last_id": "batch_def456",
+  "has_more": false
+}
+```
+
+```json 401 Unauthorized
+{
+  "error": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+import json
+
+url = "https://api.keywordsai.co/api/v1/batches/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "X-Data-Keywordsai-Params": json.dumps({
+        "customer_identifier": "user123"
+    })
+}
+params = {"limit": 10}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/v1/batches/?limit=10';
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'X-Data-Keywordsai-Params': JSON.stringify({
+        customer_identifier: 'user123'
+    })
+};
+
+const response = await fetch(url, {
+    method: 'GET',
+    headers: headers
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl "https://api.keywordsai.co/api/v1/batches/?limit=10" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "X-Data-Keywordsai-Params: {\"customer_identifier\": \"user123\"}"
+```
+</RequestExample>

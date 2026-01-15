@@ -392,6 +392,30 @@
                 ]
               },
               {
+                "group": "OpenAI Batch",
+                "pages": [
+                  {
+                    "group": "Files",
+                    "pages": [
+                      "/api-endpoints/develop/openai-batch/files/upload",
+                      "/api-endpoints/develop/openai-batch/files/list",
+                      "/api-endpoints/develop/openai-batch/files/get",
+                      "/api-endpoints/develop/openai-batch/files/delete",
+                      "/api-endpoints/develop/openai-batch/files/content"
+                    ]
+                  },
+                  {
+                    "group": "Batches",
+                    "pages": [
+                      "/api-endpoints/develop/openai-batch/batches/create",
+                      "/api-endpoints/develop/openai-batch/batches/list",
+                      "/api-endpoints/develop/openai-batch/batches/get",
+                      "/api-endpoints/develop/openai-batch/batches/cancel"
+                    ]
+                  }
+                ]
+              },
+              {
                 "group": "Multimodal",
                 "pages": [
                   "/api-endpoints/develop/multimodal/embeddings",
