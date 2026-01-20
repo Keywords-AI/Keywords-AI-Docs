@@ -1,0 +1,87 @@
+---
+title: Delete custom provider
+api: DELETE https://api.keywordsai.co/api/providers/{pk}/
+---
+
+Delete a specific custom provider from your organization.
+
+<Note>
+**Important**: 
+- This action is permanent and cannot be undone
+- Managed providers (`is_managed: true`) cannot be deleted as they are managed by Keywords AI
+- Deleting a provider may affect models that reference it
+</Note>
+
+## Path parameters
+
+<ParamField path="pk" type="integer" required>
+  The provider's primary key ID to delete.
+  
+  <Accordion title="Example">
+  ```
+  123
+  ```
+  </Accordion>
+</ParamField>
+
+## Response
+
+Returns no content on successful deletion.
+
+<ResponseExample>
+```text 204 No Content
+```
+
+```json 403 Forbidden
+{
+  "error": "Cannot delete managed provider. This provider is managed by Keywords AI and cannot be deleted."
+}
+```
+
+```json 404 Not Found
+{
+  "detail": "Not found."
+}
+```
+
+```json 401 Unauthorized
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+provider_pk = 123
+url = f"https://api.keywordsai.co/api/providers/{provider_pk}/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"Status code: {response.status_code}")
+```
+
+```typescript TypeScript
+const providerPk = 123;
+const url = `https://api.keywordsai.co/api/providers/${providerPk}/`;
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY'
+};
+
+const response = await fetch(url, {
+    method: 'DELETE',
+    headers: headers
+});
+
+console.log(`Status code: ${response.status}`);
+```
+
+```bash cURL
+curl -X DELETE "https://api.keywordsai.co/api/providers/123/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+</RequestExample>

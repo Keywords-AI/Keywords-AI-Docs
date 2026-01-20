@@ -1,0 +1,205 @@
+---
+title: Update custom model
+api: PATCH https://api.keywordsai.co/api/models/{model_name}/
+---
+
+Update a specific custom model. Only the provided fields will be updated - other fields remain unchanged.
+
+<Note>
+**Restrictions**: 
+- Only custom models can be updated (not global models)
+- The `model_name` field is read-only and cannot be changed
+- Only the owning organization can update their custom models
+</Note>
+
+## Path parameters
+
+<ParamField path="model_name" type="string" required>
+  The model's unique name to update.
+  
+  <Accordion title="Example">
+  ```
+  my-custom-gpt-4
+  ```
+  </Accordion>
+</ParamField>
+
+## Request body
+
+All fields are optional. Only provide the fields you want to update.
+
+<ParamField body="display_name" type="string">
+  Human-readable display name for the model.
+  
+  <Accordion title="Example">
+  ```json
+  "display_name": "My Updated Custom GPT-4"
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="custom_provider_id" type="integer | string">
+  ID or `provider_id` of the custom provider to associate with this model.
+</ParamField>
+
+### Pricing
+
+<ParamField body="input_cost" type="float">
+  Cost per 1M input tokens in USD.
+  
+  <Accordion title="Example">
+  ```json
+  "input_cost": 0.030
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="output_cost" type="float">
+  Cost per 1M output tokens in USD.
+</ParamField>
+
+<ParamField body="cache_hit_input_cost" type="float">
+  Cost per 1M cached input tokens in USD.
+</ParamField>
+
+<ParamField body="cache_creation_input_cost" type="float">
+  Cost per 1M cache creation tokens in USD.
+</ParamField>
+
+### Capabilities
+
+<ParamField body="max_context_window" type="integer">
+  Maximum context window size for the model.
+</ParamField>
+
+<ParamField body="streaming_support" type="integer">
+  Streaming support. `0` for no, `1` for yes.
+</ParamField>
+
+<ParamField body="function_call" type="integer">
+  Function calling support. `0` for no, `1` for yes.
+</ParamField>
+
+<ParamField body="image_support" type="integer">
+  Image/vision support. `0` for no, `1` for yes.
+</ParamField>
+
+<ParamField body="supported_params_override" type="object">
+  Partial override of UI parameter support. New overrides are merged with existing ones.
+  
+  <Accordion title="Example">
+  ```json
+  {
+    "supported_params_override": {
+      "temperature": {
+        "name": "temperature",
+        "type": "number",
+        "default": 0.7,
+        "min": 0,
+        "max": 1.5
+      }
+    }
+  }
+  ```
+  </Accordion>
+</ParamField>
+
+## Response
+
+Returns the updated model object.
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "my-custom-gpt-4",
+  "model_name": "my-custom-gpt-4",
+  "display_name": "My Updated Custom GPT-4",
+  "base_model_name": "gpt-4",
+  "affiliation_category": "custom",
+  "input_cost": 0.030,
+  "output_cost": 0.075,
+  "max_context_window": 8192,
+  "streaming_support": 1,
+  "function_call": 1,
+  "image_support": 0,
+  "source": "db",
+  "provider": {
+    "id": "my-custom-provider",
+    "provider_id": "my-custom-provider",
+    "provider_name": "My Custom Provider",
+    "organization_id": 123
+  }
+}
+```
+
+```json 403 Forbidden
+{
+  "detail": "Cannot modify hardcoded models. They are synced from code and will be overwritten on next deployment. Only database-only models can be modified."
+}
+```
+
+```json 404 Not Found
+{
+  "detail": "Not found."
+}
+```
+
+```json 401 Unauthorized
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+model_name = "my-custom-gpt-4"
+url = f"https://api.keywordsai.co/api/models/{model_name}/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+payload = {
+    "display_name": "My Updated Custom GPT-4",
+    "input_cost": 0.030
+}
+
+response = requests.patch(url, headers=headers, json=payload)
+print(response.json())
+```
+
+```typescript TypeScript
+const modelName = 'my-custom-gpt-4';
+const url = `https://api.keywordsai.co/api/models/${modelName}/`;
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    display_name: 'My Updated Custom GPT-4',
+    input_cost: 0.030
+};
+
+const response = await fetch(url, {
+    method: 'PATCH',
+    headers: headers,
+    body: JSON.stringify(payload)
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/models/my-custom-gpt-4/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "display_name": "My Updated Custom GPT-4",
+    "input_cost": 0.030
+  }'
+```
+</RequestExample>

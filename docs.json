@@ -557,7 +557,27 @@
               {
                 "group": "Models",
                 "pages": [
-                  "/api-endpoints/manage/models/models-endpoint"
+                  "/api-endpoints/manage/models/models-endpoint",
+                  {
+                    "group": "Custom Models",
+                    "pages": [
+                      "/api-endpoints/manage/models/custom-models/list",
+                      "/api-endpoints/manage/models/custom-models/create",
+                      "/api-endpoints/manage/models/custom-models/get",
+                      "/api-endpoints/manage/models/custom-models/update",
+                      "/api-endpoints/manage/models/custom-models/delete"
+                    ]
+                  },
+                  {
+                    "group": "Custom Providers",
+                    "pages": [
+                      "/api-endpoints/manage/models/custom-providers/list",
+                      "/api-endpoints/manage/models/custom-providers/create",
+                      "/api-endpoints/manage/models/custom-providers/get",
+                      "/api-endpoints/manage/models/custom-providers/update",
+                      "/api-endpoints/manage/models/custom-providers/delete"
+                    ]
+                  }
                 ]
               },
               {

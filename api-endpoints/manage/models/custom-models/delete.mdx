@@ -1,0 +1,84 @@
+---
+title: Delete custom model
+api: DELETE https://api.keywordsai.co/api/models/{model_name}/
+---
+
+Delete a specific custom model from your organization.
+
+<Note>
+**Important**: This action is permanent and cannot be undone. Only custom models (`source: "db"`) can be deleted. Hardcoded models synced from code cannot be deleted as they will be recreated on the next deployment.
+</Note>
+
+## Path parameters
+
+<ParamField path="model_name" type="string" required>
+  The model's unique name to delete.
+  
+  <Accordion title="Example">
+  ```
+  my-custom-gpt-4
+  ```
+  </Accordion>
+</ParamField>
+
+## Response
+
+Returns no content on successful deletion.
+
+<ResponseExample>
+```text 204 No Content
+```
+
+```json 403 Forbidden
+{
+  "detail": "Cannot delete hardcoded models. They are synced from code and will be recreated on next deployment. Only database-only models can be deleted."
+}
+```
+
+```json 404 Not Found
+{
+  "detail": "Not found."
+}
+```
+
+```json 401 Unauthorized
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+model_name = "my-custom-gpt-4"
+url = f"https://api.keywordsai.co/api/models/{model_name}/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.delete(url, headers=headers)
+print(f"Status code: {response.status_code}")
+```
+
+```typescript TypeScript
+const modelName = 'my-custom-gpt-4';
+const url = `https://api.keywordsai.co/api/models/${modelName}/`;
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY'
+};
+
+const response = await fetch(url, {
+    method: 'DELETE',
+    headers: headers
+});
+
+console.log(`Status code: ${response.status}`);
+```
+
+```bash cURL
+curl -X DELETE "https://api.keywordsai.co/api/models/my-custom-gpt-4/" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+</RequestExample>

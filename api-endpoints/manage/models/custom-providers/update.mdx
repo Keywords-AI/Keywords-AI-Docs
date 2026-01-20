@@ -1,0 +1,145 @@
+---
+title: Update custom provider
+api: PATCH https://api.keywordsai.co/api/providers/{pk}/
+---
+
+Update a specific custom provider. Only the provided fields will be updated - other fields remain unchanged.
+
+<Note>
+**Restrictions**: 
+- The `provider_id` field is read-only and cannot be changed
+- Only the owning organization can update their custom providers
+- Managed providers (`is_managed: true`) cannot have critical fields modified
+</Note>
+
+## Path parameters
+
+<ParamField path="pk" type="integer" required>
+  The provider's primary key ID to update.
+  
+  <Accordion title="Example">
+  ```
+  123
+  ```
+  </Accordion>
+</ParamField>
+
+## Request body
+
+All fields are optional. Only provide the fields you want to update.
+
+<ParamField body="provider_name" type="string">
+  Human-readable provider name.
+  
+  <Accordion title="Example">
+  ```json
+  "provider_name": "Updated Azure Provider"
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="api_key" type="string">
+  API key for the provider (write-only, never returned in responses).
+  
+  <Accordion title="Example">
+  ```json
+  "api_key": "new-api-key"
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="extra_kwargs" type="object">
+  Additional provider configuration (write-only, never returned in responses).
+  
+  <Accordion title="Example">
+  ```json
+  {
+    "extra_kwargs": {
+      "base_url": "https://updated-endpoint.openai.azure.com",
+      "timeout": 90
+    }
+  }
+  ```
+  </Accordion>
+</ParamField>
+
+## Response
+
+Returns the updated provider object without sensitive fields.
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "my-azure-provider",
+  "provider_id": "my-azure-provider",
+  "provider_name": "Updated Azure Provider",
+  "created_at": "2024-01-15T10:30:00Z",
+  "updated_at": "2024-01-15T12:00:00Z"
+}
+```
+
+```json 404 Not Found
+{
+  "detail": "Not found."
+}
+```
+
+```json 401 Unauthorized
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+provider_pk = 123
+url = f"https://api.keywordsai.co/api/providers/{provider_pk}/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+payload = {
+    "provider_name": "Updated Azure Provider",
+    "api_key": "new-api-key"
+}
+
+response = requests.patch(url, headers=headers, json=payload)
+print(response.json())
+```
+
+```typescript TypeScript
+const providerPk = 123;
+const url = `https://api.keywordsai.co/api/providers/${providerPk}/`;
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+};
+
+const payload = {
+    provider_name: 'Updated Azure Provider',
+    api_key: 'new-api-key'
+};
+
+const response = await fetch(url, {
+    method: 'PATCH',
+    headers: headers,
+    body: JSON.stringify(payload)
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/providers/123/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "provider_name": "Updated Azure Provider",
+    "api_key": "new-api-key"
+  }'
+```
+</RequestExample>

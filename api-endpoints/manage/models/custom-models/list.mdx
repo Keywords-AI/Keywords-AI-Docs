@@ -1,0 +1,115 @@
+---
+title: List custom models
+api: GET https://api.keywordsai.co/api/models/
+---
+
+Retrieve all models accessible to your organization, including both global models (shared across all organizations) and your custom models.
+
+## Query parameters
+
+<ParamField query="sort_by" type="string" default="model_name">
+  Field to sort by.
+  
+  <Accordion title="Example">
+  ```
+  ?sort_by=model_name
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField query="all" type="boolean" default={false}>
+  If `true`, returns all models without pagination.
+</ParamField>
+
+## Response
+
+Returns an array of model objects with their configurations and associated providers.
+
+**Model types:**
+- **Global models** (`affiliation_category: "keywordsai"`): Shared across all organizations
+- **Custom models** (`affiliation_category: "custom"`): Organization-specific models
+
+<ResponseExample>
+```json 200 OK
+[
+  {
+    "id": "my-custom-gpt-4",
+    "model_name": "my-custom-gpt-4",
+    "display_name": "My Custom GPT-4",
+    "base_model_name": "gpt-4",
+    "affiliation_category": "custom",
+    "is_called_by_custom_name": false,
+    "input_cost": 0.03,
+    "output_cost": 0.06,
+    "cache_hit_input_cost": 0.0,
+    "cache_creation_input_cost": 0.0,
+    "max_context_window": 8192,
+    "streaming_support": 1,
+    "function_call": 1,
+    "image_support": 0,
+    "source": "db",
+    "provider": {
+      "id": "my-custom-provider",
+      "provider_id": "my-custom-provider",
+      "provider_name": "My Custom Provider",
+      "organization_id": 123
+    }
+  },
+  {
+    "id": "openai/gpt-4",
+    "model_name": "openai/gpt-4",
+    "display_name": "GPT-4",
+    "affiliation_category": "keywordsai",
+    "input_cost": 0.03,
+    "output_cost": 0.06,
+    "max_context_window": 8192,
+    "streaming_support": 1,
+    "function_call": 1,
+    "image_support": 0,
+    "source": "hardcoded",
+    "provider": null
+  }
+]
+```
+
+```json 401 Unauthorized
+{
+  "detail": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/models/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+params = {"sort_by": "model_name"}
+
+response = requests.get(url, headers=headers, params=params)
+print(response.json())
+```
+
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/models/?sort_by=model_name';
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY'
+};
+
+const response = await fetch(url, {
+    method: 'GET',
+    headers: headers
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl "https://api.keywordsai.co/api/models/?sort_by=model_name" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+</RequestExample>
