@@ -1,0 +1,137 @@
+---
+title: Cancel batch
+api: POST https://api.keywordsai.co/api/v1/batches/{batch_id}/cancel/
+---
+
+Cancel a batch job that is currently in progress. Cancellation is not immediate - the batch status will transition from `cancelling` to `cancelled` once the operation completes.
+
+<Note>
+**Important**: Cancellation cannot be undone. Completed requests in the batch will still be billed, and you won't get results for incomplete requests.
+</Note>
+
+<Note>
+**Customer credentials required**: This endpoint requires your own OpenAI API key configured in Keywords AI dashboard (Settings → Providers).
+</Note>
+
+## Keywords AI parameters
+
+You can pass Keywords AI tracking parameters via the `X-Data-Keywordsai-Params` header:
+
+```bash
+-H "X-Data-Keywordsai-Params: {\"customer_identifier\": \"user123\"}"
+```
+
+## Path parameters
+
+<ParamField path="batch_id" type="string" required>
+  The unique identifier of the batch to cancel. Format: `batch_xxxxx`
+  
+  <Accordion title="Example">
+  ```
+  batch_abc123
+  ```
+  </Accordion>
+</ParamField>
+
+## Response
+
+Returns the batch object with `cancelling` status. Poll the [retrieve batch](/api-endpoints/develop/openai-batch/batches/get) endpoint to check when cancellation completes.
+
+<ResponseExample>
+```json 200 OK
+{
+  "id": "batch_abc123",
+  "object": "batch",
+  "endpoint": "/v1/chat/completions",
+  "errors": null,
+  "input_file_id": "file-abc123",
+  "completion_window": "24h",
+  "status": "cancelling",
+  "output_file_id": null,
+  "error_file_id": null,
+  "created_at": 1711471533,
+  "in_progress_at": 1711471538,
+  "expires_at": 1711557933,
+  "finalizing_at": null,
+  "completed_at": null,
+  "failed_at": null,
+  "expired_at": null,
+  "cancelling_at": 1711475163,
+  "cancelled_at": null,
+  "request_counts": {
+    "total": 100,
+    "completed": 23,
+    "failed": 1
+  },
+  "metadata": {}
+}
+```
+
+```json 404 Not Found
+{
+  "error": {
+    "message": "No such batch: batch_abc123",
+    "type": "invalid_request_error"
+  }
+}
+```
+
+```json 400 Bad Request
+{
+  "error": {
+    "message": "Batch is already completed and cannot be cancelled",
+    "type": "invalid_request_error"
+  }
+}
+```
+
+```json 401 Unauthorized
+{
+  "error": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+import json
+
+batch_id = "batch_abc123"
+url = f"https://api.keywordsai.co/api/v1/batches/{batch_id}/cancel/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "X-Data-Keywordsai-Params": json.dumps({
+        "customer_identifier": "user123"
+    })
+}
+
+response = requests.post(url, headers=headers)
+print(response.json())
+```
+
+```typescript TypeScript
+const batchId = 'batch_abc123';
+const url = `https://api.keywordsai.co/api/v1/batches/${batchId}/cancel/`;
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'X-Data-Keywordsai-Params': JSON.stringify({
+        customer_identifier: 'user123'
+    })
+};
+
+const response = await fetch(url, {
+    method: 'POST',
+    headers: headers
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl -X POST https://api.keywordsai.co/api/v1/batches/batch_abc123/cancel/ \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "X-Data-Keywordsai-Params: {\"customer_identifier\": \"user123\"}"
+```
+</RequestExample>

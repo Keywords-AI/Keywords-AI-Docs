@@ -1,0 +1,80 @@
+---
+title: List files
+api: GET https://api.keywordsai.co/api/files/
+---
+
+Retrieve a list of all files uploaded to your OpenAI account through Keywords AI. This is useful for checking existing files before uploading new ones or for cleanup purposes.
+
+<Note>
+**Customer credentials required**: This endpoint requires your own OpenAI API key configured in Keywords AI dashboard (Settings → Providers).
+</Note>
+
+## Response
+
+Returns a list object containing file metadata for all uploaded files.
+
+<ResponseExample>
+```json 200 OK
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "file-abc123",
+      "object": "file",
+      "bytes": 1024,
+      "created_at": 1677610602,
+      "filename": "batch_input.jsonl",
+      "purpose": "batch"
+    },
+    {
+      "id": "file-def456",
+      "object": "file",
+      "bytes": 2048,
+      "created_at": 1677620702,
+      "filename": "batch_input_2.jsonl",
+      "purpose": "batch"
+    }
+  ]
+}
+```
+
+```json 401 Unauthorized
+{
+  "error": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/files/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```typescript TypeScript
+const url = 'https://api.keywordsai.co/api/files/';
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY'
+};
+
+const response = await fetch(url, {
+    method: 'GET',
+    headers: headers
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```bash cURL
+curl https://api.keywordsai.co/api/files/ \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+</RequestExample>

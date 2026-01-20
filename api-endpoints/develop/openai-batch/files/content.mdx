@@ -1,0 +1,92 @@
+---
+title: Retrieve file content
+api: GET https://api.keywordsai.co/api/files/{file_id}/content/
+---
+
+Download the raw contents of a file. This is particularly useful for downloading batch output files after a batch job completes.
+
+<Note>
+**Customer credentials required**: This endpoint requires your own OpenAI API key configured in Keywords AI dashboard (Settings → Providers).
+</Note>
+
+## Path parameters
+
+<ParamField path="file_id" type="string" required>
+  The unique identifier of the file whose content you want to download. Format: `file-xxxxx`
+  
+  <Accordion title="Example">
+  ```
+  file-xyz789
+  ```
+  </Accordion>
+</ParamField>
+
+## Response
+
+Returns the raw file content. For JSONL files, each line is a separate JSON object.
+
+<Accordion title="Example batch output file content">
+```jsonl
+{"id": "batch_req_abc123", "custom_id": "request-1", "response": {"status_code": 200, "request_id": "req_xyz", "body": {"id": "chatcmpl-abc", "object": "chat.completion", "created": 1711471533, "model": "gpt-4", "usage": {"prompt_tokens": 10, "completion_tokens": 50, "total_tokens": 60}, "choices": [{"index": 0, "message": {"role": "assistant", "content": "Hello! How can I assist you today?"}}]}}, "error": null}
+{"id": "batch_req_def456", "custom_id": "request-2", "response": {"status_code": 200, "request_id": "req_uvw", "body": {"id": "chatcmpl-def", "object": "chat.completion", "created": 1711471534, "model": "gpt-3.5-turbo", "usage": {"prompt_tokens": 8, "completion_tokens": 40, "total_tokens": 48}, "choices": [{"index": 0, "message": {"role": "assistant", "content": "I'm doing well, thank you!"}}]}}, "error": null}
+```
+</Accordion>
+
+<ResponseExample>
+```json 404 Not Found
+{
+  "error": {
+    "message": "No such file: file-xyz789",
+    "type": "invalid_request_error"
+  }
+}
+```
+
+```json 401 Unauthorized
+{
+  "error": "Authentication credentials were not provided."
+}
+```
+</ResponseExample>
+
+<RequestExample>
+```python Python
+import requests
+
+file_id = "file-xyz789"
+url = f"https://api.keywordsai.co/api/files/{file_id}/content/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+
+response = requests.get(url, headers=headers)
+
+# Save to file
+with open("batch_output.jsonl", "wb") as f:
+    f.write(response.content)
+
+print("File downloaded successfully")
+```
+
+```typescript TypeScript
+const fileId = 'file-xyz789';
+const url = `https://api.keywordsai.co/api/files/${fileId}/content/`;
+const headers = {
+    'Authorization': 'Bearer YOUR_API_KEY'
+};
+
+const response = await fetch(url, {
+    method: 'GET',
+    headers: headers
+});
+
+const content = await response.text();
+console.log(content);
+```
+
+```bash cURL
+curl https://api.keywordsai.co/api/files/file-xyz789/content/ \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  --output batch_output.jsonl
+```
+</RequestExample>
