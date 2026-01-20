@@ -1,6 +1,6 @@
 ---
 title: Ingest traces from logs
-api: POST https://api.keywordsai.co/v1/traces/ingest
+api: POST https://api.keywordsai.co/api/v1/traces/ingest
 ---
 Ingest a batch of span logs to construct one or more traces. Use this to import historical data or programmatically build traces when SDK instrumentation isn't feasible.
 
@@ -8,7 +8,7 @@ Ingest a batch of span logs to construct one or more traces. Use this to import 
 If you're starting fresh, we recommend using an SDK/integration (e.g., OpenAI Agents SDK) to capture traces automatically. This endpoint is best for bulk import and migration workflows.
 </Info>
 
-<Tip>Example project: [Github Link](https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/example_scripts/python/logs_to_trace)</Tip>
+<Tip>Example project: [Github Link](https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/example_scripts/python/basic/logs_to_trace)</Tip>
 
 
 ## Body

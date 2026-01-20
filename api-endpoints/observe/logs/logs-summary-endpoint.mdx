@@ -90,23 +90,60 @@ See the [List Logs endpoint](/api-endpoints/observe/logs/list#url-based-filterin
 
 ## Response
 
-<ResponseField name="summary" type="object">
-  Aggregated statistics for the filtered logs.
+All fields are returned at the top level (consistent with experiments API format):
 
-  <Expandable title="Fields">
-    <ResponseField name="total_cost" type="float">
-      Total cost in USD for all filtered logs.
+<ResponseField name="total_cost" type="float">
+  Total cost in USD for all filtered logs.
+</ResponseField>
+
+<ResponseField name="total_tokens" type="integer">
+  Total tokens (prompt + completion) for all filtered logs.
+</ResponseField>
+
+<ResponseField name="number_of_requests" type="integer">
+  Total number of requests matching the filters.
+</ResponseField>
+
+<ResponseField name="scores" type="object">
+  Aggregated score summaries grouped by evaluator_id. Each evaluator includes:
+
+  <Expandable title="Score Summary Fields">
+    <ResponseField name="evaluator_id" type="string">
+      UUID of the evaluator
     </ResponseField>
 
-    <ResponseField name="total_tokens" type="integer">
-      Total tokens (prompt + completion) for all filtered logs.
+    <ResponseField name="evaluator_slug" type="string">
+      URL-friendly identifier for the evaluator
     </ResponseField>
 
-    <ResponseField name="number_of_requests" type="integer">
-      Total number of requests matching the filters.
+    <ResponseField name="evaluator_name" type="string">
+      Display name of the evaluator
+    </ResponseField>
+
+    <ResponseField name="score_value_type" type="string">
+      Type of score: `"numerical"`, `"percentage"`, or `"boolean"`
+    </ResponseField>
+
+    <ResponseField name="avg_score" type="float | null">
+      Average score for numerical/percentage evaluators. `null` for boolean evaluators.
+    </ResponseField>
+
+    <ResponseField name="true_count" type="integer | null">
+      Count of true values for boolean evaluators. `null` for numerical/percentage evaluators.
+    </ResponseField>
+
+    <ResponseField name="false_count" type="integer | null">
+      Count of false values for boolean evaluators. `null` for numerical/percentage evaluators.
     </ResponseField>
   </Expandable>
 </ResponseField>
+
+<Note>
+**Score Type Behavior:**
+- **Numerical/Percentage evaluators**: Only `avg_score` is populated
+- **Boolean evaluators**: Only `true_count` and `false_count` are populated
+- **Other types**: String, categorical, and JSON evaluators are not included in aggregations
+</Note>
 
 <RequestExample>
 
@@ -191,10 +228,28 @@ curl -X GET "https://api.keywordsai.co/api/request-logs/summary/?customer_identi
 <ResponseExample>
 ```json 200 OK
 {
-  "summary": {
-    "total_cost": 15.67,
-    "total_tokens": 1250000,
-    "number_of_requests": 8453
+  "total_cost": 15.67,
+  "total_tokens": 1250000,
+  "number_of_requests": 8453,
+  "scores": {
+    "550e8400-e29b-41d4-a716-446655440000": {
+      "evaluator_id": "550e8400-e29b-41d4-a716-446655440000",
+      "evaluator_slug": "quality_v1",
+      "evaluator_name": "Response Quality",
+      "score_value_type": "numerical",
+      "avg_score": 4.2,
+      "true_count": null,
+      "false_count": null
+    },
+    "661e9511-f3ab-52e5-b827-557766551111": {
+      "evaluator_id": "661e9511-f3ab-52e5-b827-557766551111",
+      "evaluator_slug": "accuracy_v1",
+      "evaluator_name": "Factual Accuracy",
+      "score_value_type": "boolean",
+      "avg_score": null,
+      "true_count": 150,
+      "false_count": 10
+    }
   }
 }
 ```
@@ -220,9 +275,14 @@ curl -X GET "https://api.keywordsai.co/api/request-logs/summary/?customer_identi
         }
     )
     
-    summary = response.json()["summary"]
-    print(f"Monthly cost: ${summary['total_cost']:.2f}")
-    print(f"Total requests: {summary['number_of_requests']}")
+    data = response.json()
+    print(f"Monthly cost: ${data['total_cost']:.2f}")
+    print(f"Total requests: {data['number_of_requests']}")
+    
+    # Access score summaries
+    if "scores" in data:
+        for evaluator_id, score_data in data["scores"].items():
+            print(f"{score_data['evaluator_name']}: avg={score_data.get('avg_score', 'N/A')}")
     ```
   </Accordion>
 
@@ -244,8 +304,8 @@ curl -X GET "https://api.keywordsai.co/api/request-logs/summary/?customer_identi
                 }
             }
         )
-        summary = response.json()["summary"]
-        print(f"{model}: ${summary['total_cost']:.2f}")
+        data = response.json()
+        print(f"{model}: ${data['total_cost']:.2f}")
     ```
   </Accordion>
 
@@ -261,9 +321,9 @@ curl -X GET "https://api.keywordsai.co/api/request-logs/summary/?customer_identi
         }
     )
     
-    summary = response.json()["summary"]
-    print(f"Customer cost: ${summary['total_cost']:.2f}")
-    print(f"Customer requests: {summary['number_of_requests']}")
+    data = response.json()
+    print(f"Customer cost: ${data['total_cost']:.2f}")
+    print(f"Customer requests: {data['number_of_requests']}")
     ```
   </Accordion>
 </AccordionGroup>

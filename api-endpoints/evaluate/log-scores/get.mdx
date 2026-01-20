@@ -41,3 +41,36 @@ print(response.json())
 }
 ```
 </ResponseExample>
+
+## Score Enrichment in Logs
+
+When you retrieve log details, scores are automatically included in the response under a `scores` field. This enriched format includes:
+
+- **evaluator_name**: Human-readable name of the evaluator
+- **evaluator_slug**: URL-friendly identifier
+- **score_value**: The actual score value (numerical, boolean, etc.)
+
+Example enriched scores in a log response:
+```json
+{
+  "id": "log_abc123",
+  "model": "gpt-4",
+  "scores": {
+    "550e8400-e29b-41d4-a716-446655440000": {
+      "evaluator_name": "Response Quality",
+      "evaluator_slug": "quality_v1",
+      "score_value": 4.5
+    }
+  }
+}
+```
+
+## Score Summary Aggregations
+
+Aggregated score summaries are available in summary endpoints. These show average scores for numerical evaluators and true/false counts for boolean evaluators:
+
+- **Logs Summary**: [GET/POST /api/request-logs/summary/](/api-endpoints/observe/logs/logs-summary-endpoint)
+- **Experiment Logs Summary**: GET/POST /evaluations/experiments/{experiment_id}/logs/summary/
+- **Dataset Logs Summary**: GET/POST /api/datasets/{dataset_id}/logs/summary/
+
+See the [Logs Summary endpoint](/api-endpoints/observe/logs/logs-summary-endpoint) for complete details on the score summary format.

@@ -48,3 +48,21 @@ print(response.json())
 }
 ```
 </ResponseExample>
+
+## Score Enrichment in Logs
+
+When you retrieve log details, scores are automatically included in the response under a `scores` field with enriched information including evaluator names and score values.
+
+## Score Summary Aggregations
+
+Aggregated score summaries (average scores for numerical evaluators, true/false counts for boolean evaluators) are available in:
+
+- **Logs Summary**: [GET/POST /api/request-logs/summary/](/api-endpoints/observe/logs/logs-summary-endpoint)
+- **Experiment Logs Summary**: GET/POST /evaluations/experiments/{experiment_id}/logs/summary/
+- **Dataset Logs Summary**: GET/POST /api/datasets/{dataset_id}/logs/summary/
+
+Score summaries show:
+- **Numerical/Percentage evaluators**: Average score (1-5 scale or 0-100%)
+- **Boolean evaluators**: True count and false count
+
+See the [Logs Summary endpoint](/api-endpoints/observe/logs/logs-summary-endpoint) for complete details on the score summary format.

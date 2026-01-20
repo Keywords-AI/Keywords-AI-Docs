@@ -18,6 +18,12 @@ Each log in the response includes:
 - **`output`** (string): JSON-serialized representation of the span's output data
 - **`log_type`** (string): Type of span (`"chat"`, `"embedding"`, `"workflow"`, etc.)
 
+### Evaluation Scores
+- **`scores`** (object): Map of evaluator scores `{ evaluator_id: score_data }`
+  - Each evaluator's score includes:
+    - **`evaluator_name`** (string): Name of the evaluator
+    - **`evaluator_slug`** (string): Slug identifier for the evaluator
+    - **`score_value`** (float): Numerical or boolean score value (booleans represented as 0.0 or 1.0)
 
 <Note>
 ### Legacy compatibility
@@ -82,6 +88,9 @@ For example:
         </ParamField>
         <ParamField body="all_tokens" type="string">
           Total tokens of each request.
+        </ParamField>
+        <ParamField body="scores__<evaluator_id>" type="string">
+          Sort by evaluator score. Use the evaluator's UUID as the suffix. Example: `scores__d4f46e95-73ff-4166-8581-928c1a1b1589`
         </ParamField>
     </Accordion>
     <Accordion title="Example">
@@ -174,6 +183,11 @@ These fields can be filtered directly without the `metadata__` prefix:
 - **Config**: `environment`, `log_type`, `stream`, `temperature`, `max_tokens`
 - **Metrics**: `cost`, `latency`, `tokens_per_second`, `time_to_first_token`, `prompt_tokens`, `completion_tokens`, `total_request_tokens`
 
+### Map-type Fields (Double Underscore Prefix)
+
+- **Custom metadata**: `metadata__<key>` - Filter on custom metadata properties
+- **Evaluator scores**: `scores__<evaluator_id>` - Filter/sort by evaluation scores (see below)
+
 ### URL Filter Examples
 
 <AccordionGroup>
@@ -246,6 +260,71 @@ URL filters and POST body filters can be combined. When there's an overlap, URL 
 - For complex operators (`gt`, `gte`, `lt`, `lte`, `contains`, etc.), use POST body filters
 - Each field can only have one value in URL (no arrays)
 - All URL values are treated as strings
+
+## Sorting and Filtering by Evaluation Scores
+
+You can sort and filter logs by evaluator scores using the `scores__` prefix pattern (consistent with `metadata__` filtering).
+
+### Sorting by Scores
+
+```bash
+# Sort by a specific evaluator (use evaluator_id from scores object)
+?sort_by=-scores__abc-123-def-456  # Descending (highest scores first)
+?sort_by=scores__abc-123-def-456   # Ascending (lowest scores first)
+```
+
+**How to find your evaluator_id:**
+- The `evaluator_id` is the key in the `scores` object returned in log responses
+- It's the same as the UUID of the evaluator in your organization
+- Example: If your scores object has `"d4f46e95-73ff-4166-8581-928c1a1b1589": {...}`, use `sort_by=-scores__d4f46e95-73ff-4166-8581-928c1a1b1589`
+
+### Filtering by Scores
+
+Use POST body filters to filter logs by score values:
+
+<AccordionGroup>
+  <Accordion title="Filter logs with score greater than 4.0">
+    ```bash
+    curl -X POST "https://api.keywordsai.co/api/request-logs/list/" \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "filters": {
+          "scores__abc-123-def-456": {
+            "operator": "gt",
+            "value": [4.0]
+          }
+        }
+      }'
+    ```
+  </Accordion>
+
+  <Accordion title="Filter logs with score less than or equal to 2.0">
+    ```bash
+    curl -X POST "https://api.keywordsai.co/api/request-logs/list/" \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "filters": {
+          "scores__abc-123-def-456": {
+            "operator": "lte",
+            "value": [2.0]
+          }
+        }
+      }'
+    ```
+  </Accordion>
+</AccordionGroup>
+
+**Supported operators for score filters:**
+- `""` (empty): Equal to
+- `"gt"`: Greater than
+- `"gte"`: Greater than or equal
+- `"lt"`: Less than
+- `"lte"`: Less than or equal
+- `"not"`: Not equal to
+
+**Note:** Score filtering and sorting leverage ClickHouse Map type indexes for efficient queries on large datasets.
 
 ## Body parameters
 You can add these parameters to the **request body**:
@@ -501,6 +580,15 @@ curl -X GET "https://api.keywordsai.co/api/request-logs/list/?user_tier=premium&
         "thread_identifier": null,
         "custom_identifier": null,
         "trace_unique_id": null,
+        
+        // Evaluation Scores
+        "scores": {
+            "evaluator-id-123": {
+                "evaluator_name": "Response Quality",
+                "evaluator_slug": "response_quality",
+                "score_value": 4.5
+            }
+        },
         
         // Status
         "failed": false,
