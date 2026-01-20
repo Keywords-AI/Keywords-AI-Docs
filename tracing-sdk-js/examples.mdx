@@ -1,0 +1,448 @@
+---
+title: "Examples"
+description: "Real TypeScript examples from the keywordsai-example-projects repository"
+---
+
+<Check>
+All examples are available on GitHub: [keywordsai-example-projects/typescript/tracing_sdk_example](https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/example_scripts/typescript/tracing_sdk_example)
+</Check>
+
+## Setup
+
+All examples require:
+
+```bash
+npm install @keywordsai/tracing
+```
+
+Configure your `.env` file:
+
+```bash .env
+KEYWORDSAI_API_KEY=your_keywordsai_api_key
+KEYWORDSAI_BASE_URL=https://api.keywordsai.co
+OPENAI_API_KEY=your_openai_api_key  # Optional
+ANTHROPIC_API_KEY=your_anthropic_api_key  # Optional
+```
+
+## Basic Usage
+
+From [`basic_usage.ts`](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/typescript/tracing_sdk_example/basic_usage.ts). Core concepts: `withWorkflow`, `withTask`, `withAgent`, `withTool`.
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    baseURL: process.env.KEYWORDSAI_BASE_URL,
+    appName: 'basic-example',
+    disableBatch: true,
+    logLevel: 'info'
+});
+
+const generateResponse = async (prompt: string) => {
+    return await keywordsAi.withTask(
+        { name: 'generate_response', version: 1 },
+        async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            return `Response to: ${prompt}`;
+        }
+    );
+};
+
+const chatWorkflow = async (userMessage: string) => {
+    return await keywordsAi.withWorkflow(
+        { 
+            name: 'chat_workflow', 
+            version: 1,
+            associationProperties: { 'user_type': 'demo' }
+        },
+        async () => {
+            const response = await generateResponse(userMessage);
+            
+            await keywordsAi.withTask(
+                { name: 'log_interaction' },
+                async () => {
+                    console.log(`User: ${userMessage}`);
+                    console.log(`Assistant: ${response}`);
+                    return 'logged';
+                }
+            );
+            
+            return response;
+        }
+    );
+};
+
+async function main() {
+    await keywordsAi.initialize();
+    
+    console.log('=== Workflow Example ===');
+    const workflowResponse = await chatWorkflow('What is the weather like?');
+    console.log('Workflow Response:', workflowResponse);
+    
+    await keywordsAi.shutdown();
+}
+
+main();
+```
+
+**Run it:**
+```bash
+npx tsx basic_usage.ts
+```
+
+## OpenAI Integration
+
+From [`openai_integration.ts`](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/typescript/tracing_sdk_example/openai_integration.ts). Automatic instrumentation of the OpenAI SDK.
+
+```typescript
+import OpenAI from "openai";
+import { KeywordsAITelemetry } from "@keywordsai/tracing";
+
+const keywordsai = new KeywordsAITelemetry({
+  apiKey: process.env.KEYWORDSAI_API_KEY,
+  appName: "openai-integration-test",
+  instrumentModules: {
+    openAI: OpenAI,  // Automatically instrument OpenAI SDK
+  },
+  logLevel: 'info'
+});
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+async function runOpenAIIntegrationTest() {
+  console.log("🚀 Starting OpenAI Integration Test\n");
+
+  await keywordsai.initialize();
+
+  await keywordsai.withWorkflow(
+    { name: "openai_chat_completion" },
+    async () => {
+      console.log("📝 Sending request to OpenAI...");
+      
+      const completion = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+            { role: "system", content: "You are a helpful assistant." },
+            { role: "user", content: "Tell me a short joke about programming." }
+        ],
+      });
+
+      console.log("📥 OpenAI Response:", completion.choices[0].message.content);
+    }
+  );
+
+  await keywordsai.shutdown();
+  console.log("✅ Done!");
+}
+
+runOpenAIIntegrationTest();
+```
+
+**Run it:**
+```bash
+npx tsx openai_integration.ts
+```
+
+## Advanced Agentic Workflow
+
+From [`advanced_tracing.ts`](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/typescript/tracing_sdk_example/advanced_tracing.ts). Demonstrates `withAgent`, `withTool`, and custom metadata for complex agent workflows.
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+import OpenAI from 'openai';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    baseURL: process.env.KEYWORDSAI_BASE_URL,
+    appName: 'advanced-tracing-example',
+    instrumentModules: {
+        openAI: OpenAI,
+    },
+    disableBatch: true,
+    logLevel: 'info'
+});
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+
+const runAgentExample = async (query: string) => {
+    return await keywordsAi.withAgent(
+        { 
+            name: 'research_assistant',
+            associationProperties: { 
+                'user_id': 'user_123',
+                'session_id': 'session_abc' 
+            }
+        },
+        async () => {
+            console.log(`🤖 Agent received query: ${query}`);
+
+            // Tool 1: Query analyzer
+            const analysis = await keywordsAi.withTool(
+                { name: 'query_analyzer' },
+                async () => {
+                    console.log('🔍 Analyzing query...');
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                    return {
+                        topic: query.toLowerCase().includes('ai') ? 'technology' : 'general',
+                        sentiment: 'neutral'
+                    };
+                }
+            );
+
+            // Tool 2: Web search
+            const searchResults = await keywordsAi.withTool(
+                { name: 'web_search' },
+                async () => {
+                    console.log('🌐 Searching the web...');
+                    return `Found some information about ${analysis.topic}`;
+                }
+            );
+
+            // Task: Final generation with OpenAI
+            const finalResponse = await keywordsAi.withTask(
+                { name: 'final_generation' },
+                async () => {
+                    console.log('✍️ Generating final response...');
+                    const completion = await openai.chat.completions.create({
+                        model: 'gpt-3.5-turbo',
+                        messages: [
+                            { role: 'system', content: `You are a research assistant. Topic: ${analysis.topic}. Info: ${searchResults}` },
+                            { role: 'user', content: query }
+                        ],
+                    });
+                    return completion.choices[0].message.content;
+                }
+            );
+
+            return {
+                analysis,
+                searchResults,
+                finalResponse
+            };
+        }
+    );
+};
+
+async function main() {
+    await keywordsAi.initialize();
+    console.log('🚀 Starting Advanced Tracing Example\n');
+
+    const result = await runAgentExample('How is AI changing software development?');
+    console.log('\n✨ Agent Execution Result:', JSON.stringify(result, null, 2));
+
+    await keywordsAi.shutdown();
+}
+
+main();
+```
+
+**Run it:**
+```bash
+npx tsx advanced_tracing.ts
+```
+
+## Span Management
+
+Using `getClient()` API to manually update spans, add events, and record exceptions.
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'span-management-example',
+});
+
+await keywordsAi.initialize();
+
+await keywordsAi.withTask(
+    { name: 'data_processing' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Update current span with custom metadata
+        client.updateCurrentSpan({
+            keywordsai_params: {
+                customer_identifier: 'user_123',
+                metadata: { stage: 'processing' }
+            },
+            attributes: { 'custom.stage': 'validation' }
+        });
+        
+        // Add an event to the span
+        client.addSpanEvent('validation_started', { 
+            input_length: 100 
+        });
+        
+        try {
+            // Your processing logic here
+            const data = await processData();
+            
+            // Record success
+            client.updateCurrentSpan({
+                status: 'OK',
+                attributes: { 'validation.result': 'success' }
+            });
+            
+            return data;
+        } catch (error) {
+            // Record exception
+            client.recordSpanException(error);
+            client.updateCurrentSpan({
+                status: 'ERROR',
+                attributes: { 'validation.result': 'failed' }
+            });
+            throw error;
+        }
+    }
+);
+
+await keywordsAi.shutdown();
+```
+
+## Multi-Provider Tracing
+
+From [`multi_provider.ts`](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/typescript/tracing_sdk_example/multi_provider.ts). Trace across multiple AI providers (OpenAI + Anthropic) in a single workflow.
+
+```typescript
+import OpenAI from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'multi-provider-example',
+    instrumentModules: {
+        openAI: OpenAI,
+        anthropic: Anthropic
+    }
+});
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+await keywordsAi.initialize();
+
+await keywordsAi.withWorkflow(
+    { name: 'multi_provider_comparison' },
+    async () => {
+        // OpenAI call
+        const openaiResponse = await keywordsAi.withTask(
+            { name: 'openai_completion' },
+            async () => {
+                return await openai.chat.completions.create({
+                    model: 'gpt-3.5-turbo',
+                    messages: [{ role: 'user', content: 'Hello!' }]
+                });
+            }
+        );
+
+        // Anthropic call
+        const anthropicResponse = await keywordsAi.withTask(
+            { name: 'anthropic_completion' },
+            async () => {
+                return await anthropic.messages.create({
+                    model: 'claude-3-haiku-20240307',
+                    max_tokens: 100,
+                    messages: [{ role: 'user', content: 'Hello!' }]
+                });
+            }
+        );
+
+        return { openaiResponse, anthropicResponse };
+    }
+);
+
+await keywordsAi.shutdown();
+```
+
+**Run it:**
+```bash
+npx tsx multi_provider.ts
+```
+
+## Agent with Multiple Tools
+
+Example of an assistant agent using multiple tools for analysis and response generation.
+
+```typescript
+const assistantAgent = async (query: string) => {
+    return await keywordsAi.withAgent(
+        { 
+            name: 'assistant_agent',
+            associationProperties: { 'agent_type': 'general' }
+        },
+        async () => {
+            // Tool 1: Query analyzer
+            const analysis = await keywordsAi.withTool(
+                { name: 'query_analyzer' },
+                async () => {
+                    return {
+                        intent: query.includes('?') ? 'question' : 'statement',
+                        length: query.length,
+                        complexity: query.split(' ').length > 10 ? 'high' : 'low'
+                    };
+                }
+            );
+            
+            // Tool 2: Response generator
+            const response = await keywordsAi.withTool(
+                { name: 'response_generator' },
+                async () => {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    return `Response based on analysis: ${JSON.stringify(analysis)}`;
+                }
+            );
+            
+            return {
+                analysis,
+                response
+            };
+        }
+    );
+};
+
+// Usage
+const result = await assistantAgent('Can you explain quantum computing?');
+console.log('Agent Response:', result);
+```
+
+## API Reference
+
+| Method | Description |
+| --- | --- |
+| `withWorkflow` | High-level grouping of tasks (top-level trace) |
+| `withTask` | Discrete step within a workflow |
+| `withAgent` | Specialized for agentic patterns |
+| `withTool` | Tool/function calls within agents |
+| `getClient()` | Access manual span management methods |
+| `initialize()` | Initialize tracing (required) |
+| `shutdown()` | Gracefully shutdown and flush spans |
+
+### Client Methods
+
+| Method | Description |
+| --- | --- |
+| `updateCurrentSpan` | Update name, attributes, status, KeywordsAI params |
+| `addSpanEvent` | Add a timestamped event to current span |
+| `recordSpanException` | Record an error on current span |
+| `getCurrentTraceId` | Get the current trace ID |
+| `getCurrentSpanId` | Get the current span ID |
+| `flush` | Manually flush pending spans |
+
+## More Examples
+
+Explore additional examples in the GitHub repository:
+
+- **Instrumentation Management** ([`instrumentation_management.ts`](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/typescript/tracing_sdk_example/instrumentation_management.ts)): Disabling specific instrumentations, explicit module loading
+- **Manual Instrumentation** ([`manual_instrumentation.ts`](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/typescript/tracing_sdk_example/manual_instrumentation.ts)): For Next.js and environments where dynamic imports don't work
+- **Span Buffering** ([`span_buffering.ts`](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/typescript/tracing_sdk_example/span_buffering.ts)): Manual control over span creation and batch processing
+- **Noise Filtering** ([`noise_filtering.ts`](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/typescript/tracing_sdk_example/noise_filtering.ts)): How the SDK filters out auto-instrumentation noise
+- **Multi-Processor** ([`multi_processor.ts`](https://github.com/Keywords-AI/keywordsai-example-projects/blob/main/example_scripts/typescript/tracing_sdk_example/multi_processor.ts)): Custom span processors with routing and filters
+
+[View all TypeScript examples on GitHub →](https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/example_scripts/typescript/tracing_sdk_example)

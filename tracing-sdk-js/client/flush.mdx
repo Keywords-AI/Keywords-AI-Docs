@@ -1,0 +1,228 @@
+---
+title: "flush()"
+description: "Manually flush pending spans to Keywords AI"
+---
+
+## Overview
+
+`flush()` forces immediate export of all pending spans to Keywords AI. Useful before application shutdown or when you need to ensure data is sent immediately.
+
+## Signature
+
+```typescript
+async flush(): Promise<void>
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+await keywordsAi.withWorkflow(
+    { name: 'my_workflow' },
+    async () => {
+        return await processData();
+    }
+);
+
+// Manually flush spans
+await keywordsAi.getClient().flush();
+console.log('Spans sent to Keywords AI');
+```
+
+## Before Application Exit
+
+```typescript
+async function main() {
+    const keywordsAi = new KeywordsAITelemetry({
+        apiKey: process.env.KEYWORDSAI_API_KEY,
+        appName: 'batch-job'
+    });
+    
+    await keywordsAi.initialize();
+    
+    try {
+        await keywordsAi.withWorkflow(
+            { name: 'batch_processing' },
+            async () => {
+                for (let i = 0; i < 100; i++) {
+                    await processBatch(i);
+                }
+                return 'complete';
+            }
+        );
+    } finally {
+        // Ensure all spans are sent before exit
+        await keywordsAi.getClient().flush();
+        console.log('All traces flushed');
+    }
+}
+
+main().catch(console.error);
+```
+
+## Periodic Flushing
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'long_running_job' },
+    async () => {
+        for (let i = 0; i < 1000; i++) {
+            await keywordsAi.withTask(
+                { name: `batch_${i}` },
+                async () => {
+                    return await processBatch(i);
+                }
+            );
+            
+            // Flush every 100 batches
+            if (i % 100 === 0) {
+                await keywordsAi.getClient().flush();
+                console.log(`Flushed after batch ${i}`);
+            }
+        }
+        
+        return 'complete';
+    }
+);
+```
+
+## Serverless Functions
+
+```typescript
+// AWS Lambda handler
+export async function handler(event: any) {
+    const keywordsAi = new KeywordsAITelemetry({
+        apiKey: process.env.KEYWORDSAI_API_KEY,
+        appName: 'lambda-function'
+    });
+    
+    await keywordsAi.initialize();
+    
+    try {
+        const result = await keywordsAi.withWorkflow(
+            { name: 'lambda_execution' },
+            async () => {
+                return await processEvent(event);
+            }
+        );
+        
+        // Flush before Lambda freezes
+        await keywordsAi.getClient().flush();
+        
+        return {
+            statusCode: 200,
+            body: JSON.stringify(result)
+        };
+    } catch (error) {
+        // Flush even on error
+        await keywordsAi.getClient().flush();
+        throw error;
+    }
+}
+```
+
+## Express Middleware
+
+```typescript
+import express from 'express';
+
+const app = express();
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'api-server'
+});
+
+await keywordsAi.initialize();
+
+app.post('/api/important', async (req, res) => {
+    try {
+        const result = await keywordsAi.withWorkflow(
+            { name: 'critical_operation' },
+            async () => {
+                return await processCriticalRequest(req.body);
+            }
+        );
+        
+        // Flush immediately for critical operations
+        await keywordsAi.getClient().flush();
+        
+        res.json({ success: true, result });
+    } catch (error) {
+        await keywordsAi.getClient().flush();
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+    console.log('Flushing traces before shutdown...');
+    await keywordsAi.getClient().flush();
+    process.exit(0);
+});
+```
+
+## Testing
+
+```typescript
+import { describe, it, beforeAll, afterAll } from '@jest/globals';
+
+describe('My Service', () => {
+    let keywordsAi: KeywordsAITelemetry;
+    
+    beforeAll(async () => {
+        keywordsAi = new KeywordsAITelemetry({
+            apiKey: process.env.KEYWORDSAI_API_KEY,
+            appName: 'test-suite'
+        });
+        await keywordsAi.initialize();
+    });
+    
+    afterAll(async () => {
+        // Flush all test traces
+        await keywordsAi.getClient().flush();
+    });
+    
+    it('should process data', async () => {
+        await keywordsAi.withWorkflow(
+            { name: 'test_workflow' },
+            async () => {
+                const result = await processData();
+                expect(result).toBeDefined();
+            }
+        );
+    });
+});
+```
+
+## With shutdown()
+
+<Note>
+For complete cleanup, use `shutdown()` instead of `flush()`. `shutdown()` flushes and then closes the tracer.
+</Note>
+
+```typescript
+// Flush only (tracer stays active)
+await keywordsAi.getClient().flush();
+
+// Shutdown (flush + close tracer)
+await keywordsAi.shutdown();
+```
+
+## Best Practices
+
+- Call `flush()` before application exit to ensure no data is lost
+- Use `shutdown()` for complete cleanup instead of just `flush()`
+- In serverless environments, always flush before function completion
+- For critical operations, flush immediately after completion
+- Flush is automatically called periodically when batching is enabled
+- Flushing is synchronous and waits for export to complete
+- In long-running processes, prefer `shutdown()` over `flush()` when done

@@ -1,0 +1,118 @@
+---
+title: "getCurrentTraceId()"
+description: "Get the current trace ID"
+---
+
+## Overview
+
+`getCurrentTraceId()` returns the trace ID of the currently active trace. Useful for correlating logs, passing to external systems, or debugging.
+
+## Signature
+
+```typescript
+getCurrentTraceId(): string | undefined
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+await keywordsAi.withWorkflow(
+    { name: 'user_request' },
+    async () => {
+        const client = keywordsAi.getClient();
+        const traceId = client.getCurrentTraceId();
+        
+        console.log(`Processing trace: ${traceId}`);
+        
+        return traceId;
+    }
+);
+```
+
+## Log Correlation
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'api_request' },
+    async () => {
+        const client = keywordsAi.getClient();
+        const traceId = client.getCurrentTraceId();
+        
+        // Add trace ID to logs for correlation
+        console.log(`[${traceId}] Starting API request`);
+        
+        const result = await fetch('https://api.example.com/data');
+        
+        console.log(`[${traceId}] API request completed`);
+        
+        return result;
+    }
+);
+```
+
+## Pass to External Systems
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'payment_processing' },
+    async () => {
+        const client = keywordsAi.getClient();
+        const traceId = client.getCurrentTraceId();
+        
+        // Pass trace ID to payment processor for correlation
+        const payment = await processPayment({
+            amount: 100,
+            currency: 'USD',
+            trace_id: traceId  // Include for debugging
+        });
+        
+        return payment;
+    }
+);
+```
+
+## Return to User
+
+```typescript
+import express from 'express';
+
+app.post('/api/process', async (req, res) => {
+    await keywordsAi.withWorkflow(
+        { name: 'api_endpoint' },
+        async () => {
+            const client = keywordsAi.getClient();
+            const traceId = client.getCurrentTraceId();
+            
+            const result = await processRequest(req.body);
+            
+            // Return trace ID to user for support requests
+            res.json({
+                success: true,
+                result: result,
+                trace_id: traceId
+            });
+        }
+    );
+});
+```
+
+## Return Value
+
+Returns the current trace ID as a string, or `undefined` if no trace is active.
+
+## Best Practices
+
+- Use trace IDs for log correlation across services
+- Include trace IDs in API responses for debugging
+- Pass trace IDs to external systems for end-to-end tracing
+- Store trace IDs with error reports for troubleshooting
+- Only call within an active trace (workflow, task, agent, or tool)

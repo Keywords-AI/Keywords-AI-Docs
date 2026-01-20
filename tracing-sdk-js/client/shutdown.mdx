@@ -1,0 +1,289 @@
+---
+title: "shutdown()"
+description: "Gracefully shutdown the tracing client and flush all pending spans"
+---
+
+## Overview
+
+`shutdown()` flushes all pending spans and gracefully shuts down the tracer. Always call this before your application exits to ensure no data is lost.
+
+## Signature
+
+```typescript
+async shutdown(): Promise<void>
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+await keywordsAi.withWorkflow(
+    { name: 'my_workflow' },
+    async () => {
+        return await processData();
+    }
+);
+
+// Shutdown before exit
+await keywordsAi.shutdown();
+console.log('Tracing shutdown complete');
+```
+
+## Complete Application Lifecycle
+
+```typescript
+async function main() {
+    const keywordsAi = new KeywordsAITelemetry({
+        apiKey: process.env.KEYWORDSAI_API_KEY,
+        appName: 'my-app'
+    });
+    
+    try {
+        // Initialize
+        await keywordsAi.initialize();
+        console.log('Tracing initialized');
+        
+        // Run your application
+        await keywordsAi.withWorkflow(
+            { name: 'main_workflow' },
+            async () => {
+                return await runApplication();
+            }
+        );
+    } catch (error) {
+        console.error('Application error:', error);
+    } finally {
+        // Always shutdown, even on error
+        await keywordsAi.shutdown();
+        console.log('Tracing shutdown complete');
+    }
+}
+
+main();
+```
+
+## Graceful Shutdown on Signals
+
+```typescript
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-server'
+});
+
+await keywordsAi.initialize();
+
+// Handle shutdown signals
+process.on('SIGTERM', async () => {
+    console.log('SIGTERM received, shutting down gracefully...');
+    await keywordsAi.shutdown();
+    process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+    console.log('SIGINT received, shutting down gracefully...');
+    await keywordsAi.shutdown();
+    process.exit(0);
+});
+
+// Run application
+await runServer();
+```
+
+## Express Application
+
+```typescript
+import express from 'express';
+
+const app = express();
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'api-server'
+});
+
+await keywordsAi.initialize();
+
+app.get('/api/data', async (req, res) => {
+    await keywordsAi.withWorkflow(
+        { name: 'api_request' },
+        async () => {
+            const data = await fetchData();
+            res.json(data);
+        }
+    );
+});
+
+const server = app.listen(3000, () => {
+    console.log('Server running on port 3000');
+});
+
+// Graceful shutdown
+async function gracefulShutdown() {
+    console.log('Shutting down gracefully...');
+    
+    // Stop accepting new requests
+    server.close(async () => {
+        console.log('HTTP server closed');
+        
+        // Shutdown tracing
+        await keywordsAi.shutdown();
+        console.log('Tracing shutdown complete');
+        
+        process.exit(0);
+    });
+    
+    // Force exit after 10 seconds
+    setTimeout(() => {
+        console.error('Forced shutdown after timeout');
+        process.exit(1);
+    }, 10000);
+}
+
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
+```
+
+## Worker/Job Processing
+
+```typescript
+async function processJobs() {
+    const keywordsAi = new KeywordsAITelemetry({
+        apiKey: process.env.KEYWORDSAI_API_KEY,
+        appName: 'job-worker'
+    });
+    
+    await keywordsAi.initialize();
+    
+    let shouldStop = false;
+    
+    process.on('SIGTERM', () => {
+        console.log('Stopping job processing...');
+        shouldStop = true;
+    });
+    
+    try {
+        while (!shouldStop) {
+            const job = await getNextJob();
+            
+            if (job) {
+                await keywordsAi.withWorkflow(
+                    { name: 'process_job' },
+                    async () => {
+                        return await processJob(job);
+                    }
+                );
+            } else {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+        }
+    } finally {
+        await keywordsAi.shutdown();
+        console.log('Worker shutdown complete');
+    }
+}
+
+processJobs();
+```
+
+## CLI Application
+
+```typescript
+#!/usr/bin/env node
+import { program } from 'commander';
+
+async function runCLI() {
+    const keywordsAi = new KeywordsAITelemetry({
+        apiKey: process.env.KEYWORDSAI_API_KEY,
+        appName: 'cli-tool'
+    });
+    
+    await keywordsAi.initialize();
+    
+    program
+        .command('process <file>')
+        .action(async (file) => {
+            try {
+                await keywordsAi.withWorkflow(
+                    { name: 'cli_process' },
+                    async () => {
+                        return await processFile(file);
+                    }
+                );
+                console.log('Processing complete');
+            } catch (error) {
+                console.error('Error:', error);
+                process.exit(1);
+            } finally {
+                await keywordsAi.shutdown();
+            }
+        });
+    
+    await program.parseAsync();
+}
+
+runCLI();
+```
+
+## Testing
+
+```typescript
+import { describe, it, beforeAll, afterAll } from '@jest/globals';
+
+describe('My Service', () => {
+    let keywordsAi: KeywordsAITelemetry;
+    
+    beforeAll(async () => {
+        keywordsAi = new KeywordsAITelemetry({
+            apiKey: process.env.KEYWORDSAI_API_KEY,
+            appName: 'test-suite'
+        });
+        await keywordsAi.initialize();
+    });
+    
+    afterAll(async () => {
+        // Shutdown after all tests
+        await keywordsAi.shutdown();
+    });
+    
+    it('should process data', async () => {
+        await keywordsAi.withWorkflow(
+            { name: 'test_workflow' },
+            async () => {
+                const result = await processData();
+                expect(result).toBeDefined();
+            }
+        );
+    });
+});
+```
+
+## What shutdown() Does
+
+1. **Flushes all pending spans** - Sends any buffered spans to Keywords AI
+2. **Closes the tracer** - Gracefully closes the OpenTelemetry tracer
+3. **Cleans up resources** - Releases any held resources
+
+## shutdown() vs flush()
+
+| Method | Purpose |
+| --- | --- |
+| `shutdown()` | Complete cleanup, sends all data, closes tracer (use at app exit) |
+| `flush()` | Sends pending data but keeps tracer active (use for periodic flushing) |
+
+## Best Practices
+
+- Always call `shutdown()` before application exit
+- Use in `finally` blocks to ensure it runs even on errors
+- Handle SIGTERM and SIGINT signals for graceful shutdown
+- Set a timeout for forced shutdown if graceful shutdown takes too long
+- In testing, shutdown after all tests complete
+- Never reuse the tracer after calling `shutdown()`
+- For serverless, you might prefer `flush()` over `shutdown()` if the environment is reused

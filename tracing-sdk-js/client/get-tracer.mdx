@@ -1,0 +1,139 @@
+---
+title: "getTracer()"
+description: "Get the underlying OpenTelemetry tracer instance"
+---
+
+## Overview
+
+`getTracer()` returns the underlying OpenTelemetry tracer for advanced use cases where you need direct access to OpenTelemetry APIs.
+
+## Signature
+
+```typescript
+getTracer(): Tracer
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+const client = keywordsAi.getClient();
+const tracer = client.getTracer();
+
+// Now you have access to the OpenTelemetry tracer
+console.log('Tracer:', tracer);
+```
+
+## Manual Span Creation
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'custom_workflow' },
+    async () => {
+        const client = keywordsAi.getClient();
+        const tracer = client.getTracer();
+        
+        // Manually create a span using OpenTelemetry API
+        const span = tracer.startSpan('custom_operation');
+        
+        try {
+            const result = await performOperation();
+            span.setStatus({ code: 1 }); // OK
+            return result;
+        } catch (error) {
+            span.setStatus({ code: 2 }); // ERROR
+            span.recordException(error);
+            throw error;
+        } finally {
+            span.end();
+        }
+    }
+);
+```
+
+## Advanced Context Management
+
+```typescript
+import { context, trace } from '@opentelemetry/api';
+
+await keywordsAi.withWorkflow(
+    { name: 'advanced_workflow' },
+    async () => {
+        const client = keywordsAi.getClient();
+        const tracer = client.getTracer();
+        
+        // Create a new span with custom context
+        const span = tracer.startSpan('custom_span');
+        const ctx = trace.setSpan(context.active(), span);
+        
+        // Run code within custom context
+        await context.with(ctx, async () => {
+            await performWork();
+        });
+        
+        span.end();
+    }
+);
+```
+
+## Custom Span Links
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'linked_workflow' },
+    async () => {
+        const client = keywordsAi.getClient();
+        const tracer = client.getTracer();
+        
+        // Create a span with links to other traces
+        const span = tracer.startSpan('linked_operation', {
+            links: [
+                {
+                    context: {
+                        traceId: 'previous-trace-id',
+                        spanId: 'previous-span-id',
+                        traceFlags: 1
+                    }
+                }
+            ]
+        });
+        
+        await performLinkedOperation();
+        
+        span.end();
+    }
+);
+```
+
+## When to Use
+
+<Note>
+For most use cases, prefer the high-level methods (`withWorkflow`, `withTask`, `withAgent`, `withTool`) over direct tracer access.
+</Note>
+
+Use `getTracer()` when you need to:
+- Create spans with custom OpenTelemetry options
+- Implement advanced context propagation
+- Add span links to external traces
+- Integrate with custom OpenTelemetry instrumentation
+- Use OpenTelemetry features not exposed by Keywords AI SDK
+
+## Return Value
+
+Returns the OpenTelemetry `Tracer` instance.
+
+## Best Practices
+
+- Prefer Keywords AI's high-level methods for standard tracing
+- Use `getTracer()` only for advanced OpenTelemetry features
+- Always call `span.end()` when manually creating spans
+- Handle errors properly when manually managing spans
+- Consult OpenTelemetry documentation for tracer API details

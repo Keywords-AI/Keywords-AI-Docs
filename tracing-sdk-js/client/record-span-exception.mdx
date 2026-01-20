@@ -1,0 +1,252 @@
+---
+title: "recordSpanException()"
+description: "Record an error or exception on the current span"
+---
+
+## Overview
+
+`recordSpanException()` records an error or exception on the currently active span, making it visible in the Keywords AI dashboard for debugging.
+
+## Signature
+
+```typescript
+recordSpanException(error: Error | unknown): void
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+await keywordsAi.withTask(
+    { name: 'database_query' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        try {
+            return await db.query('SELECT * FROM users');
+        } catch (error) {
+            client.recordSpanException(error);
+            throw error;
+        }
+    }
+);
+```
+
+## With Status Update
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'payment_processing' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        try {
+            const payment = await processPayment();
+            
+            client.updateCurrentSpan({ status: 'OK' });
+            
+            return payment;
+        } catch (error) {
+            client.recordSpanException(error);
+            client.updateCurrentSpan({ 
+                status: 'ERROR',
+                attributes: {
+                    'error.type': error.name,
+                    'error.recoverable': false
+                }
+            });
+            throw error;
+        }
+    }
+);
+```
+
+## Multiple Exception Tracking
+
+```typescript
+await keywordsAi.withTask(
+    { name: 'multi_step_operation' },
+    async () => {
+        const client = keywordsAi.getClient();
+        const errors = [];
+        
+        try {
+            await step1();
+        } catch (error) {
+            client.recordSpanException(error);
+            errors.push(error);
+        }
+        
+        try {
+            await step2();
+        } catch (error) {
+            client.recordSpanException(error);
+            errors.push(error);
+        }
+        
+        if (errors.length > 0) {
+            throw new Error(`${errors.length} steps failed`);
+        }
+        
+        return 'success';
+    }
+);
+```
+
+## Retry Logic with Exception Tracking
+
+```typescript
+await keywordsAi.withTask(
+    { name: 'retry_operation' },
+    async () => {
+        const client = keywordsAi.getClient();
+        let lastError;
+        
+        for (let attempt = 0; attempt < 3; attempt++) {
+            try {
+                client.addSpanEvent('retry_attempt', { 
+                    attempt: attempt + 1 
+                });
+                
+                return await unstableApiCall();
+            } catch (error) {
+                lastError = error;
+                client.recordSpanException(error);
+                client.addSpanEvent('retry_failed', {
+                    attempt: attempt + 1,
+                    error: error.message
+                });
+                
+                if (attempt < 2) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+            }
+        }
+        
+        throw lastError;
+    }
+);
+```
+
+## Custom Error Context
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'data_sync' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        try {
+            await syncData();
+        } catch (error) {
+            // Add context before recording
+            client.updateCurrentSpan({
+                attributes: {
+                    'sync.source': 'external_api',
+                    'sync.destination': 'database',
+                    'sync.records_attempted': 1000,
+                    'error.during': 'data_sync'
+                }
+            });
+            
+            client.recordSpanException(error);
+            throw error;
+        }
+    }
+);
+```
+
+## Graceful Degradation
+
+```typescript
+await keywordsAi.withAgent(
+    { name: 'ai_assistant' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        try {
+            // Try primary LLM provider
+            return await callOpenAI();
+        } catch (error) {
+            client.recordSpanException(error);
+            client.addSpanEvent('fallback_to_secondary', {
+                primary_provider: 'openai',
+                error: error.message
+            });
+            
+            try {
+                // Fallback to secondary provider
+                return await callAnthropic();
+            } catch (fallbackError) {
+                client.recordSpanException(fallbackError);
+                client.updateCurrentSpan({ status: 'ERROR' });
+                throw new Error('All providers failed');
+            }
+        }
+    }
+);
+```
+
+## With User Notification
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'user_operation' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        try {
+            return await performOperation();
+        } catch (error) {
+            const traceId = client.getCurrentTraceId();
+            
+            client.recordSpanException(error);
+            client.updateCurrentSpan({
+                keywordsai_params: {
+                    metadata: {
+                        error_reported: true,
+                        trace_id_shared: traceId
+                    }
+                }
+            });
+            
+            // Provide trace ID to user for support
+            throw new Error(
+                `Operation failed. Support reference: ${traceId}`
+            );
+        }
+    }
+);
+```
+
+## Parameters
+
+<ParamField body="error" type="Error | unknown" required>
+  The error or exception object to record
+</ParamField>
+
+## Recorded Information
+
+The exception recording captures:
+- Error message
+- Error type/name
+- Stack trace
+- Timestamp
+
+## Best Practices
+
+- Always record exceptions before re-throwing them
+- Combine with `updateCurrentSpan()` to set status to ERROR
+- Add context attributes before recording for better debugging
+- Record all errors, even if you handle them gracefully
+- Include trace IDs in user-facing error messages for support
+- Exception details are visible in the Keywords AI dashboard
+- Only call within an active span

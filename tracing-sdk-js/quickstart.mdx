@@ -1,0 +1,209 @@
+---
+title: "Quickstart"
+description: "Get started with the @keywordsai/tracing TypeScript SDK"
+---
+
+<Check>[Give us a star](https://github.com/Keywords-AI/keywordsai) on GitHub!</Check>
+
+The Keywords AI Tracing SDK for TypeScript/JavaScript provides comprehensive observability for your AI applications with automatic instrumentation for OpenAI, Anthropic, and other providers.
+
+## Installation
+
+<Note>
+**Node.js Requirement**: This package requires **Node.js 18** or later.
+</Note>
+
+```bash
+npm install @keywordsai/tracing
+```
+
+## Configure credentials
+
+Set up your environment variables:
+
+```bash .env
+KEYWORDSAI_API_KEY=your-api-key
+KEYWORDSAI_BASE_URL=https://api.keywordsai.co
+```
+
+Initialize the SDK:
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    baseURL: process.env.KEYWORDSAI_BASE_URL,
+    appName: 'my-app',
+    logLevel: 'info'
+});
+
+await keywordsAi.initialize();
+```
+
+## Trace a workflow and task
+
+Use `withWorkflow` and `withTask` to create structured traces:
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'hello-world'
+});
+
+await keywordsAi.initialize();
+
+// Simple task
+const generateResponse = async (prompt: string) => {
+    return await keywordsAi.withTask(
+        { name: 'generate_response' },
+        async () => {
+            return `Response to: ${prompt}`;
+        }
+    );
+};
+
+// Workflow with nested task
+const chatWorkflow = async (userMessage: string) => {
+    return await keywordsAi.withWorkflow(
+        { 
+            name: 'chat_workflow',
+            associationProperties: { 'user_type': 'demo' }
+        },
+        async () => {
+            const response = await generateResponse(userMessage);
+            console.log(`User: ${userMessage}`);
+            console.log(`Assistant: ${response}`);
+            return response;
+        }
+    );
+};
+
+const result = await chatWorkflow('Hello, how are you?');
+console.log(result);
+
+await keywordsAi.shutdown();
+```
+
+## OpenAI Integration
+
+Automatically instrument OpenAI SDK calls:
+
+```typescript
+import OpenAI from 'openai';
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'openai-example',
+    instrumentModules: {
+        openAI: OpenAI,  // Automatically instrument OpenAI
+    }
+});
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+});
+
+await keywordsAi.initialize();
+
+await keywordsAi.withWorkflow(
+    { name: 'ai_chat' },
+    async () => {
+        const completion = await openai.chat.completions.create({
+            model: 'gpt-3.5-turbo',
+            messages: [
+                { role: 'system', content: 'You are a helpful assistant.' },
+                { role: 'user', content: 'Tell me a joke about programming.' }
+            ],
+        });
+        
+        console.log(completion.choices[0].message.content);
+    }
+);
+
+await keywordsAi.shutdown();
+```
+
+## Agent and Tool Tracing
+
+For agentic workflows, use `withAgent` and `withTool`:
+
+```typescript
+const assistantAgent = async (query: string) => {
+    return await keywordsAi.withAgent(
+        { 
+            name: 'assistant_agent',
+            associationProperties: { 'agent_type': 'general' }
+        },
+        async () => {
+            // Use a tool within the agent
+            const analysis = await keywordsAi.withTool(
+                { name: 'query_analyzer' },
+                async () => {
+                    return {
+                        intent: query.includes('?') ? 'question' : 'statement',
+                        complexity: query.split(' ').length > 10 ? 'high' : 'low'
+                    };
+                }
+            );
+            
+            const response = await keywordsAi.withTool(
+                { name: 'response_generator' },
+                async () => {
+                    return `Response based on analysis: ${JSON.stringify(analysis)}`;
+                }
+            );
+            
+            return { analysis, response };
+        }
+    );
+};
+
+const result = await assistantAgent('Can you explain quantum computing?');
+console.log(result);
+```
+
+## Configuration Options
+
+<ParamField body="apiKey" type="string" required>
+  Your Keywords AI API key
+</ParamField>
+
+<ParamField body="baseURL" type="string" default="https://api.keywordsai.co">
+  Keywords AI API base URL
+</ParamField>
+
+<ParamField body="appName" type="string">
+  Name of your application for tracing identification
+</ParamField>
+
+<ParamField body="instrumentModules" type="object">
+  Modules to automatically instrument
+  
+  <Accordion title="Supported modules">
+  ```typescript
+  {
+    openAI: OpenAI,      // OpenAI SDK
+    anthropic: Anthropic  // Anthropic SDK
+  }
+  ```
+  </Accordion>
+</ParamField>
+
+<ParamField body="disableBatch" type="boolean" default={false}>
+  If `true`, sends spans immediately instead of batching
+</ParamField>
+
+<ParamField body="logLevel" type="string" default="warn">
+  Logging level: `"debug"`, `"info"`, `"warn"`, `"error"`
+</ParamField>
+
+## Next Steps
+
+- Explore [comprehensive examples](/tracing-sdk-js/examples)
+- Learn about [multi-provider tracing](/tracing-sdk-js/examples#multi-provider-tracing)
+- Understand [span management](/tracing-sdk-js/examples#span-management)
+- View [all examples on GitHub](https://github.com/Keywords-AI/keywordsai-example-projects/tree/main/example_scripts/typescript/tracing_sdk_example)

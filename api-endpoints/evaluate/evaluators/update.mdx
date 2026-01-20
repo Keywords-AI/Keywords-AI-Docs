@@ -21,14 +21,22 @@ Authorization: Bearer YOUR_API_KEY
 
 ## Request Body
 
+<Note>
+**New Format**: You can now update `score_config`, `passing_conditions`, `llm_config`, and `code_config` fields to add or modify automation for any evaluator type.
+</Note>
+
 You can update any of the following fields. Only provide the fields you want to update:
 
 | Field | Type | Description |
 |-------|------|-------------|
 | `name` | string | Display name for the evaluator |
 | `description` | string | Description of what the evaluator does |
-| `configurations` | object | Type-specific configuration settings |
-| `categorical_choices` | array | Choices for categorical evaluators |
+| `score_config` | object | **New**: Score type configuration (min/max, choices, etc.) |
+| `passing_conditions` | object | **New**: Passing conditions using universal filter format |
+| `llm_config` | object | **New**: LLM automation config |
+| `code_config` | object | **New**: Code automation config |
+| `configurations` | object | Legacy type-specific configuration settings |
+| `categorical_choices` | array | Legacy choices (use `score_config.choices` in new format) |
 | `custom_required_fields` | array | Additional required fields |
 | `starred` | boolean | Whether the evaluator is starred |
 | `tags` | array | Tags for organization |
@@ -37,7 +45,126 @@ You can update any of the following fields. Only provide the fields you want to 
 
 ## Examples
 
-### Update LLM Evaluator Configuration
+### New Format: Add LLM Config to Existing Evaluator
+
+<Note>
+This example shows adding LLM automation to any evaluator type, demonstrating the decoupling of annotation method from evaluator type.
+</Note>
+
+<CodeGroup>
+
+```python Python
+import requests
+
+evaluator_id = "0f4325f9-55ef-4c20-8abe-376694419947"
+url = f"https://api.keywordsai.co/api/evaluators/{evaluator_id}/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+# Add LLM automation to an existing evaluator
+data = {
+    "llm_config": {
+        "model": "gpt-4o-mini",
+        "evaluator_definition": "Rate the quality:\n<input>{{input}}</input>\n<output>{{output}}</output>",
+        "scoring_rubric": "1=Poor, 5=Excellent",
+        "temperature": 0.1,
+        "max_tokens": 200
+    },
+    "passing_conditions": {
+        "primary_score": {
+            "operator": "gte",
+            "value": 3
+        }
+    }
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-376694419947/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "llm_config": {
+      "model": "gpt-4o-mini",
+      "evaluator_definition": "Rate the quality:\n<input>{{input}}</input>\n<output>{{output}}</output>",
+      "temperature": 0.1
+    }
+  }'
+```
+
+</CodeGroup>
+
+### New Format: Add Code Config to Existing Evaluator
+
+<CodeGroup>
+
+```python Python
+# Add code automation to an existing evaluator
+data = {
+    "code_config": {
+        "eval_code_snippet": "def main(eval_inputs):\n    output = eval_inputs.get('output', '')\n    return len(str(output)) > 10"
+    }
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-376694419947/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code_config": {
+      "eval_code_snippet": "def main(eval_inputs):\n    return len(str(eval_inputs.get(\"output\", \"\"))) > 10"
+    }
+  }'
+```
+
+</CodeGroup>
+
+### New Format: Update Score Config
+
+<CodeGroup>
+
+```python Python
+# Update score configuration
+data = {
+    "score_config": {
+        "min_score": 0,
+        "max_score": 10,
+        "choices": [
+            {"name": "Poor", "value": 0},
+            {"name": "Average", "value": 5},
+            {"name": "Excellent", "value": 10}
+        ]
+    }
+}
+
+response = requests.patch(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X PATCH "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-376694419947/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "score_config": {
+      "min_score": 0,
+      "max_score": 10
+    }
+  }'
+```
+
+</CodeGroup>
+
+### Legacy Format: Update LLM Evaluator Configuration
 
 <CodeGroup>
 

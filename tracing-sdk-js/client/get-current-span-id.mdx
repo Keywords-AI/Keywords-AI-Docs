@@ -1,0 +1,125 @@
+---
+title: "getCurrentSpanId()"
+description: "Get the current span ID"
+---
+
+## Overview
+
+`getCurrentSpanId()` returns the span ID of the currently active span. Useful for detailed logging, debugging, and correlating specific operations.
+
+## Signature
+
+```typescript
+getCurrentSpanId(): string | undefined
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+await keywordsAi.withTask(
+    { name: 'data_processing' },
+    async () => {
+        const client = keywordsAi.getClient();
+        const spanId = client.getCurrentSpanId();
+        
+        console.log(`Processing in span: ${spanId}`);
+        
+        return 'done';
+    }
+);
+```
+
+## Trace and Span IDs Together
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'complex_workflow' },
+    async () => {
+        const client = keywordsAi.getClient();
+        const traceId = client.getCurrentTraceId();
+        const spanId = client.getCurrentSpanId();
+        
+        console.log(`Trace: ${traceId}, Span: ${spanId}`);
+        
+        await keywordsAi.withTask(
+            { name: 'subtask' },
+            async () => {
+                const subSpanId = client.getCurrentSpanId();
+                console.log(`Subtask Span: ${subSpanId}`);
+                
+                return 'done';
+            }
+        );
+        
+        return 'workflow_complete';
+    }
+);
+```
+
+## Detailed Logging
+
+```typescript
+await keywordsAi.withAgent(
+    { name: 'research_agent' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        await keywordsAi.withTool(
+            { name: 'web_search' },
+            async () => {
+                const spanId = client.getCurrentSpanId();
+                console.log(`[Span:${spanId}] Executing web search`);
+                
+                const results = await searchWeb('AI trends');
+                
+                console.log(`[Span:${spanId}] Found ${results.length} results`);
+                
+                return results;
+            }
+        );
+        
+        return 'agent_complete';
+    }
+);
+```
+
+## Error Context
+
+```typescript
+await keywordsAi.withTask(
+    { name: 'database_query' },
+    async () => {
+        const client = keywordsAi.getClient();
+        const spanId = client.getCurrentSpanId();
+        
+        try {
+            return await db.query('SELECT * FROM users');
+        } catch (error) {
+            console.error(`[Span:${spanId}] Database query failed:`, error);
+            client.recordSpanException(error);
+            throw error;
+        }
+    }
+);
+```
+
+## Return Value
+
+Returns the current span ID as a string, or `undefined` if no span is active.
+
+## Best Practices
+
+- Use span IDs for granular operation tracking
+- Include span IDs in detailed logs for precise debugging
+- Combine with trace IDs for complete context
+- Only call within an active span (workflow, task, agent, or tool)
+- Different spans have different IDs, even within the same trace

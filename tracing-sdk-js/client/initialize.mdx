@@ -1,0 +1,140 @@
+---
+title: "initialize()"
+description: "Initialize the Keywords AI telemetry client"
+---
+
+## Overview
+
+The `initialize()` method sets up the tracing client and establishes connection to Keywords AI. This must be called before using any tracing methods.
+
+## Signature
+
+```typescript
+async initialize(): Promise<void>
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+// Initialize before using any tracing methods
+await keywordsAi.initialize();
+
+// Now ready to use
+await keywordsAi.withWorkflow(
+    { name: 'my_workflow' },
+    async () => {
+        return 'ready';
+    }
+);
+```
+
+## Constructor Options
+
+```typescript
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: string;              // Required: Your Keywords AI API key
+    baseURL?: string;            // Optional: API base URL (default: https://api.keywordsai.co)
+    appName?: string;            // Optional: Application name for identification
+    instrumentModules?: {        // Optional: Modules to auto-instrument
+        openAI?: typeof OpenAI;
+        anthropic?: typeof Anthropic;
+    };
+    disableBatch?: boolean;      // Optional: Send spans immediately (default: false)
+    logLevel?: string;           // Optional: 'debug' | 'info' | 'warn' | 'error' (default: 'warn')
+});
+```
+
+## Complete Example
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+import OpenAI from 'openai';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    baseURL: 'https://api.keywordsai.co',
+    appName: 'production-app',
+    instrumentModules: {
+        openAI: OpenAI,  // Auto-instrument OpenAI
+    },
+    disableBatch: false,
+    logLevel: 'info'
+});
+
+// Initialize the client
+await keywordsAi.initialize();
+console.log('Keywords AI Tracing initialized successfully');
+
+// Use tracing
+await keywordsAi.withWorkflow(
+    { name: 'user_request' },
+    async () => {
+        // Your code here
+    }
+);
+
+// Shutdown gracefully when done
+await keywordsAi.shutdown();
+```
+
+## Environment Variables
+
+You can also configure using environment variables:
+
+```bash .env
+KEYWORDSAI_API_KEY=your-api-key
+KEYWORDSAI_BASE_URL=https://api.keywordsai.co
+```
+
+```typescript
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    baseURL: process.env.KEYWORDSAI_BASE_URL,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+```
+
+## Configuration Options
+
+<ParamField body="apiKey" type="string" required>
+  Your Keywords AI API key from the dashboard
+</ParamField>
+
+<ParamField body="baseURL" type="string" default="https://api.keywordsai.co">
+  Keywords AI API base URL
+</ParamField>
+
+<ParamField body="appName" type="string">
+  Application name for identifying traces in the dashboard
+</ParamField>
+
+<ParamField body="instrumentModules" type="object">
+  Modules to automatically instrument:
+  - `openAI`: OpenAI SDK class
+  - `anthropic`: Anthropic SDK class
+</ParamField>
+
+<ParamField body="disableBatch" type="boolean" default={false}>
+  If true, sends spans immediately instead of batching them
+</ParamField>
+
+<ParamField body="logLevel" type="string" default="warn">
+  Logging verbosity: `"debug"`, `"info"`, `"warn"`, `"error"`
+</ParamField>
+
+## Best Practices
+
+- Always call `initialize()` before using any tracing methods
+- Initialize once at application startup
+- Use environment variables for sensitive configuration
+- Call `shutdown()` before application exit to flush pending spans
+- Enable auto-instrumentation for supported SDKs

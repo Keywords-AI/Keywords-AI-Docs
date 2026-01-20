@@ -1,0 +1,266 @@
+---
+title: "setContextValue()"
+description: "Set a value in the trace context by key"
+---
+
+## Overview
+
+`setContextValue()` stores a value in the trace context that can be retrieved by child spans using `getContextValue()`. Useful for passing data without explicit parameters.
+
+## Signature
+
+```typescript
+setContextValue(key: string, value: any): void
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+await keywordsAi.withWorkflow(
+    { name: 'user_workflow' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Store user ID in context
+        client.setContextValue('user_id', 'user-123');
+        
+        await keywordsAi.withTask(
+            { name: 'nested_task' },
+            async () => {
+                const userId = client.getContextValue('user_id');
+                console.log(`Processing for: ${userId}`);
+            }
+        );
+        
+        return 'complete';
+    }
+);
+```
+
+## Request Context
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'api_request' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Store request metadata
+        client.setContextValue('request_id', generateRequestId());
+        client.setContextValue('timestamp', Date.now());
+        client.setContextValue('ip_address', req.ip);
+        client.setContextValue('user_agent', req.headers['user-agent']);
+        
+        // All child spans can access this context
+        await processRequest();
+        
+        return 'done';
+    }
+);
+```
+
+## User Session Context
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'user_session' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Store session info
+        client.setContextValue('session_id', 'SESSION-ABC');
+        client.setContextValue('user_id', 'user-123');
+        client.setContextValue('user_role', 'premium');
+        client.setContextValue('account_tier', 'enterprise');
+        
+        await keywordsAi.withTask(
+            { name: 'load_preferences' },
+            async () => {
+                const userId = client.getContextValue('user_id');
+                return await loadUserPreferences(userId);
+            }
+        );
+        
+        await keywordsAi.withTask(
+            { name: 'check_permissions' },
+            async () => {
+                const role = client.getContextValue('user_role');
+                return await checkPermissions(role);
+            }
+        );
+        
+        return 'session_initialized';
+    }
+);
+```
+
+## Feature Flags
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'feature_enabled_workflow' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Load and store feature flags
+        const flags = await loadFeatureFlags();
+        client.setContextValue('new_ui_enabled', flags.newUI);
+        client.setContextValue('beta_features', flags.beta);
+        client.setContextValue('experimental_algorithm', flags.experimental);
+        
+        await keywordsAi.withTask(
+            { name: 'render_ui' },
+            async () => {
+                const newUI = client.getContextValue('new_ui_enabled');
+                if (newUI) {
+                    return await renderNewUI();
+                } else {
+                    return await renderLegacyUI();
+                }
+            }
+        );
+        
+        return 'rendered';
+    }
+);
+```
+
+## Configuration Propagation
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'data_pipeline' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Store configuration
+        client.setContextValue('batch_size', 100);
+        client.setContextValue('parallel_workers', 4);
+        client.setContextValue('retry_attempts', 3);
+        client.setContextValue('timeout_ms', 5000);
+        
+        await keywordsAi.withTask(
+            { name: 'process_batches' },
+            async () => {
+                const batchSize = client.getContextValue('batch_size');
+                const workers = client.getContextValue('parallel_workers');
+                return await processBatches(batchSize, workers);
+            }
+        );
+        
+        return 'complete';
+    }
+);
+```
+
+## Dynamic Context Updates
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'stateful_workflow' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Initial state
+        client.setContextValue('current_stage', 'initialization');
+        client.setContextValue('records_processed', 0);
+        
+        await keywordsAi.withTask(
+            { name: 'stage_1' },
+            async () => {
+                client.setContextValue('current_stage', 'processing');
+                const result = await processStage1();
+                client.setContextValue('records_processed', result.count);
+                return result;
+            }
+        );
+        
+        await keywordsAi.withTask(
+            { name: 'stage_2' },
+            async () => {
+                client.setContextValue('current_stage', 'finalization');
+                const previousCount = client.getContextValue('records_processed');
+                const result = await processStage2(previousCount);
+                client.setContextValue('records_processed', previousCount + result.count);
+                return result;
+            }
+        );
+        
+        client.setContextValue('current_stage', 'completed');
+        
+        return client.getContextValue('records_processed');
+    }
+);
+```
+
+## Complex Objects
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'order_workflow' },
+    async () => {
+        const client = keywordsAi.getClient();
+        
+        // Store complex objects
+        client.setContextValue('order', {
+            id: 'ORDER-789',
+            customer_id: 'CUST-123',
+            items: [
+                { sku: 'ITEM-1', quantity: 2, price: 29.99 },
+                { sku: 'ITEM-2', quantity: 1, price: 49.99 }
+            ],
+            total: 109.97
+        });
+        
+        await keywordsAi.withTask(
+            { name: 'validate_order' },
+            async () => {
+                const order = client.getContextValue('order');
+                return await validateOrder(order);
+            }
+        );
+        
+        await keywordsAi.withTask(
+            { name: 'calculate_shipping' },
+            async () => {
+                const order = client.getContextValue('order');
+                const shipping = await calculateShipping(order.items);
+                order.shipping = shipping;
+                client.setContextValue('order', order);
+                return shipping;
+            }
+        );
+        
+        return 'order_processed';
+    }
+);
+```
+
+## Parameters
+
+<ParamField body="key" type="string" required>
+  The key to store the value under
+</ParamField>
+
+<ParamField body="value" type="any" required>
+  The value to store (can be any type: string, number, object, array, etc.)
+</ParamField>
+
+## Best Practices
+
+- Use context for cross-cutting concerns (request IDs, user info, feature flags)
+- Set context early in the workflow for child spans to access
+- Store configuration that multiple tasks need without explicit passing
+- Context values can be updated dynamically as the workflow progresses
+- Context is scoped to the current trace and its child spans
+- Use meaningful key names for clarity
+- Context is useful for avoiding parameter drilling through many function layers

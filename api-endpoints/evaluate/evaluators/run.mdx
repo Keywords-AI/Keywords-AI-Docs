@@ -49,6 +49,19 @@ All evaluator runs now receive a single unified `inputs` object. This applies to
 | `inputs.metadata` | object | No | Context and custom properties you pass; also logged |
 | `inputs.llm_input` | string | No | Legacy convenience alias for input (maps to unified fields) |
 | `inputs.llm_output` | string | No | Legacy convenience alias for output (maps to unified fields) |
+| `generation_method` | string | No | Controls which automation method to use: `"auto"` (default), `"llm"`, `"code"` |
+
+### Generation Method Options
+
+<Note>
+**New Feature**: The `generation_method` parameter allows you to control which automation is used, since evaluators can now have both LLM and code configs.
+</Note>
+
+- **`"auto"`** (default): Automatically selects the best available automation method in order: LLM → Code → Legacy config
+- **`"llm"`**: Force use of LLM-based evaluation (requires `llm_config` to be configured)
+- **`"code"`**: Force use of code-based evaluation (requires `code_config` to be configured)
+
+**Note:** Human scoring is done through the UI/Scores API, not via this test/run endpoint.
 
 **Notes:**
 - These fields are stored with each evaluation and shown in the Scores page alongside the resulting score
@@ -87,7 +100,8 @@ data = {
             "latency": 0.85,
             "cost": 0.0012
         }
-    }
+    },
+    "generation_method": "llm"  # Force LLM evaluation
 }
 
 response = requests.post(url, headers=headers, json=data)
@@ -111,7 +125,8 @@ curl -X POST "https://api.keywordsai.co/api/evaluators/0f4325f9-55ef-4c20-8abe-3
         "total_response_tokens": 45,
         "latency": 0.85
       }
-    }
+    },
+    "generation_method": "llm"
   }'
 ```
 

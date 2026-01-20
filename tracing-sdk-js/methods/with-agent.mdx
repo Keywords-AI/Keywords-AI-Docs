@@ -1,0 +1,171 @@
+---
+title: "withAgent()"
+description: "Wrap an async function as a traced agent"
+---
+
+## Overview
+
+Use `withAgent(options, fn)` for agentic patterns where an agent orchestrates multiple tools or sub-tasks. Agents are specialized workflow units designed for AI agent architectures.
+
+## Signature
+
+```typescript
+withAgent<T>(
+  options: {
+    name: string;
+    version?: number;
+    associationProperties?: Record<string, any>;
+  },
+  fn: () => Promise<T>
+): Promise<T>
+```
+
+## Basic Usage
+
+```typescript
+import { KeywordsAITelemetry } from '@keywordsai/tracing';
+
+const keywordsAi = new KeywordsAITelemetry({
+    apiKey: process.env.KEYWORDSAI_API_KEY,
+    appName: 'my-app'
+});
+
+await keywordsAi.initialize();
+
+const result = await keywordsAi.withAgent(
+    { 
+        name: 'research_assistant',
+        associationProperties: {
+            'agent_type': 'research',
+            'model': 'gpt-4'
+        }
+    },
+    async () => {
+        // Agent logic here
+        const analysis = await analyzeQuery();
+        const response = await generateResponse(analysis);
+        return response;
+    }
+);
+```
+
+## Agent with Tools
+
+```typescript
+const customerAgent = async (query: string) => {
+    return await keywordsAi.withAgent(
+        { 
+            name: 'customer_support_agent',
+            associationProperties: {
+                'query_type': 'support',
+                'customer_id': 'cust-123'
+            }
+        },
+        async () => {
+            // Tool 1: Search knowledge base
+            const kbResults = await keywordsAi.withTool(
+                { name: 'search_knowledge_base' },
+                async () => {
+                    return await searchKB(query);
+                }
+            );
+            
+            // Tool 2: Query CRM
+            const customerData = await keywordsAi.withTool(
+                { name: 'query_crm' },
+                async () => {
+                    return await getCRMData('cust-123');
+                }
+            );
+            
+            // Final response generation
+            return await generateSupportResponse(kbResults, customerData);
+        }
+    );
+};
+```
+
+## Multi-Agent Workflow
+
+```typescript
+await keywordsAi.withWorkflow(
+    { name: 'multi_agent_system' },
+    async () => {
+        // Agent 1: Planning
+        const plan = await keywordsAi.withAgent(
+            { name: 'planner_agent' },
+            async () => {
+                return await createPlan();
+            }
+        );
+        
+        // Agent 2: Execution
+        const result = await keywordsAi.withAgent(
+            { name: 'executor_agent' },
+            async () => {
+                return await executePlan(plan);
+            }
+        );
+        
+        // Agent 3: Verification
+        const verified = await keywordsAi.withAgent(
+            { name: 'verifier_agent' },
+            async () => {
+                return await verifyResult(result);
+            }
+        );
+        
+        return verified;
+    }
+);
+```
+
+## With OpenAI Integration
+
+```typescript
+import OpenAI from 'openai';
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+await keywordsAi.withAgent(
+    { name: 'ai_assistant' },
+    async () => {
+        // Tool calls are automatically traced
+        const completion = await openai.chat.completions.create({
+            model: 'gpt-4',
+            messages: [
+                { role: 'system', content: 'You are a helpful assistant.' },
+                { role: 'user', content: 'Explain quantum computing.' }
+            ],
+        });
+        
+        return completion.choices[0].message.content;
+    }
+);
+```
+
+## Parameters
+
+<ParamField body="name" type="string" required>
+  Agent display name for identification in the Keywords AI dashboard
+</ParamField>
+
+<ParamField body="version" type="number">
+  Version number for tracking agent iterations
+</ParamField>
+
+<ParamField body="associationProperties" type="Record<string, any>">
+  Custom metadata to associate with the agent (agent type, model, user context, etc.)
+</ParamField>
+
+## Return Value
+
+Returns a Promise that resolves to the return value of the provided function.
+
+## Best Practices
+
+- Use agents for autonomous decision-making components
+- Nest tools within agents to track tool usage
+- Add association properties to identify agent types and contexts
+- Combine multiple agents in workflows for complex multi-agent systems
+- Agents automatically capture all nested tool calls and LLM interactions

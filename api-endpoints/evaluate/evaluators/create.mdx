@@ -17,16 +17,24 @@ Authorization: Bearer YOUR_API_KEY
 
 ### Evaluator Types (Required)
 
-- **`llm`**: LLM-based evaluators that use another LLM to evaluate responses
-- **`human`**: Human annotation-based evaluators for manual scoring
-- **`code`**: Python code-based evaluators that run custom evaluation logic
+<Note>
+**Important**: The evaluator `type` field now represents the primary interface/use case, but automation can be added independently via `llm_config` or `code_config`. This decouples the annotation method from the evaluator type.
+</Note>
+
+- **`llm`**: Primarily LLM-based evaluators (can also have code automation)
+- **`human`**: Primarily human annotation-based (can have LLM or code automation for assistance)
+- **`code`**: Primarily code-based evaluators (can also have LLM automation as fallback)
 
 ### Score Value Types (Required)
 
 - **`numerical`**: Numeric scores (e.g., 1-5, 0.0-1.0)
 - **`boolean`**: True/false or pass/fail evaluations
-- **`categorical`**: Multiple choice selections with predefined options
-- **`comment`**: Text-based feedback and comments
+- **`percentage`**: 0-100 percentage scores (use decimals; 0.0–100.0)
+- **`single_select`**: Choose exactly one option from predefined choices
+- **`multi_select`**: Choose one or more options from predefined choices
+- **`json`**: Structured JSON data for complex evaluations
+- **`text`**: Text-based feedback and comments
+- (Legacy) **`categorical`** and **`comment`** remain readable for older evaluators
 
 ### Pre-built Templates (Optional)
 
@@ -72,7 +80,88 @@ Structure:
 - **`configurations`** (object): Custom configuration based on evaluator type
 - **`categorical_choices`** (array): Required when `score_value_type` is `"categorical"`
 
-## Configuration Fields by Type
+## New Format (Recommended)
+
+<Note>
+The new evaluator format uses clean, flat configuration fields instead of nested `configurations`. This format allows you to add **both LLM and code automation** to any evaluator type, decoupling the annotation method from the evaluator type.
+</Note>
+
+### New Top-Level Fields (All Optional)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `score_config` | object | Score type configuration (shape varies by `score_value_type`) |
+| `passing_conditions` | object | Passing conditions using universal filter format |
+| `llm_config` | object | LLM automation config (if using LLM for scoring) |
+| `code_config` | object | Code automation config (if using code for scoring) |
+
+### Score Config Shapes
+
+**Numerical/Percentage:**
+```json
+{
+  "min_score": 0.0,
+  "max_score": 5.0,
+  "choices": [...]  // Optional discrete values
+}
+```
+
+**Single/Multi Select:**
+```json
+{
+  "choices": [
+    {"name": "Professional", "value": "professional"},
+    {"name": "Casual", "value": "casual"}
+  ]
+}
+```
+
+### LLM Config
+
+```json
+{
+  "model": "gpt-4o-mini",
+  "evaluator_definition": "Your prompt template with {{input}} and {{output}}",
+  "scoring_rubric": "Scoring instructions",
+  "temperature": 0.1,
+  "max_tokens": 200
+}
+```
+
+Available LLM config fields (all optional except `model` and `evaluator_definition`):
+- Core: `model`, `stream`
+- Sampling: `temperature`, `top_p`, `max_tokens`, `max_completion_tokens`
+- Penalties: `frequency_penalty`, `presence_penalty`, `stop`
+- Formatting: `response_format`, `verbosity`
+- Tools: `tools`, `tool_choice`, `parallel_tool_calls`
+
+### Code Config
+
+```json
+{
+  "eval_code_snippet": "def main(eval_inputs):\n    return 1 if 'success' in eval_inputs.get('output', '') else 0"
+}
+```
+
+### Passing Conditions
+
+Uses the universal filter format. Example:
+```json
+{
+  "primary_score": {
+    "operator": "gte",
+    "value": 3
+  }
+}
+```
+
+For complete details, see the [Filters API Reference](/api-endpoints/reference/filters_api_reference).
+
+## Legacy Format (Still Supported)
+
+The legacy `configurations` format remains fully functional for backward compatibility.
+
+### Configuration Fields by Type
 
 **For `type: "llm"` evaluators:**
 
@@ -86,14 +175,14 @@ Structure:
 
 **For `type: "code"` evaluators:**
 
-- `eval_code_snippet` (string): Python code with evaluate() function that returns the score
+- `eval_code_snippet` (string): Python code with `main(eval_inputs)` function that returns the score
 
 **For `type: "human"` evaluators:**
 
 - No specific configuration fields required
-- Use `categorical_choices` field when `score_value_type` is `"categorical"`
+- Use `categorical_choices` field when `score_value_type` is `"single_select"` or `"multi_select"`
 
-**For `score_value_type: "categorical"`:**
+**For `score_value_type: "single_select" | "multi_select"`:**
 
 - `categorical_choices` (array): List of choice objects with `name` and `value` properties
   ```json
@@ -105,7 +194,209 @@ Structure:
 
 ## Examples
 
-### Custom LLM Evaluator (Numerical)
+### New Format Examples
+
+#### LLM Evaluator with Automation (Numerical)
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://api.keywordsai.co/api/evaluators/"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "name": "Response Quality",
+    "evaluator_slug": "response_quality_v2",
+    "score_value_type": "numerical",
+    "score_config": {
+        "min_score": 1,
+        "max_score": 5,
+        "choices": [
+            {"name": "Poor", "value": 1},
+            {"name": "Fair", "value": 2},
+            {"name": "Good", "value": 3},
+            {"name": "Great", "value": 4},
+            {"name": "Excellent", "value": 5}
+        ]
+    },
+    "passing_conditions": {
+        "primary_score": {
+            "operator": "gte",
+            "value": 3
+        }
+    },
+    "llm_config": {
+        "model": "gpt-4o-mini",
+        "evaluator_definition": "Rate the quality of this response:\n<input>{{input}}</input>\n<output>{{output}}</output>",
+        "scoring_rubric": "1=Poor, 5=Excellent",
+        "temperature": 0.1
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/evaluators/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Response Quality",
+    "score_value_type": "numerical",
+    "score_config": {
+      "min_score": 1,
+      "max_score": 5
+    },
+    "passing_conditions": {
+      "primary_score": {
+        "operator": "gte",
+        "value": 3
+      }
+    },
+    "llm_config": {
+      "model": "gpt-4o-mini",
+      "evaluator_definition": "Rate the quality:\n<input>{{input}}</input>\n<output>{{output}}</output>",
+      "temperature": 0.1
+    }
+  }'
+```
+
+</CodeGroup>
+
+#### Human Evaluator with LLM Assistance
+
+<Note>
+This shows how a **human** evaluator can have LLM automation for suggested scoring, decoupling annotation method from evaluator type.
+</Note>
+
+<CodeGroup>
+
+```python Python
+data = {
+    "name": "Human Review with AI Assistance",
+    "evaluator_slug": "human_ai_assist_v1",
+    "type": "human",
+    "score_value_type": "numerical",
+    "score_config": {"min_score": 1, "max_score": 5},
+    "llm_config": {
+        "model": "gpt-4o-mini",
+        "evaluator_definition": "Suggest a quality score for this response",
+        "temperature": 0.1
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/evaluators/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Human Review with AI Assistance",
+    "type": "human",
+    "score_value_type": "numerical",
+    "score_config": {"min_score": 1, "max_score": 5},
+    "llm_config": {
+      "model": "gpt-4o-mini",
+      "evaluator_definition": "Suggest a quality score"
+    }
+  }'
+```
+
+</CodeGroup>
+
+#### Code Evaluator (Boolean)
+
+<CodeGroup>
+
+```python Python
+data = {
+    "name": "Length Check",
+    "evaluator_slug": "length_check_v1",
+    "score_value_type": "boolean",
+    "description": "Checks if response is longer than 10 characters",
+    "code_config": {
+        "eval_code_snippet": "def main(eval_inputs):\n    output = eval_inputs.get('output', '')\n    return len(str(output)) > 10"
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/evaluators/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Length Check",
+    "score_value_type": "boolean",
+    "code_config": {
+      "eval_code_snippet": "def main(eval_inputs):\n    return len(str(eval_inputs.get(\"output\", \"\"))) > 10"
+    }
+  }'
+```
+
+</CodeGroup>
+
+#### Single Select Evaluator with LLM
+
+<CodeGroup>
+
+```python Python
+data = {
+    "name": "Tone Classifier",
+    "score_value_type": "single_select",
+    "score_config": {
+        "choices": [
+            {"name": "Professional", "value": "professional"},
+            {"name": "Casual", "value": "casual"},
+            {"name": "Formal", "value": "formal"}
+        ]
+    },
+    "llm_config": {
+        "model": "gpt-4o-mini",
+        "evaluator_definition": "Classify the tone of this response"
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST "https://api.keywordsai.co/api/evaluators/" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Tone Classifier",
+    "score_value_type": "single_select",
+    "score_config": {
+      "choices": [
+        {"name": "Professional", "value": "professional"},
+        {"name": "Casual", "value": "casual"}
+      ]
+    },
+    "llm_config": {
+      "model": "gpt-4o-mini",
+      "evaluator_definition": "Classify the tone"
+    }
+  }'
+```
+
+</CodeGroup>
+
+### Legacy Format Examples
+
+#### Custom LLM Evaluator (Numerical)
 
 <CodeGroup>
 
