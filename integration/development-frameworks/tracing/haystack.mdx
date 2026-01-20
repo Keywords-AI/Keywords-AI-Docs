@@ -1,0 +1,82 @@
+---
+title: Haystack
+description: "Monitor and trace your Haystack pipelines with Keywords AI for complete workflow visibility"
+---
+
+<Note> This integration is for **workflow tracing**. For gateway features, see [Haystack Gateway](/integration/development-frameworks/llm_framework/haystack). </Note>
+
+## Overview
+
+Haystack pipelines can have multiple components (retrievers, prompt builders, LLMs). The Keywords AI tracing integration captures your entire workflow execution, showing you exactly how data flows through each component.
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/haystack/haystack_tracing.png" alt="Haystack tracing visualization" />
+</Frame>
+
+## Installation
+
+```bash
+pip install keywordsai-exporter-haystack
+```
+
+## Quickstart
+
+<Steps>
+<Step title="Set Environment Variables">
+
+```bash
+export KEYWORDSAI_API_KEY="your-keywords-ai-key"
+export OPENAI_API_KEY="your-openai-key"
+export HAYSTACK_CONTENT_TRACING_ENABLED="true"
+```
+
+The `HAYSTACK_CONTENT_TRACING_ENABLED` variable activates Haystack's tracing system.
+
+</Step>
+
+<Step title="Add KeywordsAIConnector to Your Pipeline">
+
+```python
+import os
+from haystack import Pipeline
+from haystack.components.builders import PromptBuilder
+from haystack.components.generators import OpenAIGenerator
+from keywordsai_exporter_haystack import KeywordsAIConnector
+
+os.environ["HAYSTACK_CONTENT_TRACING_ENABLED"] = "true"
+
+# Create pipeline with tracing
+pipeline = Pipeline()
+pipeline.add_component("tracer", KeywordsAIConnector("My Workflow"))
+pipeline.add_component("prompt", PromptBuilder(template="Tell me about {{topic}}."))
+pipeline.add_component("llm", OpenAIGenerator(model="gpt-4o-mini"))
+pipeline.connect("prompt", "llm")
+
+# Run
+result = pipeline.run({"prompt": {"topic": "artificial intelligence"}})
+print(result["llm"]["replies"][0])
+print(f"\nTrace URL: {result['tracer']['trace_url']}")
+```
+
+</Step>
+
+<Step title="View Your Trace">
+
+After running, you'll get a trace URL. Visit it to see:
+- Pipeline execution timeline
+- Each component's input/output
+- Timing per component
+- Token usage and costs
+
+Dashboard: [platform.keywordsai.co/platform/traces](https://platform.keywordsai.co/platform/traces)
+
+</Step>
+</Steps>
+
+## Gateway Integration
+
+For production workflows, combine tracing with gateway features like automatic logging, fallbacks, and cost optimization.
+
+<Card title="Haystack Gateway Integration" href="/integration/development-frameworks/llm_framework/haystack" icon="link">
+  Learn how to route LLM calls through Keywords AI gateway
+</Card>

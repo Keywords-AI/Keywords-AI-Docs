@@ -260,6 +260,7 @@
               "/integration/tracing/vercel-tracing",
               "/integration/development-frameworks/tracing/mastra",
               "/integration/development-frameworks/tracing/langgraph",
+              "/integration/development-frameworks/tracing/haystack",
               "/integration/development-frameworks/tracing/baml",
               "/integration/development-frameworks/tracing/instructor"
             ]
@@ -276,6 +277,7 @@
               },
               "/integration/development-frameworks/llm_framework/anthropic",
               "/integration/development-frameworks/llm_framework/langchain",
+              "/integration/development-frameworks/llm_framework/haystack",
               "/integration/development-frameworks/llm_framework/vercel",
               "/integration/development-frameworks/llm_framework/llama-index",
               "/integration/development-frameworks/llm_framework/google_genai"

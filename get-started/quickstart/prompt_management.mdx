@@ -7,6 +7,45 @@ description: "A complete guide to create, deploy, and use prompts in your codeba
 
 Prompt management helps you create, version, share, and deploy prompt templates easily. Instead of hardcoding prompts in your application, you can manage them centrally, collaborate with your team, and monitor their performance.
 
+## Why use prompt management?
+
+Instead of hardcoding prompts in your application, reference them by ID.
+
+<CodeGroup>
+```python Without prompt
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {
+            "role": "system",
+            "content": "You are a helpful customer support agent for TechCorp."
+        },
+        {
+            "role": "user",
+            "content": f"Customer {customer_name} is asking about {issue_type}"
+        }
+    ]
+)
+```
+
+```python With prompt
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "placeholder"}],
+    extra_body={
+        "prompt": {
+            "prompt_id": "042f5f",
+            "variables": {
+                "customer_name": "John",
+                "issue_type": "billing"
+            },
+            "override": True
+        }
+    }
+)
+```
+</CodeGroup>
+
 ## Use prompt management
 
 ### 1. Get your Keywords AI API key
