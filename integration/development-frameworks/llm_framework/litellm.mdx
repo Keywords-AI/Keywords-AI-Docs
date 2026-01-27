@@ -1,0 +1,136 @@
+---
+title: LiteLLM
+description: "Use LiteLLM with Keywords AI for logging and gateway access."
+---
+
+<Note> This integration supports **LiteLLM callbacks** (logging) and the **Keywords AI gateway**. </Note>
+
+## Overview
+
+LiteLLM provides a unified interface for calling many LLM providers. With Keywords AI, you can either:
+- Export logs via LiteLLM callbacks
+- Route requests through the Keywords AI gateway
+
+## Quickstart
+
+### Step 1: Get a Keywords AI API key
+
+Create an API key in the [Keywords AI dashboard](https://platform.keywordsai.co/platform/api/api-keys).
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/admin/kai_create_api_key_v0.png" alt="Create a Keywords AI API key" />
+</Frame>
+
+### Step 2: Install packages
+
+<CodeGroup>
+```bash Python
+pip install litellm keywordsai-exporter-litellm
+```
+</CodeGroup>
+
+### Examples
+
+Choose one of the two ways to use the LiteLLM integration:
+
+#### Callback mode (logging)
+
+Register the Keywords AI callback to send logs automatically.
+
+<CodeGroup>
+```python Python
+import litellm
+from keywordsai_exporter_litellm import KeywordsAILiteLLMCallback
+
+callback = KeywordsAILiteLLMCallback(api_key="YOUR_KEYWORDS_AI_API_KEY")
+callback.register_litellm_callbacks()
+
+response = litellm.completion(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello!"}],
+)
+print(response.choices[0].message.content)
+```
+</CodeGroup>
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/LiteLLM/callback_log.png" alt="LiteLLM callback logging in Keywords AI" />
+</Frame>
+
+#### Gateway mode
+
+Route LiteLLM requests through the Keywords AI gateway.
+
+<CodeGroup>
+```python Python
+import litellm
+
+response = litellm.completion(
+    api_key="YOUR_KEYWORDS_AI_API_KEY",
+    api_base="https://api.keywordsai.co/api",
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello!"}],
+)
+print(response.choices[0].message.content)
+```
+</CodeGroup>
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/LiteLLM/proxy_log.png" alt="LiteLLM gateway logging in Keywords AI" />
+</Frame>
+## Keywords AI parameters
+
+### Callback mode (metadata)
+
+Pass Keywords AI parameters inside `metadata.keywordsai_params`.
+
+<CodeGroup>
+```python Python
+response = litellm.completion(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello!"}],
+    metadata={
+        "keywordsai_params": {
+            "workflow_name": "simple_logging",
+            "span_name": "single_log",
+            "customer_identifier": "user-123",
+        }
+    },
+)
+```
+</CodeGroup>
+
+### Gateway mode (extra_body)
+
+Pass Keywords AI parameters using `extra_body` when routing through the gateway.
+
+<CodeGroup>
+```python Python
+response = litellm.completion(
+    api_key="YOUR_KEYWORDS_AI_API_KEY",
+    api_base="https://api.keywordsai.co/api",
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello!"}],
+    extra_body={
+        "span_workflow_name": "simple_logging",
+        "span_name": "single_log",
+        "customer_identifier": "user-123",
+    },
+)
+```
+</CodeGroup>
+
+<Card title="View your analytics" href="https://platform.keywordsai.co/platform/dashboard">
+  Access your Keywords AI dashboard to see detailed analytics
+</Card>
+
+## Next Steps
+
+<CardGroup cols={2}>
+<Card title="Advanced settings" href="/documentation/products/users/customer-identifier">
+  Track user behavior and patterns
+</Card>
+<Card title="Prompt Management" href="/documentation/products/prompt_management/quickstart">
+  Manage and version your prompts
+</Card>
+</CardGroup>
