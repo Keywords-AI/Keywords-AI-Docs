@@ -1,0 +1,169 @@
+---
+title: Langfuse
+description: "Send Langfuse traces to Keywords AI with OTEL instrumentation."
+---
+
+<Note>Instrument before importing Langfuse so the HTTP client is patched.</Note>
+
+## Overview
+
+Use the Keywords AI Langfuse instrumentor to redirect Langfuse traces to Keywords AI without changing your Langfuse usage. You can keep using `@observe` and the Langfuse SDK as usual.
+
+## Quickstart
+
+### Step 1: Get a Keywords AI API key
+
+Create an API key in the [Keywords AI dashboard](https://platform.keywordsai.co/platform/api/api-keys).
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/admin/kai_create_api_key_v0.png" alt="Create a Keywords AI API key" />
+</Frame>
+
+### Step 2: Install packages
+
+<CodeGroup>
+```bash Python
+pip install langfuse keywordsai-instrumentation-langfuse
+```
+</CodeGroup>
+
+### Step 3: Set environment variables
+
+Create a `.env` or export environment variables:
+
+```bash .env
+KEYWORDSAI_API_KEY=your-keywordsai-api-key
+KEYWORDSAI_BASE_URL=https://api.keywordsai.co/api
+
+LANGFUSE_PUBLIC_KEY=your-langfuse-public-key
+LANGFUSE_SECRET_KEY=your-langfuse-secret-key
+LANGFUSE_HOST=https://cloud.langfuse.com
+```
+
+## Examples
+
+Below are three common Langfuse patterns using the Keywords AI instrumentor.
+
+#### Basic decorator
+
+Instrument the Langfuse client and use `@observe`.
+
+<CodeGroup>
+```python Python
+import dotenv
+dotenv.load_dotenv(".env", override=True)
+
+import os
+from keywordsai_instrumentation_langfuse import LangfuseInstrumentor
+
+# Instrument BEFORE importing Langfuse
+instrumentor = LangfuseInstrumentor()
+instrumentor.instrument(
+    api_key=os.environ["KEYWORDSAI_API_KEY"],
+    endpoint=os.environ["KEYWORDSAI_BASE_URL"] + "/v1/traces/ingest",
+)
+
+from langfuse import Langfuse, observe
+
+langfuse = Langfuse(
+    public_key="pk-lf-...",
+    secret_key="sk-lf-...",
+    host="https://cloud.langfuse.com",
+)
+
+@observe()
+def process_query(query: str):
+    return f"Response to: {query}"
+
+result = process_query("Hello World")
+print(result)
+
+langfuse.flush()
+```
+</CodeGroup>
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/Langfuse/basic_decorator.png" alt="Langfuse basic decorator tracing in Keywords AI" />
+</Frame>
+
+#### Generation tracing
+
+Mark a function as a generation with `@observe(as_type="generation")`.
+
+<CodeGroup>
+```python Python
+import os
+from keywordsai_instrumentation_langfuse import LangfuseInstrumentor
+
+os.environ["KEYWORDSAI_API_KEY"] = "your-api-key"
+
+instrumentor = LangfuseInstrumentor()
+instrumentor.instrument(
+    api_key=os.environ["KEYWORDSAI_API_KEY"],
+)
+
+from langfuse import Langfuse, observe
+
+langfuse = Langfuse(
+    public_key="pk-lf-...",
+    secret_key="sk-lf-...",
+)
+
+@observe(as_type="generation")
+def generate_response(prompt: str):
+    return f"Generated: {prompt}"
+
+result = generate_response("Write a poem")
+print(result)
+
+langfuse.flush()
+```
+</CodeGroup>
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/Langfuse/generation-tracing.png" alt="Langfuse generation tracing in Keywords AI" />
+</Frame>
+
+#### Nested traces
+
+Create parent-child relationships with nested `@observe` functions.
+
+<CodeGroup>
+```python Python
+import os
+from keywordsai_instrumentation_langfuse import LangfuseInstrumentor
+
+os.environ["KEYWORDSAI_API_KEY"] = "your-api-key"
+
+instrumentor = LangfuseInstrumentor()
+instrumentor.instrument(
+    api_key=os.environ["KEYWORDSAI_API_KEY"],
+)
+
+from langfuse import Langfuse, observe
+
+langfuse = Langfuse(
+    public_key="pk-lf-...",
+    secret_key="sk-lf-...",
+)
+
+@observe()
+def subtask(name: str):
+    return f"Completed: {name}"
+
+@observe()
+def main_workflow(task: str):
+    result1 = subtask("step 1")
+    result2 = subtask("step 2")
+    return f"Workflow done: {task}"
+
+result = main_workflow("Process request")
+print(result)
+
+langfuse.flush()
+```
+</CodeGroup>
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/Langfuse/nested_traces.png" alt="Langfuse nested traces in Keywords AI" />
+</Frame>
