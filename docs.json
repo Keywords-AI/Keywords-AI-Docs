@@ -277,6 +277,7 @@
               },
               "/integration/development-frameworks/llm_framework/anthropic",
               "/integration/development-frameworks/llm_framework/langchain",
+              "/integration/development-frameworks/llm_framework/litellm",
               "/integration/development-frameworks/llm_framework/haystack",
               "/integration/development-frameworks/llm_framework/vercel",
               "/integration/development-frameworks/llm_framework/llama-index",
