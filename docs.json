@@ -42,44 +42,49 @@
             "group": "Features",
             "pages": [
               {
-                "group": "Views",
+                "group": "Observability",
                 "pages": [
-                  "/documentation/products/dashboard/quickstart",
-                  "/documentation/products/dashboard/filter",
-                  "/documentation/products/dashboard/json_mode"
-                ]
-              },
-              {
-                "group": "Logs",
-                "pages": [
-                  "/documentation/products/logs/quickstart",
-                  "/documentation/products/logs/configuration/pass_keywordsai_parameters",
-                  "/documentation/products/logs/configuration/custom_properties",
-                  "/documentation/products/logs/log_variables",
-                  "/documentation/products/logs/log_tool_calls",
-                  "/documentation/products/logs/log_images",
-                  "/documentation/products/logs/log_thinking",
-                  "/documentation/products/logs/embedding_logging",
-                  "/documentation/products/logs/save_log_to_prompt",
-                  "/documentation/products/logs/configuration/threads",
-                  "/documentation/products/logs/export_logs",
-                  "/documentation/products/logs/configuration/group_logs",
-                  "/documentation/products/logs/custom_model",
-                  "/documentation/products/logs/filters",
-                  "/documentation/products/logs/sharing"
-                ]
-              },
-              {
-                "group": "Traces",
-                "pages": [
-                  "/documentation/products/traces/quickstart",
-                  "/documentation/products/traces/decorators",
-                  "/documentation/products/traces/configuration/pass_keywordsai_parameters",
-                  "/documentation/products/traces/configuration/group_traces",
-                  "/documentation/products/traces/configuration/customer_identifier",
-                  "/documentation/products/traces/override-span-input-output",
-                  "/documentation/products/traces/filters",
-                  "/documentation/products/traces/logs_to_trace"
+                  "/documentation/products/dashboard/metrics",
+                  "/documentation/products/dashboard/views",
+                  {
+                    "group": "Logs",
+                    "pages": [
+                      "/documentation/products/logs/quickstart",
+                      "/documentation/products/logs/configuration/pass_keywordsai_parameters",
+                      "/documentation/products/logs/configuration/custom_properties",
+                      "/documentation/products/logs/log_variables",
+                      "/documentation/products/logs/log_tool_calls",
+                      "/documentation/products/logs/log_images",
+                      "/documentation/products/logs/log_thinking",
+                      "/documentation/products/logs/embedding_logging",
+                      "/documentation/products/logs/save_log_to_prompt",
+                      "/documentation/products/logs/configuration/threads",
+                      "/documentation/products/logs/export_logs",
+                      "/documentation/products/logs/configuration/group_logs",
+                      "/documentation/products/logs/custom_model",
+                      "/documentation/products/logs/sharing"
+                    ]
+                  },
+                  {
+                    "group": "Traces",
+                    "pages": [
+                      "/documentation/products/traces/quickstart",
+                      "/documentation/products/traces/decorators",
+                      "/documentation/products/traces/configuration/pass_keywordsai_parameters",
+                      "/documentation/products/traces/configuration/group_traces",
+                      "/documentation/products/traces/configuration/customer_identifier",
+                      "/documentation/products/traces/override-span-input-output",
+                      "/documentation/products/traces/logs_to_trace"
+                    ]
+                  },
+                  {
+                    "group": "Users",
+                    "pages": [
+                      "/documentation/products/users/customer-identifier",
+                      "/documentation/products/users/user_rate_limit",
+                      "/documentation/products/users/user-budget"
+                    ]
+                  }
                 ]
               },
               {
@@ -109,41 +114,46 @@
                 ]
               },
               {
-                "group": "Evaluators",
+                "group": "Evals",
                 "pages": [
-                  "/documentation/products/evaluation/llm-evals/llm-evaluator",
-                  "/documentation/products/evaluation/llm-evals/run-evaluator-code",
-                  "/documentation/products/evaluation/llm-evals/run-evaluator-ui",
-                  "/documentation/products/evaluation/human-evals/human-evals-setup",
-                  "/documentation/products/evaluation/human-evals/human-annotation"
-                ]
-              },
-              {
-                "group": "Datasets",
-                "pages": [
-                  "/documentation/products/dataset/via_api",
-                  "/documentation/products/dataset/via_ui"
-                ]
-              },
-              {
-                "group": "Testsets",
-                "pages": [
-                  "/documentation/products/evaluation/experiments/testsets",
-                  "/documentation/products/evaluation/experiments/upload-testsets"
-                ]
-              },
-              {
-                "group": "Experiments",
-                "pages": [
-                  "/documentation/products/evaluation/experiments/experiments",
-                  "/documentation/products/evaluation/experiments/experiments-images"
-                ]
-              },
-              {
-                "group": "Experiments V2 (Beta)",
-                "pages": [
-                  "/documentation/products/experiments_v2/via_ui",
-                  "/documentation/products/experiments_v2/api-tutorial"                
+                  {
+                    "group": "Evaluators",
+                    "pages": [
+                      "/documentation/products/evaluation/llm-evals/llm-evaluator",
+                      "/documentation/products/evaluation/llm-evals/run-evaluator-code",
+                      "/documentation/products/evaluation/llm-evals/run-evaluator-ui",
+                      "/documentation/products/evaluation/human-evals/human-evals-setup",
+                      "/documentation/products/evaluation/human-evals/human-annotation"
+                    ]
+                  },
+                  {
+                    "group": "Datasets",
+                    "pages": [
+                      "/documentation/products/dataset/via_api",
+                      "/documentation/products/dataset/via_ui"
+                    ]
+                  },
+                  {
+                    "group": "Testsets",
+                    "pages": [
+                      "/documentation/products/evaluation/experiments/testsets",
+                      "/documentation/products/evaluation/experiments/upload-testsets"
+                    ]
+                  },
+                  {
+                    "group": "Experiments",
+                    "pages": [
+                      "/documentation/products/evaluation/experiments/experiments",
+                      "/documentation/products/evaluation/experiments/experiments-images"
+                    ]
+                  },
+                  {
+                    "group": "Experiments V2 (Beta)",
+                    "pages": [
+                      "/documentation/products/experiments_v2/via_ui",
+                      "/documentation/products/experiments_v2/api-tutorial"
+                    ]
+                  }
                 ]
               },
               {
@@ -167,14 +177,6 @@
                   "/documentation/products/gateway/advanced_features/upload_pdf",
                   "/documentation/products/gateway/advanced_features/upload_image",
                   "/documentation/products/gateway/monitoring_analysis/disable_logging"
-                ]
-              },
-              {
-                "group": "Users",
-                "pages": [
-                  "/documentation/products/users/customer-identifier",
-                  "/documentation/products/users/user_rate_limit",
-                  "/documentation/products/users/user-budget"
                 ]
               },
               {
@@ -489,7 +491,7 @@
             ]
           },
           {
-            "group": "Evaluate",
+            "group": "Evals",
             "pages": [
               {
                 "group": "Evaluators",
