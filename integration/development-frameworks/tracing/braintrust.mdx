@@ -1,0 +1,119 @@
+---
+title: Braintrust
+description: "Send Braintrust logs/spans to Keywords AI for tracing."
+---
+
+## Overview
+
+Use `keywordsai-exporter-braintrust` to export Braintrust log records (including nested spans) to Keywords AI Traces. You can keep using Braintrust’s logger APIs; the exporter installs itself as Braintrust’s background logger and forwards records to Keywords AI.
+
+## Quickstart
+
+### Step 1: Get a Keywords AI API key
+
+Create an API key in the [Keywords AI dashboard](https://platform.keywordsai.co/platform/api/api-keys).
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/admin/kai_create_api_key_v0.png" alt="Create a Keywords AI API key" />
+</Frame>
+
+### Step 2: Install packages
+
+```bash
+pip install braintrust keywordsai-exporter-braintrust
+```
+
+### Step 3: Set environment variables
+
+Create a `.env` or export environment variables:
+
+```bash .env
+KEYWORDSAI_API_KEY=your-keywordsai-api-key
+# Optional (default: https://api.keywordsai.co/api)
+KEYWORDSAI_BASE_URL=https://api.keywordsai.co/api
+```
+
+### Step 4: Run Braintrust with the Keywords AI exporter
+
+Create a file like `quickstart.py`:
+
+```python
+import os
+import time
+
+import braintrust
+
+from keywordsai_exporter_braintrust import KeywordsAIExporter
+
+
+def main() -> None:
+    # Export Braintrust records to Keywords AI
+    with KeywordsAIExporter(raise_on_error=True):
+        # This creates a Braintrust logger and a root+child span.
+        # (Using TEST_API_KEY keeps the example self-contained.)
+        logger = braintrust.init_logger(
+            project="KeywordsAI Braintrust Quickstart",
+            project_id="keywordsai-braintrust-quickstart",
+            api_key=braintrust.logger.TEST_API_KEY,
+            async_flush=False,
+            set_current=False,
+        )
+
+        with logger.start_span(name="keywordsai-braintrust-parent", type="task") as root_span:
+            with root_span.start_span(name="keywordsai-braintrust-child", type="chat") as child_span:
+                time.sleep(0.25)
+                child_span.log(
+                    input=[{"role": "user", "content": "Hello from Braintrust quickstart"}],
+                    output="Hello from Keywords AI!",
+                    metrics={"prompt_tokens": 5, "completion_tokens": 7},
+                    metadata={"model": "gpt-4o-mini"},
+                )
+
+        # Flush Braintrust -> exporter -> Keywords AI
+        logger.flush()
+
+    print("✓ Sent Braintrust trace to Keywords AI (check Traces page).")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+### Step 5: View your trace
+
+Open the Traces page: [platform.keywordsai.co/platform/traces](https://platform.keywordsai.co/platform/traces)
+
+<Frame className="rounded-md">
+<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/Braintrust/Braintrust+quickstart.png" alt="Braintrust quickstart result in Keywords AI" />
+</Frame>
+
+## Use Braintrust + OpenAI (optional)
+
+If you’re using Braintrust’s OpenAI wrapper (`wrap_openai`), you can still export everything to Keywords AI:
+
+```bash
+pip install openai
+```
+
+```python
+from braintrust import init_logger, wrap_openai
+from openai import OpenAI
+
+from keywordsai_exporter_braintrust import KeywordsAIExporter
+
+with KeywordsAIExporter():
+    logger = init_logger(project="Email Classifier")
+    client = wrap_openai(OpenAI())
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": "Hello from Braintrust"}],
+    )
+
+    logger.log(
+        input={"prompt": "Hello from Braintrust"},
+        output=response.choices[0].message.content,
+    )
+
+    logger.flush()
+```
