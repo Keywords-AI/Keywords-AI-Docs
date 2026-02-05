@@ -260,7 +260,6 @@
                 ]
               },
               "/integration/tracing/vercel-tracing",
-              "/integration/development-frameworks/tracing/ai-sdk",
               "/integration/development-frameworks/tracing/mastra",
               "/integration/development-frameworks/tracing/langgraph",
               "/integration/development-frameworks/tracing/langfuse",
