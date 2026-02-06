@@ -1,26 +1,22 @@
 ---
 title: Braintrust
-description: "Send Braintrust logs/spans to Keywords AI for tracing."
+description: "Send Braintrust logs/spans to Respan for tracing."
 ---
 
 ## Overview
 
-Use `keywordsai-exporter-braintrust` to export Braintrust log records (including nested spans) to Keywords AI Traces. You can keep using Braintrust’s logger APIs; the exporter installs itself as Braintrust’s background logger and forwards records to Keywords AI.
+Use `respan-exporter-braintrust` to export Braintrust log records (including nested spans) to Respan Traces. You can keep using Braintrust's logger APIs; the exporter installs itself as Braintrust's background logger and forwards records to Respan.
 
 ## Quickstart
 
-### Step 1: Get a Keywords AI API key
+### Step 1: Get a Respan API key
 
-Create an API key in the [Keywords AI dashboard](https://platform.keywordsai.co/platform/api/api-keys).
-
-<Frame className="rounded-md">
-<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/admin/kai_create_api_key_v0.png" alt="Create a Keywords AI API key" />
-</Frame>
+Create an API key in your Respan dashboard.
 
 ### Step 2: Install packages
 
 ```bash
-pip install braintrust keywordsai-exporter-braintrust
+pip install braintrust respan-exporter-braintrust
 ```
 
 ### Step 3: Set environment variables
@@ -28,12 +24,12 @@ pip install braintrust keywordsai-exporter-braintrust
 Create a `.env` or export environment variables:
 
 ```bash .env
-KEYWORDSAI_API_KEY=your-keywordsai-api-key
-# Optional (default: https://api.keywordsai.co/api)
-KEYWORDSAI_BASE_URL=https://api.keywordsai.co/api
+RESPAN_API_KEY=your-respan-api-key
+# Optional (default: https://api.respan.ai/api)
+RESPAN_BASE_URL=https://api.respan.ai/api
 ```
 
-### Step 4: Run Braintrust with the Keywords AI exporter
+### Step 4: Run Braintrust with the Respan exporter
 
 Create a file like `quickstart.py`:
 
@@ -43,36 +39,36 @@ import time
 
 import braintrust
 
-from keywordsai_exporter_braintrust import KeywordsAIExporter
+from respan_exporter_braintrust import RespanBraintrustExporter
 
 
 def main() -> None:
-    # Export Braintrust records to Keywords AI
-    with KeywordsAIExporter(raise_on_error=True):
+    # Export Braintrust records to Respan
+    with RespanBraintrustExporter(raise_on_error=True):
         # This creates a Braintrust logger and a root+child span.
         # (Using TEST_API_KEY keeps the example self-contained.)
         logger = braintrust.init_logger(
-            project="KeywordsAI Braintrust Quickstart",
-            project_id="keywordsai-braintrust-quickstart",
+            project="Respan Braintrust Quickstart",
+            project_id="respan-braintrust-quickstart",
             api_key=braintrust.logger.TEST_API_KEY,
             async_flush=False,
             set_current=False,
         )
 
-        with logger.start_span(name="keywordsai-braintrust-parent", type="task") as root_span:
-            with root_span.start_span(name="keywordsai-braintrust-child", type="chat") as child_span:
+        with logger.start_span(name="respan-braintrust-parent", type="task") as root_span:
+            with root_span.start_span(name="respan-braintrust-child", type="chat") as child_span:
                 time.sleep(0.25)
                 child_span.log(
                     input=[{"role": "user", "content": "Hello from Braintrust quickstart"}],
-                    output="Hello from Keywords AI!",
+                    output="Hello from Respan!",
                     metrics={"prompt_tokens": 5, "completion_tokens": 7},
                     metadata={"model": "gpt-4o-mini"},
                 )
 
-        # Flush Braintrust -> exporter -> Keywords AI
+        # Flush Braintrust -> exporter -> Respan
         logger.flush()
 
-    print("✓ Sent Braintrust trace to Keywords AI (check Traces page).")
+    print("✓ Sent Braintrust trace to Respan (check Traces page).")
 
 
 if __name__ == "__main__":
@@ -81,27 +77,25 @@ if __name__ == "__main__":
 
 ### Step 5: View your trace
 
-Open the Traces page: [platform.keywordsai.co/platform/traces](https://platform.keywordsai.co/platform/traces)
-
-<Frame className="rounded-md">
-<img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/Integrations/Braintrust/Braintrust+quickstart.png" alt="Braintrust quickstart result in Keywords AI" />
-</Frame>
+Open the Traces page in your Respan dashboard.
 
 ## Use Braintrust + OpenAI (optional)
 
-If you’re using Braintrust’s OpenAI wrapper (`wrap_openai`), you can still export everything to Keywords AI:
+If you're using Braintrust's OpenAI wrapper (`wrap_openai`), you can still export everything to Respan:
 
 ```bash
 pip install openai
 ```
 
 ```python
+import os
 from braintrust import init_logger, wrap_openai
 from openai import OpenAI
+from respan_exporter_braintrust import RespanBraintrustExporter
 
-from keywordsai_exporter_braintrust import KeywordsAIExporter
+os.environ["RESPAN_API_KEY"] = "your-respan-key"
 
-with KeywordsAIExporter():
+with RespanBraintrustExporter() as exporter:
     logger = init_logger(project="Email Classifier")
     client = wrap_openai(OpenAI())
 
