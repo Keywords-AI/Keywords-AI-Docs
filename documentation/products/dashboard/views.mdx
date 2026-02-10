@@ -6,6 +6,10 @@ description: "Save filters from Logs, Traces, Users, Prompts, and more as reusab
 ## What are views?
 
 **Views** are saved filter configurations. When you apply filters on [Logs](/documentation/products/logs/quickstart), [Traces](/documentation/products/traces/quickstart), [Users](/documentation/products/users/customer-identifier), [Prompts](/documentation/products/prompt_management/quickstart), or elsewhere in Keywords AI—for example, by `status`, `model`, `user`, `timestamp`, or [custom properties](/documentation/products/logs/configuration/custom_properties)—you can save that filter setup as a **view**. Views let you reuse the same filters with one click instead of reconfiguring them each time.
+<Frame className="rounded-md">
+    <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/products/dashboard/views/go_to_view_page_v0.png" />
+</Frame>
+
 
 ## Where you create filters
 
@@ -58,13 +62,15 @@ Your view is saved. Open the views list to see it and select it anytime to insta
 ## Use and manage views
 
 - **Apply a view** — Select a saved view from the views list to instantly apply its filters.
-- **Share a filter view** — Share a view with your team so everyone sees the same filtered data. See [Sharing](/documentation/products/logs/sharing#share-a-filter-view) for how to share a filter view.
-- **Manage views** — Rename or remove views from the views management UI when they’re no longer needed.
+- **Change filters and save** — When you’re in a view, you can change the filters, then **Save** to update the current view or **Save as new** to create a new view from the current filters.
+
+<Frame className="rounded-md">
+    <img src="https://keywordsai-static.s3.us-east-1.amazonaws.com/docs/documentation/products/dashboard/views/save_saveasnew_v0.png" />
+</Frame>
 
 ## Resources
 
 - [Filters API Reference](/api-endpoints/reference/filters_api_reference) — Filter logs, traces, users, prompts, and more programmatically; filters support operators like `gt`, `gte`, `contains`, `in`, and more.
-- [Sharing](/documentation/products/logs/sharing#share-a-filter-view) — Share filter views with your team.
 
 ## Additional
 
@@ -79,10 +85,6 @@ Instrument workflows and filter traces.
 
 <Card title="Filters API Reference" href="/api-endpoints/reference/filters_api_reference">
 Complete API documentation for filtering logs, traces, users, prompts, and more.
-</Card>
-
-<Card title="Sharing" href="/documentation/products/logs/sharing">
-Share logs and filter views with your team.
 </Card>
 </CardGroup>
 
