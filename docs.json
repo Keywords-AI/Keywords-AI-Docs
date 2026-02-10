@@ -262,6 +262,7 @@
               "/integration/tracing/vercel-tracing",
               "/integration/development-frameworks/tracing/mastra",
               "/integration/development-frameworks/tracing/langgraph",
+              "/integration/development-frameworks/tracing/agno",
               "/integration/development-frameworks/tracing/langfuse",
               "/integration/development-frameworks/tracing/haystack",
               "/integration/development-frameworks/tracing/baml",
