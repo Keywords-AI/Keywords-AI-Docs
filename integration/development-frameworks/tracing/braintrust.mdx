@@ -1,0 +1,113 @@
+---
+title: Braintrust
+description: "Send Braintrust logs/spans to Respan for tracing."
+---
+
+## Overview
+
+Use `respan-exporter-braintrust` to export Braintrust log records (including nested spans) to Respan Traces. You can keep using Braintrust's logger APIs; the exporter installs itself as Braintrust's background logger and forwards records to Respan.
+
+## Quickstart
+
+### Step 1: Get a Respan API key
+
+Create an API key in your Respan dashboard.
+
+### Step 2: Install packages
+
+```bash
+pip install braintrust respan-exporter-braintrust
+```
+
+### Step 3: Set environment variables
+
+Create a `.env` or export environment variables:
+
+```bash .env
+RESPAN_API_KEY=your-respan-api-key
+# Optional (default: https://api.respan.ai/api)
+RESPAN_BASE_URL=https://api.respan.ai/api
+```
+
+### Step 4: Run Braintrust with the Respan exporter
+
+Create a file like `quickstart.py`:
+
+```python
+import os
+import time
+
+import braintrust
+
+from respan_exporter_braintrust import RespanBraintrustExporter
+
+
+def main() -> None:
+    # Export Braintrust records to Respan
+    with RespanBraintrustExporter(raise_on_error=True):
+        # This creates a Braintrust logger and a root+child span.
+        # (Using TEST_API_KEY keeps the example self-contained.)
+        logger = braintrust.init_logger(
+            project="Respan Braintrust Quickstart",
+            project_id="respan-braintrust-quickstart",
+            api_key=braintrust.logger.TEST_API_KEY,
+            async_flush=False,
+            set_current=False,
+        )
+
+        with logger.start_span(name="respan-braintrust-parent", type="task") as root_span:
+            with root_span.start_span(name="respan-braintrust-child", type="chat") as child_span:
+                time.sleep(0.25)
+                child_span.log(
+                    input=[{"role": "user", "content": "Hello from Braintrust quickstart"}],
+                    output="Hello from Respan!",
+                    metrics={"prompt_tokens": 5, "completion_tokens": 7},
+                    metadata={"model": "gpt-4o-mini"},
+                )
+
+        # Flush Braintrust -> exporter -> Respan
+        logger.flush()
+
+    print("✓ Sent Braintrust trace to Respan (check Traces page).")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+### Step 5: View your trace
+
+Open the Traces page in your Respan dashboard.
+
+## Use Braintrust + OpenAI (optional)
+
+If you're using Braintrust's OpenAI wrapper (`wrap_openai`), you can still export everything to Respan:
+
+```bash
+pip install openai
+```
+
+```python
+import os
+from braintrust import init_logger, wrap_openai
+from openai import OpenAI
+from respan_exporter_braintrust import RespanBraintrustExporter
+
+os.environ["RESPAN_API_KEY"] = "your-respan-key"
+
+with RespanBraintrustExporter() as exporter:
+    logger = init_logger(project="Email Classifier")
+    client = wrap_openai(OpenAI())
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": "Hello from Braintrust"}],
+    )
+
+    logger.log(
+        input={"prompt": "Hello from Braintrust"},
+        output=response.choices[0].message.content,
+    )
+
+    logger.flush()
+```
