@@ -324,6 +324,7 @@
             "pages": [
               "/integration/dev-tools/cursor",
               "/integration/dev-tools/claude-code",
+              "/integration/dev-tools/zapier",
               "/integration/dev-tools/linkup"
             ]
           },
