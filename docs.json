@@ -227,7 +227,8 @@
               "/documentation/resources/automatic-retries",
               "/documentation/resources/streaming",
               "/documentation/resources/error-handling",
-              "/documentation/resources/api-rate-limits"
+              "/documentation/resources/api-rate-limits",
+              "/documentation/resources/respan"
             ]
           },
           {
