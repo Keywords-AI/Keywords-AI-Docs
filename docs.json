@@ -227,7 +227,8 @@
               "/documentation/resources/automatic-retries",
               "/documentation/resources/streaming",
               "/documentation/resources/error-handling",
-              "/documentation/resources/api-rate-limits"
+              "/documentation/resources/api-rate-limits",
+              "/documentation/resources/respan"
             ]
           },
           {
@@ -324,6 +325,7 @@
             "pages": [
               "/integration/dev-tools/cursor",
               "/integration/dev-tools/claude-code",
+              "/integration/dev-tools/zapier",
               "/integration/dev-tools/linkup"
             ]
           },
