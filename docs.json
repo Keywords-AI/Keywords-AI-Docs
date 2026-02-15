@@ -829,7 +829,8 @@
     "color": {
       "light": "#ffffff",
       "dark": "#05050A"
-    }
+    },
+    "decoration": "windows"
   },
   "navbar": {
     "links": [
